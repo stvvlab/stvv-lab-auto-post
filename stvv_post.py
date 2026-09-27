@@ -1,5 +1,6 @@
 import os
 import json
+import subprocess
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
@@ -16,8 +17,11 @@ def load_posted():
     if not os.path.exists(POSTED_FILE):
         return []
 
-    with open(POSTED_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open(POSTED_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
 
 
 def save_posted(posted):
@@ -122,6 +126,35 @@ def post_to_buffer(text):
     return result
 
 
+def commit_posted_file():
+    subprocess.run(
+        ["git", "config", "user.name", "github-actions[bot]"],
+        check=True
+    )
+
+    subprocess.run(
+        ["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"],
+        check=True
+    )
+
+    subprocess.run(["git", "add", POSTED_FILE], check=True)
+
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        capture_output=True
+    )
+
+    if result.returncode == 0:
+        return
+
+    subprocess.run(
+        ["git", "commit", "-m", "Update posted news"],
+        check=True
+    )
+
+    subprocess.run(["git", "push"], check=True)
+
+
 def main():
     posted = load_posted()
     news = get_news()
@@ -130,7 +163,6 @@ def main():
         print("ニュースが見つかりませんでした。")
         return
 
-    # 新しい記事を探す
     new_article = None
 
     for article in news:
@@ -138,7 +170,6 @@ def main():
             new_article = article
             break
 
-    # 新着なし
     if new_article is None:
         print("新しいニュースはありません。")
         return
@@ -153,11 +184,12 @@ def main():
     print("Buffer投稿成功:")
     print(result)
 
-    # 投稿済みとして記録
     posted.append(new_article["url"])
     save_posted(posted)
 
-    print("投稿済みURLを記録しました。")
+    commit_posted_file()
+
+    print("投稿済みURLをGitHubへ保存しました。")
 
 
 if __name__ == "__main__":
