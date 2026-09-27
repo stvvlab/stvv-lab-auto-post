@@ -1,7 +1,12 @@
-name: STVV Auto Post Test
+name: STVV Auto Post
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 23 * * *"
+    - cron: "0 3 * * *"
+    - cron: "0 9 * * *"
+    - cron: "0 12 * * *"
 
 jobs:
   post:
@@ -16,10 +21,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install requests
-        run: pip install requests
+      - name: Install packages
+        run: pip install requests beautifulsoup4
 
-      - name: Run STVV post
+      - name: Run STVV auto post
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
         run: python stvv_post.py
