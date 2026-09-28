@@ -1,17 +1,29 @@
 import os
 import json
 import subprocess
+from datetime import datetime, timezone, timedelta
+
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+
 BUFFER_API_URL = "https://api.buffer.com"
 CHANNEL_ID = "6ab8fce4ea19ca0bde027d80"
+
 NEWS_URL = "https://stvv.jp/news/2026/"
+
 POSTED_FILE = "posted.json"
+POSTS_FILE = "posts.json"
 
 BUFFER_API_KEY = os.environ["BUFFER_API_KEY"]
 
+JST = timezone(timedelta(hours=9))
+
+
+# -------------------------
+# 保存データ
+# -------------------------
 
 def load_posted():
     if not os.path.exists(POSTED_FILE):
@@ -19,31 +31,76 @@ def load_posted():
 
     try:
         with open(POSTED_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+
+        # 旧形式 posted.json = ["url", "url"] にも対応
+        if isinstance(data, list):
+            return data
+
+        return data
+
     except Exception:
         return []
 
 
 def save_posted(posted):
     with open(POSTED_FILE, "w", encoding="utf-8") as f:
-        json.dump(posted, f, ensure_ascii=False, indent=2)
+        json.dump(
+            posted,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
 
+
+# -------------------------
+# 投稿ストック
+# -------------------------
+
+def load_posts():
+
+    if not os.path.exists(POSTS_FILE):
+        return []
+
+    with open(POSTS_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    return data.get("posts", [])
+
+
+# -------------------------
+# STVVニュース取得
+# -------------------------
 
 def get_news():
+
     response = requests.get(
         NEWS_URL,
-        headers={"User-Agent": "Mozilla/5.0"},
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        },
         timeout=30
     )
+
     response.raise_for_status()
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )
 
     news = []
 
     for a in soup.find_all("a", href=True):
+
         href = a["href"]
-        title = " ".join(a.get_text(" ", strip=True).split())
+
+        title = " ".join(
+            a.get_text(
+                " ",
+                strip=True
+            ).split()
+        )
 
         if "/news/" not in href:
             continue
@@ -51,9 +108,15 @@ def get_news():
         if len(title) < 10:
             continue
 
-        url = urljoin(NEWS_URL, href)
+        url = urljoin(
+            NEWS_URL,
+            href
+        )
 
-        if any(item["url"] == url for item in news):
+        if any(
+            item["url"] == url
+            for item in news
+        ):
             continue
 
         news.append({
@@ -64,7 +127,12 @@ def get_news():
     return news
 
 
-def create_post(article):
+# -------------------------
+# ニュース投稿文
+# -------------------------
+
+def create_news_post(article):
+
     return f"""🇧🇪 STVV NEWS
 
 {article["title"]}
@@ -76,10 +144,16 @@ def create_post(article):
 #STVV #シントトロイデン"""
 
 
+# -------------------------
+# Buffer投稿
+# -------------------------
+
 def post_to_buffer(text):
+
     query = """
     mutation CreatePost($input: CreatePostInput!) {
       createPost(input: $input) {
+
         ... on PostActionSuccess {
           post {
             id
@@ -87,9 +161,11 @@ def post_to_buffer(text):
             status
           }
         }
+
         ... on MutationError {
           message
         }
+
       }
     }
     """
@@ -106,8 +182,10 @@ def post_to_buffer(text):
     response = requests.post(
         BUFFER_API_URL,
         headers={
-            "Authorization": f"Bearer {BUFFER_API_KEY}",
-            "Content-Type": "application/json"
+            "Authorization":
+                f"Bearer {BUFFER_API_KEY}",
+            "Content-Type":
+                "application/json"
         },
         json={
             "query": query,
@@ -121,26 +199,118 @@ def post_to_buffer(text):
     result = response.json()
 
     if "errors" in result:
-        raise RuntimeError(result["errors"])
+        raise RuntimeError(
+            result["errors"]
+        )
 
     return result
 
 
+# -------------------------
+# 投稿済み管理
+# -------------------------
+
+def get_used_posts(posted):
+
+    if isinstance(posted, list):
+        return []
+
+    return posted.get(
+        "used_posts",
+        []
+    )
+
+
+def get_posted_news(posted):
+
+    if isinstance(posted, list):
+        return posted
+
+    return posted.get(
+        "news",
+        []
+    )
+
+
+def normalize_posted(posted):
+
+    if isinstance(posted, list):
+
+        return {
+            "news": posted,
+            "used_posts": []
+        }
+
+    return posted
+
+
+# -------------------------
+# ストック投稿選択
+# -------------------------
+
+def choose_stock_post(
+    posts,
+    post_type,
+    used_posts
+):
+
+    for index, post in enumerate(posts):
+
+        if post.get("type") != post_type:
+            continue
+
+        post_id = f"{post_type}_{index}"
+
+        if post_id in used_posts:
+            continue
+
+        return post_id, post
+
+    return None, None
+
+
+# -------------------------
+# GitHub保存
+# -------------------------
+
 def commit_posted_file():
+
     subprocess.run(
-        ["git", "config", "user.name", "github-actions[bot]"],
+        [
+            "git",
+            "config",
+            "user.name",
+            "github-actions[bot]"
+        ],
         check=True
     )
 
     subprocess.run(
-        ["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"],
+        [
+            "git",
+            "config",
+            "user.email",
+            "41898282+github-actions[bot]@users.noreply.github.com"
+        ],
         check=True
     )
 
-    subprocess.run(["git", "add", POSTED_FILE], check=True)
+    subprocess.run(
+        [
+            "git",
+            "add",
+            POSTED_FILE
+        ],
+        check=True
+    )
 
     result = subprocess.run(
-        ["git", "diff", "--cached", "--quiet"],
+        [
+            "git",
+            "diff",
+            "--cached",
+            "--quiet"
+        ],
         capture_output=True
     )
 
@@ -148,48 +318,184 @@ def commit_posted_file():
         return
 
     subprocess.run(
-        ["git", "commit", "-m", "Update posted news"],
+        [
+            "git",
+            "commit",
+            "-m",
+            "Update posted content"
+        ],
         check=True
     )
 
-    subprocess.run(["git", "push"], check=True)
+    subprocess.run(
+        [
+            "git",
+            "push"
+        ],
+        check=True
+    )
 
+
+# -------------------------
+# メイン
+# -------------------------
 
 def main():
-    posted = load_posted()
-    news = get_news()
 
-    if not news:
-        print("ニュースが見つかりませんでした。")
+    now = datetime.now(JST)
+
+    hour = now.hour
+
+    print(
+        f"現在時刻 JST: {now}"
+    )
+
+    posted = normalize_posted(
+        load_posted()
+    )
+
+    posted_news = get_posted_news(
+        posted
+    )
+
+    used_posts = get_used_posts(
+        posted
+    )
+
+    posts = load_posts()
+
+    # =====================
+    # 8時：ニュース
+    # =====================
+
+    if hour == 8:
+
+        print(
+            "8時：STVVニュース確認"
+        )
+
+        news = get_news()
+
+        new_article = None
+
+        for article in news:
+
+            if (
+                article["url"]
+                not in posted_news
+            ):
+
+                new_article = article
+                break
+
+        if new_article is None:
+
+            print(
+                "新しいニュースはありません。"
+            )
+
+            return
+
+        text = create_news_post(
+            new_article
+        )
+
+        post_to_buffer(text)
+
+        posted_news.append(
+            new_article["url"]
+        )
+
+        posted["news"] = posted_news
+
+        save_posted(posted)
+
+        commit_posted_file()
+
+        print(
+            "ニュース投稿完了"
+        )
+
         return
 
-    new_article = None
 
-    for article in news:
-        if article["url"] not in posted:
-            new_article = article
-            break
+    # =====================
+    # 12時：選手
+    # =====================
 
-    if new_article is None:
-        print("新しいニュースはありません。")
+    if hour == 12:
+
+        post_type = "player"
+
+
+    # =====================
+    # 18時：MATCH LAB
+    # =====================
+
+    elif hour == 18:
+
+        post_type = "matchlab"
+
+
+    # =====================
+    # 21時：LAB
+    # =====================
+
+    elif hour == 21:
+
+        post_type = "lab"
+
+
+    else:
+
+        print(
+            "投稿時間ではありません。"
+        )
+
         return
 
-    post_text = create_post(new_article)
+
+    # ---------------------
+    # ストック投稿
+    # ---------------------
+
+    post_id, post = choose_stock_post(
+        posts,
+        post_type,
+        used_posts
+    )
+
+    if post is None:
+
+        print(
+            f"{post_type} の未投稿ストックがありません。"
+        )
+
+        return
+
+
+    text = post["text"]
 
     print("投稿内容:")
-    print(post_text)
+    print(text)
 
-    result = post_to_buffer(post_text)
+    post_to_buffer(text)
 
-    print("Buffer投稿成功:")
-    print(result)
+    used_posts.append(
+        post_id
+    )
 
-    posted.append(new_article["url"])
+    posted[
+        "used_posts"
+    ] = used_posts
+
     save_posted(posted)
 
     commit_posted_file()
 
-    print("投稿済みURLをGitHubへ保存しました。")
+    print(
+        f"{post_type} 投稿完了"
+    )
 
 
 if __name__ == "__main__":
