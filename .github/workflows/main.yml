@@ -27,6 +27,9 @@ jobs:
       - name: Install packages
         run: pip install requests beautifulsoup4 pillow
 
+      - name: Generate MATCH LAB image
+        run: python generate_image.py
+
       - name: Run STVV auto post
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
