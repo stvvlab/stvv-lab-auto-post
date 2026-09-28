@@ -1,5 +1,10 @@
-[
-  "https://stvv.jp/news/miracle-stvv-project/2026",
-  "https://stvv.jp/news/sponsor/20260925_1/",
-  "https://stvv.jp/news/sponsor/20260924_1/"
-]
+{
+  "news": [
+    "https://stvv.jp/news/miracle-stvv-project/2026",
+    "https://stvv.jp/news/sponsor/20260925_1/",
+    "https://stvv.jp/news/sponsor/20260924_1/"
+  ],
+  "used_posts": [
+    "matchlab_1"
+  ]
+}
