@@ -1,6 +1,7 @@
 import os
 import json
 import subprocess
+import re
 from datetime import datetime, timezone, timedelta
 
 import requests
@@ -10,7 +11,6 @@ from urllib.parse import urljoin
 
 BUFFER_API_URL = "https://api.buffer.com"
 CHANNEL_ID = "6ab8fce4ea19ca0bde027d80"
-
 NEWS_URL = "https://stvv.jp/news/2026/"
 
 POSTED_FILE = "posted.json"
@@ -21,34 +21,108 @@ BUFFER_API_KEY = os.environ["BUFFER_API_KEY"]
 JST = timezone(timedelta(hours=9))
 
 
-# =========================
-# X文字数調整
-# =========================
+# ==================================================
+# X文字数対策
+# ==================================================
 
-def fit_x_length(text, max_length=270):
+URL_PATTERN = re.compile(r"https?://\S+")
+
+
+def x_weighted_length(text):
     """
-    Buffer/Xの280文字制限で止まらないように
-    少し余裕を持って270文字以内に調整する。
+    Xの文字数制限を安全側で概算。
+
+    URL = 23
+    ASCII文字 = 1
+    日本語など = 2
+
+    Buffer側で弾かれないよう、
+    280ギリギリではなく270を上限にする。
     """
 
-    if len(text) <= max_length:
+    total = 0
+    position = 0
+
+    for match in URL_PATTERN.finditer(text):
+
+        before = text[position:match.start()]
+
+        for char in before:
+            if ord(char) <= 0x7F:
+                total += 1
+            else:
+                total += 2
+
+        total += 23
+
+        position = match.end()
+
+    remaining = text[position:]
+
+    for char in remaining:
+        if ord(char) <= 0x7F:
+            total += 1
+        else:
+            total += 2
+
+    return total
+
+
+def fit_x_length(text, max_weight=270):
+
+    weight = x_weighted_length(text)
+
+    print(f"元のX換算文字数: {weight}")
+
+    if weight <= max_weight:
         return text
 
-    hashtag = "\n\n#STVV"
-    limit = max_length - len(hashtag) - 1
+    suffix = "…\n\n#STVV"
 
-    shortened = text[:limit].rstrip()
+    allowed_weight = (
+        max_weight
+        - x_weighted_length(suffix)
+    )
 
-    return shortened + "…" + hashtag
+    result = ""
+
+    for char in text:
+
+        candidate = result + char
+
+        if (
+            x_weighted_length(candidate)
+            > allowed_weight
+        ):
+            break
+
+        result = candidate
+
+    result = result.rstrip()
+
+    final_text = result + suffix
+
+    print(
+        "X文字数制限のため"
+        "本文を自動短縮しました。"
+    )
+
+    print(
+        f"短縮後X換算文字数: "
+        f"{x_weighted_length(final_text)}"
+    )
+
+    return final_text
 
 
-# =========================
+# ==================================================
 # posted.json
-# =========================
+# ==================================================
 
 def load_posted():
 
     if not os.path.exists(POSTED_FILE):
+
         return {
             "news": [],
             "used_posts": []
@@ -64,7 +138,6 @@ def load_posted():
 
             data = json.load(f)
 
-        # 古い形式にも対応
         if isinstance(data, list):
 
             return {
@@ -72,11 +145,15 @@ def load_posted():
                 "used_posts": []
             }
 
-        if "news" not in data:
-            data["news"] = []
+        data.setdefault(
+            "news",
+            []
+        )
 
-        if "used_posts" not in data:
-            data["used_posts"] = []
+        data.setdefault(
+            "used_posts",
+            []
+        )
 
         return data
 
@@ -108,9 +185,9 @@ def save_posted(posted):
         )
 
 
-# =========================
+# ==================================================
 # posts.json
-# =========================
+# ==================================================
 
 def load_posts():
 
@@ -136,9 +213,9 @@ def load_posts():
     )
 
 
-# =========================
-# STVVニュース
-# =========================
+# ==================================================
+# STVVニュース取得
+# ==================================================
 
 def get_news():
 
@@ -198,10 +275,6 @@ def get_news():
     return news
 
 
-# =========================
-# ニュース投稿文
-# =========================
-
 def create_news_post(article):
 
     return f"""🇧🇪 STVV NEWS
@@ -215,32 +288,21 @@ def create_news_post(article):
 #STVV #シントトロイデン"""
 
 
-# =========================
-# Buffer
-# =========================
+# ==================================================
+# Buffer投稿
+# ==================================================
 
 def post_to_buffer(text):
 
-    # Xの文字数制限対策
-    original_length = len(text)
-
     text = fit_x_length(text)
 
-    final_length = len(text)
+    print("最終投稿内容:")
+    print(text)
 
     print(
-        f"元の文字数: {original_length}"
+        f"最終X換算文字数: "
+        f"{x_weighted_length(text)}"
     )
-
-    print(
-        f"送信文字数: {final_length}"
-    )
-
-    if original_length != final_length:
-
-        print(
-            "280文字制限対策で本文を自動短縮しました。"
-        )
 
     query = """
     mutation CreatePost($input: CreatePostInput!) {
@@ -290,9 +352,7 @@ def post_to_buffer(text):
 
     result = response.json()
 
-    print(
-        "Buffer response:"
-    )
+    print("Buffer response:")
 
     print(
         json.dumps(
@@ -323,7 +383,7 @@ def post_to_buffer(text):
             f"{result}"
         )
 
-    # Buffer側のMutationError
+    # Bufferが投稿を拒否
     if create_post.get("message"):
 
         raise RuntimeError(
@@ -331,9 +391,7 @@ def post_to_buffer(text):
             f"{create_post['message']}"
         )
 
-    post = create_post.get(
-        "post"
-    )
+    post = create_post.get("post")
 
     if not post:
 
@@ -342,9 +400,7 @@ def post_to_buffer(text):
             f"{create_post}"
         )
 
-    post_id = post.get(
-        "id"
-    )
+    post_id = post.get("id")
 
     if not post_id:
 
@@ -354,15 +410,15 @@ def post_to_buffer(text):
         )
 
     print(
-        f"Buffer投稿作成成功: {post_id}"
+        f"Buffer投稿成功: {post_id}"
     )
 
     return post
 
 
-# =========================
-# ストック選択
-# =========================
+# ==================================================
+# ストック投稿選択
+# ==================================================
 
 def choose_stock_post(
     posts,
@@ -370,14 +426,9 @@ def choose_stock_post(
     used_posts
 ):
 
-    for index, post in enumerate(
-        posts
-    ):
+    for index, post in enumerate(posts):
 
-        if post.get(
-            "type"
-        ) != post_type:
-
+        if post.get("type") != post_type:
             continue
 
         post_id = (
@@ -392,9 +443,9 @@ def choose_stock_post(
     return None, None
 
 
-# =========================
+# ==================================================
 # GitHubへposted.json保存
-# =========================
+# ==================================================
 
 def commit_posted_file():
 
@@ -438,7 +489,6 @@ def commit_posted_file():
         capture_output=True
     )
 
-    # 変更なし
     if result.returncode == 0:
 
         print(
@@ -466,9 +516,9 @@ def commit_posted_file():
     )
 
 
-# =========================
+# ==================================================
 # MAIN
-# =========================
+# ==================================================
 
 def main():
 
@@ -495,10 +545,9 @@ def main():
     posts = load_posts()
 
 
-    # =====================
-    # 08:00
-    # STVVニュース
-    # =====================
+    # ----------------------------------------------
+    # 08:00 NEWS
+    # ----------------------------------------------
 
     if hour == 8:
 
@@ -532,20 +581,12 @@ def main():
             new_article
         )
 
-        print(
-            "投稿内容:"
-        )
+        print("投稿内容:")
+        print(text)
 
-        print(
-            text
-        )
+        # 成功するまでposted.jsonには書かない
+        post_to_buffer(text)
 
-        # Buffer成功確認
-        post_to_buffer(
-            text
-        )
-
-        # 成功後だけ記録
         posted_news.append(
             new_article["url"]
         )
@@ -554,9 +595,7 @@ def main():
             posted_news
         )
 
-        save_posted(
-            posted
-        )
+        save_posted(posted)
 
         commit_posted_file()
 
@@ -567,30 +606,27 @@ def main():
         return
 
 
-    # =====================
-    # 12:00
-    # PLAYER
-    # =====================
+    # ----------------------------------------------
+    # 12:00 PLAYER
+    # ----------------------------------------------
 
     if hour == 12:
 
         post_type = "player"
 
 
-    # =====================
-    # 18:00
-    # MATCH LAB
-    # =====================
+    # ----------------------------------------------
+    # 18:00 MATCH LAB
+    # ----------------------------------------------
 
     elif hour == 18:
 
         post_type = "matchlab"
 
 
-    # =====================
-    # 21:00
-    # LAB
-    # =====================
+    # ----------------------------------------------
+    # 21:00 LAB
+    # ----------------------------------------------
 
     elif hour == 21:
 
@@ -606,16 +642,14 @@ def main():
         return
 
 
-    # =====================
-    # ストック選択
-    # =====================
+    # ----------------------------------------------
+    # 投稿ストック取得
+    # ----------------------------------------------
 
-    post_id, post = (
-        choose_stock_post(
-            posts,
-            post_type,
-            used_posts
-        )
+    post_id, post = choose_stock_post(
+        posts,
+        post_type,
+        used_posts
     )
 
     if post is None:
@@ -630,18 +664,13 @@ def main():
 
     text = post["text"]
 
-    print(
-        "投稿内容:"
-    )
-
-    print(
-        text
-    )
+    print("投稿内容:")
+    print(text)
 
 
-    # =====================
+    # ----------------------------------------------
     # Buffer投稿
-    # =====================
+    # ----------------------------------------------
 
     buffer_post = post_to_buffer(
         text
@@ -653,10 +682,9 @@ def main():
     )
 
 
-    # =====================
-    # Buffer成功後のみ
-    # 投稿済みにする
-    # =====================
+    # ----------------------------------------------
+    # 本当に成功した後だけ投稿済みにする
+    # ----------------------------------------------
 
     used_posts.append(
         post_id
@@ -666,9 +694,7 @@ def main():
         used_posts
     )
 
-    save_posted(
-        posted
-    )
+    save_posted(posted)
 
     commit_posted_file()
 
