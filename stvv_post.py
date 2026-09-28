@@ -21,28 +21,71 @@ BUFFER_API_KEY = os.environ["BUFFER_API_KEY"]
 JST = timezone(timedelta(hours=9))
 
 
-# -------------------------
-# 保存データ
-# -------------------------
+# =========================
+# X文字数調整
+# =========================
+
+def fit_x_length(text, max_length=270):
+    """
+    Buffer/Xの280文字制限で止まらないように
+    少し余裕を持って270文字以内に調整する。
+    """
+
+    if len(text) <= max_length:
+        return text
+
+    hashtag = "\n\n#STVV"
+    limit = max_length - len(hashtag) - 1
+
+    shortened = text[:limit].rstrip()
+
+    return shortened + "…" + hashtag
+
+
+# =========================
+# posted.json
+# =========================
 
 def load_posted():
+
     if not os.path.exists(POSTED_FILE):
-        return {"news": [], "used_posts": []}
+        return {
+            "news": [],
+            "used_posts": []
+        }
 
     try:
-        with open(POSTED_FILE, "r", encoding="utf-8") as f:
+
+        with open(
+            POSTED_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
             data = json.load(f)
 
-        # 旧形式にも対応
+        # 古い形式にも対応
         if isinstance(data, list):
+
             return {
                 "news": data,
                 "used_posts": []
             }
 
+        if "news" not in data:
+            data["news"] = []
+
+        if "used_posts" not in data:
+            data["used_posts"] = []
+
         return data
 
-    except Exception:
+    except Exception as e:
+
+        print(
+            f"posted.json読み込みエラー: {e}"
+        )
+
         return {
             "news": [],
             "used_posts": []
@@ -50,7 +93,13 @@ def load_posted():
 
 
 def save_posted(posted):
-    with open(POSTED_FILE, "w", encoding="utf-8") as f:
+
+    with open(
+        POSTED_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
         json.dump(
             posted,
             f,
@@ -59,28 +108,45 @@ def save_posted(posted):
         )
 
 
-# -------------------------
-# 投稿ストック
-# -------------------------
+# =========================
+# posts.json
+# =========================
 
 def load_posts():
+
     if not os.path.exists(POSTS_FILE):
+
+        print(
+            "posts.jsonがありません。"
+        )
+
         return []
 
-    with open(POSTS_FILE, "r", encoding="utf-8") as f:
+    with open(
+        POSTS_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
         data = json.load(f)
 
-    return data.get("posts", [])
+    return data.get(
+        "posts",
+        []
+    )
 
 
-# -------------------------
-# STVVニュース取得
-# -------------------------
+# =========================
+# STVVニュース
+# =========================
 
 def get_news():
+
     response = requests.get(
         NEWS_URL,
-        headers={"User-Agent": "Mozilla/5.0"},
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        },
         timeout=30
     )
 
@@ -93,11 +159,18 @@ def get_news():
 
     news = []
 
-    for a in soup.find_all("a", href=True):
+    for a in soup.find_all(
+        "a",
+        href=True
+    ):
+
         href = a["href"]
 
         title = " ".join(
-            a.get_text(" ", strip=True).split()
+            a.get_text(
+                " ",
+                strip=True
+            ).split()
         )
 
         if "/news/" not in href:
@@ -125,11 +198,12 @@ def get_news():
     return news
 
 
-# -------------------------
+# =========================
 # ニュース投稿文
-# -------------------------
+# =========================
 
 def create_news_post(article):
+
     return f"""🇧🇪 STVV NEWS
 
 {article["title"]}
@@ -141,11 +215,32 @@ def create_news_post(article):
 #STVV #シントトロイデン"""
 
 
-# -------------------------
-# Buffer投稿
-# -------------------------
+# =========================
+# Buffer
+# =========================
 
 def post_to_buffer(text):
+
+    # Xの文字数制限対策
+    original_length = len(text)
+
+    text = fit_x_length(text)
+
+    final_length = len(text)
+
+    print(
+        f"元の文字数: {original_length}"
+    )
+
+    print(
+        f"送信文字数: {final_length}"
+    )
+
+    if original_length != final_length:
+
+        print(
+            "280文字制限対策で本文を自動短縮しました。"
+        )
 
     query = """
     mutation CreatePost($input: CreatePostInput!) {
@@ -179,8 +274,10 @@ def post_to_buffer(text):
     response = requests.post(
         BUFFER_API_URL,
         headers={
-            "Authorization": f"Bearer {BUFFER_API_KEY}",
-            "Content-Type": "application/json"
+            "Authorization":
+                f"Bearer {BUFFER_API_KEY}",
+            "Content-Type":
+                "application/json"
         },
         json={
             "query": query,
@@ -193,7 +290,10 @@ def post_to_buffer(text):
 
     result = response.json()
 
-    print("Buffer response:")
+    print(
+        "Buffer response:"
+    )
+
     print(
         json.dumps(
             result,
@@ -202,10 +302,12 @@ def post_to_buffer(text):
         )
     )
 
-    # GraphQL自体のエラー
+    # GraphQLエラー
     if result.get("errors"):
+
         raise RuntimeError(
-            f"Buffer GraphQL error: {result['errors']}"
+            f"Buffer GraphQL error: "
+            f"{result['errors']}"
         )
 
     create_post = (
@@ -215,28 +317,40 @@ def post_to_buffer(text):
     )
 
     if not create_post:
+
         raise RuntimeError(
-            f"Buffer createPost response missing: {result}"
+            "Buffer createPost response missing: "
+            f"{result}"
         )
 
-    # MutationError
+    # Buffer側のMutationError
     if create_post.get("message"):
+
         raise RuntimeError(
-            f"Buffer post failed: {create_post['message']}"
+            "Buffer post failed: "
+            f"{create_post['message']}"
         )
 
-    post = create_post.get("post")
+    post = create_post.get(
+        "post"
+    )
 
     if not post:
+
         raise RuntimeError(
-            f"Buffer did not create a post: {create_post}"
+            "Buffer did not create a post: "
+            f"{create_post}"
         )
 
-    post_id = post.get("id")
+    post_id = post.get(
+        "id"
+    )
 
     if not post_id:
+
         raise RuntimeError(
-            f"Buffer post ID missing: {post}"
+            "Buffer post ID missing: "
+            f"{post}"
         )
 
     print(
@@ -246,9 +360,9 @@ def post_to_buffer(text):
     return post
 
 
-# -------------------------
-# ストック投稿選択
-# -------------------------
+# =========================
+# ストック選択
+# =========================
 
 def choose_stock_post(
     posts,
@@ -256,12 +370,19 @@ def choose_stock_post(
     used_posts
 ):
 
-    for index, post in enumerate(posts):
+    for index, post in enumerate(
+        posts
+    ):
 
-        if post.get("type") != post_type:
+        if post.get(
+            "type"
+        ) != post_type:
+
             continue
 
-        post_id = f"{post_type}_{index}"
+        post_id = (
+            f"{post_type}_{index}"
+        )
 
         if post_id in used_posts:
             continue
@@ -271,9 +392,9 @@ def choose_stock_post(
     return None, None
 
 
-# -------------------------
-# GitHub保存
-# -------------------------
+# =========================
+# GitHubへposted.json保存
+# =========================
 
 def commit_posted_file():
 
@@ -292,7 +413,8 @@ def commit_posted_file():
             "git",
             "config",
             "user.email",
-            "41898282+github-actions[bot]@users.noreply.github.com"
+            "41898282+github-actions[bot]"
+            "@users.noreply.github.com"
         ],
         check=True
     )
@@ -316,7 +438,13 @@ def commit_posted_file():
         capture_output=True
     )
 
+    # 変更なし
     if result.returncode == 0:
+
+        print(
+            "posted.jsonに変更なし"
+        )
+
         return
 
     subprocess.run(
@@ -338,13 +466,14 @@ def commit_posted_file():
     )
 
 
-# -------------------------
-# メイン
-# -------------------------
+# =========================
+# MAIN
+# =========================
 
 def main():
 
     now = datetime.now(JST)
+
     hour = now.hour
 
     print(
@@ -367,7 +496,8 @@ def main():
 
 
     # =====================
-    # 8時：ニュース
+    # 08:00
+    # STVVニュース
     # =====================
 
     if hour == 8:
@@ -382,7 +512,11 @@ def main():
 
         for article in news:
 
-            if article["url"] not in posted_news:
+            if (
+                article["url"]
+                not in posted_news
+            ):
+
                 new_article = article
                 break
 
@@ -398,16 +532,31 @@ def main():
             new_article
         )
 
-        # Bufferで本当に投稿が作られた場合のみ次へ
-        post_to_buffer(text)
+        print(
+            "投稿内容:"
+        )
 
+        print(
+            text
+        )
+
+        # Buffer成功確認
+        post_to_buffer(
+            text
+        )
+
+        # 成功後だけ記録
         posted_news.append(
             new_article["url"]
         )
 
-        posted["news"] = posted_news
+        posted["news"] = (
+            posted_news
+        )
 
-        save_posted(posted)
+        save_posted(
+            posted
+        )
 
         commit_posted_file()
 
@@ -419,25 +568,34 @@ def main():
 
 
     # =====================
-    # 12時：PLAYER
+    # 12:00
+    # PLAYER
     # =====================
 
     if hour == 12:
+
         post_type = "player"
 
+
     # =====================
-    # 18時：MATCH LAB
+    # 18:00
+    # MATCH LAB
     # =====================
 
     elif hour == 18:
+
         post_type = "matchlab"
 
+
     # =====================
-    # 21時：LAB
+    # 21:00
+    # LAB
     # =====================
 
     elif hour == 21:
+
         post_type = "lab"
+
 
     else:
 
@@ -448,16 +606,23 @@ def main():
         return
 
 
-    post_id, post = choose_stock_post(
-        posts,
-        post_type,
-        used_posts
+    # =====================
+    # ストック選択
+    # =====================
+
+    post_id, post = (
+        choose_stock_post(
+            posts,
+            post_type,
+            used_posts
+        )
     )
 
     if post is None:
 
         print(
-            f"{post_type} の未投稿ストックがありません。"
+            f"{post_type} の"
+            "未投稿ストックがありません。"
         )
 
         return
@@ -465,25 +630,45 @@ def main():
 
     text = post["text"]
 
-    print("投稿内容:")
-    print(text)
-
-    # ここでBufferが失敗したら例外になり、
-    # posted.jsonには記録されない
-    buffer_post = post_to_buffer(text)
-
     print(
-        f"Buffer ID: {buffer_post['id']}"
+        "投稿内容:"
     )
 
-    # Buffer成功後だけ投稿済みにする
+    print(
+        text
+    )
+
+
+    # =====================
+    # Buffer投稿
+    # =====================
+
+    buffer_post = post_to_buffer(
+        text
+    )
+
+    print(
+        f"Buffer ID: "
+        f"{buffer_post['id']}"
+    )
+
+
+    # =====================
+    # Buffer成功後のみ
+    # 投稿済みにする
+    # =====================
+
     used_posts.append(
         post_id
     )
 
-    posted["used_posts"] = used_posts
+    posted["used_posts"] = (
+        used_posts
+    )
 
-    save_posted(posted)
+    save_posted(
+        posted
+    )
 
     commit_posted_file()
 
