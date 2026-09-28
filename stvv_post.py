@@ -27,20 +27,26 @@ JST = timezone(timedelta(hours=9))
 
 def load_posted():
     if not os.path.exists(POSTED_FILE):
-        return []
+        return {"news": [], "used_posts": []}
 
     try:
         with open(POSTED_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        # 旧形式 posted.json = ["url", "url"] にも対応
+        # 旧形式にも対応
         if isinstance(data, list):
-            return data
+            return {
+                "news": data,
+                "used_posts": []
+            }
 
         return data
 
     except Exception:
-        return []
+        return {
+            "news": [],
+            "used_posts": []
+        }
 
 
 def save_posted(posted):
@@ -58,7 +64,6 @@ def save_posted(posted):
 # -------------------------
 
 def load_posts():
-
     if not os.path.exists(POSTS_FILE):
         return []
 
@@ -73,12 +78,9 @@ def load_posts():
 # -------------------------
 
 def get_news():
-
     response = requests.get(
         NEWS_URL,
-        headers={
-            "User-Agent": "Mozilla/5.0"
-        },
+        headers={"User-Agent": "Mozilla/5.0"},
         timeout=30
     )
 
@@ -92,14 +94,10 @@ def get_news():
     news = []
 
     for a in soup.find_all("a", href=True):
-
         href = a["href"]
 
         title = " ".join(
-            a.get_text(
-                " ",
-                strip=True
-            ).split()
+            a.get_text(" ", strip=True).split()
         )
 
         if "/news/" not in href:
@@ -132,7 +130,6 @@ def get_news():
 # -------------------------
 
 def create_news_post(article):
-
     return f"""🇧🇪 STVV NEWS
 
 {article["title"]}
@@ -182,10 +179,8 @@ def post_to_buffer(text):
     response = requests.post(
         BUFFER_API_URL,
         headers={
-            "Authorization":
-                f"Bearer {BUFFER_API_KEY}",
-            "Content-Type":
-                "application/json"
+            "Authorization": f"Bearer {BUFFER_API_KEY}",
+            "Content-Type": "application/json"
         },
         json={
             "query": query,
@@ -198,50 +193,57 @@ def post_to_buffer(text):
 
     result = response.json()
 
-    if "errors" in result:
+    print("Buffer response:")
+    print(
+        json.dumps(
+            result,
+            ensure_ascii=False,
+            indent=2
+        )
+    )
+
+    # GraphQL自体のエラー
+    if result.get("errors"):
         raise RuntimeError(
-            result["errors"]
+            f"Buffer GraphQL error: {result['errors']}"
         )
 
-    return result
-
-
-# -------------------------
-# 投稿済み管理
-# -------------------------
-
-def get_used_posts(posted):
-
-    if isinstance(posted, list):
-        return []
-
-    return posted.get(
-        "used_posts",
-        []
+    create_post = (
+        result
+        .get("data", {})
+        .get("createPost")
     )
 
+    if not create_post:
+        raise RuntimeError(
+            f"Buffer createPost response missing: {result}"
+        )
 
-def get_posted_news(posted):
+    # MutationError
+    if create_post.get("message"):
+        raise RuntimeError(
+            f"Buffer post failed: {create_post['message']}"
+        )
 
-    if isinstance(posted, list):
-        return posted
+    post = create_post.get("post")
 
-    return posted.get(
-        "news",
-        []
+    if not post:
+        raise RuntimeError(
+            f"Buffer did not create a post: {create_post}"
+        )
+
+    post_id = post.get("id")
+
+    if not post_id:
+        raise RuntimeError(
+            f"Buffer post ID missing: {post}"
+        )
+
+    print(
+        f"Buffer投稿作成成功: {post_id}"
     )
 
-
-def normalize_posted(posted):
-
-    if isinstance(posted, list):
-
-        return {
-            "news": posted,
-            "used_posts": []
-        }
-
-    return posted
+    return post
 
 
 # -------------------------
@@ -343,26 +345,26 @@ def commit_posted_file():
 def main():
 
     now = datetime.now(JST)
-
     hour = now.hour
 
     print(
         f"現在時刻 JST: {now}"
     )
 
-    posted = normalize_posted(
-        load_posted()
+    posted = load_posted()
+
+    posted_news = posted.get(
+        "news",
+        []
     )
 
-    posted_news = get_posted_news(
-        posted
-    )
-
-    used_posts = get_used_posts(
-        posted
+    used_posts = posted.get(
+        "used_posts",
+        []
     )
 
     posts = load_posts()
+
 
     # =====================
     # 8時：ニュース
@@ -380,11 +382,7 @@ def main():
 
         for article in news:
 
-            if (
-                article["url"]
-                not in posted_news
-            ):
-
+            if article["url"] not in posted_news:
                 new_article = article
                 break
 
@@ -400,6 +398,7 @@ def main():
             new_article
         )
 
+        # Bufferで本当に投稿が作られた場合のみ次へ
         post_to_buffer(text)
 
         posted_news.append(
@@ -420,31 +419,25 @@ def main():
 
 
     # =====================
-    # 12時：選手
+    # 12時：PLAYER
     # =====================
 
     if hour == 12:
-
         post_type = "player"
-
 
     # =====================
     # 18時：MATCH LAB
     # =====================
 
     elif hour == 18:
-
         post_type = "matchlab"
-
 
     # =====================
     # 21時：LAB
     # =====================
 
     elif hour == 21:
-
         post_type = "lab"
-
 
     else:
 
@@ -454,10 +447,6 @@ def main():
 
         return
 
-
-    # ---------------------
-    # ストック投稿
-    # ---------------------
 
     post_id, post = choose_stock_post(
         posts,
@@ -479,15 +468,20 @@ def main():
     print("投稿内容:")
     print(text)
 
-    post_to_buffer(text)
+    # ここでBufferが失敗したら例外になり、
+    # posted.jsonには記録されない
+    buffer_post = post_to_buffer(text)
 
+    print(
+        f"Buffer ID: {buffer_post['id']}"
+    )
+
+    # Buffer成功後だけ投稿済みにする
     used_posts.append(
         post_id
     )
 
-    posted[
-        "used_posts"
-    ] = used_posts
+    posted["used_posts"] = used_posts
 
     save_posted(posted)
 
