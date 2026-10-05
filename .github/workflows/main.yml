@@ -38,6 +38,8 @@ jobs:
         run: pip install requests beautifulsoup4 pillow
 
       - name: Generate STVV LAB image
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: python generate_image.py
 
       - name: Save generated image to GitHub
@@ -57,4 +59,5 @@ jobs:
       - name: Run STVV auto post
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: python stvv_post.py
