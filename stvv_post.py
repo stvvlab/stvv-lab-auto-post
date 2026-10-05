@@ -27,6 +27,28 @@ JST = timezone(timedelta(hours=9))
 
 
 # ==================================================
+# 画像投稿設定
+# ==================================================
+
+GITHUB_OWNER = "stvvlab"
+GITHUB_REPO = "stvv-lab-auto-post"
+IMAGE_PATH = "generated/match_lab.png"
+
+# 実データ画像が完成するまではFalse
+ENABLE_IMAGE_POSTS = False
+
+# ニュースには現状のMATCH LAB画像を付けない
+IMAGE_POST_TYPES = {
+    "player",
+    "compare",
+    "data",
+    "analysis",
+    "vote",
+    "review",
+}
+
+
+# ==================================================
 # 投稿スケジュール
 # ==================================================
 
@@ -387,16 +409,173 @@ def choose_stock_post(
 
 
 # ==================================================
+# GitHub画像URL取得
+# ==================================================
+
+def get_current_commit_sha():
+
+    try:
+
+        result = subprocess.run(
+            [
+                "git",
+                "rev-parse",
+                "HEAD"
+            ],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+
+        sha = result.stdout.strip()
+
+        if not sha:
+            return None
+
+        return sha
+
+    except Exception as e:
+
+        print(
+            f"GitHubコミットSHA取得エラー: {e}"
+        )
+
+        return None
+
+
+def build_image_url():
+
+    sha = get_current_commit_sha()
+
+    if not sha:
+
+        print(
+            "画像URLを作成できないため"
+            "テキスト投稿に切り替えます。"
+        )
+
+        return None
+
+    url = (
+        "https://raw.githubusercontent.com/"
+        f"{GITHUB_OWNER}/"
+        f"{GITHUB_REPO}/"
+        f"{sha}/"
+        f"{IMAGE_PATH}"
+    )
+
+    return url
+
+
+def verify_image_url(url):
+
+    if not url:
+        return False
+
+    try:
+
+        response = requests.get(
+            url,
+            timeout=20
+        )
+
+        if response.status_code != 200:
+
+            print(
+                "画像URL確認失敗: "
+                f"HTTP {response.status_code}"
+            )
+
+            return False
+
+        content_type = (
+            response.headers
+            .get("Content-Type", "")
+            .lower()
+        )
+
+        if not content_type.startswith("image/"):
+
+            print(
+                "画像URLが画像として"
+                "認識されませんでした。"
+            )
+
+            return False
+
+        print(
+            "画像URL確認成功"
+        )
+
+        return True
+
+    except Exception as e:
+
+        print(
+            f"画像URL確認エラー: {e}"
+        )
+
+        return False
+
+
+def get_image_url_for_post(post_type):
+
+    if not ENABLE_IMAGE_POSTS:
+
+        print(
+            "画像投稿は現在OFFです。"
+        )
+
+        return None
+
+    if post_type not in IMAGE_POST_TYPES:
+
+        print(
+            f"{post_type} は"
+            "画像添付対象外です。"
+        )
+
+        return None
+
+    image_url = build_image_url()
+
+    if not verify_image_url(image_url):
+
+        print(
+            "画像を確認できなかったため"
+            "テキストのみ投稿します。"
+        )
+
+        return None
+
+    print(
+        f"投稿画像URL: {image_url}"
+    )
+
+    return image_url
+
+
+# ==================================================
 # Buffer投稿
 # ==================================================
 
-def post_to_buffer(text):
+def post_to_buffer(
+    text,
+    image_url=None
+):
 
     text = fit_x_length(text)
 
     print("")
     print("========== 最終投稿 ==========")
     print(text)
+
+    if image_url:
+        print("")
+        print(
+            f"画像: {image_url}"
+        )
+
     print("==============================")
     print("")
 
@@ -409,6 +588,10 @@ def post_to_buffer(text):
             id
             text
             status
+            assets {
+              id
+              mimeType
+            }
           }
         }
 
@@ -420,13 +603,25 @@ def post_to_buffer(text):
     }
     """
 
+    post_input = {
+        "text": text,
+        "channelId": CHANNEL_ID,
+        "schedulingType": "automatic",
+        "mode": "shareNow"
+    }
+
+    if image_url:
+
+        post_input["assets"] = [
+            {
+                "image": {
+                    "url": image_url
+                }
+            }
+        ]
+
     variables = {
-        "input": {
-            "text": text,
-            "channelId": CHANNEL_ID,
-            "schedulingType": "automatic",
-            "mode": "shareNow"
-        }
+        "input": post_input
     }
 
     response = requests.post(
@@ -619,7 +814,11 @@ def handle_news(posted):
         new_article
     )
 
-    post_to_buffer(text)
+    # ニュース投稿には現在画像を付けない
+    post_to_buffer(
+        text,
+        image_url=None
+    )
 
     posted_news.append(
         new_article["url"]
@@ -685,8 +884,13 @@ def handle_stock_post(
 
         return False
 
+    image_url = get_image_url_for_post(
+        post_type
+    )
+
     buffer_post = post_to_buffer(
-        text
+        text,
+        image_url=image_url
     )
 
     print(
