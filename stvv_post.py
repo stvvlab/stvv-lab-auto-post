@@ -9,8 +9,13 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 
+# ==================================================
+# 基本設定
+# ==================================================
+
 BUFFER_API_URL = "https://api.buffer.com"
 CHANNEL_ID = "6ab8fce4ea19ca0bde027d80"
+
 NEWS_URL = "https://stvv.jp/news/2026/"
 
 POSTED_FILE = "posted.json"
@@ -22,23 +27,28 @@ JST = timezone(timedelta(hours=9))
 
 
 # ==================================================
-# X文字数対策
+# 投稿スケジュール
+# ==================================================
+
+POST_SCHEDULE = {
+    (8, 0): "player",
+    (10, 30): "compare",
+    (12, 30): "data",
+    (15, 30): "analysis",
+    (18, 0): "news",
+    (21, 0): "vote",
+    (23, 0): "review",
+}
+
+
+# ==================================================
+# X文字数チェック
 # ==================================================
 
 URL_PATTERN = re.compile(r"https?://\S+")
 
 
 def x_weighted_length(text):
-    """
-    Xの文字数制限を安全側で概算。
-
-    URL = 23
-    ASCII文字 = 1
-    日本語など = 2
-
-    Buffer側で弾かれないよう、
-    280ギリギリではなく270を上限にする。
-    """
 
     total = 0
     position = 0
@@ -48,11 +58,13 @@ def x_weighted_length(text):
         before = text[position:match.start()]
 
         for char in before:
+
             if ord(char) <= 0x7F:
                 total += 1
             else:
                 total += 2
 
+        # XではURLを固定長として扱う
         total += 23
 
         position = match.end()
@@ -60,6 +72,7 @@ def x_weighted_length(text):
     remaining = text[position:]
 
     for char in remaining:
+
         if ord(char) <= 0x7F:
             total += 1
         else:
@@ -70,6 +83,8 @@ def x_weighted_length(text):
 
 def fit_x_length(text, max_weight=270):
 
+    text = text.strip()
+
     weight = x_weighted_length(text)
 
     print(f"元のX換算文字数: {weight}")
@@ -77,7 +92,7 @@ def fit_x_length(text, max_weight=270):
     if weight <= max_weight:
         return text
 
-    suffix = "…\n\n#STVV"
+    suffix = "\n\n#STVV"
 
     allowed_weight = (
         max_weight
@@ -90,10 +105,7 @@ def fit_x_length(text, max_weight=270):
 
         candidate = result + char
 
-        if (
-            x_weighted_length(candidate)
-            > allowed_weight
-        ):
+        if x_weighted_length(candidate) > allowed_weight:
             break
 
         result = candidate
@@ -102,10 +114,7 @@ def fit_x_length(text, max_weight=270):
 
     final_text = result + suffix
 
-    print(
-        "X文字数制限のため"
-        "本文を自動短縮しました。"
-    )
+    print("文字数制限のため本文を短縮しました。")
 
     print(
         f"短縮後X換算文字数: "
@@ -140,20 +149,13 @@ def load_posted():
 
         if isinstance(data, list):
 
-            return {
+            data = {
                 "news": data,
                 "used_posts": []
             }
 
-        data.setdefault(
-            "news",
-            []
-        )
-
-        data.setdefault(
-            "used_posts",
-            []
-        )
+        data.setdefault("news", [])
+        data.setdefault("used_posts", [])
 
         return data
 
@@ -193,28 +195,70 @@ def load_posts():
 
     if not os.path.exists(POSTS_FILE):
 
+        print("posts.jsonがありません。")
+
+        return []
+
+    try:
+
+        with open(
+            POSTS_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            data = json.load(f)
+
+        posts = data.get("posts", [])
+
+        if not isinstance(posts, list):
+            return []
+
+        return posts
+
+    except Exception as e:
+
         print(
-            "posts.jsonがありません。"
+            f"posts.json読み込みエラー: {e}"
         )
 
         return []
 
-    with open(
-        POSTS_FILE,
-        "r",
-        encoding="utf-8"
-    ) as f:
 
-        data = json.load(f)
+# ==================================================
+# スポンサー・企業PR除外
+# ==================================================
 
-    return data.get(
-        "posts",
-        []
-    )
+EXCLUDED_KEYWORDS = [
+    "スポンサー",
+    "パートナー",
+    "スポンサー契約",
+    "パートナー契約",
+    "オフィシャルパートナー",
+    "サプライヤー",
+    "協賛",
+    "キャンペーン",
+    "グッズ",
+    "商品販売",
+    "販売開始",
+]
+
+
+def is_excluded_news(title):
+
+    normalized = title.lower()
+
+    for keyword in EXCLUDED_KEYWORDS:
+
+        if keyword.lower() in normalized:
+
+            return True
+
+    return False
 
 
 # ==================================================
-# STVVニュース取得
+# STVV公式ニュース取得
 # ==================================================
 
 def get_news():
@@ -256,6 +300,14 @@ def get_news():
         if len(title) < 10:
             continue
 
+        if is_excluded_news(title):
+
+            print(
+                f"除外ニュース: {title}"
+            )
+
+            continue
+
         url = urljoin(
             NEWS_URL,
             href
@@ -275,17 +327,63 @@ def get_news():
     return news
 
 
+# ==================================================
+# ニュース投稿
+# ==================================================
+
 def create_news_post(article):
 
-    return f"""🇧🇪 STVV NEWS
+    title = article["title"]
+    url = article["url"]
 
-{article["title"]}
+    text = (
+        "🚨 STVV最新情報 🇧🇪⚽\n\n"
+        f"{title}\n\n"
+        "今日チェックしておきたい"
+        "STVVのニュースです👀\n\n"
+        f"🔗 {url}\n\n"
+        "#STVV #海外サッカー"
+    )
 
-シント＝トロイデンVVの最新情報です。
+    return text
 
-🔗 {article["url"]}
 
-#STVV #シントトロイデン"""
+# ==================================================
+# ストック投稿取得
+# ==================================================
+
+def choose_stock_post(
+    posts,
+    post_type,
+    used_posts
+):
+
+    candidates = []
+
+    for index, post in enumerate(posts):
+
+        if post.get("type") != post_type:
+            continue
+
+        text = post.get("text", "").strip()
+
+        if not text:
+            continue
+
+        post_id = f"{post_type}_{index}"
+
+        if post_id in used_posts:
+            continue
+
+        candidates.append(
+            (post_id, post)
+        )
+
+    if not candidates:
+
+        return None, None
+
+    return candidates[0]
 
 
 # ==================================================
@@ -296,13 +394,11 @@ def post_to_buffer(text):
 
     text = fit_x_length(text)
 
-    print("最終投稿内容:")
+    print("")
+    print("========== 最終投稿 ==========")
     print(text)
-
-    print(
-        f"最終X換算文字数: "
-        f"{x_weighted_length(text)}"
-    )
+    print("==============================")
+    print("")
 
     query = """
     mutation CreatePost($input: CreatePostInput!) {
@@ -362,7 +458,6 @@ def post_to_buffer(text):
         )
     )
 
-    # GraphQLエラー
     if result.get("errors"):
 
         raise RuntimeError(
@@ -383,7 +478,6 @@ def post_to_buffer(text):
             f"{result}"
         )
 
-    # Bufferが投稿を拒否
     if create_post.get("message"):
 
         raise RuntimeError(
@@ -405,8 +499,7 @@ def post_to_buffer(text):
     if not post_id:
 
         raise RuntimeError(
-            "Buffer post ID missing: "
-            f"{post}"
+            "Buffer post ID missing."
         )
 
     print(
@@ -417,34 +510,7 @@ def post_to_buffer(text):
 
 
 # ==================================================
-# ストック投稿選択
-# ==================================================
-
-def choose_stock_post(
-    posts,
-    post_type,
-    used_posts
-):
-
-    for index, post in enumerate(posts):
-
-        if post.get("type") != post_type:
-            continue
-
-        post_id = (
-            f"{post_type}_{index}"
-        )
-
-        if post_id in used_posts:
-            continue
-
-        return post_id, post
-
-    return None, None
-
-
-# ==================================================
-# GitHubへposted.json保存
+# posted.jsonをGitHubへ保存
 # ==================================================
 
 def commit_posted_file():
@@ -485,8 +551,7 @@ def commit_posted_file():
             "diff",
             "--cached",
             "--quiet"
-        ],
-        capture_output=True
+        ]
     )
 
     if result.returncode == 0:
@@ -517,134 +582,78 @@ def commit_posted_file():
 
 
 # ==================================================
-# MAIN
+# ニュース投稿処理
 # ==================================================
 
-def main():
-
-    now = datetime.now(JST)
-
-    hour = now.hour
+def handle_news(posted):
 
     print(
-        f"現在時刻 JST: {now}"
+        "🚨 STVV重要ニュース確認"
     )
-
-    posted = load_posted()
 
     posted_news = posted.get(
         "news",
         []
     )
 
+    news = get_news()
+
+    new_article = None
+
+    for article in news:
+
+        if article["url"] not in posted_news:
+
+            new_article = article
+            break
+
+    if new_article is None:
+
+        print(
+            "投稿対象の新しいニュースはありません。"
+        )
+
+        return False
+
+    text = create_news_post(
+        new_article
+    )
+
+    post_to_buffer(text)
+
+    posted_news.append(
+        new_article["url"]
+    )
+
+    # 履歴肥大化防止
+    posted["news"] = posted_news[-300:]
+
+    save_posted(posted)
+
+    commit_posted_file()
+
+    print(
+        "ニュース投稿完了"
+    )
+
+    return True
+
+
+# ==================================================
+# 通常投稿処理
+# ==================================================
+
+def handle_stock_post(
+    post_type,
+    posted
+):
+
+    posts = load_posts()
+
     used_posts = posted.get(
         "used_posts",
         []
     )
-
-    posts = load_posts()
-
-
-    # ----------------------------------------------
-    # 08:00 NEWS
-    # ----------------------------------------------
-
-    if hour == 8:
-
-        print(
-            "8時：STVVニュース確認"
-        )
-
-        news = get_news()
-
-        new_article = None
-
-        for article in news:
-
-            if (
-                article["url"]
-                not in posted_news
-            ):
-
-                new_article = article
-                break
-
-        if new_article is None:
-
-            print(
-                "新しいニュースはありません。"
-            )
-
-            return
-
-        text = create_news_post(
-            new_article
-        )
-
-        print("投稿内容:")
-        print(text)
-
-        # 成功するまでposted.jsonには書かない
-        post_to_buffer(text)
-
-        posted_news.append(
-            new_article["url"]
-        )
-
-        posted["news"] = (
-            posted_news
-        )
-
-        save_posted(posted)
-
-        commit_posted_file()
-
-        print(
-            "ニュース投稿完了"
-        )
-
-        return
-
-
-    # ----------------------------------------------
-    # 12:00 PLAYER
-    # ----------------------------------------------
-
-    if hour == 12:
-
-        post_type = "player"
-
-
-    # ----------------------------------------------
-    # 18:00 MATCH LAB
-    # ----------------------------------------------
-
-    elif hour == 18:
-
-        post_type = "matchlab"
-
-
-    # ----------------------------------------------
-    # 21:00 LAB
-    # ----------------------------------------------
-
-    elif hour == 21:
-
-        post_type = "lab"
-
-
-    else:
-
-        print(
-            "投稿時間ではありません。"
-        )
-
-        return
-
-
-    # ----------------------------------------------
-    # 投稿ストック取得
-    # ----------------------------------------------
 
     post_id, post = choose_stock_post(
         posts,
@@ -659,18 +668,22 @@ def main():
             "未投稿ストックがありません。"
         )
 
-        return
+        # 投稿する価値のない枠を
+        # 無理に埋めない
+        return False
 
+    text = post.get(
+        "text",
+        ""
+    ).strip()
 
-    text = post["text"]
+    if not text:
 
-    print("投稿内容:")
-    print(text)
+        print(
+            "投稿本文が空です。"
+        )
 
-
-    # ----------------------------------------------
-    # Buffer投稿
-    # ----------------------------------------------
+        return False
 
     buffer_post = post_to_buffer(
         text
@@ -681,17 +694,14 @@ def main():
         f"{buffer_post['id']}"
     )
 
-
-    # ----------------------------------------------
-    # 本当に成功した後だけ投稿済みにする
-    # ----------------------------------------------
-
+    # Buffer成功後だけ使用済みにする
     used_posts.append(
         post_id
     )
 
+    # 履歴肥大化防止
     posted["used_posts"] = (
-        used_posts
+        used_posts[-500:]
     )
 
     save_posted(posted)
@@ -700,6 +710,83 @@ def main():
 
     print(
         f"{post_type} 投稿完了"
+    )
+
+    return True
+
+
+# ==================================================
+# MAIN
+# ==================================================
+
+def main():
+
+    now = datetime.now(JST)
+
+    hour = now.hour
+    minute = now.minute
+
+    print(
+        f"現在時刻 JST: {now}"
+    )
+
+    print(
+        f"実行時刻: {hour:02d}:{minute:02d}"
+    )
+
+    posted = load_posted()
+
+    # GitHub Actionsは数分遅れて
+    # 起動する場合があるため、
+    # 「時」を中心に投稿枠を判定する。
+    #
+    # 同じ時刻に複数枠は設定しない。
+
+    schedule_by_hour = {
+        8: "player",
+        10: "compare",
+        12: "data",
+        15: "analysis",
+        18: "news",
+        21: "vote",
+        23: "review",
+    }
+
+    post_type = schedule_by_hour.get(
+        hour
+    )
+
+    if post_type is None:
+
+        print(
+            "現在は投稿時間ではありません。"
+        )
+
+        return
+
+    print(
+        f"今回の投稿タイプ: {post_type}"
+    )
+
+    # ----------------------------------------------
+    # 18時：重要ニュース
+    # ----------------------------------------------
+
+    if post_type == "news":
+
+        handle_news(
+            posted
+        )
+
+        return
+
+    # ----------------------------------------------
+    # その他6枠
+    # ----------------------------------------------
+
+    handle_stock_post(
+        post_type,
+        posted
     )
 
 
