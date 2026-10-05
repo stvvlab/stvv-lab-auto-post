@@ -1,93 +1,538 @@
-from PIL import Image, ImageDraw, ImageFont
 import os
-import json
 from datetime import datetime, timezone, timedelta
+
+import requests
+from PIL import Image, ImageDraw, ImageFont
 
 
 # ==================================================
 # 基本設定
 # ==================================================
 
-WIDTH = 1200
-HEIGHT = 675
+API_BASE_URL = "https://v3.football.api-sports.io"
+API_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 
 OUTPUT_DIR = "generated"
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, "match_lab.png")
+OUTPUT_PATH = os.path.join(OUTPUT_DIR, "match_lab.png")
 
-POSTS_FILE = "posts.json"
-
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+WIDTH = 1200
+HEIGHT = 675
 
 JST = timezone(timedelta(hours=9))
 
 
 # ==================================================
-# STVV LAB COLORS
+# カラー
 # ==================================================
 
-NAVY = (5, 32, 58)
-NAVY_LIGHT = (12, 52, 88)
-
-YELLOW = (255, 220, 0)
+NAVY = (9, 29, 58)
+DARK_NAVY = (5, 18, 38)
+BLUE = (26, 89, 166)
+YELLOW = (255, 214, 0)
 WHITE = (255, 255, 255)
-
-BLUE = (38, 116, 184)
-LIGHT_BLUE = (105, 180, 225)
-
-GRAY = (185, 197, 207)
-DARK_GRAY = (80, 100, 115)
+LIGHT = (225, 233, 242)
+GRAY = (150, 165, 180)
 
 
 # ==================================================
-# FONT
+# フォント
 # ==================================================
 
-def get_font(size, bold=False):
+FONT_CANDIDATES = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
+]
 
-    font_candidates = []
+REGULAR_FONT_CANDIDATES = [
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
+]
 
-    if bold:
-        font_candidates = [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-            "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
-        ]
-    else:
-        font_candidates = [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-            "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
-        ]
 
-    for path in font_candidates:
+def load_font(size, bold=True):
+
+    candidates = (
+        FONT_CANDIDATES
+        if bold
+        else REGULAR_FONT_CANDIDATES
+    )
+
+    for path in candidates:
 
         if os.path.exists(path):
-
-            return ImageFont.truetype(
-                path,
-                size
-            )
+            return ImageFont.truetype(path, size)
 
     return ImageFont.load_default()
 
 
-FONT_SMALL = get_font(24)
-FONT_MEDIUM = get_font(32)
-FONT_MEDIUM_BOLD = get_font(32, True)
-FONT_LARGE = get_font(52, True)
-FONT_XL = get_font(70, True)
-FONT_NUMBER = get_font(58, True)
+FONT_TITLE = load_font(48)
+FONT_SUBTITLE = load_font(28)
+FONT_TEAM = load_font(34)
+FONT_SCORE = load_font(76)
+FONT_STAT = load_font(30)
+FONT_VALUE = load_font(38)
+FONT_SMALL = load_font(22, bold=False)
+FONT_BADGE = load_font(24)
 
 
 # ==================================================
-# DRAW HELPERS
+# API共通
 # ==================================================
 
-def draw_centered_text(
+def api_get(endpoint, params=None):
+
+    if not API_KEY:
+        raise RuntimeError(
+            "API_FOOTBALL_KEY が設定されていません。"
+        )
+
+    url = f"{API_BASE_URL}/{endpoint}"
+
+    response = requests.get(
+        url,
+        headers={
+            "x-apisports-key": API_KEY
+        },
+        params=params or {},
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    errors = data.get("errors")
+
+    if errors:
+        raise RuntimeError(
+            f"API-FOOTBALL error: {errors}"
+        )
+
+    remaining = response.headers.get(
+        "x-ratelimit-requests-remaining"
+    )
+
+    if remaining is not None:
+        print(
+            f"API残りリクエスト数: {remaining}"
+        )
+
+    return data.get("response", [])
+
+
+# ==================================================
+# STVV検索
+# ==================================================
+
+def find_stvv():
+
+    print("STVVを検索します。")
+
+    teams = api_get(
+        "teams",
+        {
+            "search": "Sint-Truidense"
+        }
+    )
+
+    if not teams:
+
+        # 表記揺れ対策
+        teams = api_get(
+            "teams",
+            {
+                "search": "Truiden"
+            }
+        )
+
+    if not teams:
+        raise RuntimeError(
+            "STVVをAPI上で見つけられませんでした。"
+        )
+
+    # Belgiumのクラブを優先
+    selected = None
+
+    for item in teams:
+
+        team = item.get("team", {})
+
+        name = team.get("name", "")
+        country = team.get("country", "")
+
+        if (
+            country == "Belgium"
+            and (
+                "Truiden" in name
+                or "Truidense" in name
+            )
+        ):
+            selected = team
+            break
+
+    if selected is None:
+        selected = teams[0].get("team", {})
+
+    team_id = selected.get("id")
+    team_name = selected.get("name")
+
+    if not team_id:
+        raise RuntimeError(
+            "STVVのTeam IDを取得できませんでした。"
+        )
+
+    print(
+        f"STVV取得成功: {team_name} "
+        f"(Team ID: {team_id})"
+    )
+
+    return team_id, team_name
+
+
+# ==================================================
+# 直近終了試合
+# ==================================================
+
+def get_latest_finished_fixture(team_id):
+
+    print("STVVの直近試合を取得します。")
+
+    fixtures = api_get(
+        "fixtures",
+        {
+            "team": team_id,
+            "last": 10,
+            "timezone": "Asia/Tokyo"
+        }
+    )
+
+    if not fixtures:
+        raise RuntimeError(
+            "STVVの試合を取得できませんでした。"
+        )
+
+    finished_statuses = {
+        "FT",
+        "AET",
+        "PEN"
+    }
+
+    finished = []
+
+    for item in fixtures:
+
+        fixture = item.get(
+            "fixture",
+            {}
+        )
+
+        status = fixture.get(
+            "status",
+            {}
+        ).get("short")
+
+        if status in finished_statuses:
+            finished.append(item)
+
+    if not finished:
+        raise RuntimeError(
+            "終了済みの直近試合がありません。"
+        )
+
+    # APIの返却順に依存せず日時で判定
+    finished.sort(
+        key=lambda x: x.get(
+            "fixture",
+            {}
+        ).get(
+            "timestamp",
+            0
+        ),
+        reverse=True
+    )
+
+    latest = finished[0]
+
+    fixture_id = latest[
+        "fixture"
+    ]["id"]
+
+    print(
+        f"直近試合 Fixture ID: {fixture_id}"
+    )
+
+    return latest
+
+
+# ==================================================
+# 試合統計
+# ==================================================
+
+def get_fixture_statistics(fixture_id):
+
+    print(
+        f"Fixture {fixture_id} の"
+        "試合統計を取得します。"
+    )
+
+    statistics = api_get(
+        "fixtures/statistics",
+        {
+            "fixture": fixture_id
+        }
+    )
+
+    return statistics
+
+
+def statistics_to_dict(statistics):
+
+    result = {}
+
+    for side in statistics:
+
+        team = side.get(
+            "team",
+            {}
+        )
+
+        team_id = team.get("id")
+
+        stat_dict = {}
+
+        for stat in side.get(
+            "statistics",
+            []
+        ):
+
+            stat_type = stat.get("type")
+            value = stat.get("value")
+
+            stat_dict[stat_type] = value
+
+        result[team_id] = stat_dict
+
+    return result
+
+
+# ==================================================
+# 表示用データ作成
+# ==================================================
+
+def clean_value(value):
+
+    if value is None:
+        return "—"
+
+    if isinstance(value, str):
+
+        value = value.strip()
+
+        if not value:
+            return "—"
+
+    return str(value)
+
+
+def build_match_data(
+    fixture,
+    statistics,
+    stvv_id
+):
+
+    teams = fixture.get(
+        "teams",
+        {}
+    )
+
+    goals = fixture.get(
+        "goals",
+        {}
+    )
+
+    fixture_info = fixture.get(
+        "fixture",
+        {}
+    )
+
+    home = teams.get(
+        "home",
+        {}
+    )
+
+    away = teams.get(
+        "away",
+        {}
+    )
+
+    home_id = home.get("id")
+    away_id = away.get("id")
+
+    stats = statistics_to_dict(
+        statistics
+    )
+
+    home_stats = stats.get(
+        home_id,
+        {}
+    )
+
+    away_stats = stats.get(
+        away_id,
+        {}
+    )
+
+    if stvv_id == home_id:
+
+        stvv_name = home.get(
+            "name",
+            "STVV"
+        )
+
+        opponent_name = away.get(
+            "name",
+            "OPPONENT"
+        )
+
+        stvv_score = goals.get(
+            "home"
+        )
+
+        opponent_score = goals.get(
+            "away"
+        )
+
+        stvv_stats = home_stats
+        opponent_stats = away_stats
+
+        venue = "HOME"
+
+    else:
+
+        stvv_name = away.get(
+            "name",
+            "STVV"
+        )
+
+        opponent_name = home.get(
+            "name",
+            "OPPONENT"
+        )
+
+        stvv_score = goals.get(
+            "away"
+        )
+
+        opponent_score = goals.get(
+            "home"
+        )
+
+        stvv_stats = away_stats
+        opponent_stats = home_stats
+
+        venue = "AWAY"
+
+    date_raw = fixture_info.get(
+        "date",
+        ""
+    )
+
+    try:
+
+        match_date = datetime.fromisoformat(
+            date_raw
+        ).astimezone(
+            JST
+        ).strftime(
+            "%Y.%m.%d"
+        )
+
+    except Exception:
+
+        match_date = date_raw[:10]
+
+    return {
+        "stvv_name": stvv_name,
+        "opponent_name": opponent_name,
+        "stvv_score": clean_value(
+            stvv_score
+        ),
+        "opponent_score": clean_value(
+            opponent_score
+        ),
+        "date": match_date,
+        "venue": venue,
+
+        "stats": [
+            (
+                "SHOTS",
+                clean_value(
+                    stvv_stats.get(
+                        "Total Shots"
+                    )
+                ),
+                clean_value(
+                    opponent_stats.get(
+                        "Total Shots"
+                    )
+                )
+            ),
+            (
+                "ON TARGET",
+                clean_value(
+                    stvv_stats.get(
+                        "Shots on Goal"
+                    )
+                ),
+                clean_value(
+                    opponent_stats.get(
+                        "Shots on Goal"
+                    )
+                )
+            ),
+            (
+                "POSSESSION",
+                clean_value(
+                    stvv_stats.get(
+                        "Ball Possession"
+                    )
+                ),
+                clean_value(
+                    opponent_stats.get(
+                        "Ball Possession"
+                    )
+                )
+            ),
+            (
+                "CORNERS",
+                clean_value(
+                    stvv_stats.get(
+                        "Corner Kicks"
+                    )
+                ),
+                clean_value(
+                    opponent_stats.get(
+                        "Corner Kicks"
+                    )
+                )
+            ),
+        ]
+    }
+
+
+# ==================================================
+# 描画ヘルパー
+# ==================================================
+
+def text_center(
     draw,
+    xy,
     text,
-    y,
     font,
     fill
 ):
+
+    x, y = xy
 
     bbox = draw.textbbox(
         (0, 0),
@@ -95,652 +540,334 @@ def draw_centered_text(
         font=font
     )
 
-    width = bbox[2] - bbox[0]
-
-    x = (WIDTH - width) // 2
+    width = (
+        bbox[2]
+        - bbox[0]
+    )
 
     draw.text(
-        (x, y),
+        (
+            x - width / 2,
+            y
+        ),
         text,
         font=font,
         fill=fill
     )
 
 
-def draw_header(
-    draw,
-    category,
-    subtitle
+def shorten_team_name(
+    name,
+    max_length=20
 ):
 
-    draw.rectangle(
-        (0, 0, WIDTH, 115),
-        fill=WHITE
+    if not name:
+        return "UNKNOWN"
+
+    if len(name) <= max_length:
+        return name.upper()
+
+    return (
+        name[:max_length - 1]
+        .upper()
+        + "…"
     )
 
+
+# ==================================================
+# 実データ画像
+# ==================================================
+
+def create_match_data_card(
+    match_data
+):
+
+    image = Image.new(
+        "RGB",
+        (
+            WIDTH,
+            HEIGHT
+        ),
+        NAVY
+    )
+
+    draw = ImageDraw.Draw(
+        image
+    )
+
+    # 上部アクセント
     draw.rectangle(
-        (0, 105, WIDTH, 115),
+        (
+            0,
+            0,
+            WIDTH,
+            16
+        ),
         fill=YELLOW
     )
 
+    # タイトル
     draw.text(
-        (55, 27),
+        (
+            55,
+            40
+        ),
         "STVV LAB",
-        font=FONT_LARGE,
-        fill=NAVY
+        font=FONT_TITLE,
+        fill=WHITE
     )
-
-    bbox = draw.textbbox(
-        (0, 0),
-        category,
-        font=FONT_MEDIUM_BOLD
-    )
-
-    category_width = bbox[2] - bbox[0]
 
     draw.text(
         (
-            WIDTH - category_width - 55,
-            30
+            55,
+            102
         ),
-        category,
-        font=FONT_MEDIUM_BOLD,
-        fill=BLUE
-    )
-
-    draw.text(
-        (58, 135),
-        subtitle,
-        font=FONT_SMALL,
-        fill=GRAY
-    )
-
-
-def draw_footer(draw):
-
-    draw.rectangle(
-        (0, HEIGHT - 55, WIDTH, HEIGHT),
-        fill=(3, 23, 42)
-    )
-
-    draw.text(
-        (50, HEIGHT - 42),
-        "STVV LAB  |  FOOTBALL DATA & ANALYSIS",
-        font=FONT_SMALL,
-        fill=GRAY
-    )
-
-    draw.text(
-        (WIDTH - 165, HEIGHT - 42),
-        "#STVV",
-        font=FONT_SMALL,
-        fill=YELLOW
-    )
-
-
-def draw_divider(
-    draw,
-    y
-):
-
-    draw.line(
-        (60, y, WIDTH - 60, y),
-        fill=DARK_GRAY,
-        width=2
-    )
-
-
-# ==================================================
-# PLAYER CARD
-# ==================================================
-
-def create_player_card():
-
-    img = Image.new(
-        "RGB",
-        (WIDTH, HEIGHT),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(img)
-
-    draw_header(
-        draw,
-        "PLAYER DATA",
-        "JAPANESE PLAYER CHECK"
-    )
-
-    draw.text(
-        (70, 220),
-        "PLAYER",
-        font=FONT_SMALL,
-        fill=LIGHT_BLUE
-    )
-
-    draw.text(
-        (70, 260),
-        "PERFORMANCE CHECK",
-        font=FONT_LARGE,
-        fill=WHITE
-    )
-
-    draw_divider(
-        draw,
-        340
-    )
-
-    labels = [
-        "ATTACK",
-        "CHANCE",
-        "DEFENCE",
-        "POSITION",
-        "IMPACT"
-    ]
-
-    start_x = 80
-
-    for i, label in enumerate(labels):
-
-        x = start_x + i * 215
-
-        draw.text(
-            (x, 390),
-            label,
-            font=FONT_SMALL,
-            fill=GRAY
-        )
-
-        draw.text(
-            (x, 440),
-            "—",
-            font=FONT_NUMBER,
-            fill=YELLOW
-        )
-
-    draw.text(
-        (70, 545),
-        "Actual match data will be displayed here.",
-        font=FONT_SMALL,
-        fill=GRAY
-    )
-
-    draw_footer(draw)
-
-    return img
-
-
-# ==================================================
-# COMPARISON CARD
-# ==================================================
-
-def create_compare_card():
-
-    img = Image.new(
-        "RGB",
-        (WIDTH, HEIGHT),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(img)
-
-    draw_header(
-        draw,
-        "HEAD TO HEAD",
-        "STVV vs NEXT OPPONENT"
-    )
-
-    draw.text(
-        (110, 215),
-        "STVV",
-        font=FONT_XL,
-        fill=WHITE
-    )
-
-    draw_centered_text(
-        draw,
-        "VS",
-        225,
-        FONT_LARGE,
-        YELLOW
-    )
-
-    opponent = "OPPONENT"
-
-    bbox = draw.textbbox(
-        (0, 0),
-        opponent,
-        font=FONT_XL
-    )
-
-    w = bbox[2] - bbox[0]
-
-    draw.text(
-        (WIDTH - w - 110, 215),
-        opponent,
-        font=FONT_XL,
-        fill=WHITE
-    )
-
-    draw_divider(
-        draw,
-        325
-    )
-
-    rows = [
-        "GOALS",
-        "CONCEDED",
-        "FORM",
-        "HOME / AWAY"
-    ]
-
-    y = 370
-
-    for row in rows:
-
-        draw.text(
-            (100, y),
-            "—",
-            font=FONT_MEDIUM_BOLD,
-            fill=YELLOW
-        )
-
-        draw_centered_text(
-            draw,
-            row,
-            y,
-            FONT_MEDIUM,
-            GRAY
-        )
-
-        draw.text(
-            (WIDTH - 130, y),
-            "—",
-            font=FONT_MEDIUM_BOLD,
-            fill=LIGHT_BLUE
-        )
-
-        y += 55
-
-    draw_footer(draw)
-
-    return img
-
-
-# ==================================================
-# MATCH DATA CARD
-# ==================================================
-
-def create_data_card():
-
-    img = Image.new(
-        "RGB",
-        (WIDTH, HEIGHT),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(img)
-
-    draw_header(
-        draw,
         "MATCH DATA",
-        "MATCH STATS"
-    )
-
-    draw.text(
-        (95, 190),
-        "STVV",
-        font=FONT_LARGE,
-        fill=WHITE
-    )
-
-    draw_centered_text(
-        draw,
-        "MATCH STATS",
-        195,
-        FONT_MEDIUM_BOLD,
-        YELLOW
-    )
-
-    opponent = "OPP"
-
-    bbox = draw.textbbox(
-        (0, 0),
-        opponent,
-        font=FONT_LARGE
-    )
-
-    w = bbox[2] - bbox[0]
-
-    draw.text(
-        (WIDTH - w - 95, 190),
-        opponent,
-        font=FONT_LARGE,
-        fill=WHITE
-    )
-
-    draw_divider(
-        draw,
-        270
-    )
-
-    stats = [
-        "SHOTS",
-        "ON TARGET",
-        "POSSESSION",
-        "CORNERS"
-    ]
-
-    y = 315
-
-    for stat in stats:
-
-        draw.text(
-            (105, y),
-            "—",
-            font=FONT_MEDIUM_BOLD,
-            fill=YELLOW
-        )
-
-        draw_centered_text(
-            draw,
-            stat,
-            y,
-            FONT_MEDIUM,
-            GRAY
-        )
-
-        draw.text(
-            (WIDTH - 135, y),
-            "—",
-            font=FONT_MEDIUM_BOLD,
-            fill=LIGHT_BLUE
-        )
-
-        y += 62
-
-    draw.text(
-        (70, 565),
-        "DATA SOURCE REQUIRED",
-        font=FONT_SMALL,
-        fill=GRAY
-    )
-
-    draw_footer(draw)
-
-    return img
-
-
-# ==================================================
-# ANALYSIS CARD
-# ==================================================
-
-def create_analysis_card():
-
-    img = Image.new(
-        "RGB",
-        (WIDTH, HEIGHT),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(img)
-
-    draw_header(
-        draw,
-        "TACTICAL LAB",
-        "MATCH ANALYSIS"
-    )
-
-    draw.text(
-        (70, 205),
-        "WHY?",
-        font=FONT_XL,
+        font=FONT_SUBTITLE,
         fill=YELLOW
     )
 
+    # 日付・HOME/AWAY
+    info_text = (
+        f"{match_data['date']}  "
+        f"{match_data['venue']}"
+    )
+
     draw.text(
-        (70, 290),
-        "WHAT CHANGED THE GAME?",
-        font=FONT_LARGE,
-        fill=WHITE
+        (
+            900,
+            60
+        ),
+        info_text,
+        font=FONT_SMALL,
+        fill=LIGHT
     )
 
-    draw_divider(
+    # チーム
+    stvv_name = shorten_team_name(
+        match_data[
+            "stvv_name"
+        ]
+    )
+
+    opponent_name = shorten_team_name(
+        match_data[
+            "opponent_name"
+        ]
+    )
+
+    text_center(
         draw,
-        370
-    )
-
-    points = [
-        "01  BUILD UP",
-        "02  PRESSING",
-        "03  TRANSITION"
-    ]
-
-    y = 410
-
-    for point in points:
-
-        draw.text(
-            (85, y),
-            point,
-            font=FONT_MEDIUM_BOLD,
-            fill=LIGHT_BLUE
-        )
-
-        y += 55
-
-    draw_footer(draw)
-
-    return img
-
-
-# ==================================================
-# VOTE CARD
-# ==================================================
-
-def create_vote_card():
-
-    img = Image.new(
-        "RGB",
-        (WIDTH, HEIGHT),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(img)
-
-    draw_header(
-        draw,
-        "FAN VOTE",
-        "STVV SUPPORTERS"
-    )
-
-    draw_centered_text(
-        draw,
-        "YOUR CHOICE?",
-        205,
-        FONT_XL,
+        (
+            270,
+            175
+        ),
+        stvv_name,
+        FONT_TEAM,
         WHITE
     )
 
-    draw_centered_text(
+    text_center(
         draw,
-        "TELL US WHAT YOU THINK",
-        300,
-        FONT_MEDIUM_BOLD,
+        (
+            930,
+            175
+        ),
+        opponent_name,
+        FONT_TEAM,
+        WHITE
+    )
+
+    # スコア
+    text_center(
+        draw,
+        (
+            270,
+            225
+        ),
+        match_data[
+            "stvv_score"
+        ],
+        FONT_SCORE,
         YELLOW
     )
 
-    draw_divider(
+    text_center(
         draw,
-        370
+        (
+            600,
+            245
+        ),
+        "-",
+        FONT_SCORE,
+        WHITE
     )
 
-    draw_centered_text(
+    text_center(
         draw,
-        "JOIN THE DISCUSSION",
-        425,
-        FONT_LARGE,
-        LIGHT_BLUE
+        (
+            930,
+            225
+        ),
+        match_data[
+            "opponent_score"
+        ],
+        FONT_SCORE,
+        WHITE
     )
 
-    draw_centered_text(
-        draw,
-        "#STVV",
-        510,
-        FONT_MEDIUM_BOLD,
-        GRAY
+    # 区切り
+    draw.line(
+        (
+            55,
+            340,
+            1145,
+            340
+        ),
+        fill=BLUE,
+        width=3
     )
 
-    draw_footer(draw)
+    # 統計
+    y = 375
 
-    return img
+    for (
+        label,
+        stvv_value,
+        opponent_value
+    ) in match_data["stats"]:
 
+        text_center(
+            draw,
+            (
+                270,
+                y
+            ),
+            stvv_value,
+            FONT_VALUE,
+            YELLOW
+        )
 
-# ==================================================
-# REVIEW CARD
-# ==================================================
+        text_center(
+            draw,
+            (
+                600,
+                y + 5
+            ),
+            label,
+            FONT_STAT,
+            LIGHT
+        )
 
-def create_review_card():
+        text_center(
+            draw,
+            (
+                930,
+                y
+            ),
+            opponent_value,
+            FONT_VALUE,
+            WHITE
+        )
 
-    img = Image.new(
-        "RGB",
-        (WIDTH, HEIGHT),
-        NAVY
-    )
+        y += 65
 
-    draw = ImageDraw.Draw(img)
-
-    draw_header(
-        draw,
-        "MATCH REVIEW",
-        "AFTER THE FINAL WHISTLE"
+    # フッター
+    draw.rectangle(
+        (
+            0,
+            HEIGHT - 42,
+            WIDTH,
+            HEIGHT
+        ),
+        fill=DARK_NAVY
     )
 
     draw.text(
-        (70, 200),
-        "90 MINUTES",
-        font=FONT_XL,
+        (
+            55,
+            HEIGHT - 34
+        ),
+        "DATA: API-FOOTBALL",
+        font=FONT_SMALL,
+        fill=GRAY
+    )
+
+    return image
+
+
+# ==================================================
+# エラー時画像
+# ==================================================
+
+def create_error_card(
+    message
+):
+
+    image = Image.new(
+        "RGB",
+        (
+            WIDTH,
+            HEIGHT
+        ),
+        NAVY
+    )
+
+    draw = ImageDraw.Draw(
+        image
+    )
+
+    draw.rectangle(
+        (
+            0,
+            0,
+            WIDTH,
+            16
+        ),
+        fill=YELLOW
+    )
+
+    draw.text(
+        (
+            55,
+            50
+        ),
+        "STVV LAB",
+        font=FONT_TITLE,
         fill=WHITE
     )
 
     draw.text(
-        (70, 285),
-        "WHAT DECIDED THE GAME?",
-        font=FONT_LARGE,
+        (
+            55,
+            120
+        ),
+        "MATCH DATA",
+        font=FONT_SUBTITLE,
         fill=YELLOW
     )
 
-    draw_divider(
-        draw,
-        365
+    draw.text(
+        (
+            55,
+            260
+        ),
+        "DATA NOT AVAILABLE",
+        font=FONT_TITLE,
+        fill=WHITE
     )
 
-    sections = [
-        ("GOOD", LIGHT_BLUE),
-        ("KEY POINT", WHITE),
-        ("NEXT", YELLOW)
-    ]
-
-    y = 410
-
-    for title, color in sections:
-
-        draw.text(
-            (85, y),
-            title,
-            font=FONT_MEDIUM_BOLD,
-            fill=color
-        )
-
-        draw.text(
-            (330, y),
-            "—",
-            font=FONT_MEDIUM_BOLD,
-            fill=GRAY
-        )
-
-        y += 58
-
-    draw_footer(draw)
-
-    return img
-
-
-# ==================================================
-# 投稿時間から画像タイプを決定
-# ==================================================
-
-def get_current_post_type():
-
-    now = datetime.now(JST)
-
-    schedule_by_hour = {
-        8: "player",
-        10: "compare",
-        12: "data",
-        15: "analysis",
-        18: "news",
-        21: "vote",
-        23: "review",
-    }
-
-    return schedule_by_hour.get(
-        now.hour,
-        "data"
+    draw.text(
+        (
+            55,
+            340
+        ),
+        message[:70],
+        font=FONT_SMALL,
+        fill=LIGHT
     )
 
-
-# ==================================================
-# IMAGE GENERATOR
-# ==================================================
-
-def generate_image(post_type):
-
-    print(
-        f"画像タイプ: {post_type}"
-    )
-
-    if post_type == "player":
-
-        img = create_player_card()
-
-    elif post_type == "compare":
-
-        img = create_compare_card()
-
-    elif post_type == "data":
-
-        img = create_data_card()
-
-    elif post_type == "analysis":
-
-        img = create_analysis_card()
-
-    elif post_type == "vote":
-
-        img = create_vote_card()
-
-    elif post_type == "review":
-
-        img = create_review_card()
-
-    elif post_type == "news":
-
-        # ニュース枠は一旦
-        # MATCH DATA系デザインを使用
-        img = create_data_card()
-
-    else:
-
-        img = create_data_card()
-
-    img.save(
-        OUTPUT_FILE,
-        "PNG"
-    )
-
-    print(
-        f"画像生成完了: {OUTPUT_FILE}"
-    )
+    return image
 
 
 # ==================================================
@@ -749,11 +876,99 @@ def generate_image(post_type):
 
 def main():
 
-    post_type = get_current_post_type()
-
-    generate_image(
-        post_type
+    os.makedirs(
+        OUTPUT_DIR,
+        exist_ok=True
     )
+
+    try:
+
+        stvv_id, stvv_name = find_stvv()
+
+        fixture = get_latest_finished_fixture(
+            stvv_id
+        )
+
+        fixture_id = fixture[
+            "fixture"
+        ]["id"]
+
+        statistics = get_fixture_statistics(
+            fixture_id
+        )
+
+        match_data = build_match_data(
+            fixture,
+            statistics,
+            stvv_id
+        )
+
+        print("")
+        print("========== 取得データ ==========")
+        print(
+            f"STVV: {stvv_name}"
+        )
+        print(
+            f"対戦相手: "
+            f"{match_data['opponent_name']}"
+        )
+        print(
+            f"スコア: "
+            f"{match_data['stvv_score']}"
+            "-"
+            f"{match_data['opponent_score']}"
+        )
+
+        for (
+            label,
+            stvv_value,
+            opponent_value
+        ) in match_data["stats"]:
+
+            print(
+                f"{label}: "
+                f"{stvv_value} / "
+                f"{opponent_value}"
+            )
+
+        print("===============================")
+        print("")
+
+        image = create_match_data_card(
+            match_data
+        )
+
+        image.save(
+            OUTPUT_PATH,
+            "PNG"
+        )
+
+        print(
+            f"画像生成成功: {OUTPUT_PATH}"
+        )
+
+    except Exception as e:
+
+        # APIエラー時に偽データは生成しない
+        print(
+            f"実データ取得エラー: {e}"
+        )
+
+        image = create_error_card(
+            str(e)
+        )
+
+        image.save(
+            OUTPUT_PATH,
+            "PNG"
+        )
+
+        print(
+            "エラー表示画像を生成しました。"
+        )
+
+        # Actions上でも失敗として分かるようにする
+        raise
 
 
 if __name__ == "__main__":
