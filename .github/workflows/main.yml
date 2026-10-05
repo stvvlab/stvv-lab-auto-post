@@ -3,10 +3,20 @@ name: STVV Auto Post
 on:
   workflow_dispatch:
   schedule:
+    # JST 08:00
     - cron: "0 23 * * *"
-    - cron: "0 3 * * *"
+    # JST 10:30
+    - cron: "30 1 * * *"
+    # JST 12:30
+    - cron: "30 3 * * *"
+    # JST 15:30
+    - cron: "30 6 * * *"
+    # JST 18:00
     - cron: "0 9 * * *"
+    # JST 21:00
     - cron: "0 12 * * *"
+    # JST 23:00
+    - cron: "0 14 * * *"
 
 permissions:
   contents: write
