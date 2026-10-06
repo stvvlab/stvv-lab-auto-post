@@ -533,38 +533,19 @@ def get_news():
             href
         )
 
-        # 2026年の「個別ニュース記事」だけを対象にする。
-        # /news/2025/ や /news/2026/ の年別一覧、
-        # カテゴリ・ページ送り・他年度リンクはすべて除外する。
+        # STVV公式の個別記事URLは
+        # /news/game/20260920_1/ や /news/team/20260917_1/
+        # のように「カテゴリ/記事slug」の2階層。
+        # 試合・チーム記事だけを対象にし、スポンサー等は拾わない。
         normalized_url = url.split("#", 1)[0].split("?", 1)[0].rstrip("/")
 
-        expected_prefix = NEWS_URL.rstrip("/") + "/"
+        match = re.match(
+            r"^https://stvv\.jp/news/(game|team)/((?:2026)\d{4}[^/]*)$",
+            normalized_url,
+            flags=re.IGNORECASE,
+        )
 
-        if not normalized_url.startswith(expected_prefix):
-            continue
-
-        relative_path = normalized_url[len(expected_prefix):].strip("/")
-
-        # 2026年トップそのものは記事ではない
-        if not relative_path:
-            continue
-
-        # 個別記事は1階層のslugだけを許可。
-        # category/... や page/... など複数階層は除外。
-        if "/" in relative_path:
-            continue
-
-        # 年だけのリンクやページ送り等を除外
-        if relative_path.isdigit():
-            continue
-
-        if relative_path.lower() in {
-            "page",
-            "category",
-            "tag",
-            "author",
-            "feed",
-        }:
+        if not match:
             continue
 
         if url in seen_urls:
