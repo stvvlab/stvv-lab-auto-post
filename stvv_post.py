@@ -481,7 +481,7 @@ def get_article_title(url, fallback_title=""):
 
             # サイト名がtitleタグに付く場合の簡易除去
             title = re.sub(
-                r"\s*[|｜]\s*シント.?トロイデン.*$",
+                r"\s*[|｜]\s*(?:STVV|シント[＝=\-ー–—・ ]*トロイデン).*?(?:日本公式サイト)?\s*$",
                 "",
                 title,
                 flags=re.IGNORECASE
@@ -578,13 +578,17 @@ def get_news():
 
         news.append({
             "title": title,
-            "url": url
+            "url": url,
+            "category": match.group(1).lower()
         })
 
     # サッカー情報を優先。特に試合結果・順位・スタメン等を上位へ。
     # 同点の場合は公式ページで取得した順序を維持する。
     news.sort(
-        key=lambda article: football_priority_score(article["title"]),
+        key=lambda article: (
+            20 if article.get("category") == "game" else 10,
+            football_priority_score(article["title"])
+        ),
         reverse=True
     )
 
@@ -600,10 +604,19 @@ def create_news_post(article):
     title = article["title"]
     url = article["url"]
 
+    category = article.get("category", "team")
+
+    if category == "game":
+        header = "⚽ STVV MATCH NEWS 🇧🇪"
+        lead = "試合に関するSTVV公式情報👇"
+    else:
+        header = "🚨 STVV TEAM NEWS 🇧🇪"
+        lead = "チーム・選手に関するSTVV公式情報👇"
+
     text = (
-        "🚨 STVV NEWS 🇧🇪⚽\n\n"
+        f"{header}\n\n"
         f"{title}\n\n"
-        "STVV公式から発表されたニュースをチェック👇\n\n"
+        f"{lead}\n"
         f"🔗 {url}\n\n"
         "#STVV #シントトロイデン"
     )
@@ -1218,9 +1231,32 @@ def main():
         print("手動実行を検出しました。")
         print("時刻に関係なくニュース投稿を実行します。")
 
-        handle_news(
+        posted_news = handle_news(
             posted
         )
+
+        if not posted_news:
+            print("新着ニュースがないため、未投稿ストックへ切り替えます。")
+            fallback_order = [
+                "review",
+                "data",
+                "analysis",
+                "compare",
+                "player",
+                "vote",
+            ]
+
+            for fallback_type in fallback_order:
+                if handle_stock_post(
+                    fallback_type,
+                    posted
+                ):
+                    print(
+                        f"手動実行フォールバック投稿完了: {fallback_type}"
+                    )
+                    break
+            else:
+                print("投稿できる未投稿ストックもありません。")
 
         return
 
