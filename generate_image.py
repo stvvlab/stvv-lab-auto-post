@@ -131,7 +131,7 @@ def find_stvv():
     teams = api_get(
         "teams",
         {
-            "search": "Sint-Truidense"
+            "search": "Sint Truidense"
         }
     )
 
