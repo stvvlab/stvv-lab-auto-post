@@ -1227,6 +1227,22 @@ def main():
 
     posted = load_posted()
 
+    # GitHub Actionsの「Run workflow」から手動実行した場合は、
+    # 時刻に関係なくニュース投稿を1件試みる。
+    # scheduleによる自動実行は、これまで通り時間割で動かす。
+    github_event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+
+    if github_event_name == "workflow_dispatch":
+
+        print("手動実行を検出しました。")
+        print("時刻に関係なくニュース投稿を実行します。")
+
+        handle_news(
+            posted
+        )
+
+        return
+
     # GitHub Actionsは数分遅れて
     # 起動する場合があるため、
     # 「時」を中心に投稿枠を判定する。
