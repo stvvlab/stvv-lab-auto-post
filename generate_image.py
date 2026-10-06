@@ -201,8 +201,7 @@ def get_latest_finished_fixture(team_id):
         "fixtures",
         {
             "team": team_id,
-            "last": 10,
-            "timezone": "Asia/Tokyo"
+"timezone": "Asia/Tokyo"
         }
     )
 
