@@ -264,6 +264,47 @@ EXCLUDED_KEYWORDS = [
     "グッズ",
     "商品販売",
     "販売開始",
+    "プレゼント",
+    "抽選",
+    "コラボ商品",
+    "新商品",
+    "ショップ",
+]
+
+# STVV LABで積極的に扱うサッカー情報。
+# 公式ニュースでは、この語を含む記事を優先して投稿する。
+FOOTBALL_PRIORITY_KEYWORDS = [
+    "試合",
+    "結果",
+    "マッチ",
+    "リーグ",
+    "順位",
+    "勝点",
+    "勝ち点",
+    "スタメン",
+    "先発",
+    "メンバー",
+    "出場",
+    "ゴール",
+    "得点",
+    "アシスト",
+    "選手",
+    "監督",
+    "コメント",
+    "加入",
+    "移籍",
+    "契約",
+    "退団",
+    "負傷",
+    "復帰",
+    "代表",
+    "招集",
+    "日程",
+    "対戦",
+    "勝利",
+    "敗戦",
+    "引き分け",
+    "トレーニング",
 ]
 
 
@@ -278,6 +319,59 @@ def is_excluded_news(title):
             return True
 
     return False
+
+
+def football_priority_score(title):
+
+    normalized = title.lower()
+    score = 0
+
+    # 試合結果・順位は最優先
+    very_high = [
+        "試合結果",
+        "結果",
+        "順位",
+        "勝点",
+        "勝ち点",
+        "勝利",
+        "敗戦",
+        "引き分け",
+        "スタメン",
+        "先発",
+    ]
+
+    high = [
+        "試合",
+        "マッチ",
+        "出場",
+        "ゴール",
+        "得点",
+        "アシスト",
+        "選手",
+        "監督",
+        "加入",
+        "移籍",
+        "負傷",
+        "復帰",
+        "代表",
+        "招集",
+        "日程",
+        "対戦",
+    ]
+
+    for keyword in very_high:
+        if keyword.lower() in normalized:
+            score += 10
+
+    for keyword in high:
+        if keyword.lower() in normalized:
+            score += 3
+
+    for keyword in FOOTBALL_PRIORITY_KEYWORDS:
+        if keyword.lower() in normalized:
+            score += 1
+
+    return score
 
 
 # ==================================================
@@ -434,18 +528,43 @@ def get_news():
 
         href = a["href"]
 
-        if "/news/" not in href:
-            continue
-
         url = urljoin(
             NEWS_URL,
             href
         )
 
-        # 年別一覧そのもの等を除外
-        normalized_url = url.rstrip("/")
+        # 2026年の「個別ニュース記事」だけを対象にする。
+        # /news/2025/ や /news/2026/ の年別一覧、
+        # カテゴリ・ページ送り・他年度リンクはすべて除外する。
+        normalized_url = url.split("#", 1)[0].split("?", 1)[0].rstrip("/")
 
-        if normalized_url == NEWS_URL.rstrip("/"):
+        expected_prefix = NEWS_URL.rstrip("/") + "/"
+
+        if not normalized_url.startswith(expected_prefix):
+            continue
+
+        relative_path = normalized_url[len(expected_prefix):].strip("/")
+
+        # 2026年トップそのものは記事ではない
+        if not relative_path:
+            continue
+
+        # 個別記事は1階層のslugだけを許可。
+        # category/... や page/... など複数階層は除外。
+        if "/" in relative_path:
+            continue
+
+        # 年だけのリンクやページ送り等を除外
+        if relative_path.isdigit():
+            continue
+
+        if relative_path.lower() in {
+            "page",
+            "category",
+            "tag",
+            "author",
+            "feed",
+        }:
             continue
 
         if url in seen_urls:
@@ -480,6 +599,13 @@ def get_news():
             "title": title,
             "url": url
         })
+
+    # サッカー情報を優先。特に試合結果・順位・スタメン等を上位へ。
+    # 同点の場合は公式ページで取得した順序を維持する。
+    news.sort(
+        key=lambda article: football_priority_score(article["title"]),
+        reverse=True
+    )
 
     return news
 
