@@ -9,8 +9,10 @@ from PIL import Image, ImageDraw, ImageFont
 # 基本設定
 # ==================================================
 
-API_BASE_URL = "https://v3.football.api-sports.io"
-API_KEY = os.environ.get("API_FOOTBALL_KEY", "")
+API_BASE_URL = "https://www.thesportsdb.com/api/v1/json/123"
+
+STVV_TEAM_ID = "135461"
+BELGIUM_LEAGUE_ID = "4338"
 
 OUTPUT_DIR = "generated"
 OUTPUT_PATH = os.path.join(OUTPUT_DIR, "match_lab.png")
@@ -58,7 +60,6 @@ def load_font(size, bold=True):
     )
 
     for path in candidates:
-
         if os.path.exists(path):
             return ImageFont.truetype(path, size)
 
@@ -72,27 +73,20 @@ FONT_SCORE = load_font(76)
 FONT_STAT = load_font(30)
 FONT_VALUE = load_font(38)
 FONT_SMALL = load_font(22, bold=False)
-FONT_BADGE = load_font(24)
 
 
 # ==================================================
-# API共通
+# TheSportsDB API
 # ==================================================
 
 def api_get(endpoint, params=None):
 
-    if not API_KEY:
-        raise RuntimeError(
-            "API_FOOTBALL_KEY が設定されていません。"
-        )
-
     url = f"{API_BASE_URL}/{endpoint}"
+
+    print(f"TheSportsDB取得: {endpoint}")
 
     response = requests.get(
         url,
-        headers={
-            "x-apisports-key": API_KEY
-        },
         params=params or {},
         timeout=30
     )
@@ -101,221 +95,216 @@ def api_get(endpoint, params=None):
 
     data = response.json()
 
-    errors = data.get("errors")
-
-    if errors:
+    if not isinstance(data, dict):
         raise RuntimeError(
-            f"API-FOOTBALL error: {errors}"
+            "TheSportsDBから正常なJSONを取得できませんでした。"
         )
 
-    remaining = response.headers.get(
-        "x-ratelimit-requests-remaining"
-    )
-
-    if remaining is not None:
-        print(
-            f"API残りリクエスト数: {remaining}"
-        )
-
-    return data.get("response", [])
+    return data
 
 
 # ==================================================
-# STVV検索
+# シーズン判定
 # ==================================================
 
-def find_stvv():
+def get_current_season():
 
-    print("STVVを検索します。")
+    now = datetime.now(JST)
 
-    teams = api_get(
-        "teams",
+    if now.month >= 7:
+        return f"{now.year}-{now.year + 1}"
+
+    return f"{now.year - 1}-{now.year}"
+
+
+# ==================================================
+# STVVの直近終了試合
+# ==================================================
+
+def get_latest_finished_fixture():
+
+    season = get_current_season()
+
+    print(f"対象シーズン: {season}")
+
+    data = api_get(
+        "eventsseason.php",
         {
-            "search": "Sint Truidense"
+            "id": BELGIUM_LEAGUE_ID,
+            "s": season
         }
     )
 
-    if not teams:
+    events = data.get("events") or []
 
-        # 表記揺れ対策
-        teams = api_get(
-            "teams",
-            {
-                "search": "Truiden"
-            }
-        )
-
-    if not teams:
+    if not events:
         raise RuntimeError(
-            "STVVをAPI上で見つけられませんでした。"
+            f"{season} のベルギーリーグ試合データを取得できませんでした。"
         )
 
-    # Belgiumのクラブを優先
-    selected = None
+    stvv_events = []
 
-    for item in teams:
+    for event in events:
 
-        team = item.get("team", {})
+        home_id = str(
+            event.get("idHomeTeam") or ""
+        )
 
-        name = team.get("name", "")
-        country = team.get("country", "")
+        away_id = str(
+            event.get("idAwayTeam") or ""
+        )
 
-        if (
-            country == "Belgium"
-            and (
-                "Truiden" in name
-                or "Truidense" in name
+        if STVV_TEAM_ID not in {
+            home_id,
+            away_id
+        }:
+            continue
+
+        home_score = event.get("intHomeScore")
+        away_score = event.get("intAwayScore")
+
+        # スコアが両方存在する試合＝終了済みとして扱う
+        if home_score is None or away_score is None:
+            continue
+
+        date_text = event.get("dateEvent") or ""
+
+        time_text = (
+            event.get("strTime")
+            or "00:00:00"
+        )
+
+        try:
+            event_datetime = datetime.fromisoformat(
+                f"{date_text}T{time_text}"
             )
-        ):
-            selected = team
-            break
+        except Exception:
+            event_datetime = datetime.min
 
-    if selected is None:
-        selected = teams[0].get("team", {})
+        stvv_events.append(
+            (
+                event_datetime,
+                event
+            )
+        )
 
-    team_id = selected.get("id")
-    team_name = selected.get("name")
-
-    if not team_id:
+    if not stvv_events:
         raise RuntimeError(
-            "STVVのTeam IDを取得できませんでした。"
+            "STVVの終了済み試合を取得できませんでした。"
         )
 
-    print(
-        f"STVV取得成功: {team_name} "
-        f"(Team ID: {team_id})"
-    )
-
-    return team_id, team_name
-
-
-# ==================================================
-# 直近終了試合
-# ==================================================
-
-def get_latest_finished_fixture(team_id):
-
-    print("STVVの直近試合を取得します。")
-
-    fixtures = api_get(
-        "fixtures",
-        {
-            "team": team_id,
-"timezone": "Asia/Tokyo"
-        }
-    )
-
-    if not fixtures:
-        raise RuntimeError(
-            "STVVの試合を取得できませんでした。"
-        )
-
-    finished_statuses = {
-        "FT",
-        "AET",
-        "PEN"
-    }
-
-    finished = []
-
-    for item in fixtures:
-
-        fixture = item.get(
-            "fixture",
-            {}
-        )
-
-        status = fixture.get(
-            "status",
-            {}
-        ).get("short")
-
-        if status in finished_statuses:
-            finished.append(item)
-
-    if not finished:
-        raise RuntimeError(
-            "終了済みの直近試合がありません。"
-        )
-
-    # APIの返却順に依存せず日時で判定
-    finished.sort(
-        key=lambda x: x.get(
-            "fixture",
-            {}
-        ).get(
-            "timestamp",
-            0
-        ),
+    stvv_events.sort(
+        key=lambda x: x[0],
         reverse=True
     )
 
-    latest = finished[0]
-
-    fixture_id = latest[
-        "fixture"
-    ]["id"]
+    latest = stvv_events[0][1]
 
     print(
-        f"直近試合 Fixture ID: {fixture_id}"
+        "直近試合取得成功: "
+        f"{latest.get('strHomeTeam')} "
+        f"{latest.get('intHomeScore')}"
+        "-"
+        f"{latest.get('intAwayScore')} "
+        f"{latest.get('strAwayTeam')}"
     )
 
     return latest
 
 
 # ==================================================
-# 試合統計
+# 試合スタッツ
 # ==================================================
 
-def get_fixture_statistics(fixture_id):
+def get_event_statistics(event_id):
 
-    print(
-        f"Fixture {fixture_id} の"
-        "試合統計を取得します。"
+    if not event_id:
+        return {}
+
+    try:
+
+        data = api_get(
+            "lookupeventstats.php",
+            {
+                "id": event_id
+            }
+        )
+
+    except Exception as e:
+
+        print(
+            f"試合スタッツ取得失敗: {e}"
+        )
+
+        return {}
+
+    raw_stats = (
+        data.get("eventstats")
+        or data.get("statistics")
+        or data.get("stats")
+        or []
     )
-
-    statistics = api_get(
-        "fixtures/statistics",
-        {
-            "fixture": fixture_id
-        }
-    )
-
-    return statistics
-
-
-def statistics_to_dict(statistics):
 
     result = {}
 
-    for side in statistics:
+    if not isinstance(raw_stats, list):
+        return result
 
-        team = side.get(
-            "team",
-            {}
+    for stat in raw_stats:
+
+        if not isinstance(stat, dict):
+            continue
+
+        stat_name = (
+            stat.get("strStat")
+            or stat.get("strStatistic")
+            or stat.get("type")
+            or stat.get("strType")
         )
 
-        team_id = team.get("id")
+        if not stat_name:
+            continue
 
-        stat_dict = {}
+        home_value = (
+            stat.get("intHome")
+            if stat.get("intHome") is not None
+            else stat.get("strHome")
+        )
 
-        for stat in side.get(
-            "statistics",
-            []
-        ):
+        away_value = (
+            stat.get("intAway")
+            if stat.get("intAway") is not None
+            else stat.get("strAway")
+        )
 
-            stat_type = stat.get("type")
-            value = stat.get("value")
-
-            stat_dict[stat_type] = value
-
-        result[team_id] = stat_dict
+        result[
+            str(stat_name).strip().lower()
+        ] = {
+            "home": home_value,
+            "away": away_value
+        }
 
     return result
 
 
+def find_stat(stats, names, side):
+
+    for name in names:
+
+        key = name.lower()
+
+        if key in stats:
+
+            value = stats[key].get(side)
+
+            if value is not None:
+                return value
+
+    return None
+
+
 # ==================================================
-# 表示用データ作成
+# 表示用データ
 # ==================================================
 
 def clean_value(value):
@@ -323,199 +312,154 @@ def clean_value(value):
     if value is None:
         return "—"
 
-    if isinstance(value, str):
+    value = str(value).strip()
 
-        value = value.strip()
+    if not value:
+        return "—"
 
-        if not value:
-            return "—"
-
-    return str(value)
+    return value
 
 
-def build_match_data(
-    fixture,
-    statistics,
-    stvv_id
-):
+def build_match_data(event, statistics):
 
-    teams = fixture.get(
-        "teams",
-        {}
+    home_id = str(
+        event.get("idHomeTeam") or ""
     )
 
-    goals = fixture.get(
-        "goals",
-        {}
+    away_id = str(
+        event.get("idAwayTeam") or ""
     )
 
-    fixture_info = fixture.get(
-        "fixture",
-        {}
+    home_name = (
+        event.get("strHomeTeam")
+        or "HOME"
     )
 
-    home = teams.get(
-        "home",
-        {}
+    away_name = (
+        event.get("strAwayTeam")
+        or "AWAY"
     )
 
-    away = teams.get(
-        "away",
-        {}
-    )
+    home_score = event.get("intHomeScore")
+    away_score = event.get("intAwayScore")
 
-    home_id = home.get("id")
-    away_id = away.get("id")
+    if home_id == STVV_TEAM_ID:
 
-    stats = statistics_to_dict(
-        statistics
-    )
+        stvv_name = home_name
+        opponent_name = away_name
 
-    home_stats = stats.get(
-        home_id,
-        {}
-    )
+        stvv_score = home_score
+        opponent_score = away_score
 
-    away_stats = stats.get(
-        away_id,
-        {}
-    )
-
-    if stvv_id == home_id:
-
-        stvv_name = home.get(
-            "name",
-            "STVV"
-        )
-
-        opponent_name = away.get(
-            "name",
-            "OPPONENT"
-        )
-
-        stvv_score = goals.get(
-            "home"
-        )
-
-        opponent_score = goals.get(
-            "away"
-        )
-
-        stvv_stats = home_stats
-        opponent_stats = away_stats
+        stvv_side = "home"
+        opponent_side = "away"
 
         venue = "HOME"
 
-    else:
+    elif away_id == STVV_TEAM_ID:
 
-        stvv_name = away.get(
-            "name",
-            "STVV"
-        )
+        stvv_name = away_name
+        opponent_name = home_name
 
-        opponent_name = home.get(
-            "name",
-            "OPPONENT"
-        )
+        stvv_score = away_score
+        opponent_score = home_score
 
-        stvv_score = goals.get(
-            "away"
-        )
-
-        opponent_score = goals.get(
-            "home"
-        )
-
-        stvv_stats = away_stats
-        opponent_stats = home_stats
+        stvv_side = "away"
+        opponent_side = "home"
 
         venue = "AWAY"
 
-    date_raw = fixture_info.get(
-        "date",
-        ""
+    else:
+
+        raise RuntimeError(
+            "取得した試合にSTVVが含まれていません。"
+        )
+
+    date_raw = (
+        event.get("dateEvent")
+        or ""
     )
 
     try:
 
-        match_date = datetime.fromisoformat(
-            date_raw
-        ).astimezone(
-            JST
+        match_date = datetime.strptime(
+            date_raw,
+            "%Y-%m-%d"
         ).strftime(
             "%Y.%m.%d"
         )
 
     except Exception:
 
-        match_date = date_raw[:10]
+        match_date = date_raw
+
+    stat_definitions = [
+        (
+            "SHOTS",
+            [
+                "Total Shots",
+                "Shots",
+                "Total attempts"
+            ]
+        ),
+        (
+            "ON TARGET",
+            [
+                "Shots on Goal",
+                "Shots on Target",
+                "On Target"
+            ]
+        ),
+        (
+            "POSSESSION",
+            [
+                "Ball Possession",
+                "Possession"
+            ]
+        ),
+        (
+            "CORNERS",
+            [
+                "Corner Kicks",
+                "Corners"
+            ]
+        ),
+    ]
+
+    display_stats = []
+
+    for label, names in stat_definitions:
+
+        stvv_value = find_stat(
+            statistics,
+            names,
+            stvv_side
+        )
+
+        opponent_value = find_stat(
+            statistics,
+            names,
+            opponent_side
+        )
+
+        display_stats.append(
+            (
+                label,
+                clean_value(stvv_value),
+                clean_value(opponent_value)
+            )
+        )
 
     return {
         "stvv_name": stvv_name,
         "opponent_name": opponent_name,
-        "stvv_score": clean_value(
-            stvv_score
-        ),
+        "stvv_score": clean_value(stvv_score),
         "opponent_score": clean_value(
             opponent_score
         ),
         "date": match_date,
         "venue": venue,
-
-        "stats": [
-            (
-                "SHOTS",
-                clean_value(
-                    stvv_stats.get(
-                        "Total Shots"
-                    )
-                ),
-                clean_value(
-                    opponent_stats.get(
-                        "Total Shots"
-                    )
-                )
-            ),
-            (
-                "ON TARGET",
-                clean_value(
-                    stvv_stats.get(
-                        "Shots on Goal"
-                    )
-                ),
-                clean_value(
-                    opponent_stats.get(
-                        "Shots on Goal"
-                    )
-                )
-            ),
-            (
-                "POSSESSION",
-                clean_value(
-                    stvv_stats.get(
-                        "Ball Possession"
-                    )
-                ),
-                clean_value(
-                    opponent_stats.get(
-                        "Ball Possession"
-                    )
-                )
-            ),
-            (
-                "CORNERS",
-                clean_value(
-                    stvv_stats.get(
-                        "Corner Kicks"
-                    )
-                ),
-                clean_value(
-                    opponent_stats.get(
-                        "Corner Kicks"
-                    )
-                )
-            ),
-        ]
+        "stats": display_stats
     }
 
 
@@ -532,6 +476,8 @@ def text_center(
 ):
 
     x, y = xy
+
+    text = str(text)
 
     bbox = draw.textbbox(
         (0, 0),
@@ -567,8 +513,7 @@ def shorten_team_name(
         return name.upper()
 
     return (
-        name[:max_length - 1]
-        .upper()
+        name[:max_length - 1].upper()
         + "…"
     )
 
@@ -577,9 +522,7 @@ def shorten_team_name(
 # 実データ画像
 # ==================================================
 
-def create_match_data_card(
-    match_data
-):
+def create_match_data_card(match_data):
 
     image = Image.new(
         "RGB",
@@ -590,9 +533,7 @@ def create_match_data_card(
         NAVY
     )
 
-    draw = ImageDraw.Draw(
-        image
-    )
+    draw = ImageDraw.Draw(image)
 
     # 上部アクセント
     draw.rectangle(
@@ -644,15 +585,11 @@ def create_match_data_card(
 
     # チーム
     stvv_name = shorten_team_name(
-        match_data[
-            "stvv_name"
-        ]
+        match_data["stvv_name"]
     )
 
     opponent_name = shorten_team_name(
-        match_data[
-            "opponent_name"
-        ]
+        match_data["opponent_name"]
     )
 
     text_center(
@@ -684,9 +621,7 @@ def create_match_data_card(
             270,
             225
         ),
-        match_data[
-            "stvv_score"
-        ],
+        match_data["stvv_score"],
         FONT_SCORE,
         YELLOW
     )
@@ -708,9 +643,7 @@ def create_match_data_card(
             930,
             225
         ),
-        match_data[
-            "opponent_score"
-        ],
+        match_data["opponent_score"],
         FONT_SCORE,
         WHITE
     )
@@ -787,7 +720,7 @@ def create_match_data_card(
             55,
             HEIGHT - 34
         ),
-        "DATA: API-FOOTBALL",
+        "DATA: TheSportsDB",
         font=FONT_SMALL,
         fill=GRAY
     )
@@ -799,9 +732,7 @@ def create_match_data_card(
 # エラー時画像
 # ==================================================
 
-def create_error_card(
-    message
-):
+def create_error_card(message):
 
     image = Image.new(
         "RGB",
@@ -812,9 +743,7 @@ def create_error_card(
         NAVY
     )
 
-    draw = ImageDraw.Draw(
-        image
-    )
+    draw = ImageDraw.Draw(image)
 
     draw.rectangle(
         (
@@ -861,7 +790,7 @@ def create_error_card(
             55,
             340
         ),
-        message[:70],
+        str(message)[:70],
         font=FONT_SMALL,
         fill=LIGHT
     )
@@ -882,40 +811,50 @@ def main():
 
     try:
 
-        stvv_id, stvv_name = find_stvv()
+        print("")
+        print("========== STVV LAB ==========")
+        print("DATA SOURCE: TheSportsDB")
+        print("==============================")
+        print("")
 
-        fixture = get_latest_finished_fixture(
-            stvv_id
+        fixture = get_latest_finished_fixture()
+
+        event_id = fixture.get("idEvent")
+
+        print(
+            f"Event ID: {event_id}"
         )
 
-        fixture_id = fixture[
-            "fixture"
-        ]["id"]
-
-        statistics = get_fixture_statistics(
-            fixture_id
+        statistics = get_event_statistics(
+            event_id
         )
 
         match_data = build_match_data(
             fixture,
-            statistics,
-            stvv_id
+            statistics
         )
 
         print("")
         print("========== 取得データ ==========")
+
         print(
-            f"STVV: {stvv_name}"
+            f"STVV: {match_data['stvv_name']}"
         )
+
         print(
             f"対戦相手: "
             f"{match_data['opponent_name']}"
         )
+
         print(
             f"スコア: "
             f"{match_data['stvv_score']}"
             "-"
             f"{match_data['opponent_score']}"
+        )
+
+        print(
+            f"会場: {match_data['venue']}"
         )
 
         for (
@@ -930,7 +869,7 @@ def main():
                 f"{opponent_value}"
             )
 
-        print("===============================")
+        print("==============================")
         print("")
 
         image = create_match_data_card(
@@ -948,7 +887,6 @@ def main():
 
     except Exception as e:
 
-        # APIエラー時に偽データは生成しない
         print(
             f"実データ取得エラー: {e}"
         )
@@ -966,7 +904,6 @@ def main():
             "エラー表示画像を生成しました。"
         )
 
-        # Actions上でも失敗として分かるようにする
         raise
 
 
