@@ -1,3 +1,4 @@
+
 import os
 from datetime import datetime, timezone, timedelta
 
@@ -5,30 +6,21 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 
 
-# ==================================================
-# 基本設定
-# ==================================================
+# ==========================================
+# STVV LAB 設定
+# ==========================================
 
-API_BASE_URL = "https://www.thesportsdb.com/api/v1/json/123"
+API_BASE = "https://www.thesportsdb.com/api/v1/json/123"
+STVV_ID = "135461"
 
-STVV_TEAM_ID = "135461"
-BELGIUM_LEAGUE_ID = "4338"
-
-OUTPUT_DIR = "generated"
-OUTPUT_PATH = os.path.join(OUTPUT_DIR, "match_lab.png")
+OUTPUT_PATH = "generated/match_lab.png"
 
 WIDTH = 1200
 HEIGHT = 675
-
 JST = timezone(timedelta(hours=9))
 
-
-# ==================================================
-# カラー
-# ==================================================
-
 NAVY = (9, 29, 58)
-DARK_NAVY = (5, 18, 38)
+DARK = (5, 18, 38)
 BLUE = (26, 89, 166)
 YELLOW = (255, 214, 0)
 WHITE = (255, 255, 255)
@@ -36,874 +28,352 @@ LIGHT = (225, 233, 242)
 GRAY = (150, 165, 180)
 
 
-# ==================================================
-# フォント
-# ==================================================
-
-FONT_CANDIDATES = [
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-    "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
-]
-
-REGULAR_FONT_CANDIDATES = [
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-    "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
-]
-
-
-def load_font(size, bold=True):
-
-    candidates = (
-        FONT_CANDIDATES
+def font(size, bold=True):
+    path = (
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
         if bold
-        else REGULAR_FONT_CANDIDATES
+        else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
     )
-
-    for path in candidates:
-        if os.path.exists(path):
-            return ImageFont.truetype(path, size)
-
-    return ImageFont.load_default()
+    return ImageFont.truetype(path, size)
 
 
-FONT_TITLE = load_font(48)
-FONT_SUBTITLE = load_font(28)
-FONT_TEAM = load_font(34)
-FONT_SCORE = load_font(76)
-FONT_STAT = load_font(30)
-FONT_VALUE = load_font(38)
-FONT_SMALL = load_font(22, bold=False)
-
-
-# ==================================================
-# TheSportsDB API
-# ==================================================
-
-def api_get(endpoint, params=None):
-
-    url = f"{API_BASE_URL}/{endpoint}"
-
-    print(f"TheSportsDB取得: {endpoint}")
-
+def api_get(endpoint, params):
     response = requests.get(
-        url,
-        params=params or {},
-        timeout=30
+        f"{API_BASE}/{endpoint}",
+        params=params,
+        timeout=30,
     )
-
     response.raise_for_status()
-
     data = response.json()
-
     if not isinstance(data, dict):
-        raise RuntimeError(
-            "TheSportsDBから正常なJSONを取得できませんでした。"
-        )
-
+        raise ValueError("API response is invalid")
     return data
 
 
-# ==================================================
-# シーズン判定
-# ==================================================
+# ==========================================
+# STVV最新試合取得
+# ==========================================
 
-def get_current_season():
-
-    now = datetime.now(JST)
-
-    if now.month >= 7:
-        return f"{now.year}-{now.year + 1}"
-
-    return f"{now.year - 1}-{now.year}"
-
-
-# ==================================================
-# STVVの直近終了試合
-# ==================================================
-
-def get_latest_finished_fixture():
-
-    season = get_current_season()
-
-    print(f"対象シーズン: {season}")
-
+def get_latest_match():
     data = api_get(
-        "eventsseason.php",
-        {
-            "id": BELGIUM_LEAGUE_ID,
-            "s": season
-        }
+        "eventslast.php",
+        {"id": STVV_ID},
     )
 
-    events = data.get("events") or []
-
-    if not events:
-        raise RuntimeError(
-            f"{season} のベルギーリーグ試合データを取得できませんでした。"
-        )
-
-    stvv_events = []
+    events = data.get("results") or []
+    today = datetime.now(JST).date()
+    candidates = []
 
     for event in events:
-
-        home_id = str(
-            event.get("idHomeTeam") or ""
-        )
-
-        away_id = str(
-            event.get("idAwayTeam") or ""
-        )
-
-        if STVV_TEAM_ID not in {
-            home_id,
-            away_id
+        if STVV_ID not in {
+            str(event.get("idHomeTeam")),
+            str(event.get("idAwayTeam")),
         }:
             continue
 
-        home_score = event.get("intHomeScore")
-        away_score = event.get("intAwayScore")
-
-        # スコアが両方存在する試合＝終了済みとして扱う
-        if home_score is None or away_score is None:
+        if event.get("strStatus") not in (
+            "FT", "AET", "PEN"
+        ):
             continue
 
-        date_text = event.get("dateEvent") or ""
-
-        time_text = (
-            event.get("strTime")
-            or "00:00:00"
-        )
+        if (
+            event.get("intHomeScore") is None
+            or event.get("intAwayScore") is None
+        ):
+            continue
 
         try:
-            event_datetime = datetime.fromisoformat(
-                f"{date_text}T{time_text}"
-            )
-        except Exception:
-            event_datetime = datetime.min
+            match_date = datetime.strptime(
+                event["dateEvent"], "%Y-%m-%d"
+            ).date()
+        except (KeyError, TypeError, ValueError):
+            continue
 
-        stvv_events.append(
-            (
-                event_datetime,
-                event
-            )
-        )
+        days_old = (today - match_date).days
 
-    if not stvv_events:
+        if 0 <= days_old <= 30:
+            candidates.append((match_date, event))
+
+    if not candidates:
         raise RuntimeError(
-            "STVVの終了済み試合を取得できませんでした。"
+            "直近30日以内の終了済みSTVV試合がありません"
         )
 
-    stvv_events.sort(
-        key=lambda x: x[0],
-        reverse=True
+    candidates.sort(
+        key=lambda item: item[0],
+        reverse=True,
     )
 
-    latest = stvv_events[0][1]
-
-    print(
-        "直近試合取得成功: "
-        f"{latest.get('strHomeTeam')} "
-        f"{latest.get('intHomeScore')}"
-        "-"
-        f"{latest.get('intAwayScore')} "
-        f"{latest.get('strAwayTeam')}"
-    )
-
-    return latest
+    return candidates[0][1]
 
 
-# ==================================================
+# ==========================================
 # 試合スタッツ
-# ==================================================
+# ==========================================
 
-def get_event_statistics(event_id):
-
+def get_stats(event_id):
     if not event_id:
         return {}
 
     try:
-
         data = api_get(
             "lookupeventstats.php",
-            {
-                "id": event_id
-            }
+            {"id": event_id},
         )
-
-    except Exception as e:
-
-        print(
-            f"試合スタッツ取得失敗: {e}"
-        )
-
+    except (requests.RequestException, ValueError) as error:
+        print(f"スタッツ取得失敗: {error}")
         return {}
 
-    raw_stats = (
+    rows = (
         data.get("eventstats")
         or data.get("statistics")
-        or data.get("stats")
         or []
     )
 
     result = {}
 
-    if not isinstance(raw_stats, list):
-        return result
+    for row in rows:
+        name = (
+            row.get("strStat")
+            or row.get("strStatistic")
+            or ""
+        ).strip().lower()
 
-    for stat in raw_stats:
-
-        if not isinstance(stat, dict):
+        if not name:
             continue
 
-        stat_name = (
-            stat.get("strStat")
-            or stat.get("strStatistic")
-            or stat.get("type")
-            or stat.get("strType")
-        )
+        home = row.get("intHome")
+        away = row.get("intAway")
 
-        if not stat_name:
-            continue
+        if home is None:
+            home = row.get("strHome")
+        if away is None:
+            away = row.get("strAway")
 
-        home_value = (
-            stat.get("intHome")
-            if stat.get("intHome") is not None
-            else stat.get("strHome")
-        )
-
-        away_value = (
-            stat.get("intAway")
-            if stat.get("intAway") is not None
-            else stat.get("strAway")
-        )
-
-        result[
-            str(stat_name).strip().lower()
-        ] = {
-            "home": home_value,
-            "away": away_value
-        }
+        result[name] = (home, away)
 
     return result
 
 
-def find_stat(stats, names, side):
-
-    for name in names:
-
-        key = name.lower()
-
-        if key in stats:
-
-            value = stats[key].get(side)
-
-            if value is not None:
-                return value
-
-    return None
+def find_stat(stats, aliases, index):
+    for alias in aliases:
+        pair = stats.get(alias.lower())
+        if pair and pair[index] is not None:
+            return str(pair[index])
+    return "—"
 
 
-# ==================================================
-# 表示用データ
-# ==================================================
+# ==========================================
+# 画像描画
+# ==========================================
 
-def clean_value(value):
+def center_text(draw, x, y, text, size, color):
+    text = str(text)
+    current_font = font(size)
 
-    if value is None:
-        return "—"
-
-    value = str(value).strip()
-
-    if not value:
-        return "—"
-
-    return value
-
-
-def build_match_data(event, statistics):
-
-    home_id = str(
-        event.get("idHomeTeam") or ""
-    )
-
-    away_id = str(
-        event.get("idAwayTeam") or ""
-    )
-
-    home_name = (
-        event.get("strHomeTeam")
-        or "HOME"
-    )
-
-    away_name = (
-        event.get("strAwayTeam")
-        or "AWAY"
-    )
-
-    home_score = event.get("intHomeScore")
-    away_score = event.get("intAwayScore")
-
-    if home_id == STVV_TEAM_ID:
-
-        stvv_name = home_name
-        opponent_name = away_name
-
-        stvv_score = home_score
-        opponent_score = away_score
-
-        stvv_side = "home"
-        opponent_side = "away"
-
-        venue = "HOME"
-
-    elif away_id == STVV_TEAM_ID:
-
-        stvv_name = away_name
-        opponent_name = home_name
-
-        stvv_score = away_score
-        opponent_score = home_score
-
-        stvv_side = "away"
-        opponent_side = "home"
-
-        venue = "AWAY"
-
-    else:
-
-        raise RuntimeError(
-            "取得した試合にSTVVが含まれていません。"
+    while size > 15:
+        box = draw.textbbox(
+            (0, 0), text, font=current_font
         )
+        if box[2] - box[0] <= 470:
+            break
+        size -= 2
+        current_font = font(size)
 
-    date_raw = (
-        event.get("dateEvent")
-        or ""
+    box = draw.textbbox(
+        (0, 0), text, font=current_font
     )
 
-    try:
+    width = box[2] - box[0]
 
-        match_date = datetime.strptime(
-            date_raw,
-            "%Y-%m-%d"
-        ).strftime(
-            "%Y.%m.%d"
-        )
+    draw.text(
+        (x - width / 2, y),
+        text,
+        font=current_font,
+        fill=color,
+    )
 
-    except Exception:
 
-        match_date = date_raw
+def create_image(event, stats):
+    home = str(event["idHomeTeam"]) == STVV_ID
 
-    stat_definitions = [
+    opponent = (
+        event["strAwayTeam"]
+        if home
+        else event["strHomeTeam"]
+    )
+
+    stvv_score = (
+        event["intHomeScore"]
+        if home
+        else event["intAwayScore"]
+    )
+
+    opponent_score = (
+        event["intAwayScore"]
+        if home
+        else event["intHomeScore"]
+    )
+
+    stvv_index = 0 if home else 1
+    opponent_index = 1 - stvv_index
+
+    image = Image.new(
+        "RGB", (WIDTH, HEIGHT), NAVY
+    )
+    draw = ImageDraw.Draw(image)
+
+    draw.rectangle(
+        (0, 0, WIDTH, 16), fill=YELLOW
+    )
+
+    draw.text(
+        (55, 40),
+        "STVV LAB",
+        font=font(48),
+        fill=WHITE,
+    )
+
+    draw.text(
+        (55, 105),
+        "MATCH DATA",
+        font=font(28),
+        fill=YELLOW,
+    )
+
+    match_date = event["dateEvent"].replace("-", ".")
+    location = "HOME" if home else "AWAY"
+
+    draw.text(
+        (830, 60),
+        f"{match_date}  {location}",
+        font=font(22, False),
+        fill=LIGHT,
+    )
+
+    center_text(
+        draw, 270, 175,
+        "SINT-TRUIDEN", 34, WHITE
+    )
+
+    center_text(
+        draw, 930, 175,
+        opponent.upper(), 34, WHITE
+    )
+
+    center_text(
+        draw, 270, 225,
+        stvv_score, 76, YELLOW
+    )
+
+    center_text(
+        draw, 600, 245,
+        "-", 76, WHITE
+    )
+
+    center_text(
+        draw, 930, 225,
+        opponent_score, 76, WHITE
+    )
+
+    draw.line(
+        (55, 340, 1145, 340),
+        fill=BLUE,
+        width=3,
+    )
+
+    definitions = [
         (
             "SHOTS",
-            [
-                "Total Shots",
-                "Shots",
-                "Total attempts"
-            ]
+            ["total shots", "shots", "total attempts"],
         ),
         (
             "ON TARGET",
-            [
-                "Shots on Goal",
-                "Shots on Target",
-                "On Target"
-            ]
+            ["shots on goal", "shots on target"],
         ),
         (
             "POSSESSION",
-            [
-                "Ball Possession",
-                "Possession"
-            ]
+            ["ball possession", "possession"],
         ),
         (
             "CORNERS",
-            [
-                "Corner Kicks",
-                "Corners"
-            ]
+            ["corner kicks", "corners"],
         ),
     ]
 
-    display_stats = []
-
-    for label, names in stat_definitions:
-
-        stvv_value = find_stat(
-            statistics,
-            names,
-            stvv_side
-        )
-
-        opponent_value = find_stat(
-            statistics,
-            names,
-            opponent_side
-        )
-
-        display_stats.append(
-            (
-                label,
-                clean_value(stvv_value),
-                clean_value(opponent_value)
-            )
-        )
-
-    return {
-        "stvv_name": stvv_name,
-        "opponent_name": opponent_name,
-        "stvv_score": clean_value(stvv_score),
-        "opponent_score": clean_value(
-            opponent_score
-        ),
-        "date": match_date,
-        "venue": venue,
-        "stats": display_stats
-    }
-
-
-# ==================================================
-# 描画ヘルパー
-# ==================================================
-
-def text_center(
-    draw,
-    xy,
-    text,
-    font,
-    fill
-):
-
-    x, y = xy
-
-    text = str(text)
-
-    bbox = draw.textbbox(
-        (0, 0),
-        text,
-        font=font
-    )
-
-    width = (
-        bbox[2]
-        - bbox[0]
-    )
-
-    draw.text(
-        (
-            x - width / 2,
-            y
-        ),
-        text,
-        font=font,
-        fill=fill
-    )
-
-
-def shorten_team_name(
-    name,
-    max_length=20
-):
-
-    if not name:
-        return "UNKNOWN"
-
-    if len(name) <= max_length:
-        return name.upper()
-
-    return (
-        name[:max_length - 1].upper()
-        + "…"
-    )
-
-
-# ==================================================
-# 実データ画像
-# ==================================================
-
-def create_match_data_card(match_data):
-
-    image = Image.new(
-        "RGB",
-        (
-            WIDTH,
-            HEIGHT
-        ),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(image)
-
-    # 上部アクセント
-    draw.rectangle(
-        (
-            0,
-            0,
-            WIDTH,
-            16
-        ),
-        fill=YELLOW
-    )
-
-    # タイトル
-    draw.text(
-        (
-            55,
-            40
-        ),
-        "STVV LAB",
-        font=FONT_TITLE,
-        fill=WHITE
-    )
-
-    draw.text(
-        (
-            55,
-            102
-        ),
-        "MATCH DATA",
-        font=FONT_SUBTITLE,
-        fill=YELLOW
-    )
-
-    # 日付・HOME/AWAY
-    info_text = (
-        f"{match_data['date']}  "
-        f"{match_data['venue']}"
-    )
-
-    draw.text(
-        (
-            900,
-            60
-        ),
-        info_text,
-        font=FONT_SMALL,
-        fill=LIGHT
-    )
-
-    # チーム
-    stvv_name = shorten_team_name(
-        match_data["stvv_name"]
-    )
-
-    opponent_name = shorten_team_name(
-        match_data["opponent_name"]
-    )
-
-    text_center(
-        draw,
-        (
-            270,
-            175
-        ),
-        stvv_name,
-        FONT_TEAM,
-        WHITE
-    )
-
-    text_center(
-        draw,
-        (
-            930,
-            175
-        ),
-        opponent_name,
-        FONT_TEAM,
-        WHITE
-    )
-
-    # スコア
-    text_center(
-        draw,
-        (
-            270,
-            225
-        ),
-        match_data["stvv_score"],
-        FONT_SCORE,
-        YELLOW
-    )
-
-    text_center(
-        draw,
-        (
-            600,
-            245
-        ),
-        "-",
-        FONT_SCORE,
-        WHITE
-    )
-
-    text_center(
-        draw,
-        (
-            930,
-            225
-        ),
-        match_data["opponent_score"],
-        FONT_SCORE,
-        WHITE
-    )
-
-    # 区切り
-    draw.line(
-        (
-            55,
-            340,
-            1145,
-            340
-        ),
-        fill=BLUE,
-        width=3
-    )
-
-    # 統計
     y = 375
 
-    for (
-        label,
-        stvv_value,
-        opponent_value
-    ) in match_data["stats"]:
-
-        text_center(
-            draw,
-            (
-                270,
-                y
-            ),
-            stvv_value,
-            FONT_VALUE,
-            YELLOW
+    for label, aliases in definitions:
+        stvv_value = find_stat(
+            stats, aliases, stvv_index
+        )
+        other_value = find_stat(
+            stats, aliases, opponent_index
         )
 
-        text_center(
-            draw,
-            (
-                600,
-                y + 5
-            ),
-            label,
-            FONT_STAT,
-            LIGHT
+        center_text(
+            draw, 270, y,
+            stvv_value, 38, YELLOW
         )
 
-        text_center(
-            draw,
-            (
-                930,
-                y
-            ),
-            opponent_value,
-            FONT_VALUE,
-            WHITE
+        center_text(
+            draw, 600, y + 5,
+            label, 30, LIGHT
+        )
+
+        center_text(
+            draw, 930, y,
+            other_value, 38, WHITE
         )
 
         y += 65
 
-    # フッター
     draw.rectangle(
-        (
-            0,
-            HEIGHT - 42,
-            WIDTH,
-            HEIGHT
-        ),
-        fill=DARK_NAVY
+        (0, HEIGHT - 42, WIDTH, HEIGHT),
+        fill=DARK,
     )
 
     draw.text(
-        (
-            55,
-            HEIGHT - 34
-        ),
+        (55, HEIGHT - 34),
         "DATA: TheSportsDB",
-        font=FONT_SMALL,
-        fill=GRAY
+        font=font(22, False),
+        fill=GRAY,
     )
 
     return image
 
 
-# ==================================================
-# エラー時画像
-# ==================================================
-
-def create_error_card(message):
-
-    image = Image.new(
-        "RGB",
-        (
-            WIDTH,
-            HEIGHT
-        ),
-        NAVY
-    )
-
-    draw = ImageDraw.Draw(image)
-
-    draw.rectangle(
-        (
-            0,
-            0,
-            WIDTH,
-            16
-        ),
-        fill=YELLOW
-    )
-
-    draw.text(
-        (
-            55,
-            50
-        ),
-        "STVV LAB",
-        font=FONT_TITLE,
-        fill=WHITE
-    )
-
-    draw.text(
-        (
-            55,
-            120
-        ),
-        "MATCH DATA",
-        font=FONT_SUBTITLE,
-        fill=YELLOW
-    )
-
-    draw.text(
-        (
-            55,
-            260
-        ),
-        "DATA NOT AVAILABLE",
-        font=FONT_TITLE,
-        fill=WHITE
-    )
-
-    draw.text(
-        (
-            55,
-            340
-        ),
-        str(message)[:70],
-        font=FONT_SMALL,
-        fill=LIGHT
-    )
-
-    return image
-
-
-# ==================================================
-# MAIN
-# ==================================================
+# ==========================================
+# メイン処理
+# ==========================================
 
 def main():
-
-    os.makedirs(
-        OUTPUT_DIR,
-        exist_ok=True
-    )
+    print("STVV LAB 画像生成開始")
 
     try:
-
-        print("")
-        print("========== STVV LAB ==========")
-        print("DATA SOURCE: TheSportsDB")
-        print("==============================")
-        print("")
-
-        fixture = get_latest_finished_fixture()
-
-        event_id = fixture.get("idEvent")
+        event = get_latest_match()
 
         print(
-            f"Event ID: {event_id}"
+            "対象試合:",
+            event.get("dateEvent"),
+            event.get("strEvent"),
         )
 
-        statistics = get_event_statistics(
-            event_id
-        )
+        stats = get_stats(event.get("idEvent"))
+        image = create_image(event, stats)
 
-        match_data = build_match_data(
-            fixture,
-            statistics
-        )
+        os.makedirs("generated", exist_ok=True)
 
-        print("")
-        print("========== 取得データ ==========")
+        temporary_path = OUTPUT_PATH + ".tmp.png"
+        image.save(temporary_path, "PNG")
 
-        print(
-            f"STVV: {match_data['stvv_name']}"
-        )
+        os.replace(temporary_path, OUTPUT_PATH)
 
-        print(
-            f"対戦相手: "
-            f"{match_data['opponent_name']}"
-        )
+        print(f"画像生成成功: {OUTPUT_PATH}")
 
-        print(
-            f"スコア: "
-            f"{match_data['stvv_score']}"
-            "-"
-            f"{match_data['opponent_score']}"
-        )
-
-        print(
-            f"会場: {match_data['venue']}"
-        )
-
-        for (
-            label,
-            stvv_value,
-            opponent_value
-        ) in match_data["stats"]:
-
-            print(
-                f"{label}: "
-                f"{stvv_value} / "
-                f"{opponent_value}"
-            )
-
-        print("==============================")
-        print("")
-
-        image = create_match_data_card(
-            match_data
-        )
-
-        image.save(
-            OUTPUT_PATH,
-            "PNG"
-        )
-
-        print(
-            f"画像生成成功: {OUTPUT_PATH}"
-        )
-
-    except Exception as e:
-
-        print(
-            f"実データ取得エラー: {e}"
-        )
-
-        image = create_error_card(
-            str(e)
-        )
-
-        image.save(
-            OUTPUT_PATH,
-            "PNG"
-        )
-
-        print(
-            "エラー表示画像を生成しました。"
-        )
-
+    except Exception as error:
+        print(f"画像生成を中止: {error}")
+        print("既存の画像は上書きしません")
         raise
 
 
