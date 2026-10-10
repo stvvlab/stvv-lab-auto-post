@@ -1201,6 +1201,145 @@ def handle_stock_post(
 
 
 # ==================================================
+# TheSportsDB: 実試合データを使った投稿
+# ==================================================
+
+SPORTSDB_BASE = "https://www.thesportsdb.com/api/v1/json/123"
+SPORTSDB_LEAGUE_ID = "4338"
+SPORTSDB_STVV_ID = "135461"
+
+
+def get_real_match():
+    """ベルギー1部の最新の終了試合を取得。欠損・古い試合は投稿しない。"""
+    now = datetime.now(JST)
+    season_start = now.year if now.month >= 7 else now.year - 1
+    season = f"{season_start}-{season_start + 1}"
+    response = requests.get(
+        f"{SPORTSDB_BASE}/eventsseason.php",
+        params={"id": SPORTSDB_LEAGUE_ID, "s": season},
+        timeout=30,
+    )
+    response.raise_for_status()
+    events = response.json().get("events") or []
+    candidates = []
+    for event in events:
+        if SPORTSDB_STVV_ID not in {
+            str(event.get("idHomeTeam")), str(event.get("idAwayTeam"))
+        }:
+            continue
+        if event.get("intHomeScore") is None or event.get("intAwayScore") is None:
+            continue
+        date = event.get("dateEvent")
+        if not date:
+            continue
+        try:
+            match_day = datetime.strptime(date, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        days_old = (now.date() - match_day).days
+        if not 0 <= days_old <= 7:
+            continue
+        candidates.append((match_day, event))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    return candidates[0][1]
+
+
+def get_real_match_stats(event_id):
+    if not event_id:
+        return {}
+    try:
+        response = requests.get(
+            f"{SPORTSDB_BASE}/lookupeventstats.php",
+            params={"id": event_id}, timeout=20,
+        )
+        response.raise_for_status()
+        data = response.json()
+        rows = data.get("eventstats") or data.get("statistics") or []
+        result = {}
+        for row in rows:
+            name = (row.get("strStat") or row.get("strStatistic") or "").lower().strip()
+            if not name:
+                continue
+            home = row.get("intHome") if row.get("intHome") is not None else row.get("strHome")
+            away = row.get("intAway") if row.get("intAway") is not None else row.get("strAway")
+            result[name] = (home, away)
+        return result
+    except (requests.RequestException, ValueError, AttributeError) as error:
+        print(f"スタッツ取得をスキップ: {error}")
+        return {}
+
+
+def create_real_match_post(event, slot):
+    home = str(event.get("idHomeTeam")) == SPORTSDB_STVV_ID
+    opponent = event.get("strAwayTeam") if home else event.get("strHomeTeam")
+    stvv_score = event.get("intHomeScore") if home else event.get("intAwayScore")
+    other_score = event.get("intAwayScore") if home else event.get("intHomeScore")
+    location = "HOME" if home else "AWAY"
+    date = event.get("dateEvent")
+    if not opponent or stvv_score is None or other_score is None:
+        return None
+    header = f"⚽ STVV 試合結果｜{date} {location}\nSTVV {stvv_score} - {other_score} {opponent}"
+    if slot == "result":
+        outcome = "勝利！🔥" if int(stvv_score) > int(other_score) else ("引き分け🤝" if int(stvv_score) == int(other_score) else "敗戦。次節に期待⚽")
+        return f"{header}\n\n{outcome}\nこの試合の注目選手は誰？👀\n\n#STVV #シントトロイデン"
+
+    stats = get_real_match_stats(event.get("idEvent"))
+    stvv_side = 0 if home else 1
+    other_side = 1 - stvv_side
+    found = []
+    for label, aliases in [
+        ("シュート", ("total shots", "shots", "total attempts")),
+        ("枠内シュート", ("shots on goal", "shots on target", "on target")),
+        ("支配率", ("ball possession", "possession")),
+        ("CK", ("corner kicks", "corners")),
+    ]:
+        pair = next((stats[a] for a in aliases if a in stats), None)
+        if pair and pair[0] is not None and pair[1] is not None:
+            found.append(f"{label}：{pair[stvv_side]} 対 {pair[other_side]}")
+    if not found:
+        return None
+    details = "\n".join(found[:3])
+    if slot == "data":
+        return f"📊 STVV 前節データ｜{date}\n対戦：{opponent}（{location}）\n{details}\n\nこの数字、どう見る？👀\n#STVV #サッカー分析"
+    if slot == "compare":
+        return f"⚔️ STVV vs {opponent}\n結果：{stvv_score}-{other_score}\n{details}\n\n結果とスタッツを比べて、気になった点は？\n#STVV #ベルギーリーグ"
+    return None
+
+
+def handle_real_match(posted, slot):
+    """投稿済みIDを保存し、同じ試合・同じ切り口は二度出さない。"""
+    try:
+        event = get_real_match()
+    except (requests.RequestException, ValueError, AttributeError) as error:
+        print(f"試合データ取得をスキップ: {error}")
+        return False
+    if not event:
+        print("直近7日間の確認済みSTVV試合がありません。")
+        return False
+    event_id = event.get("idEvent")
+    if not event_id:
+        return False
+    key = f"real_{event_id}_{slot}"
+    used = posted.get("used_posts", [])
+    if key in used:
+        print(f"実データ投稿済み: {key}")
+        return False
+    text = create_real_match_post(event, slot)
+    if not text:
+        print(f"{slot} の確認済みデータが足りないため投稿しません。")
+        return False
+    post_to_buffer(text, image_url=None)
+    used.append(key)
+    posted["used_posts"] = used[-500:]
+    save_posted(posted)
+    commit_posted_file()
+    print(f"実データ投稿完了: {key}")
+    return True
+
+
+# ==================================================
 # MAIN
 # ==================================================
 
@@ -1231,32 +1370,14 @@ def main():
         print("手動実行を検出しました。")
         print("時刻に関係なくニュース投稿を実行します。")
 
+        if handle_real_match(posted, "result"):
+            return
         posted_news = handle_news(
             posted
         )
 
         if not posted_news:
-            print("新着ニュースがないため、未投稿ストックへ切り替えます。")
-            fallback_order = [
-                "review",
-                "data",
-                "analysis",
-                "compare",
-                "player",
-                "vote",
-            ]
-
-            for fallback_type in fallback_order:
-                if handle_stock_post(
-                    fallback_type,
-                    posted
-                ):
-                    print(
-                        f"手動実行フォールバック投稿完了: {fallback_type}"
-                    )
-                    break
-            else:
-                print("投稿できる未投稿ストックもありません。")
+            print("新着ニュース・新しい試合結果がないため投稿しません。")
 
         return
 
@@ -1308,10 +1429,12 @@ def main():
     # その他6枠
     # ----------------------------------------------
 
-    handle_stock_post(
-        post_type,
-        posted
-    )
+    # 実データ優先。未確認の一般論ストックは投稿しない。
+    slot = {"player": "result", "compare": "compare", "data": "data",
+            "analysis": "compare", "vote": "result", "review": "data"}.get(post_type)
+    if slot and handle_real_match(posted, slot):
+        return
+    print("この枠は確認済みの新しい実データがないため投稿を見送ります。")
 
 
 if __name__ == "__main__":
