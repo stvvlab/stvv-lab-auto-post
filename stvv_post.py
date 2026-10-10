@@ -1,5 +1,7 @@
 
-"""STVV LAB automated X posting via Buffer. Python 3.12+."""
+"""STVV LAB automatic posting - stable edition."""
+
+import hashlib
 import html
 import json
 import os
@@ -7,489 +9,1033 @@ import re
 import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 
+
+# ==========================================
+# 基本設定
+# ==========================================
+
 JST = timezone(timedelta(hours=9))
-BASE = "https://www.thesportsdb.com/api/v1/json/123"
+
+SPORTS_DB = "https://www.thesportsdb.com/api/v1/json/123"
 TEAM_ID = "135461"
+
 NEWS_URL = "https://stvv.jp/news/2026/"
 BUFFER_URL = "https://api.buffer.com"
-CHANNEL_ID = os.getenv(
-    "BUFFER_CHANNEL_ID", "6ab8fce4ea19ca0bde027d80"
-)
-POSTED_PATH = Path("posted.json")
 
-SLOTS = {
-    8: "review",
-    10: "compare",
-    12: "data",
-    15: "target",
-    18: "news",
-    21: "vote",
-    23: "homeaway",
+CHANNEL_ID = os.getenv(
+    "BUFFER_CHANNEL_ID",
+    "6ab8fce4ea19ca0bde027d80",
+)
+
+HISTORY_FILE = Path("posted.json")
+
+SCHEDULE_SLOTS = {
+    "0 23 * * *": "player",
+    "30 1 * * *": "compare",
+    "30 3 * * *": "data",
+    "30 6 * * *": "analysis",
+    "0 9 * * *": "news",
+    "0 12 * * *": "vote",
+    "0 14 * * *": "recap",
+}
+
+SLOT_TIMES = {
+    "player": "08:00",
+    "compare": "10:30",
+    "data": "12:30",
+    "analysis": "15:30",
+    "news": "18:00",
+    "vote": "21:00",
+    "recap": "23:00",
+}
+
+SLOT_TITLES = {
+    "player": "🇯🇵 STVV LAB｜選手分析",
+    "compare": "⚔️ STVV LAB｜比較分析",
+    "data": "📊 STVV LAB｜試合データ",
+    "analysis": "🧠 STVV LAB｜戦術分析",
+    "news": "📰 STVV LAB｜クラブ情報",
+    "vote": "🗳️ STVV LAB｜ファン参加",
+    "recap": "⚽ STVV LAB｜試合レビュー",
 }
 
 SPONSOR_WORDS = (
-    "スポンサー", "パートナー", "協賛", "サプライヤー",
-    "キャンペーン", "グッズ", "商品販売", "プレゼント", "抽選"
+    "スポンサー",
+    "パートナー契約",
+    "協賛",
+    "サプライヤー",
+    "商品販売",
+    "グッズ",
+    "キャンペーン",
+    "プレゼント",
+    "抽選",
 )
+
 FOOTBALL_WORDS = (
-    "試合", "結果", "順位", "勝点", "勝ち点", "先発",
-    "スタメン", "出場", "ゴール", "得点", "選手",
-    "監督", "移籍", "加入", "負傷", "復帰", "代表",
-    "招集", "日程", "対戦", "勝利", "敗戦"
+    "試合",
+    "結果",
+    "順位",
+    "選手",
+    "監督",
+    "移籍",
+    "加入",
+    "退団",
+    "負傷",
+    "復帰",
+    "出場",
+    "得点",
+    "ゴール",
+    "代表",
+    "招集",
+    "対戦",
+    "勝利",
+    "敗戦",
+    "日程",
+    "スタメン",
+    "契約更新",
 )
 
 SESSION = requests.Session()
 SESSION.headers.update({
-    "User-Agent": "STVV-LAB/1.0 (news aggregation)"
+    "User-Agent": "STVV-LAB/2.0",
 })
 
 
-class SourceUnavailable(Exception):
-    pass
+# ==========================================
+# 共通処理
+# ==========================================
+
+def log(message):
+    now = datetime.now(JST)
+    print(
+        f"[{now.strftime('%Y-%m-%d %H:%M:%S')}] "
+        f"{message}",
+        flush=True,
+    )
 
 
-def fetch_json(url, params=None):
-    try:
-        response = SESSION.get(
-            url, params=params, timeout=25
+def fetch_json(endpoint, params=None):
+    response = SESSION.get(
+        f"{SPORTS_DB}/{endpoint}",
+        params=params,
+        timeout=25,
+    )
+    response.raise_for_status()
+
+    data = response.json()
+
+    if not isinstance(data, dict):
+        raise ValueError("API response is not an object")
+
+    return data
+
+
+def clean_text(value):
+    text = html.unescape(str(value or ""))
+    text = BeautifulSoup(
+        text, "html.parser"
+    ).get_text(" ", strip=True)
+
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def text_length(value):
+    total = 0
+    position = 0
+
+    for match in re.finditer(
+        r"https?://\S+", value
+    ):
+        before = value[position:match.start()]
+
+        total += sum(
+            1 if ord(char) < 128 else 2
+            for char in before
         )
-        response.raise_for_status()
-        return response.json()
-    except (requests.RequestException, ValueError) as exc:
-        raise SourceUnavailable(str(exc)) from exc
 
+        total += 23
+        position = match.end()
+
+    total += sum(
+        1 if ord(char) < 128 else 2
+        for char in value[position:]
+    )
+
+    return total
+
+
+def make_key(*values):
+    source = "|".join(str(x) for x in values)
+
+    return hashlib.sha256(
+        source.encode("utf-8")
+    ).hexdigest()[:20]
+
+
+# ==========================================
+# 投稿履歴
+# ==========================================
 
 def load_history():
-    if not POSTED_PATH.exists():
-        return {"news": [], "used_posts": []}
-    try:
-        data = json.loads(
-            POSTED_PATH.read_text(encoding="utf-8")
-        )
-        if isinstance(data, list):
-            data = {"news": data, "used_posts": []}
-        if not isinstance(data, dict):
-            raise ValueError("posted.json must be an object")
-        return {
-            "news": list(data.get("news") or []),
-            "used_posts": list(data.get("used_posts") or []),
-        }
-    except (ValueError, OSError, TypeError) as exc:
+    if not HISTORY_FILE.exists():
         raise RuntimeError(
-            f"投稿履歴を読めません。安全のため停止: {exc}"
-        ) from exc
+            "posted.json がありません。"
+            "既存履歴を保護するため停止します。"
+        )
+
+    data = json.loads(
+        HISTORY_FILE.read_text(
+            encoding="utf-8"
+        )
+    )
+
+    if not isinstance(data, dict):
+        raise RuntimeError(
+            "posted.json の形式が不正です"
+        )
+
+    if not isinstance(
+        data.get("news"), list
+    ):
+        raise RuntimeError(
+            "news の形式が不正です"
+        )
+
+    if not isinstance(
+        data.get("used_posts"), list
+    ):
+        raise RuntimeError(
+            "used_posts の形式が不正です"
+        )
+
+    # 既存のキーは削除しない
+    data.setdefault("publication_log", [])
+    data.setdefault("tracked_topics", {})
+
+    return data
 
 
 def save_history(history):
-    history["news"] = history["news"][-500:]
-    history["used_posts"] = history["used_posts"][-1000:]
+    temporary = HISTORY_FILE.with_name(
+        "posted.json.tmp"
+    )
 
-    temporary = POSTED_PATH.with_suffix(".json.tmp")
     temporary.write_text(
-        json.dumps(history, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(
+            history,
+            ensure_ascii=False,
+            indent=2,
+        ) + "\n",
         encoding="utf-8",
     )
-    temporary.replace(POSTED_PATH)
+
+    temporary.replace(HISTORY_FILE)
 
     subprocess.run(
-        ["git", "config", "user.name", "github-actions[bot]"],
-        check=True,
-    )
-    subprocess.run(
         [
-            "git", "config", "user.email",
-            "41898282+github-actions[bot]@users.noreply.github.com",
+            "git", "config",
+            "user.name",
+            "github-actions[bot]",
         ],
         check=True,
     )
+
     subprocess.run(
-        ["git", "add", str(POSTED_PATH)],
+        [
+            "git", "config",
+            "user.email",
+            "41898282+github-actions[bot]"
+            "@users.noreply.github.com",
+        ],
         check=True,
     )
 
-    changed = subprocess.run(
-        ["git", "diff", "--cached", "--quiet"],
+    subprocess.run(
+        ["git", "add", "posted.json"],
+        check=True,
+    )
+
+    diff = subprocess.run(
+        [
+            "git", "diff",
+            "--cached", "--quiet",
+        ],
         check=False,
     )
-    if changed.returncode == 0:
+
+    if diff.returncode == 0:
         return
-    if changed.returncode != 1:
-        raise RuntimeError("git diff failed")
+
+    if diff.returncode != 1:
+        raise RuntimeError(
+            "Git差分の確認に失敗しました"
+        )
 
     subprocess.run(
-        ["git", "commit", "-m", "Update STVV posting history"],
+        [
+            "git", "commit",
+            "-m", "Update STVV LAB history",
+        ],
         check=True,
     )
-    subprocess.run(["git", "push"], check=True)
+
+    subprocess.run(
+        ["git", "push"],
+        check=True,
+    )
 
 
-def latest_match(now):
-    payload = fetch_json(
-        f"{BASE}/eventslast.php",
+# ==========================================
+# 実行枠の判定
+# ==========================================
+
+def determine_slot(now):
+    event_name = os.getenv(
+        "GITHUB_EVENT_NAME", ""
+    )
+
+    if event_name == "workflow_dispatch":
+        return "manual"
+
+    cron = os.getenv(
+        "GITHUB_SCHEDULE", ""
+    ).strip()
+
+    if cron:
+        slot = SCHEDULE_SLOTS.get(cron)
+
+        if not slot:
+            raise RuntimeError(
+                f"未知のスケジュール: {cron}"
+            )
+
+        return slot
+
+    # ローカル実行用
+    current = now.strftime("%H:%M")
+
+    for slot, scheduled in SLOT_TIMES.items():
+        if current == scheduled:
+            return slot
+
+    return None
+
+
+# ==========================================
+# 試合データ
+# ==========================================
+
+def get_latest_match(now):
+    data = fetch_json(
+        "eventslast.php",
         {"id": TEAM_ID},
     )
+
     candidates = []
 
-    for event in payload.get("results") or []:
-        if TEAM_ID not in (
+    for event in data.get("results") or []:
+        if not isinstance(event, dict):
+            continue
+
+        teams = {
             str(event.get("idHomeTeam")),
             str(event.get("idAwayTeam")),
-        ):
+        }
+
+        if TEAM_ID not in teams:
             continue
 
-        if str(event.get("strStatus") or "").upper() not in (
+        status = str(
+            event.get("strStatus") or ""
+        ).upper()
+
+        if status not in {
             "FT", "AET", "PEN"
-        ):
-            continue
-
-        if (
-            event.get("intHomeScore") is None
-            or event.get("intAwayScore") is None
-        ):
+        }:
             continue
 
         try:
             day = datetime.strptime(
-                event["dateEvent"], "%Y-%m-%d"
+                event["dateEvent"],
+                "%Y-%m-%d",
             ).date()
-            int(event["intHomeScore"])
-            int(event["intAwayScore"])
-        except (KeyError, ValueError, TypeError):
+
+            home_score = int(
+                event["intHomeScore"]
+            )
+
+            away_score = int(
+                event["intAwayScore"]
+            )
+
+        except (
+            KeyError,
+            ValueError,
+            TypeError,
+        ):
             continue
 
-        if 0 <= (now.date() - day).days <= 30:
-            candidates.append((day, event))
+        age = (now.date() - day).days
 
-    return (
-        max(candidates, key=lambda item: item[0])[1]
-        if candidates else None
-    )
+        if age < 0 or age > 7:
+            continue
 
+        if not event.get("idEvent"):
+            continue
 
-def match_stats(event_id):
-    if not event_id:
-        return {}
-
-    try:
-        payload = fetch_json(
-            f"{BASE}/lookupeventstats.php",
-            {"id": event_id},
+        candidates.append(
+            (day, event, home_score, away_score)
         )
-        rows = (
-            payload.get("eventstats")
-            or payload.get("statistics")
-            or []
-        )
-        result = {}
 
-        for row in rows:
-            name = str(
-                row.get("strStat")
-                or row.get("strStatistic")
-                or ""
-            ).lower().strip()
-
-            if name:
-                home = (
-                    row.get("intHome")
-                    if row.get("intHome") is not None
-                    else row.get("strHome")
-                )
-                away = (
-                    row.get("intAway")
-                    if row.get("intAway") is not None
-                    else row.get("strAway")
-                )
-                result[name] = (home, away)
-
-        return result
-
-    except (
-        SourceUnavailable, ValueError,
-        AttributeError, TypeError
-    ) as exc:
-        print(f"スタッツ未取得: {exc}")
-        return {}
-
-
-def build_match_post(event, slot):
-    home = str(event.get("idHomeTeam")) == TEAM_ID
-    opponent = (
-        event.get("strAwayTeam")
-        if home else event.get("strHomeTeam")
-    )
-
-    if not opponent or not event.get("idEvent"):
+    if not candidates:
         return None
 
-    own = int(
-        event["intHomeScore"]
-        if home else event["intAwayScore"]
-    )
-    other = int(
-        event["intAwayScore"]
-        if home else event["intHomeScore"]
+    candidates.sort(
+        key=lambda item: item[0],
+        reverse=True,
     )
 
-    venue = "ホーム" if home else "アウェイ"
-    base = (
-        f"{event['dateEvent']}｜{venue}\n"
-        f"STVV {own}–{other} {opponent}"
+    return candidates[0][1]
+
+
+def get_match_info(event):
+    home = (
+        str(event.get("idHomeTeam"))
+        == TEAM_ID
     )
+
+    opponent = (
+        event.get("strAwayTeam")
+        if home
+        else event.get("strHomeTeam")
+    )
+
+    if not opponent:
+        return None
+
+    own_score = int(
+        event["intHomeScore"]
+        if home
+        else event["intAwayScore"]
+    )
+
+    other_score = int(
+        event["intAwayScore"]
+        if home
+        else event["intHomeScore"]
+    )
+
     result = (
-        "勝利" if own > other
-        else "引き分け" if own == other
+        "勝利"
+        if own_score > other_score
+        else "引き分け"
+        if own_score == other_score
         else "敗戦"
     )
-    suffix = "\n\n#STVV #シントトロイデン"
 
-    if slot == "result":
-        return (
-            f"⚽ STVV試合結果\n{base}\n{result}。\n\n"
-            "印象に残った選手は？" + suffix
+    return {
+        "id": str(event["idEvent"]),
+        "date": event["dateEvent"],
+        "opponent": str(opponent),
+        "venue": (
+            "ホーム" if home else "アウェイ"
+        ),
+        "home": home,
+        "own": own_score,
+        "other": other_score,
+        "result": result,
+    }
+
+
+def get_match_stats(event_id):
+    try:
+        data = fetch_json(
+            "lookupeventstats.php",
+            {"id": event_id},
         )
+    except (
+        requests.RequestException,
+        ValueError,
+    ) as error:
+        log(f"スタッツ取得失敗: {error}")
+        return {}
 
-    if slot == "review":
-        return (
-            f"🔎 STVV 試合振り返り\n{base}\n"
-            f"結果は{result}。\n\n"
-            "次の試合に向けて注目する点は？" + suffix
-        )
+    rows = (
+        data.get("eventstats")
+        or data.get("statistics")
+        or []
+    )
 
-    if slot == "homeaway":
+    stats = {}
+
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        name = str(
+            row.get("strStat")
+            or row.get("strStatistic")
+            or ""
+        ).lower().strip()
+
+        if not name:
+            continue
+
+        home = row.get("intHome")
+        away = row.get("intAway")
+
+        if home is None:
+            home = row.get("strHome")
+
+        if away is None:
+            away = row.get("strAway")
+
+        stats[name] = (home, away)
+
+    return stats
+
+
+def find_stat(stats, names, home):
+    index = 0 if home else 1
+
+    for name in names:
+        pair = stats.get(name)
+
+        if (
+            isinstance(pair, (list, tuple))
+            and len(pair) == 2
+            and pair[index] is not None
+            and pair[1 - index] is not None
+        ):
+            own = str(pair[index])
+            other = str(pair[1 - index])
+
+            return own, other
+
+    return None
+
+
+# ==========================================
+# 試合関連の投稿
+# ==========================================
+
+def build_match_post(event, slot):
+    info = get_match_info(event)
+
+    if not info:
+        return None
+
+    base = (
+        f"{info['date']}｜{info['venue']}\n"
+        f"STVV {info['own']}–"
+        f"{info['other']} "
+        f"{info['opponent']}"
+    )
+
+    suffix = (
+        "\n\n#STVV #シントトロイデン"
+    )
+
+    if slot == "recap":
         return (
-            f"🏟️ STVV {venue}戦\n{base}\n"
-            f"得点：{own}／失点：{other}\n\n"
-            f"次の{venue}戦に期待することは？" + suffix
+            "⚽ STVV｜試合結果\n\n"
+            f"{base}\n"
+            f"結果：{info['result']}\n\n"
+            "勝敗とスコアを確認。"
+            "試合内容の評価には、"
+            "さらにプレーデータが必要です。"
+            + suffix
         )
 
     if slot == "vote":
         return (
-            f"🗳️ STVVファンに質問\n{base}\n\n"
-            "この試合のMOMは誰？" + suffix
+            "🗳️ STVV｜試合を振り返る\n\n"
+            f"{base}\n\n"
+            "この試合で最も評価したいのは？\n"
+            "① 攻撃\n"
+            "② 守備\n"
+            "③ 個人のプレー\n"
+            "④ 監督の采配"
+            + suffix
         )
 
-    stats = match_stats(event["idEvent"])
-    aliases = {
-        "shots": ("total shots", "shots", "total attempts"),
-        "target": (
-            "shots on goal", "shots on target", "on target"
-        ),
-        "possession": ("ball possession", "possession"),
-        "corners": ("corner kicks", "corners"),
-    }
-    values = {}
+    if slot not in {
+        "data", "compare", "analysis"
+    }:
+        return None
 
-    for key, names in aliases.items():
-        pair = next(
-            (stats[name] for name in names if name in stats),
-            None,
+    stats = get_match_stats(info["id"])
+
+    shots = find_stat(
+        stats,
+        [
+            "total shots",
+            "shots",
+            "total attempts",
+        ],
+        info["home"],
+    )
+
+    target = find_stat(
+        stats,
+        [
+            "shots on goal",
+            "shots on target",
+            "on target",
+        ],
+        info["home"],
+    )
+
+    possession = find_stat(
+        stats,
+        [
+            "ball possession",
+            "possession",
+        ],
+        info["home"],
+    )
+
+    if slot == "compare" and shots:
+        return (
+            "⚔️ STVV｜シュート数比較\n\n"
+            f"{base}\n\n"
+            f"STVV：{shots[0]}\n"
+            f"相手：{shots[1]}\n\n"
+            "シュート数だけでは"
+            "決定機の質までは判断できません。"
+            + suffix
         )
-        if (
-            pair and len(pair) == 2
-            and all(value is not None for value in pair)
-        ):
-            values[key] = tuple(
-                str(v) for v in (
-                    pair if home else pair[::-1]
-                )
+
+    if slot == "data":
+        lines = []
+
+        if shots:
+            lines.append(
+                f"シュート："
+                f"{shots[0]} 対 {shots[1]}"
             )
 
-    if slot == "compare" and "shots" in values:
-        a, b = values["shots"]
-        return (
-            f"⚔️ シュート数比較\n{base}\n"
-            f"STVV {a}本／相手 {b}本\n\n"
-            "どう感じた？" + suffix
-        )
+        if target:
+            lines.append(
+                f"枠内："
+                f"{target[0]} 対 {target[1]}"
+            )
 
-    if slot == "target" and "target" in values:
-        a, b = values["target"]
-        return (
-            f"🎯 枠内シュート比較\n{base}\n"
-            f"STVV {a}本／相手 {b}本\n\n"
-            "数字から見えることは？" + suffix
-        )
+        if possession:
+            lines.append(
+                f"支配率："
+                f"{possession[0]} 対 "
+                f"{possession[1]}"
+            )
 
-    if slot == "data" and values:
-        labels = {
-            "shots": "シュート",
-            "target": "枠内シュート",
-            "possession": "支配率",
-            "corners": "CK",
-        }
-        lines = [
-            f"{labels[k]}：{a} 対 {b}"
-            for k, (a, b) in values.items()
-        ][:3]
+        if lines:
+            return (
+                "📊 STVV｜試合データ\n\n"
+                f"{base}\n\n"
+                + "\n".join(lines)
+                + "\n\n数字をもとに"
+                "試合内容を振り返ります。"
+                + suffix
+            )
+
+    if slot == "analysis" and shots and target:
+        try:
+            own_shots = float(
+                shots[0].replace("%", "")
+            )
+
+            own_target = float(
+                target[0].replace("%", "")
+            )
+
+            if own_shots <= 0:
+                return None
+
+            rate = (
+                own_target / own_shots * 100
+            )
+
+            if not 0 <= rate <= 100:
+                return None
+
+        except ValueError:
+            return None
+
         return (
-            f"📊 STVV 試合データ\n{base}\n"
-            + "\n".join(lines)
-            + "\n\n気になった数字は？"
+            "🧠 STVV｜攻撃データ分析\n\n"
+            f"{base}\n\n"
+            f"シュート：{shots[0]}本\n"
+            f"枠内：{target[0]}本\n"
+            f"枠内率：約{rate:.1f}%\n\n"
+            "枠内率は攻撃を評価する"
+            "指標の一つです。"
+            "決定機の質とは区別して考えます。"
             + suffix
         )
 
     return None
 
 
-def clean_title(value):
-    value = re.sub(
-        r"\[/?caption\b[^\]]*\]",
-        " ",
-        str(value or ""),
-        flags=re.I,
-    )
-    value = BeautifulSoup(
-        html.unescape(value), "html.parser"
-    ).get_text(" ", strip=True)
-    return re.sub(r"\s+", " ", value).strip()
-
-
-def article_title(url, fallback):
-    try:
-        response = SESSION.get(url, timeout=20)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        h1 = soup.find("h1")
-        og = soup.find(
-            "meta", attrs={"property": "og:title"}
-        )
-
-        for title in (
-            h1.get_text(" ", strip=True) if h1 else "",
-            og.get("content", "") if og else "",
-            fallback,
-        ):
-            title = clean_title(title)
-            if len(title) >= 8:
-                return title
-
-    except requests.RequestException as exc:
-        print(f"ニュース詳細を取得できません: {exc}")
-
-    return clean_title(fallback)
-
+# ==========================================
+# 公式ニュース
+# ==========================================
 
 def get_news(now):
-    try:
-        response = SESSION.get(NEWS_URL, timeout=25)
-        response.raise_for_status()
-    except requests.RequestException as exc:
-        raise SourceUnavailable(str(exc)) from exc
+    response = SESSION.get(
+        NEWS_URL,
+        timeout=25,
+    )
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    response.raise_for_status()
+
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser",
+    )
+
     articles = []
     seen = set()
 
-    for anchor in soup.find_all("a", href=True):
-        url = urljoin(
-            NEWS_URL, anchor["href"]
-        ).split("#", 1)[0].split("?", 1)[0]
-        url = url.rstrip("/") + "/"
+    pattern = re.compile(
+        r"^/news/(game|team)/"
+        r"(20\d{6}[^/]*)/$",
+        re.I,
+    )
 
-        match = re.fullmatch(
-            r"https://stvv\.jp/news/(game|team)/(20\d{6}[^/]*)/",
-            url,
-            flags=re.I,
+    for anchor in soup.find_all(
+        "a", href=True
+    ):
+        url = urljoin(
+            NEWS_URL,
+            anchor["href"],
         )
-        if not match or url in seen:
+
+        parsed = urlparse(url)
+
+        if parsed.netloc.lower() != "stvv.jp":
             continue
 
-        seen.add(url)
+        path = parsed.path.rstrip("/") + "/"
+        match = pattern.fullmatch(path)
+
+        if not match:
+            continue
+
+        canonical = (
+            "https://stvv.jp" + path
+        )
+
+        if canonical in seen:
+            continue
+
+        seen.add(canonical)
 
         try:
-            article_day = datetime.strptime(
-                match.group(2)[:8], "%Y%m%d"
+            day = datetime.strptime(
+                match.group(2)[:8],
+                "%Y%m%d",
             ).date()
         except ValueError:
             continue
 
-        if not 0 <= (now.date() - article_day).days <= 7:
+        age = (now.date() - day).days
+
+        if not 0 <= age <= 7:
             continue
 
-        title = article_title(
-            url, anchor.get_text(" ", strip=True)
+        title = clean_text(
+            anchor.get_text(" ", strip=True)
         )
 
-        if (
-            len(title) < 8
-            or any(word in title for word in SPONSOR_WORDS)
+        if len(title) < 8:
+            continue
+
+        if any(
+            word in title
+            for word in SPONSOR_WORDS
         ):
             continue
 
-        if not any(word in title for word in FOOTBALL_WORDS):
+        if not any(
+            word in title
+            for word in FOOTBALL_WORDS
+        ):
             continue
 
         articles.append({
-            "url": url,
+            "url": canonical,
             "title": title,
-            "day": article_day,
-            "category": match.group(1).lower(),
+            "day": day.isoformat(),
         })
 
     articles.sort(
-        key=lambda item: (
-            item["day"],
-            item["category"] == "game",
-        ),
+        key=lambda item: item["day"],
         reverse=True,
     )
+
     return articles
 
 
 def build_news_post(article):
-    header = (
-        "⚽ STVV MATCH NEWS 🇧🇪"
-        if article["category"] == "game"
-        else "🚨 STVV TEAM NEWS 🇧🇪"
-    )
     return (
-        f"{header}\n\n{article['title']}\n\n"
-        f"🔗 {article['url']}\n\n"
+        "📰 STVV｜公式ニュース\n\n"
+        f"{article['title']}\n\n"
+        "公式発表はこちら👇\n"
+        f"{article['url']}\n\n"
         "#STVV #シントトロイデン"
     )
 
 
-def x_length(text):
-    total = 0
-    last = 0
+# ==========================================
+# データ不足時の投稿
+# ==========================================
 
-    for match in re.finditer(r"https?://\S+", text):
-        total += sum(
-            1 if ord(c) < 128 else 2
-            for c in text[last:match.start()]
-        ) + 23
-        last = match.end()
+EVERGREEN = {
+    "player": [
+        (
+            "選手を評価するとき、"
+            "得点・アシストだけでは"
+            "見えない貢献があります。\n\n"
+            "例えば、守備への切り替え、"
+            "味方のための動き、"
+            "ボールを受ける位置。\n\n"
+            "あなたが最も注目するのは？"
+        ),
+        (
+            "日本人選手の欧州挑戦を"
+            "見るときに注目したいのは、"
+            "出場時間だけではありません。\n\n"
+            "どんな役割を任され、"
+            "試合にどう関わっているか。"
+            "その変化も重要です。"
+        ),
+        (
+            "FWの貢献度を考えるなら、"
+            "ゴール以外にも注目。\n\n"
+            "裏への抜け出し、"
+            "前線からの守備、"
+            "味方へのスペース作り。\n\n"
+            "数字に表れにくい働きもあります。"
+        ),
+    ],
+    "compare": [
+        (
+            "シュート数が多いチームと、"
+            "少ないチャンスを決め切るチーム。\n\n"
+            "攻撃力を比べるなら、"
+            "本数だけでなく"
+            "シュート位置や決定機の質も"
+            "確認したいところです。"
+        ),
+        (
+            "DFを比較するとき、"
+            "タックル数だけで"
+            "優劣を決められるでしょうか。\n\n"
+            "ポジショニングによって"
+            "相手にパスを出させない守備も、"
+            "大きな貢献です。"
+        ),
+        (
+            "中盤の選手を比較するなら、"
+            "パス成功率だけでは不十分。\n\n"
+            "前進させるパス、"
+            "相手の守備を動かす判断、"
+            "ボールを失うリスクも"
+            "合わせて考えたいところです。"
+        ),
+    ],
+    "data": [
+        (
+            "📊 サッカーのデータ分析\n\n"
+            "ボール保持率が高くても、"
+            "必ず勝てるわけではありません。\n\n"
+            "どこで保持したのか、"
+            "そこから何回チャンスを"
+            "作れたのかが重要です。"
+        ),
+        (
+            "📊 枠内シュート率とは？\n\n"
+            "枠内シュート数を"
+            "総シュート数で割った割合。\n\n"
+            "ただし、枠内に飛んだだけで"
+            "得点期待値が高いとは限りません。"
+        ),
+        (
+            "📊 守備データの見方\n\n"
+            "被シュート数が少ないことは"
+            "重要な指標の一つ。\n\n"
+            "一方で、少ない本数でも"
+            "決定的な場面を許していれば、"
+            "守備の評価は変わります。"
+        ),
+    ],
+    "analysis": [
+        (
+            "🧠 STVV LAB｜戦術の見方\n\n"
+            "前線からプレスをかけるなら、"
+            "後方の選手との連動が重要。\n\n"
+            "前だけが追いかけても、"
+            "中盤にスペースが生まれます。"
+        ),
+        (
+            "🧠 サイド攻撃のポイント\n\n"
+            "幅を取る選手と"
+            "内側に入る選手の連携。\n\n"
+            "相手DFに複数の選択肢を"
+            "意識させることで、"
+            "突破の可能性が広がります。"
+        ),
+        (
+            "🧠 試合終盤の戦い方\n\n"
+            "リード時には"
+            "ボールを保持するだけでなく、"
+            "失った直後の配置も重要。\n\n"
+            "攻守のバランスが"
+            "勝点を左右します。"
+        ),
+    ],
+    "news": [
+        (
+            "📰 STVV LAB｜情報の見方\n\n"
+            "移籍や負傷の情報は、"
+            "公式発表と報道を"
+            "分けて確認することが重要。\n\n"
+            "未確定情報を"
+            "事実として扱わないことを"
+            "大切にします。"
+        ),
+        (
+            "📰 STVV LAB｜注目ポイント\n\n"
+            "クラブの動きを追うときは、"
+            "新加入だけでなく"
+            "契約更新や若手の起用にも注目。\n\n"
+            "チーム編成の方向性を"
+            "考える材料になります。"
+        ),
+        (
+            "📰 STVV LAB｜試合情報\n\n"
+            "試合前に確認したいのは、"
+            "対戦相手の直近成績、"
+            "出場可能な選手、"
+            "ホーム・アウェイの条件。\n\n"
+            "予想と確定情報は"
+            "分けて扱います。"
+        ),
+    ],
+    "vote": [
+        (
+            "🗳️ STVVファンに質問！\n\n"
+            "試合で一番見たいのは？\n\n"
+            "① 日本人選手の活躍\n"
+            "② チームの勝利\n"
+            "③ 戦術的な駆け引き\n"
+            "④ 若手の成長"
+        ),
+        (
+            "🗳️ STVV LABアンケート\n\n"
+            "次に詳しく読みたい分析は？\n\n"
+            "① 攻撃の仕組み\n"
+            "② 守備の連動\n"
+            "③ 選手の個人成績\n"
+            "④ 対戦相手の研究"
+        ),
+        (
+            "🗳️ サッカー観戦の楽しみ\n\n"
+            "あなたが最も注目するのは？\n\n"
+            "① ゴールシーン\n"
+            "② 好守備\n"
+            "③ パスワーク\n"
+            "④ 監督の采配"
+        ),
+    ],
+    "recap": [
+        (
+            "⚽ STVV LAB｜試合分析\n\n"
+            "試合を振り返るときは、"
+            "スコアだけでなく"
+            "得点・失点の時間帯にも注目。\n\n"
+            "どの局面で試合が動いたかを"
+            "確認することが大切です。"
+        ),
+        (
+            "⚽ STVV LAB｜勝敗の要因\n\n"
+            "試合結果を分析するなら、"
+            "決定力だけでなく"
+            "チャンスの作り方も重要。\n\n"
+            "良い形を何度作れたかで、"
+            "次戦への評価も変わります。"
+        ),
+        (
+            "⚽ STVV LAB｜次戦への視点\n\n"
+            "試合後に注目したいのは、"
+            "課題が次の試合で"
+            "改善されたかどうか。\n\n"
+            "単発の結果ではなく、"
+            "複数試合の変化を"
+            "追うことが重要です。"
+        ),
+    ],
+}
 
-    return total + sum(
-        1 if ord(c) < 128 else 2
-        for c in text[last:]
+
+def build_evergreen(slot, now):
+    topics = EVERGREEN[slot]
+
+    # 日付と枠でテーマを切り替える
+    index = (
+        now.date().toordinal()
+        + list(SLOT_TIMES).index(slot) * 7
+    ) % len(topics)
+
+    return (
+        f"{SLOT_TITLES[slot]}\n\n"
+        f"{topics[index]}\n\n"
+        "#STVV #シントトロイデン"
     )
 
 
-def post_to_buffer(text):
-    if x_length(text) > 270:
-        raise ValueError(
-            "投稿文字数が上限を超えました。"
-            "切り詰めず安全に停止します。"
+# ==========================================
+# Buffer投稿
+# ==========================================
+
+def post_to_buffer(message):
+    api_key = os.getenv(
+        "BUFFER_API_KEY"
+    )
+
+    if not api_key:
+        raise RuntimeError(
+            "BUFFER_API_KEY が未設定です"
         )
 
-    api_key = os.environ.get("BUFFER_API_KEY")
-    if not api_key:
-        raise RuntimeError("BUFFER_API_KEY が未設定です")
+    if not CHANNEL_ID:
+        raise RuntimeError(
+            "BUFFER_CHANNEL_ID が未設定です"
+        )
+
+    if text_length(message) > 270:
+        raise RuntimeError(
+            "投稿文字数が安全上限を超えました"
+        )
 
     mutation = """
     mutation CreatePost($input: CreatePostInput!) {
       createPost(input: $input) {
         ... on PostActionSuccess {
-          post { id text status }
+          post {
+            id
+            text
+            status
+          }
         }
-        ... on MutationError { message }
+        ... on MutationError {
+          message
+        }
       }
     }
     """
@@ -498,7 +1044,7 @@ def post_to_buffer(text):
         "query": mutation,
         "variables": {
             "input": {
-                "text": text,
+                "text": message,
                 "channelId": CHANNEL_ID,
                 "schedulingType": "automatic",
                 "mode": "shareNow",
@@ -506,286 +1052,330 @@ def post_to_buffer(text):
         },
     }
 
-    response = requests.post(
+    response = SESSION.post(
         BUFFER_URL,
         json=payload,
         timeout=30,
         headers={
-            "Authorization": f"Bearer {api_key}",
+            "Authorization": (
+                f"Bearer {api_key}"
+            ),
             "Content-Type": "application/json",
         },
     )
+
     response.raise_for_status()
-    data = response.json()
 
-    if data.get("errors"):
+    result = response.json()
+
+    if result.get("errors"):
         raise RuntimeError(
-            f"Buffer GraphQLエラー: {data['errors']}"
+            f"Buffer APIエラー: "
+            f"{result['errors']}"
         )
 
-    result = (
-        (data.get("data") or {}).get("createPost") or {}
+    action = (
+        result.get("data") or {}
+    ).get("createPost") or {}
+
+    post = action.get("post") or {}
+
+    if not post.get("id"):
+        raise RuntimeError(
+            f"Buffer投稿を確認できません: "
+            f"{action}"
+        )
+
+    log(
+        f"Buffer受付成功: {post['id']}"
     )
-    post = result.get("post") or {}
 
-    if result.get("message") or not post.get("id"):
-        raise RuntimeError(
-            f"Buffer投稿が確認できません: {result}"
-        )
-
-    print(f"Buffer投稿成功: {post['id']}\n{text}")
+    return {
+        "id": str(post["id"]),
+        "status": post.get("status"),
+    }
 
 
-def publish_match(history, now, slot):
-    event = latest_match(now)
-    if not event:
-        print(
-            "30日以内の終了済みSTVV試合は"
-            "取得できませんでした"
-        )
+# ==========================================
+# 投稿管理
+# ==========================================
+
+def already_posted(history, key):
+    return key in history["used_posts"]
+
+
+def publish(
+    history,
+    key,
+    message,
+    slot,
+    source=None,
+):
+    if already_posted(history, key):
+        log(f"投稿済みのためスキップ: {key}")
         return False
 
-    key = f"real_{event['idEvent']}_{slot}"
-    if key in history["used_posts"]:
-        print(f"投稿済み: {key}")
-        return False
+    log(
+        f"投稿開始: {slot} / {key}"
+    )
 
-    text = build_match_post(event, slot)
-    if not text:
-        print(
-            f"この試合には{slot}用の"
-            "確認済みデータがありません"
-        )
-        return False
+    result = post_to_buffer(message)
 
-    post_to_buffer(text)
     history["used_posts"].append(key)
+
+    history["publication_log"].append({
+        "key": key,
+        "slot": slot,
+        "buffer_id": result["id"],
+        "buffer_status": result["status"],
+        "submitted_at": (
+            datetime.now(JST).isoformat()
+        ),
+        "source": source,
+        "text": message,
+    })
+
     save_history(history)
+
+    log("投稿履歴を保存しました")
+
     return True
 
 
 def publish_news(history, now):
     articles = get_news(now)
 
-    if not history["news"]:
-        history["news"] = [
-            item["url"] for item in articles
-        ]
-        save_history(history)
-        print(
-            "ニュース既読履歴を初期化。"
-            "次回から新着を投稿します"
-        )
-        return False
-
     for article in articles:
-        if article["url"] in history["news"]:
+        url = article["url"]
+
+        if url in history["news"]:
             continue
 
-        post_to_buffer(build_news_post(article))
-        history["news"].append(article["url"])
-        save_history(history)
-        return True
+        key = "news_" + make_key(url)
 
-    print("未投稿の新着ニュースはありません")
+        if already_posted(history, key):
+            continue
+
+        message = build_news_post(article)
+
+        if text_length(message) > 270:
+            log(
+                "ニュースが長いためスキップ: "
+                + url
+            )
+            continue
+
+        # 投稿と履歴保存が成功した後に
+        # ニュース既読を追加する
+        result = publish(
+            history,
+            key,
+            message,
+            "news",
+            source=url,
+        )
+
+        if result:
+            history["news"].append(url)
+            save_history(history)
+            return True
+
     return False
 
 
-# ==========================================
-# 最新情報がない場合の投稿テーマ
-# ==========================================
-
-FALLBACK_TOPICS = {
-    "review": [
-        "STVVの試合を見るとき、最初に注目するのは守備の並び？ それとも前線の動き？",
-        "失点場面を振り返るなら、個人の対応とチーム全体の配置、どちらを先に確認したい？",
-        "試合を評価するとき、結果と内容のどちらをより重視する？",
-        "STVVの試合で「流れが変わった」と感じるのは、どんなプレー？",
-        "90分を振り返るなら、まず確認したい数字や場面は何？",
-        "守備の改善点を探すとき、プレス開始位置と最終ラインの距離、どちらを見る？",
-        "試合のMVPを選ぶなら、得点以外に何を評価したい？",
-        "接戦の試合で勝敗を分ける要素は、セットプレー？ 交代策？",
-        "STVVの試合を見返すなら、前半と後半のどちらから分析する？",
-        "試合内容をひと言で表すとき、何を基準にする？",
-    ],
-    "compare": [
-        "攻撃を比べるなら、シュート数と決定機の質、どちらが重要？",
-        "ボール保持率が高いチームと速攻が鋭いチーム、どちらが手ごわい？",
-        "サイド攻撃と中央突破。STVVに期待するのはどちら？",
-        "前線の選手を比較するなら、得点力と守備への貢献、どちらを重視する？",
-        "中盤の選手を見るなら、パス成功率と前進させるパス、どちらに注目？",
-        "DFを評価するなら、対人の強さとビルドアップ、どちらを重視する？",
-        "GKを比較するなら、セーブと足元の技術、どちらが決め手？",
-        "高い位置からのプレスと自陣でのブロック、どちらが好き？",
-        "若手の起用と経験豊富な選手の安定感。どちらを優先したい？",
-        "得点力と失点の少なさ。順位を上げる鍵はどちらだと思う？",
-    ],
-    "data": [
-        "📊 シュート数が多くても勝てない試合。次に確認したい数字は何？",
-        "📊 枠内シュート率と決定率。攻撃の精度を見るならどちら？",
-        "📊 パス成功率だけでは分からない攻撃の質。どんな指標を見たい？",
-        "📊 セットプレーの強さを測るなら、獲得数と得点数、どちらに注目？",
-        "📊 守備の良さを測る数字として、被シュート数以外に何を見たい？",
-        "📊 走行距離とスプリント回数。運動量を見るならどちら？",
-        "📊 ボール奪取数は多ければいい？ 奪う位置も重要だと思う？",
-        "📊 クロスの本数と成功率。サイド攻撃を分析するならどちら？",
-        "📊 前半と後半の得点傾向。STVVで調べてみたいのは何？",
-        "📊 交代選手の貢献度を測るなら、どんな数字が必要？",
-    ],
-    "target": [
-        "🎯 枠内シュートを増やすには、シュート位置とラストパス、どちらの改善が先？",
-        "🎯 決定機を作るなら、裏への抜け出しとサイドの崩し、どちらに期待？",
-        "🎯 ミドルシュートは積極的に狙うべき？ それともゴール前まで運ぶべき？",
-        "🎯 1対1の場面。シュートを選ぶ選手とパスを選ぶ選手、どちらが好み？",
-        "🎯 セットプレーで狙いたいのは、直接ゴール？ こぼれ球の回収？",
-        "🎯 攻撃のテンポを上げるには、縦パスとドリブル突破、どちらが有効？",
-        "🎯 相手が引いて守るとき、どんな攻め方が効果的だと思う？",
-        "🎯 シュート精度を高めるには、どんな練習が重要だと思う？",
-        "🎯 ゴール前で人数をかける攻撃とカウンターへの備え、どう両立する？",
-        "🎯 得点シーンを分析するなら、最後の一手とその前の動き、どちらに注目？",
-    ],
-    "news": [
-        "📰 STVVの公式発表で、最も知りたいのは選手情報？ 試合情報？",
-        "📰 日本人選手の情報で、出場状況とプレー内容、どちらを詳しく知りたい？",
-        "📰 移籍ニュースを見るとき、まず確認したいポイントは何？",
-        "📰 STVVの最新情報を追うなら、監督コメントと選手コメント、どちらが気になる？",
-        "📰 試合前に知りたいのは予想先発？ 相手チームの特徴？",
-        "📰 クラブの育成について、どんな話題を深掘りしてほしい？",
-        "📰 STVVの情報発信で、もっと増えてほしいコンテンツは何？",
-        "📰 日本とベルギーのサッカーを比較するなら、何を取り上げてほしい？",
-        "📰 試合後の情報で、スタッツと選手の声、どちらを先に見たい？",
-        "📰 STVV LABで次に調べてほしいテーマを教えてください！",
-    ],
-    "vote": [
-        "🗳️ STVVで注目したいポジションは？ FW／MF／DF／GK",
-        "🗳️ 好きな得点パターンは？ カウンター／セットプレー／崩し／ミドル",
-        "🗳️ 試合観戦で重視するのは？ 結果／戦術／個人技／雰囲気",
-        "🗳️ 次に見たい分析は？ 攻撃／守備／選手比較／対戦相手",
-        "🗳️ 理想の中盤は？ ボール奪取型／展開力型／運動量型／得点型",
-        "🗳️ 試合前に気になるのは？ 先発／フォーメーション／相手の弱点／直近成績",
-        "🗳️ サッカー観戦で好きな瞬間は？ ゴール／好守備／パスワーク／逆転劇",
-        "🗳️ 注目する若手の特徴は？ スピード／技術／判断力／フィジカル",
-        "🗳️ 勝利に欠かせないのは？ 決定力／守備組織／運動量／采配",
-        "🗳️ STVV LABへの希望は？ 試合速報／戦術解説／選手紹介／データ分析",
-    ],
-    "homeaway": [
-        "🏟️ ホームで強いチームに必要なのは、先制点？ 安定した守備？",
-        "🏟️ アウェイで勝ち点を取るために大切なのは何だと思う？",
-        "🏟️ 試合の入り方と終盤の戦い方。どちらが勝敗を左右する？",
-        "🏟️ 相手サポーターの声が大きい会場。選手に必要な強さは何？",
-        "🏟️ ホームゲームで見たいのは、積極的な攻撃？ 堅実な試合運び？",
-        "🏟️ 遠征先での試合。まず注目したいのはピッチ環境？ 対戦相手？",
-        "🏟️ 先制した後の戦い方。追加点を狙う？ 主導権を維持する？",
-        "🏟️ 追いかける展開で効果的なのは、交代策？ フォーメーション変更？",
-        "🏟️ ホームとアウェイで、戦術はどこまで変えるべき？",
-        "🏟️ STVVの試合を現地観戦するなら、どこに注目して見たい？",
-    ],
-}
-
-
-def publish_fallback(history, now, slot):
-    day_key = now.strftime("%Y-%m-%d")
-    key = f"fallback_{day_key}_{slot}"
-
-    if key in history["used_posts"]:
-        print(f"本日の{slot}枠は投稿済み")
+def publish_match(
+    history,
+    now,
+    slot,
+    event,
+):
+    if event is None:
         return False
 
-    topics = FALLBACK_TOPICS[slot]
-    index = (
-        now.date().toordinal()
-        + list(SLOTS.values()).index(slot) * 3
-    ) % len(topics)
-
-    titles = {
-        "review": "🔎 STVV LAB｜試合の見方",
-        "compare": "⚔️ STVV LAB｜比較・考察",
-        "data": "STVV LAB｜データの見方",
-        "target": "STVV LAB｜攻撃分析",
-        "news": "STVV LAB｜ファンの声",
-        "vote": "STVV LAB｜みんなに質問",
-        "homeaway": "STVV LAB｜次戦に向けて",
-    }
-
-    message = (
-        f"{titles[slot]}\n\n"
-        f"{topics[index]}\n\n"
-        "#STVV #シントトロイデン"
+    event_id = str(
+        event.get("idEvent") or ""
     )
 
-    post_to_buffer(message)
-    history["used_posts"].append(key)
-    save_history(history)
-    return True
-
-
-def try_live_content(history, now, slot):
-    try:
-        if slot == "news":
-            return (
-                publish_news(history, now)
-                or publish_match(history, now, "result")
-            )
-        return publish_match(history, now, slot)
-
-    except (
-        SourceUnavailable, ValueError,
-        KeyError, TypeError, AttributeError
-    ) as exc:
-        print(
-            "データ生成に失敗したため"
-            f"常設テーマへ切り替え: {exc}"
-        )
+    if not event_id:
         return False
 
+    key = f"real_{event_id}_{slot}"
+
+    if already_posted(history, key):
+        return False
+
+    message = build_match_post(
+        event, slot
+    )
+
+    if not message:
+        return False
+
+    return publish(
+        history,
+        key,
+        message,
+        slot,
+        source=f"thesportsdb:{event_id}",
+    )
+
+
+def publish_evergreen(
+    history,
+    now,
+    slot,
+):
+    day = now.strftime("%Y-%m-%d")
+    key = f"fallback_{day}_{slot}"
+
+    if already_posted(history, key):
+        return False
+
+    message = build_evergreen(
+        slot, now
+    )
+
+    return publish(
+        history,
+        key,
+        message,
+        slot,
+    )
+
+
+# ==========================================
+# メイン処理
+# ==========================================
 
 def main():
     now = datetime.now(JST)
+
+    log("STVV LAB 自動投稿開始")
+
     history = load_history()
-    manual = (
-        os.getenv("GITHUB_EVENT_NAME")
-        == "workflow_dispatch"
-    )
+    slot = determine_slot(now)
 
-    print(
-        f"STVV LAB {now.isoformat()} / "
-        f"{'手動' if manual else '定期'}"
-    )
-
-    if manual:
-        for slot in (
-            "result", "data", "compare", "target",
-            "review", "homeaway", "vote"
-        ):
-            try:
-                if publish_match(history, now, slot):
-                    return
-            except (
-                SourceUnavailable, ValueError,
-                KeyError, TypeError, AttributeError
-            ) as exc:
-                print(f"試合取得失敗: {exc}")
-                break
-
-        try:
-            if publish_news(history, now):
-                return
-        except (
-            SourceUnavailable, ValueError,
-            KeyError, TypeError, AttributeError
-        ) as exc:
-            print(f"ニュース取得失敗: {exc}")
-
-        publish_fallback(history, now, "vote")
-        return
-
-    slot = SLOTS.get(now.hour)
     if not slot:
-        print("投稿対象の時間ではありません")
+        log("投稿対象時刻ではありません")
         return
 
-    if not try_live_content(history, now, slot):
-        publish_fallback(history, now, slot)
+    if slot == "manual":
+        log("手動実行モード")
+
+        # 手動実行は試合結果の未投稿分を優先
+        try:
+            event = get_latest_match(now)
+
+            if event:
+                if publish_match(
+                    history,
+                    now,
+                    "recap",
+                    event,
+                ):
+                    return
+
+        except (
+            requests.RequestException,
+            ValueError,
+            KeyError,
+            TypeError,
+        ) as error:
+            log(
+                f"試合データ取得失敗: {error}"
+            )
+
+        # 手動実行で既存の投稿を
+        # 無理に再投稿しない
+        log(
+            "新しい試合結果がないため"
+            "手動投稿を終了します"
+        )
+        return
+
+    log(
+        f"対象枠: {slot} "
+        f"({SLOT_TIMES[slot]} JST)"
+    )
+
+    day = now.strftime("%Y-%m-%d")
+
+    # この枠で既に投稿していたら終了
+    daily_key = f"daily_{day}_{slot}"
+
+    if already_posted(
+        history, daily_key
+    ):
+        log("この枠は本日投稿済みです")
+        return
+
+    published = False
+
+    # 18時は公式ニュース優先
+    if slot == "news":
+        try:
+            published = publish_news(
+                history, now
+            )
+        except (
+            requests.RequestException,
+            ValueError,
+            KeyError,
+            TypeError,
+        ) as error:
+            log(
+                f"ニュース取得失敗: {error}"
+            )
+
+    # 試合情報を使える枠
+    if (
+        not published
+        and slot in {
+            "compare",
+            "data",
+            "analysis",
+            "vote",
+            "recap",
+        }
+    ):
+        try:
+            event = get_latest_match(now)
+
+            if event:
+                published = publish_match(
+                    history,
+                    now,
+                    slot,
+                    event,
+                )
+
+        except (
+            requests.RequestException,
+            ValueError,
+            KeyError,
+            TypeError,
+        ) as error:
+            log(
+                f"試合データ取得失敗: {error}"
+            )
+
+    # 実データがない場合
+    if not published:
+        published = publish_evergreen(
+            history,
+            now,
+            slot,
+        )
+
+    if published:
+        history["used_posts"].append(
+            daily_key
+        )
+        save_history(history)
+
+        log(
+            f"{slot} 枠の処理完了"
+        )
 
 
 if __name__ == "__main__":
