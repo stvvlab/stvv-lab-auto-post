@@ -1,29 +1,28 @@
+
 name: STVV Auto Post
 
 on:
   workflow_dispatch:
   schedule:
-    # JST 08:00
-    - cron: "0 23 * * *"
-    # JST 10:30
-    - cron: "30 1 * * *"
-    # JST 12:30
-    - cron: "30 3 * * *"
-    # JST 15:30
-    - cron: "30 6 * * *"
-    # JST 18:00
-    - cron: "0 9 * * *"
-    # JST 21:00
-    - cron: "0 12 * * *"
-    # JST 23:00
-    - cron: "0 14 * * *"
+    - cron: "0 23 * * *"   # JST 08:00
+    - cron: "30 1 * * *"   # JST 10:30
+    - cron: "30 3 * * *"   # JST 12:30
+    - cron: "30 6 * * *"   # JST 15:30
+    - cron: "0 9 * * *"    # JST 18:00
+    - cron: "0 12 * * *"   # JST 21:00
+    - cron: "0 14 * * *"   # JST 23:00
 
 permissions:
   contents: write
 
+concurrency:
+  group: stvv-auto-post
+  cancel-in-progress: false
+
 jobs:
   post:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -39,8 +38,6 @@ jobs:
 
       - name: Generate STVV LAB image
         continue-on-error: true
-        env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: python generate_image.py
 
       - name: Save generated image to GitHub
@@ -49,17 +46,22 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add generated/match_lab.png
+          if [ -f generated/match_lab.png ]; then
+            git add generated/match_lab.png
 
-          if git diff --cached --quiet; then
-            echo "No image changes"
+            if git diff --cached --quiet; then
+              echo "No image changes"
+            else
+              git commit -m "Update STVV LAB image"
+              git push
+            fi
           else
-            git commit -m "Update STVV LAB image"
-            git push
+            echo "No generated image"
           fi
 
       - name: Run STVV auto post
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          GITHUB_SCHEDULE: ${{ github.event.schedule }}
         run: python stvv_post.py
