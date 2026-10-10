@@ -41,16 +41,20 @@
     "compare_5",
     "data_8",
     "analysis_11",
-    "real_2496750_result"
+    "real_2496750_result",
+    "daily_2026-10-10_news"
   ],
-  "publication_log": [],
-  "pending_posts": {
-    "daily_2026-10-10_news": {
+  "publication_log": [
+    {
+      "key": "daily_2026-10-10_news",
       "slot": "news",
       "source": null,
-      "text": "📰 STVV LAB｜クラブの動きを追うときは、新加入だけでなく契約更新や若手の起用にも注目。編成の方向性を考える材料になります。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-10T18:03:40.305399+09:00"
+      "buffer_id": "6ac9ff6db07d37ac97682095",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-10T18:03:43.079587+09:00",
+      "text": "📰 STVV LAB｜クラブの動きを追うときは、新加入だけでなく契約更新や若手の起用にも注目。編成の方向性を考える材料になります。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
