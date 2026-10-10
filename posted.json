@@ -42,7 +42,8 @@
     "data_8",
     "analysis_11",
     "real_2496750_result",
-    "daily_2026-10-10_news"
+    "daily_2026-10-10_news",
+    "daily_2026-10-10_vote"
   ],
   "publication_log": [
     {
@@ -53,15 +54,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-10T18:03:43.079587+09:00",
       "text": "📰 STVV LAB｜クラブの動きを追うときは、新加入だけでなく契約更新や若手の起用にも注目。編成の方向性を考える材料になります。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-10_vote": {
+    },
+    {
+      "key": "daily_2026-10-10_vote",
       "slot": "vote",
       "source": null,
-      "text": "🗳️ サッカー観戦で最も注目するのは？\n①ゴールシーン\n②好守備\n③パスワーク\n④監督の采配\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-10T21:14:54.724903+09:00"
+      "buffer_id": "6aca2c40c4de2d2b1227bdd0",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-10T21:14:57.169013+09:00",
+      "text": "🗳️ サッカー観戦で最も注目するのは？\n①ゴールシーン\n②好守備\n③パスワーク\n④監督の采配\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
