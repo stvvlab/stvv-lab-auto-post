@@ -1237,7 +1237,7 @@ def get_real_match():
         except ValueError:
             continue
         days_old = (now.date() - match_day).days
-        if not 0 <= days_old <= 7:
+        if not 0 <= days_old <= 30:
             continue
         candidates.append((match_day, event))
     if not candidates:
@@ -1276,19 +1276,25 @@ def create_real_match_post(event, slot):
     opponent = event.get("strAwayTeam") if home else event.get("strHomeTeam")
     stvv_score = event.get("intHomeScore") if home else event.get("intAwayScore")
     other_score = event.get("intAwayScore") if home else event.get("intHomeScore")
-    location = "HOME" if home else "AWAY"
+    location = "ホーム" if home else "アウェイ"
     date = event.get("dateEvent")
-    if not opponent or stvv_score is None or other_score is None:
+    if not opponent or stvv_score is None or other_score is None or not date:
         return None
-    header = f"⚽ STVV 試合結果｜{date} {location}\nSTVV {stvv_score} - {other_score} {opponent}"
+    try:
+        stvv_score, other_score = int(stvv_score), int(other_score)
+    except (TypeError, ValueError):
+        return None
+    scoreline = f"STVV {stvv_score}-{other_score} {opponent}"
+    outcome = "勝利🔥" if stvv_score > other_score else ("引き分け🤝" if stvv_score == other_score else "敗戦")
+    base = f"{date}｜{location}\n{scoreline}"
+    tag = "\n\n#STVV #シントトロイデン"
     if slot == "result":
-        outcome = "勝利！🔥" if int(stvv_score) > int(other_score) else ("引き分け🤝" if int(stvv_score) == int(other_score) else "敗戦。次節に期待⚽")
-        return f"{header}\n\n{outcome}\nこの試合の注目選手は誰？👀\n\n#STVV #シントトロイデン"
+        return f"⚽ STVV試合結果\n{base}\n{outcome}！\n\nこの試合で印象に残った選手は？" + tag
 
     stats = get_real_match_stats(event.get("idEvent"))
     stvv_side = 0 if home else 1
     other_side = 1 - stvv_side
-    found = []
+    values = {}
     for label, aliases in [
         ("シュート", ("total shots", "shots", "total attempts")),
         ("枠内シュート", ("shots on goal", "shots on target", "on target")),
@@ -1296,15 +1302,30 @@ def create_real_match_post(event, slot):
         ("CK", ("corner kicks", "corners")),
     ]:
         pair = next((stats[a] for a in aliases if a in stats), None)
-        if pair and pair[0] is not None and pair[1] is not None:
-            found.append(f"{label}：{pair[stvv_side]} 対 {pair[other_side]}")
-    if not found:
-        return None
-    details = "\n".join(found[:3])
+        if pair and len(pair) == 2 and pair[0] is not None and pair[1] is not None:
+            values[label] = (str(pair[stvv_side]), str(pair[other_side]))
+
     if slot == "data":
-        return f"📊 STVV 前節データ｜{date}\n対戦：{opponent}（{location}）\n{details}\n\nこの数字、どう見る？👀\n#STVV #サッカー分析"
+        if not values:
+            return None
+        details = "\n".join(f"{name}：{a} 対 {b}" for name, (a, b) in list(values.items())[:3])
+        return f"📊 STVV 試合データ\n{base}\n{details}\n\n数字で気になったのはどこ？" + tag
     if slot == "compare":
-        return f"⚔️ STVV vs {opponent}\n結果：{stvv_score}-{other_score}\n{details}\n\n結果とスタッツを比べて、気になった点は？\n#STVV #ベルギーリーグ"
+        if "シュート" not in values:
+            return None
+        a, b = values["シュート"]
+        return f"⚔️ シュート数で比較\n{base}\nSTVV {a}本／相手 {b}本\n\nスコアとシュート数、どう感じた？" + tag
+    if slot == "target":
+        if "枠内シュート" not in values:
+            return None
+        a, b = values["枠内シュート"]
+        return f"🎯 枠内シュート比較\n{base}\nSTVV {a}本／相手 {b}本\n\n決定機の質はどうだったと思う？" + tag
+    if slot == "review":
+        return f"🔎 STVV 前節振り返り\n{base}\n結果は{outcome}。\n\n次節に向けて一番改善してほしい点は？" + tag
+    if slot == "homeaway":
+        return f"🏟️ STVV {location}戦を振り返る\n{base}\n得点：{stvv_score}／失点：{other_score}\n\n次の{location}戦で期待することは？" + tag
+    if slot == "vote":
+        return f"🗳️ STVVファンに質問！\n{base}\n\nこの試合のMOM（最も印象に残った選手）は誰？理由も教えてください👇" + tag
     return None
 
 
@@ -1316,7 +1337,7 @@ def handle_real_match(posted, slot):
         print(f"試合データ取得をスキップ: {error}")
         return False
     if not event:
-        print("直近7日間の確認済みSTVV試合がありません。")
+        print("直近30日間の確認済みSTVV試合がありません。")
         return False
     event_id = event.get("idEvent")
     if not event_id:
@@ -1365,76 +1386,33 @@ def main():
     # scheduleによる自動実行は、これまで通り時間割で動かす。
     github_event_name = os.environ.get("GITHUB_EVENT_NAME", "")
 
+    # 手動実行では未投稿の実データを優先し、なければ新着ニュースを確認。
     if github_event_name == "workflow_dispatch":
-
-        print("手動実行を検出しました。")
-        print("時刻に関係なくニュース投稿を実行します。")
-
-        if handle_real_match(posted, "result"):
-            return
-        posted_news = handle_news(
-            posted
-        )
-
-        if not posted_news:
-            print("新着ニュース・新しい試合結果がないため投稿しません。")
-
+        print("手動実行: 未投稿の実データを確認します。")
+        for slot in ("result", "data", "compare", "target", "review", "homeaway", "vote"):
+            if handle_real_match(posted, slot):
+                return
+        if not handle_news(posted):
+            print("確認済みの新しい投稿素材がないため投稿しません。")
         return
 
-    # GitHub Actionsは数分遅れて
-    # 起動する場合があるため、
-    # 「時」を中心に投稿枠を判定する。
-    #
-    # 同じ時刻に複数枠は設定しない。
-
+    # 7枠を別々の切り口にする。各試合・各切り口は1回限り。
     schedule_by_hour = {
-        8: "player",
-        10: "compare",
-        12: "data",
-        15: "analysis",
-        18: "news",
-        21: "vote",
-        23: "review",
+        8: "review", 10: "compare", 12: "data", 15: "target",
+        18: "news", 21: "vote", 23: "homeaway",
     }
-
-    post_type = schedule_by_hour.get(
-        hour
-    )
-
+    post_type = schedule_by_hour.get(hour)
     if post_type is None:
-
-        print(
-            "現在は投稿時間ではありません。"
-        )
-
+        print("投稿時間ではありません。")
         return
-
-    print(
-        f"今回の投稿タイプ: {post_type}"
-    )
-
-    # ----------------------------------------------
-    # 18時：重要ニュース
-    # ----------------------------------------------
-
     if post_type == "news":
-
-        handle_news(
-            posted
-        )
-
+        if handle_news(posted):
+            return
+        # 新着ニュースがなければ結果速報を試す。
+        handle_real_match(posted, "result")
         return
-
-    # ----------------------------------------------
-    # その他6枠
-    # ----------------------------------------------
-
-    # 実データ優先。未確認の一般論ストックは投稿しない。
-    slot = {"player": "result", "compare": "compare", "data": "data",
-            "analysis": "compare", "vote": "result", "review": "data"}.get(post_type)
-    if slot and handle_real_match(posted, slot):
-        return
-    print("この枠は確認済みの新しい実データがないため投稿を見送ります。")
+    if not handle_real_match(posted, post_type):
+        print("未投稿の確認済みデータがないため、この枠は投稿を見送ります。")
 
 
 if __name__ == "__main__":
