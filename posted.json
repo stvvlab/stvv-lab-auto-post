@@ -47,7 +47,8 @@
     "daily_2026-10-10_recap",
     "daily_2026-10-11_player",
     "daily_2026-10-11_compare",
-    "daily_2026-10-11_data"
+    "daily_2026-10-11_data",
+    "daily_2026-10-11_analysis"
   ],
   "publication_log": [
     {
@@ -103,15 +104,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-11T12:43:27.318317+09:00",
       "text": "📊 データの見方｜保持率が高くても勝てるとは限りません。保持した位置と、そこから生まれた決定機を合わせて見る必要があります。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-11_analysis": {
+    },
+    {
+      "key": "daily_2026-10-11_analysis",
       "slot": "analysis",
       "source": null,
-      "text": "🧠 サイド攻撃｜幅を取る選手と内側へ動く選手が連動すると、相手DFに複数の判断を迫ることができます。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-11T15:49:35.969340+09:00"
+      "buffer_id": "6acb3182ed92ed8fa5f409da",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-11T15:49:39.577579+09:00",
+      "text": "🧠 サイド攻撃｜幅を取る選手と内側へ動く選手が連動すると、相手DFに複数の判断を迫ることができます。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
