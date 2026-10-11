@@ -45,7 +45,8 @@
     "daily_2026-10-10_news",
     "daily_2026-10-10_vote",
     "daily_2026-10-10_recap",
-    "daily_2026-10-11_player"
+    "daily_2026-10-11_player",
+    "daily_2026-10-11_compare"
   ],
   "publication_log": [
     {
@@ -83,15 +84,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-11T08:05:03.449172+09:00",
       "text": "🇯🇵 欧州でプレーする選手の成長を見るなら、出場時間だけでなく、任される役割やプレーの選択肢の変化にも注目したいところです。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-11_compare": {
+    },
+    {
+      "key": "daily_2026-10-11_compare",
       "slot": "compare",
       "source": null,
-      "text": "⚔️ 中盤比較｜パス成功率だけでなく、相手の守備を崩す前進パスや、失った直後の守備対応も確認したい指標です。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-11T10:42:06.159243+09:00"
+      "buffer_id": "6acae96fed92ed8fa5e9f52d",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-11T10:42:08.800965+09:00",
+      "text": "⚔️ 中盤比較｜パス成功率だけでなく、相手の守備を崩す前進パスや、失った直後の守備対応も確認したい指標です。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
