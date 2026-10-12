@@ -1,0 +1,70 @@
+
+name: STVV LAB Feedback
+
+on:
+  workflow_dispatch:
+    inputs:
+      post_key:
+        description: "評価する投稿のkey（例: daily_2026-10-12_news）"
+        required: true
+        type: string
+      rating:
+        description: "投稿の評価（1〜5）"
+        required: true
+        type: choice
+        options:
+          - "5"
+          - "4"
+          - "3"
+          - "2"
+          - "1"
+      comment:
+        description: "評価理由（任意）"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stvv-lab-feedback
+  cancel-in-progress: false
+
+jobs:
+  register-feedback:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Register feedback
+        env:
+          POST_KEY: ${{ inputs.post_key }}
+          RATING: ${{ inputs.rating }}
+          COMMENT: ${{ inputs.comment }}
+        run: |
+          python add_feedback.py \
+            --post "$POST_KEY" \
+            --rating "$RATING" \
+            --comment "$COMMENT"
+
+      - name: Save feedback to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add feedback.json
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "Update STVV LAB feedback"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
