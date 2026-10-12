@@ -23,6 +23,7 @@ CHANNEL = os.getenv(
     "6ab8fce4ea19ca0bde027d80",
 )
 FILE = Path("posted.json")
+FEEDBACK_FILE = Path("feedback.json")
 
 SLOTS = {
     "0 23 * * *": ("player", 8, 0),
@@ -173,6 +174,37 @@ def load():
     history.setdefault("tracked_topics", {})
 
     return history
+
+
+def load_feedback():
+    """Read optional manual feedback without altering scheduled posting."""
+    if not FEEDBACK_FILE.exists():
+        log("feedback.json がありません。フィードバック集計をスキップ")
+        return
+
+    try:
+        data = json.loads(FEEDBACK_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        log(f"フィードバック読み込み不可: {error}")
+        return
+
+    if not isinstance(data, dict):
+        log("feedback.json の形式が不正です")
+        return
+
+    settings = data.get("settings", {})
+    reviews = data.get("feedback", [])
+
+    if not isinstance(settings, dict) or not isinstance(reviews, list):
+        log("feedback.json の設定または評価一覧が不正です")
+        return
+
+    if not settings.get("feedback_enabled", False):
+        log("フィードバック機能は無効です")
+        return
+
+    log(f"手動フィードバック: {len(reviews)}件")
+    log("自動指標取得・自動改善は未実装です")
 
 
 def slot_for_run(now):
@@ -711,6 +743,7 @@ def publish(
 def main():
     now = datetime.now(JST)
     history = load()
+    load_feedback()
     slot, day = slot_for_run(now)
 
     if slot is None:
