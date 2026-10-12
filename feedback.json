@@ -8,6 +8,13 @@
     "auto_improvement_enabled": false,
     "weekly_report_enabled": false
   },
+  "rating_guide": {
+    "5": "非常に良い：今後も積極的に投稿したい",
+    "4": "良い：同じ方向性を継続したい",
+    "3": "普通：改善の余地がある",
+    "2": "悪い：内容や表現を見直したい",
+    "1": "非常に悪い：同じ内容を避けたい"
+  },
   "feedback": [],
   "metrics": [],
   "improvement_rules": {
