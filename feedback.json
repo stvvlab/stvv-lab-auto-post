@@ -1,4 +1,3 @@
-
 {
   "version": 1,
   "settings": {
@@ -15,7 +14,15 @@
     "2": "悪い：内容や表現を見直したい",
     "1": "非常に悪い：同じ内容を避けたい"
   },
-  "feedback": [],
+  "feedback": [
+    {
+      "post_key": "daily_2026-10-12_news",
+      "slot": "news",
+      "rating": 2,
+      "comment": "STVVの具体的な最新ニュースがなく一般論になっている。公式情報を基に具体的な選手名や出来事を伝える投稿に改善したい。",
+      "updated_at": "2026-10-12T20:26:04.577606+09:00"
+    }
+  ],
   "metrics": [],
   "improvement_rules": {
     "prioritize": [
