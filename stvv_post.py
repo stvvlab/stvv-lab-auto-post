@@ -1,6 +1,6 @@
 
-"""STVV LAB: safe scheduled posting to Buffer."""
-import hashlib
+"""STVV LAB: scheduled posting with manual feedback filtering."""
+
 import html
 import json
 import os
@@ -13,6 +13,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+
 JST = timezone(timedelta(hours=9))
 TEAM = "135461"
 SPORTS = "https://www.thesportsdb.com/api/v1/json/123"
@@ -22,6 +23,7 @@ CHANNEL = os.getenv(
     "BUFFER_CHANNEL_ID",
     "6ab8fce4ea19ca0bde027d80",
 )
+
 FILE = Path("posted.json")
 FEEDBACK_FILE = Path("feedback.json")
 
@@ -36,13 +38,14 @@ SLOTS = {
 }
 
 SESSION = requests.Session()
-SESSION.headers["User-Agent"] = "STVV-LAB/3.0"
+SESSION.headers["User-Agent"] = "STVV-LAB/3.1"
 
 SPONSORS = (
     "スポンサー", "協賛", "パートナー",
     "サプライヤー", "グッズ",
     "キャンペーン", "プレゼント", "抽選",
 )
+
 WORDS = (
     "試合", "選手", "監督", "移籍",
     "加入", "退団", "負傷", "復帰",
@@ -88,11 +91,12 @@ TOPICS = {
     ],
 }
 
+HASHTAGS = "\n\n#STVV #シントトロイデン"
+
 
 def log(message):
     print(
-        f"[{datetime.now(JST):%Y-%m-%d %H:%M:%S}] "
-        f"{message}",
+        f"[{datetime.now(JST):%Y-%m-%d %H:%M:%S}] {message}",
         flush=True,
     )
 
@@ -104,19 +108,15 @@ def git(*args):
 def save(history):
     temp = FILE.with_suffix(".json.tmp")
     temp.write_text(
-        json.dumps(
-            history, ensure_ascii=False, indent=2
-        ) + "\n",
+        json.dumps(history, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     temp.replace(FILE)
 
+    git("config", "user.name", "github-actions[bot]")
     git(
-        "config", "user.name",
-        "github-actions[bot]",
-    )
-    git(
-        "config", "user.email",
+        "config",
+        "user.email",
         "41898282+github-actions[bot]@users.noreply.github.com",
     )
     git("add", "posted.json")
@@ -129,102 +129,145 @@ def save(history):
     if result.returncode != 1:
         raise RuntimeError("git diff failed")
 
-    git(
-        "commit", "-m",
-        "Update STVV LAB posting state",
-    )
+    git("commit", "-m", "Update STVV LAB posting state")
     git("push")
 
 
 def load():
     if not FILE.exists():
-        raise RuntimeError(
-            "posted.json がないため安全停止"
-        )
+        raise RuntimeError("posted.json がないため安全停止")
 
-    history = json.loads(
-        FILE.read_text(encoding="utf-8")
-    )
+    history = json.loads(FILE.read_text(encoding="utf-8"))
 
     if (
         not isinstance(history, dict)
         or not isinstance(history.get("news"), list)
-        or not isinstance(
-            history.get("used_posts"), list
-        )
+        or not isinstance(history.get("used_posts"), list)
+        or not isinstance(history.get("publication_log", []), list)
+        or not isinstance(history.get("pending_posts", {}), dict)
     ):
-        raise RuntimeError(
-            "posted.json の形式が不正です"
-        )
-
-    if (
-        not isinstance(
-            history.get("publication_log", []), list
-        )
-        or not isinstance(
-            history.get("pending_posts", {}), dict
-        )
-    ):
-        raise RuntimeError(
-            "履歴の追加項目が不正です"
-        )
+        raise RuntimeError("posted.json の形式が不正です")
 
     history.setdefault("publication_log", [])
     history.setdefault("pending_posts", {})
     history.setdefault("tracked_topics", {})
-
     return history
 
 
 def load_feedback():
-    """Read optional manual feedback without altering scheduled posting."""
+    """Load manual ratings; invalid feedback never blocks posting."""
     if not FEEDBACK_FILE.exists():
-        log("feedback.json がありません。フィードバック集計をスキップ")
-        return
+        log("feedback.json がありません。評価フィルターは無効")
+        return []
 
     try:
-        data = json.loads(FEEDBACK_FILE.read_text(encoding="utf-8"))
+        data = json.loads(
+            FEEDBACK_FILE.read_text(encoding="utf-8")
+        )
+        if not isinstance(data, dict):
+            raise ValueError("JSONの最上位がオブジェクトではありません")
+
+        settings = data.get("settings", {})
+        reviews = data.get("feedback", [])
+
+        if not isinstance(settings, dict):
+            raise ValueError("settings の形式が不正です")
+        if not isinstance(reviews, list):
+            raise ValueError("feedback の形式が不正です")
+
+        if not settings.get("feedback_enabled", False):
+            log("フィードバック機能は無効です")
+            return []
+
+        if not settings.get("manual_feedback_enabled", False):
+            log("手動フィードバックは無効です")
+            return []
+
+        valid = []
+        for review in reviews:
+            if not isinstance(review, dict):
+                continue
+
+            rating = review.get("rating")
+            if (
+                isinstance(rating, int)
+                and not isinstance(rating, bool)
+                and 1 <= rating <= 5
+                and isinstance(review.get("post_key"), str)
+            ):
+                valid.append(review)
+
+        log(f"手動フィードバック: {len(valid)}件")
+        return valid
+
     except (OSError, ValueError) as error:
         log(f"フィードバック読み込み不可: {error}")
-        return
+        return []
 
-    if not isinstance(data, dict):
-        log("feedback.json の形式が不正です")
-        return
 
-    settings = data.get("settings", {})
-    reviews = data.get("feedback", [])
+def normalize_text(message):
+    """Remove only the fixed hashtags for exact-text comparison."""
+    if not isinstance(message, str):
+        return ""
+    if message.endswith(HASHTAGS):
+        message = message[:-len(HASHTAGS)]
+    return message.strip()
 
-    if not isinstance(settings, dict) or not isinstance(reviews, list):
-        log("feedback.json の設定または評価一覧が不正です")
-        return
 
-    if not settings.get("feedback_enabled", False):
-        log("フィードバック機能は無効です")
-        return
+def feedback_scores(history, reviews):
+    """Map previously published text to its latest manual rating."""
+    publications = {
+        post.get("key"): post
+        for post in history["publication_log"]
+        if isinstance(post, dict)
+        and isinstance(post.get("key"), str)
+    }
 
-    log(f"手動フィードバック: {len(reviews)}件")
-    log("自動指標取得・自動改善は未実装です")
+    scores = {}
+
+    for review in reviews:
+        publication = publications.get(review["post_key"])
+        if not publication:
+            continue
+
+        message = normalize_text(publication.get("text", ""))
+        if not message:
+            continue
+
+        scores[message] = review["rating"]
+
+    return scores
+
+
+def choose_fallback(slot, day, scores):
+    """Avoid repeating exact text rated 1 or 2."""
+    topics = TOPICS[slot]
+    index = (
+        datetime.strptime(day, "%Y-%m-%d").date().toordinal()
+        + list(TOPICS).index(slot) * 7
+    ) % len(topics)
+
+    ordered = topics[index:] + topics[:index]
+
+    for candidate in ordered:
+        if scores.get(normalize_text(candidate), 3) >= 3:
+            return candidate
+
+    # Do not silently reuse content that was rated poorly.
+    # If every fallback is rejected, skip this slot safely.
+    return None
 
 
 def slot_for_run(now):
-    if (
-        os.getenv("GITHUB_EVENT_NAME")
-        == "workflow_dispatch"
-    ):
+    if os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch":
         return None, None
 
-    cron = os.getenv(
-        "GITHUB_SCHEDULE", ""
-    ).strip()
+    cron = os.getenv("GITHUB_SCHEDULE", "").strip()
 
     if cron not in SLOTS:
-        raise RuntimeError(
-            f"予定時刻が不明です: {cron!r}"
-        )
+        raise RuntimeError(f"予定時刻が不明です: {cron!r}")
 
     slot, hour, minute = SLOTS[cron]
-
     expected = now.replace(
         hour=hour,
         minute=minute,
@@ -236,9 +279,7 @@ def slot_for_run(now):
         expected -= timedelta(days=1)
 
     if now - expected > timedelta(hours=6):
-        raise RuntimeError(
-            "実行が6時間以上遅れたため安全停止"
-        )
+        raise RuntimeError("実行が6時間以上遅れたため安全停止")
 
     return slot, expected.date().isoformat()
 
@@ -253,9 +294,7 @@ def fetch(endpoint, params):
 
     data = response.json()
     if not isinstance(data, dict):
-        raise ValueError(
-            "APIレスポンスが不正です"
-        )
+        raise ValueError("APIレスポンスが不正です")
 
     return data
 
@@ -278,9 +317,7 @@ def latest_match(now):
         if TEAM not in teams:
             continue
 
-        if str(
-            event.get("strStatus", "")
-        ).upper() not in {
+        if str(event.get("strStatus", "")).upper() not in {
             "FT", "AET", "PEN"
         }:
             continue
@@ -289,27 +326,16 @@ def latest_match(now):
             day = datetime.strptime(
                 event["dateEvent"], "%Y-%m-%d"
             ).date()
-            home_score = int(
-                event["intHomeScore"]
-            )
-            away_score = int(
-                event["intAwayScore"]
-            )
-        except (
-            KeyError, ValueError, TypeError
-        ):
+            int(event["intHomeScore"])
+            int(event["intAwayScore"])
+        except (KeyError, ValueError, TypeError):
             continue
 
         if (
             0 <= (now.date() - day).days <= 7
             and event.get("idEvent")
         ):
-            valid.append(
-                (
-                    day, event,
-                    home_score, away_score,
-                )
-            )
+            valid.append((day, event))
 
     return (
         max(valid, key=lambda item: item[0])[1]
@@ -318,16 +344,13 @@ def latest_match(now):
 
 
 def match_post(event, slot):
-    home = (
-        str(event.get("idHomeTeam"))
-        == TEAM
-    )
-
+    home = str(event.get("idHomeTeam")) == TEAM
     opponent = (
         event.get("strAwayTeam")
         if home
         else event.get("strHomeTeam")
     )
+
     if not opponent:
         return None
 
@@ -354,10 +377,7 @@ def match_post(event, slot):
             else "引き分け" if own == other
             else "敗戦"
         )
-        return (
-            f"⚽ STVV試合結果\n{base}\n"
-            f"結果：{result}。"
-        )
+        return f"⚽ STVV試合結果\n{base}\n結果：{result}。"
 
     if slot == "vote":
         return (
@@ -365,9 +385,7 @@ def match_post(event, slot):
             "この試合で最も印象に残った場面は？"
         )
 
-    if slot not in {
-        "data", "compare", "analysis"
-    }:
+    if slot not in {"data", "compare", "analysis"}:
         return None
 
     try:
@@ -375,9 +393,7 @@ def match_post(event, slot):
             "lookupeventstats.php",
             {"id": event["idEvent"]},
         )
-    except (
-        requests.RequestException, ValueError
-    ) as error:
+    except (requests.RequestException, ValueError) as error:
         log(f"スタッツ取得不可: {error}")
         return None
 
@@ -419,28 +435,15 @@ def match_post(event, slot):
 
     def stat(*names):
         return next(
-            (
-                values[name]
-                for name in names
-                if name in values
-            ),
+            (values[name] for name in names if name in values),
             None,
         )
 
-    shots = stat(
-        "total shots",
-        "shots",
-        "total attempts",
-    )
+    shots = stat("total shots", "shots", "total attempts")
     target = stat(
-        "shots on goal",
-        "shots on target",
-        "on target",
+        "shots on goal", "shots on target", "on target"
     )
-    possession = stat(
-        "ball possession",
-        "possession",
-    )
+    possession = stat("ball possession", "possession")
 
     if slot == "compare" and shots:
         return (
@@ -459,8 +462,7 @@ def match_post(event, slot):
         ]:
             if pair:
                 lines.append(
-                    f"{label}："
-                    f"{pair[0]} 対 {pair[1]}"
+                    f"{label}：{pair[0]} 対 {pair[1]}"
                 )
 
         return (
@@ -469,11 +471,7 @@ def match_post(event, slot):
             if lines else None
         )
 
-    if (
-        slot == "analysis"
-        and shots
-        and target
-    ):
+    if slot == "analysis" and shots and target:
         try:
             a = float(shots[0])
             b = float(target[0])
@@ -493,34 +491,23 @@ def match_post(event, slot):
 
 
 def articles(now):
-    response = SESSION.get(
-        NEWS, timeout=25
-    )
+    response = SESSION.get(NEWS, timeout=25)
     response.raise_for_status()
 
-    soup = BeautifulSoup(
-        response.text, "html.parser"
-    )
+    soup = BeautifulSoup(response.text, "html.parser")
     found = {}
 
-    for anchor in soup.find_all(
-        "a", href=True
-    ):
-        url = urljoin(
-            NEWS, anchor["href"]
-        )
+    for anchor in soup.find_all("a", href=True):
+        url = urljoin(NEWS, anchor["href"])
         parsed = urlparse(url)
 
         if parsed.netloc.lower() != "stvv.jp":
             continue
 
-        path = (
-            parsed.path.rstrip("/") + "/"
-        )
+        path = parsed.path.rstrip("/") + "/"
 
         match = re.fullmatch(
-            r"/news/(game|team)/"
-            r"(20\d{6}[^/]*)/",
+            r"/news/(game|team)/(20\d{6}[^/]*)/",
             path,
             re.I,
         )
@@ -529,15 +516,12 @@ def articles(now):
 
         try:
             day = datetime.strptime(
-                match.group(2)[:8],
-                "%Y%m%d",
+                match.group(2)[:8], "%Y%m%d"
             ).date()
         except ValueError:
             continue
 
-        if not (
-            0 <= (now.date() - day).days <= 7
-        ):
+        if not 0 <= (now.date() - day).days <= 7:
             continue
 
         title = re.sub(
@@ -545,9 +529,7 @@ def articles(now):
             " ",
             BeautifulSoup(
                 html.unescape(
-                    anchor.get_text(
-                        " ", strip=True
-                    )
+                    anchor.get_text(" ", strip=True)
                 ),
                 "html.parser",
             ).get_text(" ", strip=True),
@@ -555,20 +537,12 @@ def articles(now):
 
         if (
             len(title) < 8
-            or any(
-                word in title
-                for word in SPONSORS
-            )
-            or not any(
-                word in title
-                for word in WORDS
-            )
+            or any(word in title for word in SPONSORS)
+            or not any(word in title for word in WORDS)
         ):
             continue
 
-        found[
-            "https://stvv.jp" + path
-        ] = (day, title)
+        found["https://stvv.jp" + path] = (day, title)
 
     return sorted(
         found.items(),
@@ -581,16 +555,11 @@ def x_length(message):
     count = 0
     previous = 0
 
-    for match in re.finditer(
-        r"https?://\S+", message
-    ):
+    for match in re.finditer(r"https?://\S+", message):
         count += sum(
             1 if ord(c) < 128 else 2
-            for c in message[
-                previous:match.start()
-            ]
+            for c in message[previous:match.start()]
         ) + 23
-
         previous = match.end()
 
     return count + sum(
@@ -603,14 +572,10 @@ def send(message):
     key = os.getenv("BUFFER_API_KEY")
 
     if not key or not CHANNEL:
-        raise RuntimeError(
-            "Buffer設定がありません"
-        )
+        raise RuntimeError("Buffer設定がありません")
 
     if x_length(message) > 270:
-        raise RuntimeError(
-            "X文字数の安全上限を超えました"
-        )
+        raise RuntimeError("X文字数の安全上限を超えました")
 
     query = """
     mutation CreatePost($input: CreatePostInput!) {
@@ -652,20 +617,17 @@ def send(message):
 
     if data.get("errors"):
         raise RuntimeError(
-            f"Buffer GraphQL error: "
-            f"{data['errors']}"
+            f"Buffer GraphQL error: {data['errors']}"
         )
 
     action = (
-        (data.get("data") or {})
-        .get("createPost") or {}
+        (data.get("data") or {}).get("createPost") or {}
     )
     post = action.get("post") or {}
 
     if not post.get("id"):
         raise RuntimeError(
-            "Buffer受付を確認できません: "
-            f"{action}"
+            f"Buffer受付を確認できません: {action}"
         )
 
     return post
@@ -690,47 +652,37 @@ def publish(
         )
         return False
 
-    # 送信前に予約をGitHubへ保存する。
-    # 保存失敗時はBufferに送信しない。
     history["pending_posts"][key] = {
         "slot": slot,
         "source": source,
         "text": message,
-        "created_at": (
-            datetime.now(JST).isoformat()
-        ),
+        "created_at": datetime.now(JST).isoformat(),
     }
 
+    # Bufferへ送る前に、確認待ちをGitHubへ保存する。
     save(history)
 
     log(f"Buffer送信開始: {key}")
 
-    # 送信結果が不明ならpendingを残す。
-    # 自動再送による重複を防止する。
+    # 送信結果が不明な場合は確認待ちを残し、
+    # 同じ投稿の自動再送を防ぐ。
     post = send(message)
 
     history["used_posts"].append(key)
-
     history["publication_log"].append({
         "key": key,
         "slot": slot,
         "source": source,
         "buffer_id": str(post["id"]),
         "buffer_status": post.get("status"),
-        "submitted_at": (
-            datetime.now(JST).isoformat()
-        ),
+        "submitted_at": datetime.now(JST).isoformat(),
         "text": message,
     })
 
-    if (
-        news_url
-        and news_url not in history["news"]
-    ):
+    if news_url and news_url not in history["news"]:
         history["news"].append(news_url)
 
     del history["pending_posts"][key]
-
     save(history)
 
     log(
@@ -743,19 +695,20 @@ def publish(
 def main():
     now = datetime.now(JST)
     history = load()
-    load_feedback()
+    reviews = load_feedback()
+    scores = feedback_scores(history, reviews)
+
     slot, day = slot_for_run(now)
 
     if slot is None:
+        log("手動実行は安全確認のみ。投稿はしません")
         log(
-            "手動実行は安全確認のみ。"
-            "投稿はしません"
+            f"既存投稿履歴: {len(history['used_posts'])}件、"
+            f"確認待ち: {len(history['pending_posts'])}件"
         )
         log(
-            "既存投稿履歴: "
-            f"{len(history['used_posts'])}件、"
-            "確認待ち: "
-            f"{len(history['pending_posts'])}件"
+            "低評価の投稿文: "
+            f"{sum(score <= 2 for score in scores.values())}件"
         )
         return
 
@@ -765,10 +718,7 @@ def main():
         daily in history["used_posts"]
         or daily in history["pending_posts"]
     ):
-        log(
-            f"{day} {slot} は"
-            "処理済み／確認待ちです"
-        )
+        log(f"{day} {slot} は処理済み／確認待ちです")
         return
 
     log(f"定期投稿: {day} {slot}")
@@ -789,9 +739,7 @@ def main():
                     f"🔗 {url}"
                 )
 
-                if x_length(
-                    candidate + "\n#STVV"
-                ) <= 270:
+                if x_length(candidate + HASHTAGS) <= 270:
                     message = candidate
                     source = url
                     news_url = url
@@ -801,18 +749,12 @@ def main():
             requests.RequestException,
             ValueError,
         ) as error:
-            log(
-                f"ニュース取得不可: {error}"
-            )
+            log(f"ニュース取得不可: {error}")
 
     if (
         not message
         and slot in {
-            "compare",
-            "data",
-            "analysis",
-            "vote",
-            "recap",
+            "compare", "data", "analysis", "vote", "recap"
         }
     ):
         try:
@@ -820,22 +762,15 @@ def main():
 
             if event:
                 match_key = (
-                    f"real_{event['idEvent']}"
-                    f"_{slot}"
+                    f"real_{event['idEvent']}_{slot}"
                 )
 
-                if (
-                    match_key
-                    not in history["used_posts"]
-                ):
-                    message = match_post(
-                        event, slot
-                    )
+                if match_key not in history["used_posts"]:
+                    message = match_post(event, slot)
 
                     if message:
                         source = (
-                            "thesportsdb:"
-                            f"{event['idEvent']}"
+                            f"thesportsdb:{event['idEvent']}"
                         )
 
         except (
@@ -844,28 +779,22 @@ def main():
             KeyError,
             TypeError,
         ) as error:
-            log(
-                f"試合取得不可: {error}"
-            )
+            log(f"試合取得不可: {error}")
 
     if not message:
-        topics = TOPICS[slot]
+        message = choose_fallback(slot, day, scores)
 
-        index = (
-            datetime.strptime(
-                day, "%Y-%m-%d"
-            ).date().toordinal()
-            + list(TOPICS).index(slot) * 7
-        ) % len(topics)
+        if message is None:
+            log(
+                f"{slot} の候補がすべて低評価のため、"
+                "この枠の投稿を見送ります"
+            )
+            return
 
-        message = topics[index]
+        log(f"評価フィルター適用: {slot}")
 
-    message += (
-        "\n\n#STVV #シントトロイデン"
-    )
+    message += HASHTAGS
 
-    # 1投稿枠につき1つの履歴キー。
-    # ニュースURLは同時に既読登録。
     publish(
         history,
         daily,
