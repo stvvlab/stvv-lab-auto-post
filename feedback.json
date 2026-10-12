@@ -1,0 +1,27 @@
+
+{
+  "version": 1,
+  "settings": {
+    "feedback_enabled": true,
+    "manual_feedback_enabled": true,
+    "auto_metrics_enabled": false,
+    "auto_improvement_enabled": false,
+    "weekly_report_enabled": false
+  },
+  "feedback": [],
+  "metrics": [],
+  "improvement_rules": {
+    "prioritize": [
+      "STVVの最新情報",
+      "日本人選手",
+      "試合結果と分析",
+      "データに基づく比較"
+    ],
+    "avoid": [
+      "根拠のない情報",
+      "同じ内容の繰り返し",
+      "内容の薄い定型投稿",
+      "スポンサー・商品販売関連"
+    ]
+  }
+}
