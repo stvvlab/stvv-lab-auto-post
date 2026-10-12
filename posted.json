@@ -54,7 +54,8 @@
     "daily_2026-10-11_recap",
     "daily_2026-10-12_player",
     "daily_2026-10-12_compare",
-    "daily_2026-10-12_data"
+    "daily_2026-10-12_data",
+    "daily_2026-10-12_analysis"
   ],
   "publication_log": [
     {
@@ -173,15 +174,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-12T12:47:21.238321+09:00",
       "text": "📊 枠内シュート率は枠内シュート数÷総シュート数。ただし、枠内に飛んだことと、得点の可能性が高かったことは別です。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-12_analysis": {
+    },
+    {
+      "key": "daily_2026-10-12_analysis",
       "slot": "analysis",
       "source": null,
-      "text": "🧠 試合終盤｜リード時は保持だけでなく、失った直後の配置が重要。攻守のバランスが勝点を左右します。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-12T15:57:15.048664+09:00"
+      "buffer_id": "6acc84cc7db619a29160816c",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-12T15:57:17.727280+09:00",
+      "text": "🧠 試合終盤｜リード時は保持だけでなく、失った直後の配置が重要。攻守のバランスが勝点を左右します。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
