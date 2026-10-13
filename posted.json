@@ -60,7 +60,8 @@
     "daily_2026-10-12_vote",
     "daily_2026-10-12_recap",
     "daily_2026-10-13_player",
-    "daily_2026-10-13_compare"
+    "daily_2026-10-13_compare",
+    "daily_2026-10-13_data"
   ],
   "publication_log": [
     {
@@ -233,15 +234,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-13T10:45:35.634103+09:00",
       "text": "⚔️ DF比較｜タックル数が多い選手が必ずしも優秀とは限りません。パスコースを消す位置取りにも注目です。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-13_data": {
+    },
+    {
+      "key": "daily_2026-10-13_data",
       "slot": "data",
       "source": null,
-      "text": "📊 守備分析｜被シュート数が少なくても、決定的な場面を何度も許していれば、守備が安定していたとは言い切れません。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-13T12:46:35.445310+09:00"
+      "buffer_id": "6acda99c5462be2e9035117c",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-13T12:46:37.877541+09:00",
+      "text": "📊 守備分析｜被シュート数が少なくても、決定的な場面を何度も許していれば、守備が安定していたとは言い切れません。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
