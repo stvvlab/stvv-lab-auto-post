@@ -59,7 +59,8 @@
     "daily_2026-10-12_news",
     "daily_2026-10-12_vote",
     "daily_2026-10-12_recap",
-    "daily_2026-10-13_player"
+    "daily_2026-10-13_player",
+    "daily_2026-10-13_compare"
   ],
   "publication_log": [
     {
@@ -223,15 +224,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-13T08:07:27.090644+09:00",
       "text": "🇯🇵 選手分析｜得点・アシストだけでは測れない貢献があります。守備への切り替え、受ける位置、味方のための動きも評価したいポイントです。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-13_compare": {
+    },
+    {
+      "key": "daily_2026-10-13_compare",
       "slot": "compare",
       "source": null,
-      "text": "⚔️ DF比較｜タックル数が多い選手が必ずしも優秀とは限りません。パスコースを消す位置取りにも注目です。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-13T10:45:33.177630+09:00"
+      "buffer_id": "6acd8d3e5462be2e90304e21",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-13T10:45:35.634103+09:00",
+      "text": "⚔️ DF比較｜タックル数が多い選手が必ずしも優秀とは限りません。パスコースを消す位置取りにも注目です。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
