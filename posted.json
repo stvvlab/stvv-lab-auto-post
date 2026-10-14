@@ -67,7 +67,8 @@
     "daily_2026-10-13_vote",
     "daily_2026-10-13_recap",
     "daily_2026-10-14_player",
-    "daily_2026-10-14_compare"
+    "daily_2026-10-14_compare",
+    "daily_2026-10-14_data"
   ],
   "publication_log": [
     {
@@ -303,15 +304,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-14T10:55:05.143829+09:00",
       "text": "⚔️ 中盤比較｜パス成功率だけでなく、相手の守備を崩す前進パスや、失った直後の守備対応も確認したい指標です。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-14_data": {
+    },
+    {
+      "key": "daily_2026-10-14_data",
       "slot": "data",
       "source": null,
-      "text": "📊 データの見方｜保持率が高くても勝てるとは限りません。保持した位置と、そこから生まれた決定機を合わせて見る必要があります。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-14T12:58:56.629177+09:00"
+      "buffer_id": "6acefe01848c31c8095b118c",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-14T12:58:59.105420+09:00",
+      "text": "📊 データの見方｜保持率が高くても勝てるとは限りません。保持した位置と、そこから生まれた決定機を合わせて見る必要があります。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
