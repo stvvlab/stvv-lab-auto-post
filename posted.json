@@ -72,7 +72,8 @@
     "daily_2026-10-14_analysis",
     "daily_2026-10-14_news",
     "daily_2026-10-14_vote",
-    "daily_2026-10-14_recap"
+    "daily_2026-10-14_recap",
+    "daily_2026-10-15_player"
   ],
   "publication_log": [
     {
@@ -353,15 +354,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-14T23:21:49.042762+09:00",
       "text": "⚽ 勝敗の要因｜決定力だけでなく、チャンスを作るまでの過程も重要。良い形を何度作れたかを振り返りたいところです。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-15_player": {
+    },
+    {
+      "key": "daily_2026-10-15_player",
       "slot": "player",
       "source": null,
-      "text": "🇯🇵 FWの働きはゴールだけではありません。相手DFを動かすランニングや前線の守備が、味方のチャンスを生みます。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-15T08:16:15.484152+09:00"
+      "buffer_id": "6ad00d40cf4828067a360add",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-15T08:16:17.990884+09:00",
+      "text": "🇯🇵 FWの働きはゴールだけではありません。相手DFを動かすランニングや前線の守備が、味方のチャンスを生みます。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
