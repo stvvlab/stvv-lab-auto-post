@@ -71,7 +71,8 @@
     "daily_2026-10-14_data",
     "daily_2026-10-14_analysis",
     "daily_2026-10-14_news",
-    "daily_2026-10-14_vote"
+    "daily_2026-10-14_vote",
+    "daily_2026-10-14_recap"
   ],
   "publication_log": [
     {
@@ -343,15 +344,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-14T21:30:47.693032+09:00",
       "text": "🗳️ STVVファンに質問！試合で一番見たいのは？\n①日本人選手の活躍\n②チームの勝利\n③戦術的な駆け引き\n④若手の成長\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-14_recap": {
+    },
+    {
+      "key": "daily_2026-10-14_recap",
       "slot": "recap",
       "source": null,
-      "text": "⚽ 勝敗の要因｜決定力だけでなく、チャンスを作るまでの過程も重要。良い形を何度作れたかを振り返りたいところです。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-14T23:21:46.084776+09:00"
+      "buffer_id": "6acf8ffb8b6c76b221ff0d21",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-14T23:21:49.042762+09:00",
+      "text": "⚽ 勝敗の要因｜決定力だけでなく、チャンスを作るまでの過程も重要。良い形を何度作れたかを振り返りたいところです。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
