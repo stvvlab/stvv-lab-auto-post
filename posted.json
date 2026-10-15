@@ -73,7 +73,8 @@
     "daily_2026-10-14_news",
     "daily_2026-10-14_vote",
     "daily_2026-10-14_recap",
-    "daily_2026-10-15_player"
+    "daily_2026-10-15_player",
+    "daily_2026-10-15_compare"
   ],
   "publication_log": [
     {
@@ -363,15 +364,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-15T08:16:17.990884+09:00",
       "text": "🇯🇵 FWの働きはゴールだけではありません。相手DFを動かすランニングや前線の守備が、味方のチャンスを生みます。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-15_compare": {
+    },
+    {
+      "key": "daily_2026-10-15_compare",
       "slot": "compare",
       "source": null,
-      "text": "⚔️ チーム比較｜シュート本数だけで攻撃力は判断できません。どの位置から、どれほど良い体勢で打てたかも重要です。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-15T10:56:34.931912+09:00"
+      "buffer_id": "6ad032d45f62d3c5af159285",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-15T10:56:37.830530+09:00",
+      "text": "⚔️ チーム比較｜シュート本数だけで攻撃力は判断できません。どの位置から、どれほど良い体勢で打てたかも重要です。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
