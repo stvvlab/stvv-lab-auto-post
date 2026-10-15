@@ -77,7 +77,8 @@
     "daily_2026-10-15_compare",
     "daily_2026-10-15_data",
     "daily_2026-10-15_analysis",
-    "daily_2026-10-15_news"
+    "daily_2026-10-15_news",
+    "daily_2026-10-15_vote"
   ],
   "publication_log": [
     {
@@ -403,15 +404,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-15T18:19:39.352943+09:00",
       "text": "📰 STVV LAB｜クラブの動きを追うときは、新加入だけでなく契約更新や若手の起用にも注目。編成の方向性を考える材料になります。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-15_vote": {
+    },
+    {
+      "key": "daily_2026-10-15_vote",
       "slot": "vote",
       "source": null,
-      "text": "🗳️ STVV LABアンケート！次に詳しく読みたい分析は？\n①攻撃の仕組み\n②守備の連動\n③選手の個人成績\n④対戦相手の研究\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-15T21:30:29.151871+09:00"
+      "buffer_id": "6ad0c7677d5e788a72f83618",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-15T21:30:32.675941+09:00",
+      "text": "🗳️ STVV LABアンケート！次に詳しく読みたい分析は？\n①攻撃の仕組み\n②守備の連動\n③選手の個人成績\n④対戦相手の研究\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
