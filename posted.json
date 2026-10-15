@@ -79,7 +79,8 @@
     "daily_2026-10-15_analysis",
     "daily_2026-10-15_news",
     "daily_2026-10-15_vote",
-    "daily_2026-10-15_recap"
+    "daily_2026-10-15_recap",
+    "daily_2026-10-16_player"
   ],
   "publication_log": [
     {
@@ -423,15 +424,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-15T23:24:55.170275+09:00",
       "text": "⚽ 次戦への視点｜前節の課題が改善されたか。単発の結果だけでなく、複数試合を通じた変化を追うことが大切です。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-16_player": {
+    },
+    {
+      "key": "daily_2026-10-16_player",
       "slot": "player",
       "source": null,
-      "text": "🇯🇵 選手分析｜得点・アシストだけでは測れない貢献があります。守備への切り替え、受ける位置、味方のための動きも評価したいポイントです。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-16T08:12:43.942015+09:00"
+      "buffer_id": "6ad15ded9597cd166258575a",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-16T08:12:46.578799+09:00",
+      "text": "🇯🇵 選手分析｜得点・アシストだけでは測れない貢献があります。守備への切り替え、受ける位置、味方のための動きも評価したいポイントです。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
