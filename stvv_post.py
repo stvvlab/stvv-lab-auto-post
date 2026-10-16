@@ -12,6 +12,7 @@ from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from style_posts import STYLE_POSTS
 
 
 JST = timezone(timedelta(hours=9))
@@ -267,8 +268,31 @@ def auto_feedback_scores(history):
         return {}
 
 
-def choose_fallback(slot, day, scores, automatic=None):
+def choose_fallback(slot, day, scores, automatic=None, history_for_style=None):
     """Avoid repeating exact text rated 1 or 2."""
+    history_for_style = history_for_style or []
+    # Natural, human-edited options; legacy text remains as emergency fallback.
+    options = STYLE_POSTS.get(slot, [])
+    recent = {
+        normalize_text(p.get("text", ""))
+        for p in history_for_style[-21:]
+        if isinstance(p, dict)
+    }
+    if options:
+        start = (
+            datetime.strptime(day, "%Y-%m-%d").date().toordinal()
+            + list(TOPICS).index(slot) * 3
+        ) % len(options)
+        ordered_options = options[start:] + options[:start]
+        candidates = [
+            text for style, text in ordered_options
+            if scores.get(normalize_text(text), 3) >= 3
+        ]
+        unseen = [text for text in candidates if normalize_text(text) not in recent]
+        if unseen:
+            return unseen[0]
+        if candidates:
+            return candidates[0]
     topics = TOPICS[slot]
     index = (
         datetime.strptime(day, "%Y-%m-%d").date().toordinal()
@@ -812,7 +836,7 @@ def main():
             log(f"試合取得不可: {error}")
 
     if not message:
-        message = choose_fallback(slot, day, scores, automatic_scores)
+        message = choose_fallback(slot, day, scores, automatic_scores, history['publication_log'])
 
         if message is None:
             log(
