@@ -13,6 +13,13 @@ class PlayerCardTests(unittest.TestCase):
             self.assertTrue(p.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
             self.assertGreater(p.stat().st_size, 1000)
 
+    def test_topic_cards_are_fact_free_pngs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for topic in cards.TOPIC_TITLES:
+                filename = cards.render_topic(topic, Path(tmp) / f"{topic}.png")
+                self.assertTrue(filename.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
+                self.assertGreater(filename.stat().st_size, 1000)
+
     def test_only_generic_player_posts_eligible(self):
         self.assertIsNone(post.faceless_player_media("news", None))
         self.assertIsNone(post.faceless_player_media("player", "thesportsdb:123"))
