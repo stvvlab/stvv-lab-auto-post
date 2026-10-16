@@ -486,6 +486,14 @@
       "image_url": null
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-16_recap": {
+      "slot": "recap",
+      "source": null,
+      "text": "次の試合で見えてくることもある。\n\n前節の課題が改善されたのか。STVVの変化は、1試合だけでは測れない。\n\n#STVV #シントトロイデン",
+      "image_url": null,
+      "created_at": "2026-10-16T23:22:49.623798+09:00"
+    }
+  },
   "tracked_topics": {}
 }
