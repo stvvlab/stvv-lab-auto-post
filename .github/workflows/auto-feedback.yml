@@ -2,6 +2,11 @@ name: STVV LAB Auto Feedback
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'auto_feedback.py'
+      - '.github/workflows/auto-feedback.yml'
   schedule:
     - cron: "0 18 * * *"  # 03:00 JST
 
