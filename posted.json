@@ -86,7 +86,8 @@
     "daily_2026-10-16_analysis",
     "daily_2026-10-16_news",
     "daily_2026-10-16_vote",
-    "daily_2026-10-16_recap"
+    "daily_2026-10-16_recap",
+    "daily_2026-10-17_player"
   ],
   "publication_log": [
     {
@@ -495,16 +496,18 @@
       "submitted_at": "2026-10-16T23:22:52.589905+09:00",
       "text": "次の試合で見えてくることもある。\n\n前節の課題が改善されたのか。STVVの変化は、1試合だけでは測れない。\n\n#STVV #シントトロイデン",
       "image_url": null
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-17_player": {
+    },
+    {
+      "key": "daily_2026-10-17_player",
       "slot": "player",
       "source": null,
+      "buffer_id": "6ad2afcb52adf2bfae672713",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-17T08:14:21.843047+09:00",
       "text": "STVVの日本人選手、次に深掘りするなら誰？🇯🇵\n\nプレーの数字と映像、両方を並べて見てみたい。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/18d3301fe5d3b9cc5e27c5615ad72808fab6d455/generated/player_lab.png",
-      "created_at": "2026-10-17T08:14:18.056167+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/18d3301fe5d3b9cc5e27c5615ad72808fab6d455/generated/player_lab.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
