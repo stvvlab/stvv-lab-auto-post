@@ -65,6 +65,20 @@ class FeedbackTests(unittest.TestCase):
             {"type": "reactions", "value": "none", "unit": "count"},
         ]})
         self.assertEqual(result, {"impressions": 120.0, "engagementRate": 3.1})
+    def test_daily_report_exists_without_enough_metrics(self):
+        with tempfile.TemporaryDirectory() as d:
+            with patch.object(a, "REPORTS", Path(d)):
+                feedback = {"metrics": [], "automatic_feedback": []}
+                history = {"publication_log": [{
+                    "submitted_at": (NOW - timedelta(days=1)).isoformat(),
+                    "text": "General discussion", "source": None, "image_url": None
+                }]}
+                a.daily_report(feedback, history, NOW)
+                report = (Path(d) / "latest.md").read_text(encoding="utf-8")
+                self.assertIn("投稿登録：1件", report)
+                self.assertIn("未取得は0回として扱いません", report)
+                self.assertTrue((Path(d) / "daily-2026-10-15.md").is_file())
+
     def test_disabled_collection_preserves_manual_feedback(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
