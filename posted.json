@@ -83,7 +83,8 @@
     "daily_2026-10-16_player",
     "daily_2026-10-16_compare",
     "daily_2026-10-16_data",
-    "daily_2026-10-16_analysis"
+    "daily_2026-10-16_analysis",
+    "daily_2026-10-16_news"
   ],
   "publication_log": [
     {
@@ -463,15 +464,17 @@
       "buffer_status": "sent",
       "submitted_at": "2026-10-16T16:13:53.863057+09:00",
       "text": "🧠 戦術分析｜前線からのプレスは、後方との連動が重要。前だけが追えば中盤に空間が生まれ、相手に前進を許します。\n\n#STVV #シントトロイデン"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-16_news": {
+    },
+    {
+      "key": "daily_2026-10-16_news",
       "slot": "news",
       "source": null,
-      "text": "📰 STVV LAB｜クラブの動きを追うときは、新加入だけでなく契約更新や若手の起用にも注目。編成の方向性を考える材料になります。\n\n#STVV #シントトロイデン",
-      "created_at": "2026-10-16T18:19:50.989341+09:00"
+      "buffer_id": "6ad1ec384ed7d375a452ec97",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-16T18:19:53.479521+09:00",
+      "text": "📰 STVV LAB｜クラブの動きを追うときは、新加入だけでなく契約更新や若手の起用にも注目。編成の方向性を考える材料になります。\n\n#STVV #シントトロイデン"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
