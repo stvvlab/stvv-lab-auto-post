@@ -239,7 +239,35 @@ def feedback_scores(history, reviews):
     return scores
 
 
-def choose_fallback(slot, day, scores):
+
+def auto_feedback_scores(history):
+    """Rank exact fallback texts with sufficient real post data."""
+    try:
+        data = json.loads(FEEDBACK_FILE.read_text(encoding="utf-8"))
+        settings = data.get("settings", {})
+        if not settings.get("feedback_enabled") or not settings.get("auto_improvement_enabled"):
+            return {}
+        publications = {
+            p.get("key"): p.get("text", "")
+            for p in history["publication_log"] if isinstance(p, dict)
+        }
+        values = {}
+        for rating in data.get("automatic_feedback", []):
+            if not isinstance(rating, dict) or type(rating.get("rating")) is not int:
+                continue
+            if not 1 <= rating["rating"] <= 5:
+                continue
+            message = normalize_text(publications.get(rating.get("post_key"), ""))
+            if message:
+                values.setdefault(message, []).append(rating["rating"])
+        return {text: sum(scores) / len(scores)
+                for text, scores in values.items() if len(scores) >= 2}
+    except (OSError, ValueError, TypeError, AttributeError) as error:
+        log(f"自動評価の読み込みを見送り: {error}")
+        return {}
+
+
+def choose_fallback(slot, day, scores, automatic=None):
     """Avoid repeating exact text rated 1 or 2."""
     topics = TOPICS[slot]
     index = (
@@ -249,13 +277,14 @@ def choose_fallback(slot, day, scores):
 
     ordered = topics[index:] + topics[:index]
 
-    for candidate in ordered:
-        if scores.get(normalize_text(candidate), 3) >= 3:
-            return candidate
-
-    # Do not silently reuse content that was rated poorly.
-    # If every fallback is rejected, skip this slot safely.
-    return None
+    eligible = [candidate for candidate in ordered
+                if scores.get(normalize_text(candidate), 3) >= 3]
+    if not eligible:
+        return None
+    automatic = automatic or {}
+    # Preserve the rotating order unless measured scores distinguish texts.
+    return max(eligible, key=lambda candidate:
+               automatic.get(normalize_text(candidate), 3.0))
 
 
 def slot_for_run(now):
@@ -697,6 +726,7 @@ def main():
     history = load()
     reviews = load_feedback()
     scores = feedback_scores(history, reviews)
+    automatic_scores = auto_feedback_scores(history)
 
     slot, day = slot_for_run(now)
 
@@ -782,7 +812,7 @@ def main():
             log(f"試合取得不可: {error}")
 
     if not message:
-        message = choose_fallback(slot, day, scores)
+        message = choose_fallback(slot, day, scores, automatic_scores)
 
         if message is None:
             log(
