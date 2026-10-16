@@ -56,5 +56,49 @@ def render(destination=OUTPUT):
     return destination
 
 
+# Evergreen art only: labels describe the editorial topic, never a player or match.
+TOPIC_TITLES = {
+    "compare": ("COMPARE", "PLAYERS  /  TEAMS"),
+    "data": ("DATA LAB", "NUMBERS IN CONTEXT"),
+    "analysis": ("TACTICS", "GAME ANALYSIS"),
+    "news": ("STVV NEWS", "CHECK THE SOURCE"),
+    "vote": ("FAN VOICE", "WHAT DO YOU THINK?"),
+    "recap": ("RECAP", "MATCH REVIEW"),
+}
+
+
+def render_topic(slot, destination=None):
+    """Create reusable, fact-free, portrait-free art for an editorial slot."""
+    if slot not in TOPIC_TITLES:
+        raise ValueError(f"Unknown topic: {slot}")
+    destination = Path(destination or f"generated/topic_{slot}.png")
+    name, subtitle = TOPIC_TITLES[slot]
+    image = Image.new("RGB", (W, H), NAVY)
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 0, W, 16), fill=YELLOW)
+    draw.polygon([(W, 0), (W, 920), (530, 1100), (220, 380)], fill=BLUE)
+    draw.polygon([(W, 310), (W, 720), (700, 420)], fill="#0C315A")
+    for i in range(13):
+        x = 360 + i * 61
+        draw.line((x, 150, x - 430, 1100), fill="#235485", width=2)
+    draw.ellipse((500, 360, 1240, 1100), outline=YELLOW, width=11)
+    draw.ellipse((575, 435, 1165, 1025), outline="#467DB3", width=4)
+    draw.text((60, 72), "STVV LAB", font=font(55), fill=WHITE)
+    draw.text((62, 160), "INDEPENDENT FOOTBALL MEDIA", font=font(25, False), fill=MUTED)
+    draw.rounded_rectangle((58, 275, 405, 345), radius=8, fill=YELLOW)
+    draw.text((75, 295), "EDITORIAL", font=font(32), fill=DARK)
+    draw.text((56, 415), name, font=font(103), fill=WHITE)
+    draw.text((60, 545), subtitle, font=font(35), fill=YELLOW)
+    draw.rectangle((0, 1100, W, H), fill=DARK)
+    draw.text((58, 1145), "JAPANESE PLAYERS  /  FOOTBALL", font=font(33), fill=WHITE)
+    draw.line((58, 1215, 1020, 1215), fill=BLUE, width=4)
+    draw.text((58, 1250), "STVV LAB   |   INDEPENDENT", font=font(28), fill=YELLOW)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    image.save(destination, format="PNG", optimize=True)
+    return destination
+
+
 if __name__ == "__main__":
     print(f"Generated {render()}")
+    for topic in TOPIC_TITLES:
+        print(f"Generated {render_topic(topic)}")
