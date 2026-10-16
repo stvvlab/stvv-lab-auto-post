@@ -39,6 +39,23 @@ class ImageTests(unittest.TestCase):
             finally:
                 os.chdir(previous)
 
+    def test_generic_media_requires_matching_public_png(self):
+        with tempfile.TemporaryDirectory() as td:
+            import os
+            root = Path(td)
+            (root / "generated").mkdir()
+            (root / "generated/topic_vote.png").write_bytes(FakeResponse.content)
+            before = os.getcwd()
+            try:
+                os.chdir(root)
+                with patch.object(p.subprocess, "check_output", return_value="a" * 40 + "\n"), \
+                     patch.object(p.SESSION, "get", return_value=FakeResponse()):
+                    self.assertIn("topic_vote.png", p.generic_topic_media("vote"))
+                    self.assertIsNone(p.generic_topic_media("news"))
+                    self.assertIsNone(p.generic_topic_media("player"))
+            finally:
+                os.chdir(before)
+
     def test_buffer_payload_has_image_asset_only_when_supplied(self):
         class Response:
             def raise_for_status(self):

@@ -44,26 +44,16 @@ jobs:
         run: python generate_social_cards.py
 
       - name: Save generated image to GitHub
-        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          if [ -f generated/player_lab.png ] || [ -f generated/match_lab.png ]; then
-            if [ -f generated/match_lab.png ]; then
-              git add generated/match_lab.png generated/match_manifest.json
-              git add generated/match_*.png
-            fi
-            git add generated/player_lab.png
-
-            if git diff --cached --quiet; then
-              echo "No image changes"
-            else
-              git commit -m "Update STVV LAB image"
-              git push
-            fi
+          git add -A -- generated/
+          if git diff --cached --quiet; then
+            echo "No changes to generated cards"
           else
-            echo "No generated image"
+            git commit -m "Update STVV LAB editorial cards"
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
 
       - name: Run STVV auto post
