@@ -663,7 +663,7 @@ def generic_topic_media(slot):
         return None
     try:
         local = path.read_bytes()
-        if not local.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+        if not local.startswith(b"\x89PNG\r\n\x1a\n"):
             return None
         revision = subprocess.check_output(
             ["git", "rev-parse", "HEAD"], text=True
