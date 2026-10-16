@@ -1,0 +1,83 @@
+name: Buffer Metrics Read-Only Probe
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/buffer-metrics-probe.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stvv-buffer-metrics-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install requests
+      - name: Probe one existing post (no posting or writes)
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+          import requests
+
+          key = os.environ.get("BUFFER_API_KEY")
+          if not key:
+              raise RuntimeError("BUFFER_API_KEY missing")
+          history = json.loads(Path("posted.json").read_text(encoding="utf-8"))
+          now = datetime.now(timezone.utc)
+          old = []
+          for item in history.get("publication_log", []):
+              try:
+                  submitted = datetime.fromisoformat(item["submitted_at"])
+                  if submitted.tzinfo is not None and now - submitted >= timedelta(hours=48) and item.get("buffer_id"):
+                      old.append((submitted, item))
+              except (ValueError, TypeError, KeyError):
+                  continue
+          if not old:
+              raise RuntimeError("No eligible 48h-old Buffer posts in history")
+          _, post = max(old, key=lambda x: x[0])
+          print("POST_KEY:", post["key"])
+          query = """query GetPostMetrics {
+            post(input: { id: %s }) {
+              id
+              status
+              metrics { type name value unit }
+              metricsUpdatedAt
+            }
+          }""" % json.dumps(post["buffer_id"])
+          response = requests.post(
+              "https://api.buffer.com",
+              json={"query": query},
+              headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
+              timeout=25,
+          )
+          print("HTTP_STATUS:", response.status_code)
+          response.raise_for_status()
+          body = response.json()
+          if body.get("errors"):
+              print("GRAPHQL_QUERY_REJECTED: yes")
+              raise RuntimeError("Buffer rejected metrics query")
+          result = (body.get("data") or {}).get("post")
+          if not isinstance(result, dict):
+              raise RuntimeError("Buffer returned no post object")
+          print("POST_STATUS:", result.get("status"))
+          print("METRICS_READY:", bool(result.get("metricsUpdatedAt")))
+          metrics = result.get("metrics")
+          print("METRIC_COUNT:", len(metrics) if isinstance(metrics, list) else 0)
+          print("METRIC_TYPES:", ",".join(str(m.get("type")) for m in metrics if isinstance(m, dict)) if isinstance(metrics, list) else "(none)")
+          print("PROBE_FINISHED: no changes made to any posts")
+          PY
