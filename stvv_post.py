@@ -827,7 +827,7 @@ def publish(
     # Bufferへ送る前に、確認待ちをGitHubへ保存する。
     save(history)
 
-    log(f"Buffer送信開始: {key}")
+    log(f"Buffer送信開始: {key} / 画像添付要求: {bool(image_url)} / 画像URL: {image_url or 'なし'}")
 
     # 送信結果が不明な場合は確認待ちを残し、
     # 同じ投稿の自動再送を防ぐ。
@@ -852,8 +852,8 @@ def publish(
     save(history)
 
     log(
-        f"Buffer受付成功: {post['id']} "
-        "/ 履歴保存完了"
+        f"Buffer受付成功: {post['id']} / 画像添付要求: {bool(image_url)} "
+        "/ X側の画像表示は未検証 / 履歴保存完了"
     )
     return True
 
