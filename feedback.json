@@ -3,16 +3,16 @@
   "settings": {
     "feedback_enabled": true,
     "manual_feedback_enabled": true,
-    "auto_metrics_enabled": false,
-    "auto_improvement_enabled": false,
-    "weekly_report_enabled": false
+    "auto_metrics_enabled": true,
+    "auto_improvement_enabled": true,
+    "weekly_report_enabled": true
   },
   "rating_guide": {
-    "5": "非常に良い：今後も積極的に投稿したい",
-    "4": "良い：同じ方向性を継続したい",
-    "3": "普通：改善の余地がある",
+    "1": "非常に悪い：同じ内容を避けたい",
     "2": "悪い：内容や表現を見直したい",
-    "1": "非常に悪い：同じ内容を避けたい"
+    "3": "普通：改善の余地がある",
+    "4": "良い：同じ方向性を継続したい",
+    "5": "非常に良い：今後も積極的に投稿したい"
   },
   "feedback": [
     {
