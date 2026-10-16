@@ -95,11 +95,13 @@ def collect_metrics(feedback, history, now, session, key):
     candidates.sort(key=lambda entry: entry[0])
     total = min(len(candidates), MAX_CALLS)
     successes = 0
+    collection_error = None
     for _, item in candidates[:MAX_CALLS]:
         try:
             result = metric_query(item["buffer_id"], session, key)
         except (requests.RequestException, ValueError) as error:
-            print("Buffer metrics unavailable; stopping this run:", type(error).__name__)
+            collection_error = type(error).__name__
+            print("Buffer metrics unavailable; stopping this run:", collection_error)
             break
         indexed[item["key"]] = {
             "post_key": item["key"],
@@ -113,6 +115,13 @@ def collect_metrics(feedback, history, now, session, key):
         }
         successes += 1
     feedback["metrics"] = sorted(indexed.values(), key=lambda p: p["post_key"])
+    feedback["last_collection"] = {
+        "checked_at": now.isoformat(),
+        "eligible": total,
+        "checked": successes,
+        "status": "unavailable" if collection_error else ("ok" if total else "no_eligible_posts"),
+        "error_class": collection_error,
+    }
     print(f"Checked {successes}/{total} eligible Buffer posts")
 
 def engagement_rate(entry):
@@ -191,8 +200,81 @@ def weekly_report(feedback, now):
         lines.append("比較可能な実績が不足しているため、順位付けは保留しています。")
     lines.append("")
     report = "\n".join(lines)
-    (REPORTS / "latest.md").write_text(report, encoding="utf-8")
+    (REPORTS / "weekly-latest.md").write_text(report, encoding="utf-8")
     (REPORTS / f"weekly-{week.year}-W{week.week:02d}.md").write_text(report, encoding="utf-8")
+
+
+def daily_report(feedback, history, now):
+    """Publish a readable status even before enough posts qualify for a rating."""
+    REPORTS.mkdir(exist_ok=True)
+    day = (now - timedelta(days=1)).date()
+    day_posts = []
+    for item in history.get("publication_log", []):
+        if not isinstance(item, dict):
+            continue
+        submitted = parse_date(item.get("submitted_at"))
+        if submitted and submitted.astimezone(JST).date() == day:
+            day_posts.append(item)
+
+    total = len(day_posts)
+    with_image = sum(bool(p.get("image_url")) for p in day_posts)
+    with_source = sum(bool(p.get("source")) for p in day_posts)
+    metrics = [p for p in feedback.get("metrics", []) if isinstance(p, dict)]
+    with_views = [
+        p for p in metrics
+        if p.get("status") == "sent"
+        and p.get("metrics_updated_at")
+        and isinstance((p.get("values") or {}).get("impressions"), (int, float))
+    ]
+    collection = feedback.get("last_collection", {})
+    ratings = feedback.get("automatic_feedback", [])
+    lines = [
+        f"# STVV LAB 日次フィードバック（対象：{day}）",
+        "",
+        f"作成日時（JST）：{now:%Y-%m-%d %H:%M}",
+        "",
+        "## 前日の投稿状況",
+        f"- 投稿登録：{total}件",
+        f"- Buffer送信時に画像URLを指定：{with_image}件 / {total}件",
+        f"- 出典付きの試合・ニュース投稿：{with_source}件 / {total}件",
+        f"- 汎用テーマ投稿：{total - with_source}件 / {total}件",
+        "",
+        "※ 画像URLの指定は、Xへの画像掲載成功を保証するものではありません。",
+        "※ 出典がない一般論を、実際のSTVVの試合分析として採点しません。",
+        "",
+        "## 実測データの収集",
+        f"- Buffer実績取得済み：{len(metrics)}投稿",
+        f"- 表示回数を取得済み：{len(with_views)}投稿",
+        f"- 比較条件を満たした相対評価：{len(ratings)}件",
+        f"- 最新取得結果：{collection.get('status', '未実行')}",
+        f"- 最新取得処理：{collection.get('checked', '未実行')}件",
+        "",
+    ]
+    if with_views:
+        lines.append("### 最近取得できた表示回数")
+        for item in sorted(with_views, key=lambda p: p.get("checked_at") or "", reverse=True)[:5]:
+            number = item["values"]["impressions"]
+            lines.append(f"- {item.get('post_key', 'unknown')}: {number:g}表示")
+        lines.append("")
+    else:
+        lines.extend(["表示回数の実測値はまだ取得できていません。未取得は0回として扱いません。", ""])
+    lines.append("## 次の改善事項")
+    if total == 0:
+        lines.append("- 前日の投稿登録がありません。GitHub Actionsの実行履歴とBufferを照合してください。")
+    else:
+        if with_image < total:
+            lines.append("- 画像なし投稿があります。画像の生成・公開先・Buffer画像添付を確認してください。")
+        if with_source < total:
+            lines.append("- 一般論の投稿があります。最新の試合・選手・公式情報に基づく具体的な投稿を優先してください。")
+        if with_image == total and with_source == total:
+            lines.append("- 投稿画像と出典の指定はできています。X側の掲載状態と実際の反応を確認してください。")
+    if len(ratings) == 0:
+        lines.append("- 十分な反応データがないため、投稿の優劣を断定しません。")
+    lines.append("")
+    report = "\n".join(lines)
+    (REPORTS / "latest.md").write_text(report, encoding="utf-8")
+    (REPORTS / f"daily-{day}.md").write_text(report, encoding="utf-8")
+
 
 def run(now=None, session=None):
     now = now or datetime.now(JST)
@@ -213,6 +295,8 @@ def run(now=None, session=None):
         data["automatic_feedback"] = automatic_ratings(data, now)
     if settings.get("weekly_report_enabled", False):
         weekly_report(data, now)
+    if settings.get("daily_report_enabled", True):
+        daily_report(data, history, now)
     write_json(FEEDBACK, data)
 
 if __name__ == "__main__":
