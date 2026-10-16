@@ -1,5 +1,8 @@
 
 import os
+import json
+import re
+from pathlib import Path
 from datetime import datetime, timezone, timedelta
 
 import requests
@@ -368,6 +371,21 @@ def main():
         image.save(temporary_path, "PNG")
 
         os.replace(temporary_path, OUTPUT_PATH)
+
+        event_id = str(event.get("idEvent", ""))
+        if not re.fullmatch(r"[0-9]+", event_id):
+            raise RuntimeError("Invalid event ID")
+        unique_path = Path("generated") / f"match_{event_id}.png"
+        unique_path.write_bytes(Path(OUTPUT_PATH).read_bytes())
+        manifest = {
+            "event_id": event_id,
+            "image": str(unique_path),
+        }
+        Path("generated/match_manifest.json").write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
 
         print(f"画像生成成功: {OUTPUT_PATH}")
 

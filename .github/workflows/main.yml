@@ -47,7 +47,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           if [ -f generated/match_lab.png ]; then
-            git add generated/match_lab.png
+            git add generated/match_lab.png generated/match_manifest.json
+            git add generated/match_*.png
 
             if git diff --cached --quiet; then
               echo "No image changes"
