@@ -2,6 +2,7 @@
 """STVV LAB: scheduled posting with manual feedback filtering."""
 
 import html
+import hashlib
 import json
 import os
 import re
@@ -621,7 +622,49 @@ def x_length(message):
     )
 
 
-def send(message):
+def media_for(source, slot):
+    """Attach only a committed image from the exact verified match."""
+    if slot not in {"compare", "data", "analysis", "recap"}:
+        return None
+    if not isinstance(source, str) or not source.startswith("thesportsdb:"):
+        return None
+    event_id = source.partition(":")[2]
+    if not event_id.isdigit():
+        return None
+    try:
+        manifest = json.loads(
+            Path("generated/match_manifest.json").read_text(encoding="utf-8")
+        )
+        if manifest.get("event_id") != event_id:
+            return None
+        path = Path("generated") / f"match_{event_id}.png"
+        if manifest.get("image") != path.as_posix() or not path.is_file():
+            return None
+        local = path.read_bytes()
+        if not local.startswith(b"\x89PNG\r\n\x1a\n"):
+            return None
+        revision = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], text=True
+        ).strip()
+        if not re.fullmatch(r"[0-9a-f]{40}", revision):
+            return None
+        url = (
+            "https://raw.githubusercontent.com/stvvlab/"
+            f"stvv-lab-auto-post/{revision}/{path.as_posix()}"
+        )
+        response = SESSION.get(url, timeout=15)
+        response.raise_for_status()
+        if hashlib.sha256(response.content).digest() != hashlib.sha256(local).digest():
+            log("公開画像と生成画像が一致しないため添付しません")
+            return None
+        return url
+    except (OSError, ValueError, subprocess.SubprocessError,
+            requests.RequestException) as error:
+        log(f"画像確認不可。テキスト投稿を継続: {error}")
+        return None
+
+
+def send(message, image_url=None):
     key = os.getenv("BUFFER_API_KEY")
 
     if not key or not CHANNEL:
@@ -651,6 +694,7 @@ def send(message):
                 "channelId": CHANNEL,
                 "schedulingType": "automatic",
                 "mode": "shareNow",
+                "assets": [{"image": {"url": image_url}}] if image_url else [],
             }
         },
     }
@@ -683,6 +727,8 @@ def send(message):
             f"Buffer受付を確認できません: {action}"
         )
 
+    if image_url and not post.get('id'):
+        raise RuntimeError('画像付き投稿の受付に失敗')
     return post
 
 
@@ -693,6 +739,7 @@ def publish(
     slot,
     source=None,
     news_url=None,
+    image_url=None,
 ):
     if key in history["used_posts"]:
         log(f"投稿済み: {key}")
@@ -709,6 +756,7 @@ def publish(
         "slot": slot,
         "source": source,
         "text": message,
+        "image_url": image_url,
         "created_at": datetime.now(JST).isoformat(),
     }
 
@@ -719,7 +767,7 @@ def publish(
 
     # 送信結果が不明な場合は確認待ちを残し、
     # 同じ投稿の自動再送を防ぐ。
-    post = send(message)
+    post = send(message, image_url=image_url)
 
     history["used_posts"].append(key)
     history["publication_log"].append({
@@ -730,6 +778,7 @@ def publish(
         "buffer_status": post.get("status"),
         "submitted_at": datetime.now(JST).isoformat(),
         "text": message,
+        "image_url": image_url,
     })
 
     if news_url and news_url not in history["news"]:
@@ -856,6 +905,7 @@ def main():
         slot,
         source,
         news_url,
+        media_for(source, slot),
     )
 
 
