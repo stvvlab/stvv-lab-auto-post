@@ -653,6 +653,39 @@ def faceless_player_media(slot, source):
         return None
 
 
+def generic_topic_media(slot):
+    """Attach only a publicly committed, verified, fact-free editorial card."""
+    if slot not in {"compare", "data", "analysis", "news", "vote", "recap"}:
+        return None
+    path = Path("generated") / f"topic_{slot}.png"
+    if not path.is_file():
+        log(f"Topic card not available: {slot}")
+        return None
+    try:
+        local = path.read_bytes()
+        if not local.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+            return None
+        revision = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], text=True
+        ).strip()
+        if not re.fullmatch(r"[0-9a-f]{40}", revision):
+            return None
+        url = (
+            "https://raw.githubusercontent.com/stvvlab/"
+            f"stvv-lab-auto-post/{revision}/{path.as_posix()}"
+        )
+        remote = SESSION.get(url, timeout=15)
+        remote.raise_for_status()
+        if hashlib.sha256(remote.content).digest() != hashlib.sha256(local).digest():
+            log(f"Published topic card differs from local file: {slot}")
+            return None
+        return url
+    except (OSError, ValueError, requests.RequestException,
+            subprocess.SubprocessError) as error:
+        log(f"Topic card unavailable ({slot}); text-only fallback: {error}")
+        return None
+
+
 def media_for(source, slot):
     """Attach only a committed image from the exact verified match."""
     if slot not in {"compare", "data", "analysis", "recap"}:
@@ -936,7 +969,7 @@ def main():
         slot,
         source,
         news_url,
-        faceless_player_media(slot, source) or media_for(source, slot),
+        faceless_player_media(slot, source) or media_for(source, slot) or generic_topic_media(slot),
     )
 
 
