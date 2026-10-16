@@ -518,6 +518,23 @@
       }
     },
     {
+      "post_key": "daily_2026-10-14_recap",
+      "slot": "recap",
+      "buffer_id": "6acf8ffb8b6c76b221ff0d21",
+      "submitted_at": "2026-10-14T23:21:49.042762+09:00",
+      "checked_at": "2026-10-17T03:27:24.809692+09:00",
+      "metrics_updated_at": "2026-10-16T15:28:48.373Z",
+      "status": "sent",
+      "values": {
+        "reactions": 0.0,
+        "comments": 0.0,
+        "engagementRate": 0.0,
+        "reposts": 0.0,
+        "impressions": 2.0,
+        "clicks": 0.0
+      }
+    },
+    {
       "post_key": "daily_2026-10-14_vote",
       "slot": "vote",
       "buffer_id": "6acf75f629caaa71852174ad",
@@ -550,9 +567,9 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-10-16T23:32:15.521072+09:00",
-    "eligible": 30,
-    "checked": 30,
+    "checked_at": "2026-10-17T03:27:24.809692+09:00",
+    "eligible": 1,
+    "checked": 1,
     "status": "ok",
     "error_class": null
   },
