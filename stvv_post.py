@@ -622,6 +622,37 @@ def x_length(message):
     )
 
 
+def faceless_player_media(slot, source):
+    """Only attach an original, no-face graphic to generic player commentary."""
+    if slot != "player" or source is not None:
+        return None
+    path = Path("generated/player_lab.png")
+    if not path.is_file():
+        return None
+    try:
+        local = path.read_bytes()
+        if not local.startswith(b"\x89PNG\r\n\x1a\n"):
+            return None
+        revision = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], text=True
+        ).strip()
+        if not re.fullmatch(r"[0-9a-f]{40}", revision):
+            return None
+        url = (
+            "https://raw.githubusercontent.com/stvvlab/"
+            f"stvv-lab-auto-post/{revision}/{path.as_posix()}"
+        )
+        remote = SESSION.get(url, timeout=15)
+        remote.raise_for_status()
+        if hashlib.sha256(remote.content).digest() != hashlib.sha256(local).digest():
+            return None
+        return url
+    except (OSError, ValueError, requests.RequestException,
+            subprocess.SubprocessError) as error:
+        log(f"PLAYER LAB image unavailable; text-only fallback: {error}")
+        return None
+
+
 def media_for(source, slot):
     """Attach only a committed image from the exact verified match."""
     if slot not in {"compare", "data", "analysis", "recap"}:
@@ -905,7 +936,7 @@ def main():
         slot,
         source,
         news_url,
-        media_for(source, slot),
+        faceless_player_media(slot, source) or media_for(source, slot),
     )
 
 
