@@ -258,6 +258,29 @@ def daily_report(feedback, history, now):
         lines.append("")
     else:
         lines.extend(["表示回数の実測値はまだ取得できていません。未取得は0回として扱いません。", ""])
+    # Measured impression performance, never substituting zero for missing values.
+    if with_views:
+        ranked = sorted(with_views, key=lambda p: p["values"]["impressions"], reverse=True)
+        views_total = sum(p["values"]["impressions"] for p in with_views)
+        lines.extend([
+            "## インプレッション重視の効果測定",
+            f"- 実測表示回数合計：{views_total:g}回（{len(with_views)}投稿）",
+            f"- 1投稿平均：{views_total / len(with_views):.2f}回",
+            f"- 20表示以上：{sum(p['values']['impressions'] >= 20 for p in with_views)}投稿",
+            "",
+            "### 表示回数TOP5",
+        ])
+        for item in ranked[:5]:
+            lines.append(f"- {item.get('post_key', 'unknown')}：{item['values']['impressions']:g}回")
+        lines.extend(["", "### 投稿枠別の平均表示回数"])
+        grouped = {}
+        for item in with_views:
+            grouped.setdefault(item.get("slot") or "unknown", []).append(item["values"]["impressions"])
+        for slot, values in sorted(grouped.items(), key=lambda x: -sum(x[1]) / len(x[1])):
+            lines.append(f"- {slot}：{sum(values) / len(values):.2f}回（{len(values)}投稿）")
+        lines.extend(["", "※ 投稿後の経過時間や収集時点が異なるため、比較は暫定値です。", ""])
+    else:
+        lines.extend(["## インプレッション重視の効果測定", "実測表示回数は未取得です。", ""])
     lines.append("## 投稿形式の自動改善")
     lines.append("- 各形式につき評価済み投稿が3件以上集まるまで、形式の優劣は判断しません。")
     lines.append("- 手動評価を優先し、十分な実績がある形式を次回の候補選択に反映します。")
