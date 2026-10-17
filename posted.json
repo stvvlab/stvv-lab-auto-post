@@ -519,6 +519,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/af26675a62f4a4e06096dd6344e44d8cfa7f5ea5/generated/topic_compare.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-17_data": {
+      "slot": "data",
+      "source": null,
+      "text": "📊 枠内シュート率＝枠内シュート数÷シュート数。\n\nただし、この数字だけで『決定機が多かった』とは言えない。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/bd8e49527bad76c61b4188143adcd1b433daea7e/generated/content_2026-10-17_data.png",
+      "created_at": "2026-10-17T12:56:43.100068+09:00"
+    }
+  },
   "tracked_topics": {}
 }
