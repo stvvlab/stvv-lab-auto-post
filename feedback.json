@@ -522,8 +522,8 @@
       "slot": "recap",
       "buffer_id": "6acf8ffb8b6c76b221ff0d21",
       "submitted_at": "2026-10-14T23:21:49.042762+09:00",
-      "checked_at": "2026-10-17T03:27:24.809692+09:00",
-      "metrics_updated_at": "2026-10-16T15:28:48.373Z",
+      "checked_at": "2026-10-18T03:22:46.470489+09:00",
+      "metrics_updated_at": "2026-10-17T14:28:56.161Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -686,9 +686,9 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-10-18T00:47:02.098689+09:00",
-    "eligible": 7,
-    "checked": 7,
+    "checked_at": "2026-10-18T03:22:46.470489+09:00",
+    "eligible": 1,
+    "checked": 1,
     "status": "ok",
     "error_class": null
   },
