@@ -574,6 +574,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a55f95b28164a78e9f2d1ce60c1d18074268e0af/generated/content_2026-10-17_recap.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-18_player": {
+      "slot": "player",
+      "source": null,
+      "text": "🇯🇵 選手評価のメモ。\n\n・前を向いて受けた回数\n・チャンスにつながる関与\n・失った直後の反応\n\n得点・アシスト以外にも材料はある。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/015cf9871ae7ee415e16fe0fc3c22c9baa5f9406/generated/content_2026-10-18_player.png",
+      "created_at": "2026-10-18T08:09:31.409066+09:00"
+    }
+  },
   "tracked_topics": {}
 }
