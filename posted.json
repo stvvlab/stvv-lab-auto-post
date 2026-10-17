@@ -508,6 +508,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/18d3301fe5d3b9cc5e27c5615ad72808fab6d455/generated/player_lab.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-17_compare": {
+      "slot": "compare",
+      "source": null,
+      "text": "同じパス成功率でも、意味は違う。\n\n安全につなぐパスと、相手の守備を動かすパス。STVVを比較するときは、まずそこを分けたい。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/af26675a62f4a4e06096dd6344e44d8cfa7f5ea5/generated/topic_compare.png",
+      "created_at": "2026-10-17T10:55:24.994854+09:00"
+    }
+  },
   "tracked_topics": {}
 }
