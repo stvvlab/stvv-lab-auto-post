@@ -530,6 +530,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/bd8e49527bad76c61b4188143adcd1b433daea7e/generated/content_2026-10-17_data.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-17_analysis": {
+      "slot": "analysis",
+      "source": "thesportsdb:2594772",
+      "text": "🧠 STVV攻撃データ\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nシュート20本／枠内5本\n枠内率：約25.0%\n決定機の質は別途検証が必要です。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/82d8508f8ff6311499225938c5ad0b32ccbf550a/generated/content_2026-10-17_analysis.png",
+      "created_at": "2026-10-17T16:08:13.513862+09:00"
+    }
+  },
   "tracked_topics": {}
 }
