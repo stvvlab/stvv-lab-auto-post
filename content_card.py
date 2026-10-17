@@ -22,8 +22,8 @@ def font(size):
 
 
 def clean(message):
-    text = re.sub(r"https?://\\S+", "", message)
-    text = re.sub(r"(?<!\\w)#[^\\s#]+", "", text)
+    text = re.sub(r"https?://\S+", "", message)
+    text = re.sub(r"(?<!\w)#[^\s#]+", "", text)
     return text.strip() or "STVV LAB"
 
 
