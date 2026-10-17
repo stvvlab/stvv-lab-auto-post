@@ -686,6 +686,47 @@ def generic_topic_media(slot):
         return None
 
 
+
+def content_card_media(slot, day, message):
+    """Create a post-specific, faceless card and publish it before Buffer."""
+    try:
+        from content_card import render_content_card
+        path = Path("generated") / f"content_{day}_{slot}.png"
+        render_content_card(slot, message, path)
+        git("config", "user.name", "github-actions[bot]")
+        git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
+        git("add", "--", str(path))
+        changed = subprocess.run(["git", "diff", "--cached", "--quiet"])
+        if changed.returncode == 1:
+            git("commit", "-m", f"Create {slot} content card for {day}")
+            git("push")
+        elif changed.returncode != 0:
+            raise RuntimeError("card git diff failed")
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+        url = (
+            "https://raw.githubusercontent.com/stvvlab/"
+            f"stvv-lab-auto-post/{revision}/{path.as_posix()}"
+        )
+        local_hash = hashlib.sha256(path.read_bytes()).digest()
+        import time
+        for attempt in range(5):
+            try:
+                response = SESSION.get(url, timeout=15)
+                response.raise_for_status()
+                if hashlib.sha256(response.content).digest() == local_hash:
+                    log(f"投稿内容入り画像を公開・検証済み: {path}")
+                    return url
+            except requests.RequestException as error:
+                log(f"画像公開待ち {attempt + 1}/5: {error}")
+            if attempt < 4:
+                time.sleep(3)
+        log("投稿内容入り画像の公開を確認できず、固定画像へフォールバック")
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError,
+            requests.RequestException) as error:
+        log(f"投稿内容入り画像生成不可: {error}")
+    return None
+
+
 def media_for(source, slot):
     """Attach only a committed image from the exact verified match."""
     if slot not in {"compare", "data", "analysis", "recap"}:
@@ -969,7 +1010,7 @@ def main():
         slot,
         source,
         news_url,
-        faceless_player_media(slot, source) or media_for(source, slot) or generic_topic_media(slot),
+        content_card_media(slot, day, message) or faceless_player_media(slot, source) or media_for(source, slot) or generic_topic_media(slot),
     )
 
 
