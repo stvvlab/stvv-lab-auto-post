@@ -91,7 +91,8 @@
     "daily_2026-10-17_compare",
     "daily_2026-10-17_data",
     "daily_2026-10-17_analysis",
-    "daily_2026-10-17_news"
+    "daily_2026-10-17_news",
+    "daily_2026-10-17_vote"
   ],
   "publication_log": [
     {
@@ -550,16 +551,18 @@
       "submitted_at": "2026-10-17T18:13:14.448785+09:00",
       "text": "STVVで今、一番追いかけたい話題は？\n\n日本人選手の起用、クラブの編成、それとも次の試合。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/6c91d077fbd846b5380605b30846a40f64858a67/generated/content_2026-10-17_news.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-17_vote": {
+    },
+    {
+      "key": "daily_2026-10-17_vote",
       "slot": "vote",
       "source": "thesportsdb:2594772",
+      "buffer_id": "6ad368800a208cb3231cf2cc",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-17T21:22:26.673033+09:00",
       "text": "🗳️ STVVファンに質問\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nこの試合で最も印象に残った場面は？\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/e6e3826d505d3d00e2f1836f705eb88e4ac8f885/generated/content_2026-10-17_vote.png",
-      "created_at": "2026-10-17T21:22:22.813105+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/e6e3826d505d3d00e2f1836f705eb88e4ac8f885/generated/content_2026-10-17_vote.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
