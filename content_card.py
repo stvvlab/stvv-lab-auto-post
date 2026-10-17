@@ -1,20 +1,17 @@
-"""Generate factual, post-specific, portrait-free Japanese social cards."""
+"""Seven content-aware, portrait-free STVV LAB editorial layouts."""
 import re
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 1080, 1350
-NAVY, BLUE, YELLOW, WHITE = "#06172C", "#123D71", "#FFD400", "#F7FAFF"
-LABELS = {
-    "player": "PLAYER LAB", "compare": "COMPARE", "data": "DATA LAB",
-    "analysis": "TACTICS", "news": "STVV NEWS", "vote": "FAN VOICE",
-    "recap": "MATCH REVIEW",
-}
-FONTS = [
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-    "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-]
+NAVY, DARK, BLUE = "#06172C", "#030C18", "#123D71"
+YELLOW, WHITE, MUTED = "#FFD400", "#F7FAFF", "#B9C8DC"
+LABELS = {"player": "PLAYER LAB", "compare": "COMPARE", "data": "DATA LAB",
+          "analysis": "TACTICS", "news": "STVV NEWS", "vote": "FAN VOICE",
+          "recap": "MATCH REVIEW"}
+FONTS = ["/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+         "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]
 
 
 def font(size):
@@ -24,54 +21,105 @@ def font(size):
     raise RuntimeError("Japanese-compatible font unavailable")
 
 
-def wrap(draw, text, face, max_width):
-    lines = []
-    for paragraph in text.split("\n"):
+def clean(message):
+    text = re.sub(r"https?://\\S+", "", message)
+    text = re.sub(r"(?<!\\w)#[^\\s#]+", "", text)
+    return text.strip() or "STVV LAB"
+
+
+def wrap(draw, text, face, width):
+    result = []
+    for paragraph in text.splitlines():
         line = ""
-        for char in paragraph:
-            trial = line + char
-            if line and draw.textbbox((0, 0), trial, font=face)[2] > max_width:
-                lines.append(line)
+        for char in paragraph.strip():
+            next_line = line + char
+            if line and draw.textbbox((0, 0), next_line, font=face)[2] > width:
+                result.append(line)
                 line = char
             else:
-                line = trial
+                line = next_line
         if line:
-            lines.append(line)
-    return lines
+            result.append(line)
+    return result
+
+
+def fit(draw, text, width, height, max_size=70, min_size=28):
+    for size in range(max_size, min_size - 1, -2):
+        face = font(size)
+        lines = wrap(draw, text, face, width)
+        step = size + 19
+        if len(lines) * step <= height:
+            return face, lines, step
+    raise ValueError("Text too long for legible card")
+
+
+def write(draw, text, x, y, width, height, color=WHITE, max_size=70):
+    face, lines, step = fit(draw, text, width, height, max_size)
+    for line in lines:
+        draw.text((x, y), line, font=face, fill=color)
+        y += step
+    return y
+
+
+def pitch(draw, x, y, width, height):
+    ink = "#4475A7"
+    draw.rounded_rectangle((x, y, x+width, y+height), radius=12, outline=ink, width=5)
+    draw.line((x+width//2, y, x+width//2, y+height), fill=ink, width=4)
+    draw.ellipse((x+width//2-70, y+height//2-70,
+                  x+width//2+70, y+height//2+70), outline=ink, width=4)
+    for dx, dy in [(140, 125), (width//2, height//2), (width-140, height-125)]:
+        draw.ellipse((x+dx-14, y+dy-14, x+dx+14, y+dy+14), fill=YELLOW)
+    draw.line((x+140, y+125, x+width//2, y+height//2), fill=YELLOW, width=8)
+    draw.line((x+width//2, y+height//2, x+width-140, y+height-125), fill=YELLOW, width=8)
 
 
 def render_content_card(slot, message, destination):
     if slot not in LABELS:
         raise ValueError("Unknown slot")
-    # Use exactly the already-approved post text, never invent facts or stats.
-    body = re.sub(r"https?://\S+", "", message)
-    body = re.sub(r"#(?:STVV|シントトロイデン|STVVLAB)\S*", "", body)
-    body = re.sub(r"^[^\w\u3040-\u30ff\u3400-\u9fff]+", "", body.strip())
-    body = body.strip() or "STVV LAB"
+    body = clean(message)
     image = Image.new("RGB", (W, H), NAVY)
-    draw = ImageDraw.Draw(image)
-    draw.polygon([(720, 0), (1080, 0), (1080, 1080), (800, 1080), (430, 380)], fill=BLUE)
-    draw.rectangle((0, 0, W, 18), fill=YELLOW)
-    draw.text((65, 70), "STVV LAB", font=font(64), fill=WHITE)
-    draw.rounded_rectangle((65, 200, 570, 285), radius=12, fill=YELLOW)
-    draw.text((87, 218), LABELS[slot], font=font(41), fill=NAVY)
-    draw.line((65, 345, 1010, 345), fill=YELLOW, width=5)
+    d = ImageDraw.Draw(image)
+    d.polygon([(640, 0), (1080, 0), (1080, 1080), (860, 1080), (430, 420)], fill=BLUE)
+    d.rectangle((0, 0, W, 16), fill=YELLOW)
+    d.text((64, 60), "STVV LAB", font=font(60), fill=WHITE)
+    d.text((68, 145), "INDEPENDENT FOOTBALL ANALYSIS", font=font(24), fill=MUTED)
+    d.rounded_rectangle((64, 220, 560, 304), radius=9, fill=YELLOW)
+    d.text((84, 237), LABELS[slot], font=font(41), fill=DARK)
+    d.line((64, 348, 1016, 348), fill=YELLOW, width=5)
 
-    # Size to fit all essential lines without clipping.
-    for size in (68, 61, 54, 48, 42, 36):
-        face = font(size)
-        lines = wrap(draw, body, face, 920)
-        line_height = size + 24
-        if len(lines) * line_height <= 720:
-            break
+    if slot == "compare":
+        d.rounded_rectangle((64, 385, 1016, 570), radius=18, fill=DARK)
+        d.line((540, 398, 540, 560), fill=YELLOW, width=4)
+        d.text((108, 405), "A", font=font(98), fill=WHITE)
+        d.text((610, 405), "B", font=font(98), fill=YELLOW)
+        write(d, body, 74, 625, 920, 475, max_size=65)
+    elif slot == "data":
+        for i, width in enumerate((330, 510, 720)):
+            y = 420 + i*110
+            d.rounded_rectangle((78, y, 78+width, y+42), radius=9,
+                                fill=[BLUE, "#4475A7", YELLOW][i])
+        d.text((75, 770), "DATA / CONTEXT", font=font(36), fill=YELLOW)
+        write(d, body, 74, 850, 920, 260, max_size=52)
+    elif slot == "analysis":
+        pitch(d, 75, 390, 930, 385)
+        write(d, body, 74, 825, 920, 300, max_size=54)
+    elif slot == "news":
+        d.rectangle((64, 394, 76, 1090), fill=YELLOW)
+        write(d, body, 110, 430, 870, 640, max_size=76)
+    elif slot == "vote":
+        write(d, body, 74, 395, 920, 720, max_size=67)
+        d.text((72, 1110), "YOUR VOICE MATTERS", font=font(32), fill=YELLOW)
+    elif slot == "recap":
+        d.rounded_rectangle((64, 390, 1016, 510), radius=12, fill=DARK)
+        d.text((95, 415), "MATCH REVIEW", font=font(54), fill=YELLOW)
+        write(d, body, 74, 565, 920, 555, max_size=65)
     else:
-        raise ValueError("Post text too long for readable card")
-    y = 395
-    for line in lines:
-        draw.text((65, y), line, font=face, fill=WHITE)
-        y += line_height
-    draw.rectangle((0, 1190, W, H), fill="#04101F")
-    draw.text((65, 1235), "STVV LAB  |  INDEPENDENT FOOTBALL MEDIA", font=font(28), fill=YELLOW)
+        d.ellipse((740, 395, 1020, 675), outline=YELLOW, width=11)
+        write(d, body, 74, 415, 910, 690, max_size=67)
+
+    d.rectangle((0, 1185, W, H), fill=DARK)
+    d.line((64, 1210, 1016, 1210), fill=BLUE, width=4)
+    d.text((65, 1240), "STVV LAB  |  FOOTBALL INSIGHT", font=font(31), fill=YELLOW)
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     image.save(destination, format="PNG", optimize=True)
