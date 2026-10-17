@@ -552,6 +552,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/6c91d077fbd846b5380605b30846a40f64858a67/generated/content_2026-10-17_news.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-17_vote": {
+      "slot": "vote",
+      "source": "thesportsdb:2594772",
+      "text": "🗳️ STVVファンに質問\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nこの試合で最も印象に残った場面は？\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/e6e3826d505d3d00e2f1836f705eb88e4ac8f885/generated/content_2026-10-17_vote.png",
+      "created_at": "2026-10-17T21:22:22.813105+09:00"
+    }
+  },
   "tracked_topics": {}
 }
