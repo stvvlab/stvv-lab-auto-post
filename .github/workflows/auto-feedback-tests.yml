@@ -5,6 +5,7 @@ on:
     paths:
       - 'auto_feedback.py'
       - 'content_card.py'
+      - 'discovery_brief.py'
       - 'tests/**'
       - '.github/workflows/auto-feedback-tests.yml'
   workflow_dispatch:
