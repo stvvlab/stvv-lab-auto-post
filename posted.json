@@ -87,7 +87,8 @@
     "daily_2026-10-16_news",
     "daily_2026-10-16_vote",
     "daily_2026-10-16_recap",
-    "daily_2026-10-17_player"
+    "daily_2026-10-17_player",
+    "daily_2026-10-17_compare"
   ],
   "publication_log": [
     {
@@ -506,16 +507,18 @@
       "submitted_at": "2026-10-17T08:14:21.843047+09:00",
       "text": "STVVの日本人選手、次に深掘りするなら誰？🇯🇵\n\nプレーの数字と映像、両方を並べて見てみたい。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/18d3301fe5d3b9cc5e27c5615ad72808fab6d455/generated/player_lab.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-17_compare": {
+    },
+    {
+      "key": "daily_2026-10-17_compare",
       "slot": "compare",
       "source": null,
+      "buffer_id": "6ad2d58e52adf2bfae6ebdaa",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-17T10:55:28.800519+09:00",
       "text": "同じパス成功率でも、意味は違う。\n\n安全につなぐパスと、相手の守備を動かすパス。STVVを比較するときは、まずそこを分けたい。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/af26675a62f4a4e06096dd6344e44d8cfa7f5ea5/generated/topic_compare.png",
-      "created_at": "2026-10-17T10:55:24.994854+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/af26675a62f4a4e06096dd6344e44d8cfa7f5ea5/generated/topic_compare.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
