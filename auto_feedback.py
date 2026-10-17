@@ -258,6 +258,11 @@ def daily_report(feedback, history, now):
         lines.append("")
     else:
         lines.extend(["表示回数の実測値はまだ取得できていません。未取得は0回として扱いません。", ""])
+    lines.append("## 投稿形式の自動改善")
+    lines.append("- 各形式につき評価済み投稿が3件以上集まるまで、形式の優劣は判断しません。")
+    lines.append("- 手動評価を優先し、十分な実績がある形式を次回の候補選択に反映します。")
+    lines.append("- 画像の良し悪しは本文の反応だけでは判定できないため、画像デザインの自動変更は保留します。")
+    lines.append("")
     lines.append("## 次の改善事項")
     if total == 0:
         lines.append("- 前日の投稿登録がありません。GitHub Actionsの実行履歴とBufferを照合してください。")
