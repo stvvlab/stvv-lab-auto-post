@@ -269,10 +269,54 @@ def auto_feedback_scores(history):
         return {}
 
 
+def learned_style_scores(slot, history_for_style):
+    """Prefer a style only after enough independently rated publications."""
+    try:
+        data = json.loads(FEEDBACK_FILE.read_text(encoding="utf-8"))
+        if not data.get("settings", {}).get("auto_improvement_enabled", False):
+            return {}
+        candidates = {
+            normalize_text(text): style for style, text in STYLE_POSTS.get(slot, [])
+        }
+        published = {
+            post.get("key"): post for post in history_for_style
+            if isinstance(post, dict) and post.get("slot") == slot
+        }
+        manual = {
+            item.get("post_key"): item.get("rating")
+            for item in data.get("feedback", [])
+            if isinstance(item, dict) and type(item.get("rating")) is int
+            and 1 <= item["rating"] <= 5
+        }
+        automatic = {
+            item.get("post_key"): item.get("rating")
+            for item in data.get("automatic_feedback", [])
+            if isinstance(item, dict) and type(item.get("rating")) is int
+            and 1 <= item["rating"] <= 5
+        }
+        observations = {}
+        for key, post in published.items():
+            style = candidates.get(normalize_text(post.get("text", "")))
+            if not style:
+                continue
+            rating = manual.get(key, automatic.get(key))
+            if rating is not None:
+                observations.setdefault(style, []).append(rating)
+        # Three rated posts per style prevent a single low-view post
+        # from determining future content. Manual ratings take precedence.
+        return {
+            style: sum(ratings) / len(ratings)
+            for style, ratings in observations.items()
+            if len(ratings) >= 3
+        }
+    except (OSError, ValueError, TypeError, AttributeError) as error:
+        log(f"スタイル学習を見送り: {error}")
+        return {}
+
+
 def choose_fallback(slot, day, scores, automatic=None, history_for_style=None):
-    """Avoid repeating exact text rated 1 or 2."""
+    """Rotate verified text; learn style preference only from enough ratings."""
     history_for_style = history_for_style or []
-    # Natural, human-edited options; legacy text remains as emergency fallback.
     options = STYLE_POSTS.get(slot, [])
     recent = {
         normalize_text(p.get("text", ""))
@@ -284,32 +328,36 @@ def choose_fallback(slot, day, scores, automatic=None, history_for_style=None):
             datetime.strptime(day, "%Y-%m-%d").date().toordinal()
             + list(TOPICS).index(slot) * 3
         ) % len(options)
-        ordered_options = options[start:] + options[:start]
+        ordered = options[start:] + options[:start]
         candidates = [
-            text for style, text in ordered_options
+            (style, text) for style, text in ordered
             if scores.get(normalize_text(text), 3) >= 3
         ]
-        unseen = [text for text in candidates if normalize_text(text) not in recent]
-        if unseen:
-            return unseen[0]
-        if candidates:
-            return candidates[0]
+        unseen = [(style, text) for style, text in candidates
+                  if normalize_text(text) not in recent]
+        pool = unseen or candidates
+        if pool:
+            preferences = learned_style_scores(slot, history_for_style)
+            if preferences:
+                best = max(preferences.get(style, 3.0) for style, _ in pool)
+                for style, text in pool:
+                    if preferences.get(style, 3.0) == best:
+                        log(f"フィードバック反映: {slot} / {style} / 評価 {best:.2f}")
+                        return text
+            return pool[0][1]
     topics = TOPICS[slot]
     index = (
         datetime.strptime(day, "%Y-%m-%d").date().toordinal()
         + list(TOPICS).index(slot) * 7
     ) % len(topics)
-
     ordered = topics[index:] + topics[:index]
-
-    eligible = [candidate for candidate in ordered
-                if scores.get(normalize_text(candidate), 3) >= 3]
+    eligible = [text for text in ordered
+                if scores.get(normalize_text(text), 3) >= 3]
     if not eligible:
         return None
     automatic = automatic or {}
-    # Preserve the rotating order unless measured scores distinguish texts.
-    return max(eligible, key=lambda candidate:
-               automatic.get(normalize_text(candidate), 3.0))
+    return max(eligible, key=lambda text:
+               automatic.get(normalize_text(text), 3.0))
 
 
 def slot_for_run(now):
