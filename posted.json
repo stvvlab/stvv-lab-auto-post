@@ -96,7 +96,8 @@
     "daily_2026-10-17_recap",
     "daily_2026-10-18_player",
     "daily_2026-10-18_compare",
-    "daily_2026-10-18_data"
+    "daily_2026-10-18_data",
+    "daily_2026-10-18_analysis"
   ],
   "publication_log": [
     {
@@ -605,16 +606,18 @@
       "submitted_at": "2026-10-18T12:57:23.191654+09:00",
       "text": "📊 STVV試合データ\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nシュート：20 対 4\n枠内：5 対 1\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/282e0cca2a8b5ea19ff567483ecb53c1e33686d3/generated/content_2026-10-18_data.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-18_analysis": {
+    },
+    {
+      "key": "daily_2026-10-18_analysis",
       "slot": "analysis",
       "source": "thesportsdb:2594772",
+      "buffer_id": "6ad47040938409f1d0bd357e",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-18T16:07:45.860354+09:00",
       "text": "🧠 STVV攻撃データ\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nシュート20本／枠内5本\n枠内率：約25.0%\n決定機の質は別途検証が必要です。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/46fe7356aaabb22926cb0007c84a2c583e498c60/generated/content_2026-10-18_analysis.png",
-      "created_at": "2026-10-18T16:07:42.962824+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/46fe7356aaabb22926cb0007c84a2c583e498c60/generated/content_2026-10-18_analysis.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
