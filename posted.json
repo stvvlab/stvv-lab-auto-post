@@ -99,7 +99,8 @@
     "daily_2026-10-18_data",
     "daily_2026-10-18_analysis",
     "daily_2026-10-18_news",
-    "daily_2026-10-18_vote"
+    "daily_2026-10-18_vote",
+    "daily_2026-10-18_recap"
   ],
   "publication_log": [
     {
@@ -638,16 +639,18 @@
       "submitted_at": "2026-10-18T21:22:24.102484+09:00",
       "text": "🗳️ STVVファンに質問\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nこの試合で最も印象に残った場面は？\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a641ec2e9d313dcbcf76bb01db9b9bb4f16e8e1e/generated/content_2026-10-18_vote.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-18_recap": {
+    },
+    {
+      "key": "daily_2026-10-18_recap",
       "slot": "recap",
       "source": "thesportsdb:2594772",
+      "buffer_id": "6ad4d495769b457934c6db02",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-18T23:15:50.930288+09:00",
       "text": "⚽ STVV試合結果\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\n結果：勝利。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f9952c3bc28033c2453271fdbf96d86c93da9e0a/generated/content_2026-10-18_recap.png",
-      "created_at": "2026-10-18T23:15:48.132640+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f9952c3bc28033c2453271fdbf96d86c93da9e0a/generated/content_2026-10-18_recap.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
