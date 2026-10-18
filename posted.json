@@ -100,7 +100,8 @@
     "daily_2026-10-18_analysis",
     "daily_2026-10-18_news",
     "daily_2026-10-18_vote",
-    "daily_2026-10-18_recap"
+    "daily_2026-10-18_recap",
+    "daily_2026-10-19_player"
   ],
   "publication_log": [
     {
@@ -649,16 +650,18 @@
       "submitted_at": "2026-10-18T23:15:50.930288+09:00",
       "text": "⚽ STVV試合結果\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\n結果：勝利。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f9952c3bc28033c2453271fdbf96d86c93da9e0a/generated/content_2026-10-18_recap.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-19_player": {
+    },
+    {
+      "key": "daily_2026-10-19_player",
       "slot": "player",
       "source": null,
+      "buffer_id": "6ad551f3ae173d6e00203f92",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-19T08:10:45.964522+09:00",
       "text": "🇯🇵 目立つプレーだけで選手を判断するのは、ちょっともったいない。\n\nSTVVの日本人選手を見るなら、ボールを受ける前の動きも面白い。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/d560aba3ce52aa61bc4b7742b95bebc8607498ea/generated/content_2026-10-19_player.png",
-      "created_at": "2026-10-19T08:10:42.383657+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/d560aba3ce52aa61bc4b7742b95bebc8607498ea/generated/content_2026-10-19_player.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
