@@ -596,6 +596,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/dd0c719345d7bc33789ab25617a94b82e4ffa82c/generated/content_2026-10-18_compare.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-18_data": {
+      "slot": "data",
+      "source": "thesportsdb:2594772",
+      "text": "📊 STVV試合データ\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nシュート：20 対 4\n枠内：5 対 1\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/282e0cca2a8b5ea19ff567483ecb53c1e33686d3/generated/content_2026-10-18_data.png",
+      "created_at": "2026-10-18T12:57:19.521838+09:00"
+    }
+  },
   "tracked_topics": {}
 }
