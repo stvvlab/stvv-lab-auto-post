@@ -618,6 +618,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/46fe7356aaabb22926cb0007c84a2c583e498c60/generated/content_2026-10-18_analysis.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-18_news": {
+      "slot": "news",
+      "source": null,
+      "text": "📰 STVVの新情報をチェックするときは、\n\n①公式の発表日\n②対象の選手・試合\n③確定した内容\n\nこの3つを最初に確認します。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9201a50e68695d6e284a9787372e25dc542af78d/generated/content_2026-10-18_news.png",
+      "created_at": "2026-10-18T18:13:09.253477+09:00"
+    }
+  },
   "tracked_topics": {}
 }
