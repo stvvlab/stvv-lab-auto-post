@@ -95,7 +95,8 @@
     "daily_2026-10-17_vote",
     "daily_2026-10-17_recap",
     "daily_2026-10-18_player",
-    "daily_2026-10-18_compare"
+    "daily_2026-10-18_compare",
+    "daily_2026-10-18_data"
   ],
   "publication_log": [
     {
@@ -594,16 +595,18 @@
       "submitted_at": "2026-10-18T10:55:59.840775+09:00",
       "text": "⚔️ シュート数比較\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nSTVV 20／相手 4\n本数と決定機の質は区別して評価します。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/dd0c719345d7bc33789ab25617a94b82e4ffa82c/generated/content_2026-10-18_compare.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-18_data": {
+    },
+    {
+      "key": "daily_2026-10-18_data",
       "slot": "data",
       "source": "thesportsdb:2594772",
+      "buffer_id": "6ad443a10b0d72757a0776d4",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-18T12:57:23.191654+09:00",
       "text": "📊 STVV試合データ\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nシュート：20 対 4\n枠内：5 対 1\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/282e0cca2a8b5ea19ff567483ecb53c1e33686d3/generated/content_2026-10-18_data.png",
-      "created_at": "2026-10-18T12:57:19.521838+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/282e0cca2a8b5ea19ff567483ecb53c1e33686d3/generated/content_2026-10-18_data.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
