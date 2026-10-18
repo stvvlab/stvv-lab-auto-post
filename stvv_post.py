@@ -961,9 +961,9 @@ def image_teaser(slot, detail, source=None):
     # Never conceal an official news URL: retain access to the primary source.
     url = source if isinstance(source, str) and source.startswith("https://stvv.jp/") else None
     caption = hooks.get(slot, "🔎 STVV LABの注目ポイント")
-    caption += "\\n\\n👇 画像をタップして詳しくチェック！"
+    caption += "\n\n👇 画像をタップして詳しくチェック！"
     if url:
-        caption += "\\n公式情報：" + url
+        caption += "\n公式情報：" + url
     return caption
 
 
