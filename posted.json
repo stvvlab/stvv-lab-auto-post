@@ -97,7 +97,8 @@
     "daily_2026-10-18_player",
     "daily_2026-10-18_compare",
     "daily_2026-10-18_data",
-    "daily_2026-10-18_analysis"
+    "daily_2026-10-18_analysis",
+    "daily_2026-10-18_news"
   ],
   "publication_log": [
     {
@@ -616,16 +617,18 @@
       "submitted_at": "2026-10-18T16:07:45.860354+09:00",
       "text": "🧠 STVV攻撃データ\n2026-10-15｜ホーム\nSTVV 2–0 Iberia 1999\nシュート20本／枠内5本\n枠内率：約25.0%\n決定機の質は別途検証が必要です。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/46fe7356aaabb22926cb0007c84a2c583e498c60/generated/content_2026-10-18_analysis.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-18_news": {
+    },
+    {
+      "key": "daily_2026-10-18_news",
       "slot": "news",
       "source": null,
+      "buffer_id": "6ad48da6ae173d6e00f4365b",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-18T18:13:11.835973+09:00",
       "text": "📰 STVVの新情報をチェックするときは、\n\n①公式の発表日\n②対象の選手・試合\n③確定した内容\n\nこの3つを最初に確認します。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9201a50e68695d6e284a9787372e25dc542af78d/generated/content_2026-10-18_news.png",
-      "created_at": "2026-10-18T18:13:09.253477+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9201a50e68695d6e284a9787372e25dc542af78d/generated/content_2026-10-18_news.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
