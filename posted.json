@@ -651,6 +651,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f9952c3bc28033c2453271fdbf96d86c93da9e0a/generated/content_2026-10-18_recap.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-19_player": {
+      "slot": "player",
+      "source": null,
+      "text": "🇯🇵 目立つプレーだけで選手を判断するのは、ちょっともったいない。\n\nSTVVの日本人選手を見るなら、ボールを受ける前の動きも面白い。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/d560aba3ce52aa61bc4b7742b95bebc8607498ea/generated/content_2026-10-19_player.png",
+      "created_at": "2026-10-19T08:10:42.383657+09:00"
+    }
+  },
   "tracked_topics": {}
 }
