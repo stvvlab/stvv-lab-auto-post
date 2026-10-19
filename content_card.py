@@ -1,152 +1,213 @@
-"""Seven content-aware, portrait-free STVV LAB editorial layouts."""
+"""STVV LAB: seven bold, fact-safe, portrait-free football editorial posters."""
+import math
 import re
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 1080, 1350
-NAVY, DARK, BLUE = "#06172C", "#030C18", "#123D71"
-YELLOW, WHITE, MUTED = "#FFD400", "#F7FAFF", "#B9C8DC"
-LABELS = {"player": "PLAYER LAB", "compare": "COMPARE", "data": "DATA LAB",
-          "analysis": "TACTICS", "news": "STVV NEWS", "vote": "FAN VOICE",
-          "recap": "MATCH REVIEW"}
-FONTS = ["/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-         "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
-         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]
+NAVY, INK, BLUE = "#061529", "#020A15", "#1462B3"
+YELLOW, WHITE, MUTED = "#FFE000", "#FFFFFF", "#B9CCE0"
+LABELS = {
+    "player": ("PLAYER", "ANALYSIS"), "compare": ("HEAD TO", "HEAD"),
+    "data": ("DATA", "INSIGHTS"), "analysis": ("TACTICS", "ANALYSIS"),
+    "news": ("NEWS", "UPDATE"), "vote": ("FAN", "VOICE"),
+    "recap": ("MATCH", "REVIEW"),
+}
+FONTS = [
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+]
 
 
 def font(size):
-    for name in FONTS:
-        if Path(name).exists():
-            return ImageFont.truetype(name, size)
+    for path in FONTS:
+        if Path(path).exists():
+            return ImageFont.truetype(path, size)
     raise RuntimeError("Japanese-compatible font unavailable")
 
 
 def clean(message):
-    text = re.sub(r"https?://\S+", "", message)
-    text = re.sub(r"(?<!\w)#[^\s#]+", "", text)
-    return text.strip() or "STVV LAB"
+    message = re.sub(r"https?://\S+", "", message)
+    message = re.sub(r"(?<!\w)#[^\s#]+", "", message)
+    return message.strip() or "STVV LAB"
 
 
-def wrap(draw, text, face, width):
+def lines(draw, text, face, max_width):
     result = []
     for paragraph in text.splitlines():
-        line = ""
+        current = ""
         for char in paragraph.strip():
-            next_line = line + char
-            if line and draw.textbbox((0, 0), next_line, font=face)[2] > width:
-                result.append(line)
-                line = char
+            trial = current + char
+            if current and draw.textbbox((0, 0), trial, font=face)[2] > max_width:
+                result.append(current)
+                current = char
             else:
-                line = next_line
-        if line:
-            result.append(line)
+                current = trial
+        if current:
+            result.append(current)
     return result
 
 
-def fit(draw, text, width, height, max_size=70, min_size=28):
-    for size in range(max_size, min_size - 1, -2):
-        face = font(size)
-        lines = wrap(draw, text, face, width)
-        step = size + 19
-        if len(lines) * step <= height:
-            return face, lines, step
-    raise ValueError("Text too long for legible card")
-
-
-def write(draw, text, x, y, width, height, color=WHITE, max_size=70):
-    face, lines, step = fit(draw, text, width, height, max_size)
-    for line in lines:
+def write(draw, text, x, y, width, height, color=WHITE, size=59):
+    for pt in range(size, 25, -2):
+        face = font(pt)
+        wrapped = lines(draw, text, face, width)
+        step = pt + 16
+        if len(wrapped) * step <= height:
+            for line in wrapped:
+                draw.text((x, y), line, font=face, fill=color, stroke_width=0)
+                y += step
+            return y
+    # Preserve the start of a long story, with a visible truncation indicator.
+    face = font(26)
+    step = 40
+    allowed = max(1, height // step)
+    wrapped = lines(draw, text, face, width)
+    for line in wrapped[:allowed - 1]:
         draw.text((x, y), line, font=face, fill=color)
         y += step
-    return y
+    draw.text((x, y), (wrapped[allowed - 1][:22] + "…") if len(wrapped) >= allowed else "…",
+              font=face, fill=color)
+    return y + step
 
 
-def pitch(draw, x, y, width, height):
-    ink = "#4475A7"
-    draw.rounded_rectangle((x, y, x+width, y+height), radius=12, outline=ink, width=5)
-    draw.line((x+width//2, y, x+width//2, y+height), fill=ink, width=4)
-    draw.ellipse((x+width//2-70, y+height//2-70,
-                  x+width//2+70, y+height//2+70), outline=ink, width=4)
-    for dx, dy in [(140, 125), (width//2, height//2), (width-140, height-125)]:
-        draw.ellipse((x+dx-14, y+dy-14, x+dx+14, y+dy+14), fill=YELLOW)
-    draw.line((x+140, y+125, x+width//2, y+height//2), fill=YELLOW, width=8)
-    draw.line((x+width//2, y+height//2, x+width-140, y+height-125), fill=YELLOW, width=8)
+def slash(draw, y, color=YELLOW, thickness=36):
+    draw.polygon([(0, y+140), (W, y-100), (W, y-100+thickness),
+                  (0, y+140+thickness)], fill=color)
+
+
+def grit(draw, color="#17345B"):
+    # Deterministic editorial texture, no photo rights or external assets.
+    for i in range(35):
+        x = (i * 197 + 41) % W
+        y = (i * 389 + 107) % 1130
+        draw.line((x, y, x+34, y-8), fill=color, width=2)
+
+
+def brand(draw, number):
+    draw.rectangle((0, 0, W, 17), fill=YELLOW)
+    draw.text((55, 39), "STVV LAB", font=font(44), fill=WHITE)
+    draw.text((810, 53), f"0{number} / 07", font=font(27), fill=YELLOW)
+
+
+def headline(draw, slot, y=170, size=112):
+    first, second = LABELS[slot]
+    draw.text((51, y), first, font=font(size), fill=WHITE,
+              stroke_width=2, stroke_fill=INK)
+    draw.text((51, y+size-5), second, font=font(size), fill=YELLOW,
+              stroke_width=2, stroke_fill=INK)
+
+
+def panel(draw, text, y, height=360, color=WHITE):
+    draw.rounded_rectangle((46, y-24, 1034, y+height), radius=18, fill="#07182D")
+    draw.rectangle((46, y-24, 57, y+height), fill=YELLOW)
+    write(draw, text, 88, y+12, 905, height-54, color=color, size=60)
+
+
+def footer(draw, slot):
+    draw.rectangle((0, 1194, W, H), fill=INK)
+    draw.line((50, 1215, 1030, 1215), fill=YELLOW, width=5)
+    draw.text((55, 1243), "STVV LAB  /  FOOTBALL ANALYSIS", font=font(31), fill=WHITE)
+    draw.text((900, 1246), slot.upper(), font=font(20), fill=YELLOW)
+
+
+def pitch(draw, x, y, w, h):
+    draw.rounded_rectangle((x, y, x+w, y+h), radius=12,
+                           fill="#0C433B", outline=WHITE, width=4)
+    draw.line((x+w//2, y, x+w//2, y+h), fill="#82B6AA", width=4)
+    draw.ellipse((x+w//2-60, y+h//2-60, x+w//2+60, y+h//2+60),
+                 outline="#82B6AA", width=4)
+    for px, py in [(0.15, 0.3), (0.33, 0.68), (0.54, 0.40), (0.76, 0.67)]:
+        cx, cy = x+int(w*px), y+int(h*py)
+        draw.ellipse((cx-17, cy-17, cx+17, cy+17), fill=YELLOW)
+    # Decorative schematic, not a claimed match event.
+    draw.line((x+int(w*.15), y+int(h*.3), x+int(w*.33), y+int(h*.68),
+               x+int(w*.54), y+int(h*.4), x+int(w*.76), y+int(h*.67)),
+              fill=YELLOW, width=9)
 
 
 def render_content_card(slot, message, destination):
     if slot not in LABELS:
         raise ValueError("Unknown slot")
     body = clean(message)
-    # Seven visibly distinct visual identities, not one shared template.
-    backgrounds = {
-        "player": "#071B37", "compare": "#101127", "data": "#F1F5FA",
-        "analysis": "#07352E", "news": "#F5D423",
-        "vote": "#291C52", "recap": "#101820",
-    }
-    light = slot in {"data", "news"}
-    foreground = DARK if light else WHITE
-    image = Image.new("RGB", (W, H), backgrounds[slot])
-    d = ImageDraw.Draw(image)
+    im = Image.new("RGB", (W, H), NAVY)
+    d = ImageDraw.Draw(im)
+    grit(d)
+    number = list(LABELS).index(slot)+1
+
     if slot == "player":
-        d.ellipse((620, 170, 1200, 750), outline=YELLOW, width=25)
-        d.rectangle((0, 0, 26, 1180), fill=YELLOW)
+        d.ellipse((595, 340, 1260, 1000), outline=BLUE, width=36)
+        d.ellipse((705, 445, 950, 690), fill="#193E6C", outline=YELLOW, width=12)
+        d.polygon([(590, 1010), (670, 720), (950, 720), (1040, 1010)], fill="#174A8A")
+        d.text((746, 750), "10", font=font(155), fill=YELLOW)
+        slash(d, 950)
+        brand(d, number)
+        headline(d, slot, 165, 106)
+        panel(d, body, 830, 335)
+
     elif slot == "compare":
-        d.polygon([(0, 0), (540, 0), (540, 1180), (0, 900)], fill="#183D77")
-        d.polygon([(540, 0), (1080, 0), (1080, 900), (540, 1180)], fill="#332C55")
-    elif slot == "data":
-        d.rectangle((0, 0, 1080, 355), fill=BLUE)
-    elif slot == "analysis":
-        d.rectangle((0, 0, 1080, 355), fill="#09271F")
-        d.line((0, 355, 1080, 355), fill=YELLOW, width=12)
-    elif slot == "news":
-        d.polygon([(730, 0), (1080, 0), (1080, 1180), (920, 1180)], fill="#E8B910")
-    elif slot == "vote":
-        for x in (70, 290, 510, 730, 950):
-            d.ellipse((x-150, -180, x+150, 120), outline="#56498E", width=12)
-    elif slot == "recap":
-        d.rectangle((0, 0, 1080, 340), fill="#16385D")
-        d.line((0, 340, 1080, 340), fill=YELLOW, width=12)
-    d.rectangle((0, 0, W, 15), fill=YELLOW)
-    d.text((64, 58), "STVV LAB", font=font(60), fill=WHITE if slot in {"data", "analysis", "recap", "compare", "player", "vote"} else DARK)
-    d.text((68, 148), "INDEPENDENT FOOTBALL ANALYSIS", font=font(24), fill=WHITE if slot == "data" else (DARK if light else MUTED))
-    d.rounded_rectangle((64, 225, 560, 310), radius=9, fill=DARK if light else YELLOW)
-    d.text((84, 241), LABELS[slot], font=font(41), fill=WHITE if light else DARK)
-    d.line((64, 348, 1016, 348), fill=DARK if light else YELLOW, width=5)
+        d.polygon([(0, 370), (525, 330), (525, 1060), (0, 1100)], fill="#104A88")
+        d.polygon([(555, 330), (1080, 370), (1080, 1100), (555, 1060)], fill="#192D51")
+        slash(d, 960)
+        brand(d, number)
+        headline(d, slot, 165, 105)
+        d.text((180, 445), "A", font=font(185), fill=WHITE)
+        d.text((460, 480), "VS", font=font(75), fill=YELLOW)
+        d.text((740, 445), "B", font=font(185), fill=WHITE)
+        panel(d, body, 760, 400)
 
-    if slot == "compare":
-        d.rounded_rectangle((64, 385, 1016, 570), radius=18, fill=DARK)
-        d.line((540, 398, 540, 560), fill=YELLOW, width=4)
-        d.text((108, 405), "A", font=font(98), fill=WHITE)
-        d.text((610, 405), "B", font=font(98), fill=YELLOW)
-        write(d, body, 74, 625, 920, 475, max_size=65)
     elif slot == "data":
-        for i, width in enumerate((330, 510, 720)):
-            y = 420 + i*110
-            d.rounded_rectangle((78, y, 78+width, y+42), radius=9,
-                                fill=[BLUE, "#4475A7", YELLOW][i])
-        d.text((75, 770), "DATA / CONTEXT", font=font(36), fill=YELLOW)
-        write(d, body, 74, 850, 920, 260, color=DARK, max_size=52)
-    elif slot == "analysis":
-        pitch(d, 75, 390, 930, 385)
-        write(d, body, 74, 825, 920, 300, max_size=54)
-    elif slot == "news":
-        d.rectangle((64, 394, 76, 1090), fill=YELLOW)
-        write(d, body, 110, 430, 870, 640, color=DARK, max_size=76)
-    elif slot == "vote":
-        write(d, body, 74, 395, 920, 720, max_size=67)
-        d.text((72, 1110), "YOUR VOICE MATTERS", font=font(32), fill=YELLOW)
-    elif slot == "recap":
-        d.rounded_rectangle((64, 390, 1016, 510), radius=12, fill=DARK)
-        d.text((95, 415), "MATCH REVIEW", font=font(54), fill=YELLOW)
-        write(d, body, 74, 565, 920, 555, max_size=65)
-    else:
-        d.ellipse((740, 395, 1020, 675), outline=YELLOW, width=11)
-        write(d, body, 74, 415, 910, 690, max_size=67)
+        brand(d, number)
+        headline(d, slot, 165, 109)
+        # Chart is explicitly a decorative motif; never invent metrics.
+        d.text((64, 460), "DATA / CONTEXT", font=font(33), fill=MUTED)
+        for i, h in enumerate((75, 150, 108, 208, 245, 175, 295)):
+            x = 105+i*128
+            d.rounded_rectangle((x, 805-h, x+70, 805), radius=8,
+                                fill=YELLOW if i == 6 else "#2365A3")
+        d.line((70, 815, 1020, 815), fill=WHITE, width=3)
+        d.text((68, 833), "VISUAL MOTIF  /  NOT MATCH STATISTICS",
+               font=font(21), fill=MUTED)
+        panel(d, body, 890, 265)
 
-    d.rectangle((0, 1185, W, H), fill=("#123D71" if slot == "data" else DARK))
-    d.line((64, 1210, 1016, 1210), fill=BLUE, width=4)
-    d.text((65, 1240), "STVV LAB  |  FOOTBALL INSIGHT", font=font(31), fill=YELLOW)
+    elif slot == "analysis":
+        brand(d, number)
+        headline(d, slot, 155, 104)
+        pitch(d, 78, 445, 924, 410)
+        d.text((76, 866), "SCHEMATIC  /  NOT TRACKING DATA",
+               font=font(23), fill=MUTED)
+        panel(d, body, 925, 230)
+
+    elif slot == "news":
+        d.polygon([(740, 0), (1080, 0), (1080, 1150), (930, 1150)], fill="#0B4B91")
+        slash(d, 930)
+        brand(d, number)
+        headline(d, slot, 170, 122)
+        d.rounded_rectangle((56, 500, 300, 565), radius=5, fill=YELLOW)
+        d.text((80, 509), "LATEST", font=font(37), fill=INK)
+        panel(d, body, 625, 520)
+
+    elif slot == "vote":
+        d.ellipse((610, 380, 1090, 860), outline="#1D5794", width=38)
+        d.ellipse((730, 500, 970, 740), outline=YELLOW, width=28)
+        slash(d, 970)
+        brand(d, number)
+        headline(d, slot, 165, 126)
+        d.text((74, 465), "YOUR OPINION", font=font(42), fill=YELLOW)
+        panel(d, body, 655, 500)
+
+    else:  # recap
+        d.rectangle((0, 395, W, 775), fill="#123D71")
+        d.polygon([(0, 770), (1080, 470), (1080, 800), (0, 1090)], fill="#1B568C")
+        slash(d, 950)
+        brand(d, number)
+        headline(d, slot, 165, 111)
+        d.text((80, 450), "FULL TIME / KEY MOMENTS", font=font(46), fill=YELLOW)
+        panel(d, body, 705, 450)
+
+    footer(d, slot)
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    image.save(destination, format="PNG", optimize=True)
+    im.save(destination, format="PNG", optimize=True)
     return destination
