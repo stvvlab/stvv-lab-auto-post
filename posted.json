@@ -107,7 +107,8 @@
     "daily_2026-10-19_analysis",
     "daily_2026-10-19_news",
     "daily_2026-10-19_vote",
-    "daily_2026-10-19_recap"
+    "daily_2026-10-19_recap",
+    "daily_2026-10-20_player"
   ],
   "publication_log": [
     {
@@ -726,16 +727,18 @@
       "submitted_at": "2026-10-19T23:29:36.471125+09:00",
       "text": "⚽ STVVを振り返るとき、何が重要？\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/8bda184a890598a02f97109124136fbdf4d62742/generated/content_2026-10-19_recap.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-20_player": {
+    },
+    {
+      "key": "daily_2026-10-20_player",
       "slot": "player",
       "source": null,
+      "buffer_id": "6ad6a5522fcafd0f183f1610",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-20T08:18:44.813565+09:00",
       "text": "🇯🇵 STVVの選手を見るとき、注目したいポイントは？\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/c74e4146f1a6c6ee207712c8387f26d04dbdf5dc/generated/content_2026-10-20_player.png",
-      "created_at": "2026-10-20T08:18:41.169815+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/c74e4146f1a6c6ee207712c8387f26d04dbdf5dc/generated/content_2026-10-20_player.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
