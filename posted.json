@@ -103,7 +103,8 @@
     "daily_2026-10-18_recap",
     "daily_2026-10-19_player",
     "daily_2026-10-19_compare",
-    "daily_2026-10-19_data"
+    "daily_2026-10-19_data",
+    "daily_2026-10-19_analysis"
   ],
   "publication_log": [
     {
@@ -682,16 +683,18 @@
       "submitted_at": "2026-10-19T13:03:37.851466+09:00",
       "text": "📊 数字だけでは見えないポイント、整理しました。\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/5325c5e6f4adced9ead2960cc4e5c17826516c6e/generated/content_2026-10-19_data.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-19_analysis": {
+    },
+    {
+      "key": "daily_2026-10-19_analysis",
       "slot": "analysis",
       "source": null,
+      "buffer_id": "6ad5c51538c1835cd442cd8b",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-19T16:21:59.081098+09:00",
       "text": "🧠 このプレー、どこを見ると理解が深まる？\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/6aedf9fdc3483688ae89868f551a96a43e3a1705/generated/content_2026-10-19_analysis.png",
-      "created_at": "2026-10-19T16:21:56.075057+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/6aedf9fdc3483688ae89868f551a96a43e3a1705/generated/content_2026-10-19_analysis.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
