@@ -101,7 +101,8 @@
     "daily_2026-10-18_news",
     "daily_2026-10-18_vote",
     "daily_2026-10-18_recap",
-    "daily_2026-10-19_player"
+    "daily_2026-10-19_player",
+    "daily_2026-10-19_compare"
   ],
   "publication_log": [
     {
@@ -660,16 +661,18 @@
       "submitted_at": "2026-10-19T08:10:45.964522+09:00",
       "text": "🇯🇵 目立つプレーだけで選手を判断するのは、ちょっともったいない。\n\nSTVVの日本人選手を見るなら、ボールを受ける前の動きも面白い。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/d560aba3ce52aa61bc4b7742b95bebc8607498ea/generated/content_2026-10-19_player.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-19_compare": {
+    },
+    {
+      "key": "daily_2026-10-19_compare",
       "slot": "compare",
       "source": null,
+      "buffer_id": "6ad5795eae173d6e002822b1",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-19T10:58:55.740513+09:00",
       "text": "保持率だけでは見えないものがある。\n\nどこで持ち、どこまで運び、どこで止められたか。STVVの攻撃を見る視点。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/8d5e9629a449de69e003009083e2c4140cc3a8bc/generated/content_2026-10-19_compare.png",
-      "created_at": "2026-10-19T10:58:52.921046+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/8d5e9629a449de69e003009083e2c4140cc3a8bc/generated/content_2026-10-19_compare.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
