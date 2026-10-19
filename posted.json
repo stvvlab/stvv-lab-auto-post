@@ -673,6 +673,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/8d5e9629a449de69e003009083e2c4140cc3a8bc/generated/content_2026-10-19_compare.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-19_data": {
+      "slot": "data",
+      "source": null,
+      "text": "📊 数字だけでは見えないポイント、整理しました。\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/5325c5e6f4adced9ead2960cc4e5c17826516c6e/generated/content_2026-10-19_data.png",
+      "created_at": "2026-10-19T13:03:34.210417+09:00"
+    }
+  },
   "tracked_topics": {}
 }
