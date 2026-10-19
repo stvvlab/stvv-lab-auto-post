@@ -947,6 +947,26 @@ def publish(
     return True
 
 
+def image_teaser(slot, detail, source=None):
+    """Invite image opens without implying unsupported match facts."""
+    hooks = {
+        "player": "🇯🇵 STVVの選手を見るとき、注目したいポイントは？",
+        "compare": "⚔️ 数字を並べると、違いが見えてくる。",
+        "data": "📊 数字だけでは見えないポイント、整理しました。",
+        "analysis": "🧠 このプレー、どこを見ると理解が深まる？",
+        "news": "📰 STVVの話題、押さえたいポイントを整理。",
+        "vote": "🗳️ STVVファンのみなさんはどれを選ぶ？",
+        "recap": "⚽ STVVを振り返るとき、何が重要？",
+    }
+    # Never conceal an official news URL: retain access to the primary source.
+    url = source if isinstance(source, str) and source.startswith("https://stvv.jp/") else None
+    caption = hooks.get(slot, "🔎 STVV LABの注目ポイント")
+    caption += "\n\n👇 画像をタップして詳しくチェック！"
+    if url:
+        caption += "\n公式情報：" + url
+    return caption
+
+
 def main():
     now = datetime.now(JST)
     history = load()
@@ -1049,6 +1069,16 @@ def main():
 
         log(f"評価フィルター適用: {slot}")
 
+    # Build the detailed visual first. A teaser is only appropriate when
+    # an image was actually prepared; otherwise publish the full explanation.
+    image_url = (
+        content_card_media(slot, day, message)
+        or faceless_player_media(slot, source)
+        or media_for(source, slot)
+        or generic_topic_media(slot)
+    )
+    if image_url and "/generated/content_" in image_url:
+        message = image_teaser(slot, message, source)
     message += HASHTAGS
 
     publish(
@@ -1058,7 +1088,7 @@ def main():
         slot,
         source,
         news_url,
-        content_card_media(slot, day, message) or faceless_player_media(slot, source) or media_for(source, slot) or generic_topic_media(slot),
+        image_url,
     )
 
 
