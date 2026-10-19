@@ -77,15 +77,41 @@ def render_content_card(slot, message, destination):
     if slot not in LABELS:
         raise ValueError("Unknown slot")
     body = clean(message)
-    image = Image.new("RGB", (W, H), NAVY)
+    # Seven visibly distinct visual identities, not one shared template.
+    backgrounds = {
+        "player": "#071B37", "compare": "#101127", "data": "#F1F5FA",
+        "analysis": "#07352E", "news": "#F5D423",
+        "vote": "#291C52", "recap": "#101820",
+    }
+    light = slot in {"data", "news"}
+    foreground = DARK if light else WHITE
+    image = Image.new("RGB", (W, H), backgrounds[slot])
     d = ImageDraw.Draw(image)
-    d.polygon([(640, 0), (1080, 0), (1080, 1080), (860, 1080), (430, 420)], fill=BLUE)
-    d.rectangle((0, 0, W, 16), fill=YELLOW)
-    d.text((64, 60), "STVV LAB", font=font(60), fill=WHITE)
-    d.text((68, 145), "INDEPENDENT FOOTBALL ANALYSIS", font=font(24), fill=MUTED)
-    d.rounded_rectangle((64, 220, 560, 304), radius=9, fill=YELLOW)
-    d.text((84, 237), LABELS[slot], font=font(41), fill=DARK)
-    d.line((64, 348, 1016, 348), fill=YELLOW, width=5)
+    if slot == "player":
+        d.ellipse((620, 170, 1200, 750), outline=YELLOW, width=25)
+        d.rectangle((0, 0, 26, 1180), fill=YELLOW)
+    elif slot == "compare":
+        d.polygon([(0, 0), (540, 0), (540, 1180), (0, 900)], fill="#183D77")
+        d.polygon([(540, 0), (1080, 0), (1080, 900), (540, 1180)], fill="#332C55")
+    elif slot == "data":
+        d.rectangle((0, 0, 1080, 355), fill=BLUE)
+    elif slot == "analysis":
+        d.rectangle((0, 0, 1080, 355), fill="#09271F")
+        d.line((0, 355, 1080, 355), fill=YELLOW, width=12)
+    elif slot == "news":
+        d.polygon([(730, 0), (1080, 0), (1080, 1180), (920, 1180)], fill="#E8B910")
+    elif slot == "vote":
+        for x in (70, 290, 510, 730, 950):
+            d.ellipse((x-150, -180, x+150, 120), outline="#56498E", width=12)
+    elif slot == "recap":
+        d.rectangle((0, 0, 1080, 340), fill="#16385D")
+        d.line((0, 340, 1080, 340), fill=YELLOW, width=12)
+    d.rectangle((0, 0, W, 15), fill=YELLOW)
+    d.text((64, 58), "STVV LAB", font=font(60), fill=WHITE if slot in {"data", "analysis", "recap", "compare", "player", "vote"} else DARK)
+    d.text((68, 148), "INDEPENDENT FOOTBALL ANALYSIS", font=font(24), fill=WHITE if slot == "data" else (DARK if light else MUTED))
+    d.rounded_rectangle((64, 225, 560, 310), radius=9, fill=DARK if light else YELLOW)
+    d.text((84, 241), LABELS[slot], font=font(41), fill=WHITE if light else DARK)
+    d.line((64, 348, 1016, 348), fill=DARK if light else YELLOW, width=5)
 
     if slot == "compare":
         d.rounded_rectangle((64, 385, 1016, 570), radius=18, fill=DARK)
@@ -99,13 +125,13 @@ def render_content_card(slot, message, destination):
             d.rounded_rectangle((78, y, 78+width, y+42), radius=9,
                                 fill=[BLUE, "#4475A7", YELLOW][i])
         d.text((75, 770), "DATA / CONTEXT", font=font(36), fill=YELLOW)
-        write(d, body, 74, 850, 920, 260, max_size=52)
+        write(d, body, 74, 850, 920, 260, color=DARK, max_size=52)
     elif slot == "analysis":
         pitch(d, 75, 390, 930, 385)
         write(d, body, 74, 825, 920, 300, max_size=54)
     elif slot == "news":
         d.rectangle((64, 394, 76, 1090), fill=YELLOW)
-        write(d, body, 110, 430, 870, 640, max_size=76)
+        write(d, body, 110, 430, 870, 640, color=DARK, max_size=76)
     elif slot == "vote":
         write(d, body, 74, 395, 920, 720, max_size=67)
         d.text((72, 1110), "YOUR VOICE MATTERS", font=font(32), fill=YELLOW)
@@ -117,7 +143,7 @@ def render_content_card(slot, message, destination):
         d.ellipse((740, 395, 1020, 675), outline=YELLOW, width=11)
         write(d, body, 74, 415, 910, 690, max_size=67)
 
-    d.rectangle((0, 1185, W, H), fill=DARK)
+    d.rectangle((0, 1185, W, H), fill=("#123D71" if slot == "data" else DARK))
     d.line((64, 1210, 1016, 1210), fill=BLUE, width=4)
     d.text((65, 1240), "STVV LAB  |  FOOTBALL INSIGHT", font=font(31), fill=YELLOW)
     destination = Path(destination)
