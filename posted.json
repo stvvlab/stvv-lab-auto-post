@@ -105,7 +105,8 @@
     "daily_2026-10-19_compare",
     "daily_2026-10-19_data",
     "daily_2026-10-19_analysis",
-    "daily_2026-10-19_news"
+    "daily_2026-10-19_news",
+    "daily_2026-10-19_vote"
   ],
   "publication_log": [
     {
@@ -704,16 +705,18 @@
       "submitted_at": "2026-10-19T18:23:56.990982+09:00",
       "text": "📰 STVVの話題、押さえたいポイントを整理。\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/7e7d5845428a25de181a9eba0abd27fc4ba3f4f4/generated/content_2026-10-19_news.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-19_vote": {
+    },
+    {
+      "key": "daily_2026-10-19_vote",
       "slot": "vote",
       "source": "thesportsdb:2611487",
+      "buffer_id": "6ad60de151676f487cfb2012",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-19T21:32:35.969654+09:00",
       "text": "🗳️ STVVファンのみなさんはどれを選ぶ？\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/42c54447a35a4a421d8701fedd613c0d8eea84f2/generated/content_2026-10-19_vote.png",
-      "created_at": "2026-10-19T21:32:32.393026+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/42c54447a35a4a421d8701fedd613c0d8eea84f2/generated/content_2026-10-19_vote.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
