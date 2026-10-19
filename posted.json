@@ -662,6 +662,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/d560aba3ce52aa61bc4b7742b95bebc8607498ea/generated/content_2026-10-19_player.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-19_compare": {
+      "slot": "compare",
+      "source": null,
+      "text": "保持率だけでは見えないものがある。\n\nどこで持ち、どこまで運び、どこで止められたか。STVVの攻撃を見る視点。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/8d5e9629a449de69e003009083e2c4140cc3a8bc/generated/content_2026-10-19_compare.png",
+      "created_at": "2026-10-19T10:58:52.921046+09:00"
+    }
+  },
   "tracked_topics": {}
 }
