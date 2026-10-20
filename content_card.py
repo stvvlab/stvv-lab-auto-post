@@ -127,86 +127,126 @@ def pitch(draw, x, y, w, h):
               fill=YELLOW, width=9)
 
 
+def story_parts(message):
+    """Use real supplied text as the headline; never fabricate a score or stat."""
+    body = clean(message)
+    parts = [p.strip() for p in body.splitlines() if p.strip()]
+    if not parts:
+        return "STVV LAB", ""
+    first = re.sub(r"^[^\w一-龥ぁ-んァ-ン]+", "", parts[0]).strip()
+    if len(parts) > 1:
+        return first[:80], "\n".join(parts[1:])
+    # Split one-line analysis at the first natural sentence boundary.
+    m = re.search(r"[。！？!?]", first)
+    if m and 12 <= m.end() <= 65 and len(first) > m.end():
+        return first[:m.end()], first[m.end():].strip()
+    return first, ""
+
+
+def atmosphere(draw, slot):
+    """Layered stadium-light atmosphere without pretending to show real players."""
+    from PIL import ImageFilter
+    palette = {
+        "player": ("#0C3764", "#03111F"),
+        "compare": ("#173F78", "#091328"),
+        "data": ("#083C54", "#041526"),
+        "analysis": ("#06443D", "#041923"),
+        "news": ("#173C70", "#060D20"),
+        "vote": ("#3D2E66", "#07152D"),
+        "recap": ("#4C304A", "#081426"),
+    }
+    top, bottom = palette[slot]
+    def rgb(value):
+        return tuple(int(value[i:i+2], 16) for i in (1, 3, 5))
+    a, b = rgb(top), rgb(bottom)
+    for y in range(H):
+        t = y / H
+        draw.line((0, y, W, y), fill=tuple(int(a[k]*(1-t)+b[k]*t) for k in range(3)))
+    # Perspective floodlights and distant stands.
+    for x in (-180, 280, 820, 1290):
+        draw.polygon([(x-190, 0), (x+190, 0), (W//2+130, 950), (W//2-130, 950)],
+                     fill="#15304A")
+    for row in range(10):
+        y = 670 + row*46
+        draw.line((0, y, W, y+row*5), fill="#23415B", width=2)
+    for j in range(100):
+        x = (j*317+49) % W
+        y = 630 + (j*149) % 510
+        draw.ellipse((x, y, x+3, y+3), fill="#5A7182")
+    for x in (95, 975):
+        for j in range(6):
+            draw.ellipse((x-8, 60+j*28, x+8, 76+j*28), fill="#E2E8DD")
+    draw.polygon([(0, 1020), (W, 800), (W, 890), (0, 1110)], fill="#FFE000")
+
+
+def editorial_header(draw, slot, index):
+    draw.rectangle((0, 0, W, 15), fill=YELLOW)
+    draw.text((58, 40), "STVV / LAB", font=font(45), fill=WHITE)
+    draw.text((795, 52), "FOOTBALL MEDIA", font=font(21), fill=YELLOW)
+    draw.line((58, 113, 1022, 113), fill="#69859D", width=2)
+    draw.text((60, 145), LABELS[slot][0] + "  /  " + LABELS[slot][1],
+              font=font(35), fill=YELLOW)
+    draw.text((950, 149), f"0{index}", font=font(34), fill=WHITE)
+
+
 def render_content_card(slot, message, destination):
     if slot not in LABELS:
         raise ValueError("Unknown slot")
-    body = clean(message)
+    headline_text, detail = story_parts(message)
     im = Image.new("RGB", (W, H), NAVY)
     d = ImageDraw.Draw(im)
-    grit(d)
-    number = list(LABELS).index(slot)+1
+    atmosphere(d, slot)
+    index = list(LABELS).index(slot) + 1
+    editorial_header(d, slot, index)
 
-    if slot == "player":
-        d.ellipse((595, 340, 1260, 1000), outline=BLUE, width=36)
-        d.ellipse((705, 445, 950, 690), fill="#193E6C", outline=YELLOW, width=12)
-        d.polygon([(590, 1010), (670, 720), (950, 720), (1040, 1010)], fill="#174A8A")
-        d.text((746, 750), "10", font=font(155), fill=YELLOW)
-        slash(d, 950)
-        brand(d, number)
-        headline(d, slot, 165, 106)
-        panel(d, body, 830, 335)
-
-    elif slot == "compare":
-        d.polygon([(0, 370), (525, 330), (525, 1060), (0, 1100)], fill="#104A88")
-        d.polygon([(555, 330), (1080, 370), (1080, 1100), (555, 1060)], fill="#192D51")
-        slash(d, 960)
-        brand(d, number)
-        headline(d, slot, 165, 105)
-        d.text((180, 445), "A", font=font(185), fill=WHITE)
-        d.text((460, 480), "VS", font=font(75), fill=YELLOW)
-        d.text((740, 445), "B", font=font(185), fill=WHITE)
-        panel(d, body, 760, 400)
-
+    # Distinct editorial structure per category, all driven by verified text.
+    if slot == "compare":
+        d.polygon([(0, 305), (510, 260), (510, 770), (0, 860)], fill="#0B447D")
+        d.polygon([(570, 260), (1080, 305), (1080, 860), (570, 770)], fill="#192C4B")
+        d.text((440, 430), "VS", font=font(112), fill=YELLOW)
+        title_y, title_h, detail_y = 850, 270, 1120
     elif slot == "data":
-        brand(d, number)
-        headline(d, slot, 165, 109)
-        # Chart is explicitly a decorative motif; never invent metrics.
-        d.text((64, 460), "DATA / CONTEXT", font=font(33), fill=MUTED)
-        for i, h in enumerate((75, 150, 108, 208, 245, 175, 295)):
-            x = 105+i*128
-            d.rounded_rectangle((x, 805-h, x+70, 805), radius=8,
-                                fill=YELLOW if i == 6 else "#2365A3")
-        d.line((70, 815, 1020, 815), fill=WHITE, width=3)
-        d.text((68, 833), "VISUAL MOTIF  /  NOT MATCH STATISTICS",
-               font=font(21), fill=MUTED)
-        panel(d, body, 890, 265)
-
+        # Grid and measured-looking graphics are intentionally omitted unless
+        # actual numeric data are parsed; typography carries the story.
+        for i in range(7):
+            d.line((70+i*145, 360, 70+i*145, 860), fill="#20516B", width=2)
+        d.text((62, 355), "NUMBERS / CONTEXT", font=font(42), fill=YELLOW)
+        title_y, title_h, detail_y = 560, 380, 965
     elif slot == "analysis":
-        brand(d, number)
-        headline(d, slot, 155, 104)
-        pitch(d, 78, 445, 924, 410)
-        d.text((76, 866), "SCHEMATIC  /  NOT TRACKING DATA",
-               font=font(23), fill=MUTED)
-        panel(d, body, 925, 230)
-
+        d.rounded_rectangle((60, 320, 1020, 735), radius=12, outline="#B2D8D2", width=5)
+        d.line((540, 320, 540, 735), fill="#B2D8D2", width=3)
+        d.ellipse((460, 445, 620, 605), outline="#B2D8D2", width=3)
+        d.text((77, 340), "TACTICAL BOARD / CONCEPT", font=font(28), fill=YELLOW)
+        title_y, title_h, detail_y = 770, 340, 1120
+    elif slot == "player":
+        d.ellipse((660, 295, 1120, 755), outline="#306C9C", width=35)
+        d.text((710, 390), "STVV", font=font(78), fill="#88A8C6")
+        title_y, title_h, detail_y = 660, 420, 1100
     elif slot == "news":
-        d.polygon([(740, 0), (1080, 0), (1080, 1150), (930, 1150)], fill="#0B4B91")
-        slash(d, 930)
-        brand(d, number)
-        headline(d, slot, 170, 122)
-        d.rounded_rectangle((56, 500, 300, 565), radius=5, fill=YELLOW)
-        d.text((80, 509), "LATEST", font=font(37), fill=INK)
-        panel(d, body, 625, 520)
-
+        d.rectangle((55, 290, 425, 370), fill=YELLOW)
+        d.text((76, 300), "OFFICIAL / NEWS", font=font(36), fill=INK)
+        title_y, title_h, detail_y = 425, 600, 1060
     elif slot == "vote":
-        d.ellipse((610, 380, 1090, 860), outline="#1D5794", width=38)
-        d.ellipse((730, 500, 970, 740), outline=YELLOW, width=28)
-        slash(d, 970)
-        brand(d, number)
-        headline(d, slot, 165, 126)
-        d.text((74, 465), "YOUR OPINION", font=font(42), fill=YELLOW)
-        panel(d, body, 655, 500)
+        d.text((55, 315), "YOUR CALL.", font=font(92), fill=YELLOW)
+        title_y, title_h, detail_y = 485, 530, 1035
+    else:
+        d.rectangle((0, 315, W, 440), fill="#133F6D")
+        d.text((65, 326), "MATCHDAY / REVIEW", font=font(59), fill=YELLOW)
+        title_y, title_h, detail_y = 515, 515, 1050
 
-    else:  # recap
-        d.rectangle((0, 395, W, 775), fill="#123D71")
-        d.polygon([(0, 770), (1080, 470), (1080, 800), (0, 1090)], fill="#1B568C")
-        slash(d, 950)
-        brand(d, number)
-        headline(d, slot, 165, 111)
-        d.text((80, 450), "FULL TIME / KEY MOMENTS", font=font(46), fill=YELLOW)
-        panel(d, body, 705, 450)
-
-    footer(d, slot)
+    # Dark translucent-style plate gives the actual headline priority.
+    d.rounded_rectangle((42, title_y-15, 1038, min(1160, title_y+title_h)),
+                        radius=18, fill="#061425")
+    d.rectangle((42, title_y-15, 56, min(1160, title_y+title_h)), fill=YELLOW)
+    title_size = 70 if slot not in {"news", "recap"} else 76
+    write(d, headline_text, 83, title_y+18, 925, title_h-42, color=WHITE, size=title_size)
+    if detail and detail_y < 1190:
+        write(d, detail, 79, detail_y, 915, 1185-detail_y,
+              color=MUTED, size=35)
+    d.rectangle((0, 1200, W, H), fill=INK)
+    d.line((56, 1220, 1020, 1220), fill=YELLOW, width=5)
+    d.text((60, 1248), "STVV LAB  /  FACTS FIRST", font=font(32), fill=WHITE)
+    d.text((940, 1254), slot.upper(), font=font(19), fill=YELLOW)
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     im.save(destination, format="PNG", optimize=True)
