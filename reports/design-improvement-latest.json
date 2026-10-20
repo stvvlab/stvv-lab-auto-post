@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-10-21T06:07:00+09:00",
+  "updated_at": "2026-10-21T07:05:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Add a deterministic tapered paint sweep below the large brush heading",
-    "Use five irregular local bristle trails to strengthen motion without adding content",
-    "Record the accent bounds and strokes in the per-image layout audit"
+    "Emit one machine-readable RUN_RESULT for every normal scheduled outcome",
+    "Distinguish Buffer acceptance, duplicate protection, missing verified content, missing vote candidates and failed image-byte verification",
+    "Write the same outcome to the GitHub Actions step summary without changing posting state"
   ],
   "preview_path": "generated/auto_stadium_preview.jpg",
   "preview_layout_path": "generated/auto_stadium_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 45,
+    "passed": 46,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "No extra X post sent. At 2026-10-21 06:01 JST, no normal scheduled run using the new renderer had occurred; the next JST08:00 output and X display remain unverified.",
+  "ci_status": "pending",
+  "publication_status": "No extra X post sent. At 2026-10-21 07:01 JST, no normal scheduled run using the new renderer had occurred. The 08:00 player slot will be explicitly recorded as a safe skip when it lacks verified new content, rather than being confused with an error.",
   "remaining": [
-    "Japanese and data-card output still needs review after a real scheduled generation",
-    "Review actual news/data cards after scheduled generation",
+    "Review the explicit outcome of the JST08:00 player slot",
+    "Review actual news/data cards after a scheduled generation",
     "Verify next scheduled Buffer result and X image display"
   ],
-  "next_priority": "Inspect next regular scheduled run, distinguish source-quality skips from errors, verify public image bytes, Buffer result and X display.",
-  "ci_tests_passed": 45,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39497691359",
-  "implementation_commit": "bd59d048108511c0d3f535bbfa579b9f68254a95",
-  "visual_review": "Compared before and after at full size: the white tapered sweep adds the missing brush follow-through under REVIEW while staying clear of the match card. Headline, score, panels and verified source copy are unchanged.",
-  "baseline_commit": "d4fd5484b58c3c968b8f41067889cbb9d47063a9",
+  "next_priority": "Inspect the 08:00 result; if submitted, verify public image bytes, Buffer result and X display. If skipped, preserve the exact reason and inspect the next eligible slot.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Fresh preview rendered and inspected at full size. This pass changes run observability only; the approved stadium composition, brush sweep, score and panel hierarchy remain visually intact.",
+  "baseline_commit": "6eb24bda07e711824f9bf0e2db43262713df916e",
   "pending_posts_observed": 0,
   "ci_artifact_id": 12298077319,
   "additional_local_preview_path": "generated/auto_stadium_preview.jpg"

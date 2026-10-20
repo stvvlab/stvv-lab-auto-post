@@ -53,6 +53,15 @@ that line remains in the story content. No date is inferred.
 ## Quality pass 4
 
 The large brush heading now ends in a deterministic tapered paint sweep and
-seven broken bristle trails. The accent stays above the information card and
+five broken bristle trails. The accent stays above the information card and
 is generated locally from the bundled assets; it carries no fixture or player
 data. Its exact bounds and strokes are recorded in the layout audit.
+
+## Scheduled result reporting
+
+Every scheduled run emits one machine-readable `RUN_RESULT` and writes the
+same result to the GitHub Actions step summary. Successful Buffer acceptance,
+duplicate protection, missing verified content, missing vote candidates and
+failed public-image byte verification have distinct statuses. An unexpected
+exception still fails the workflow, so a safe skip is not confused with an
+error.

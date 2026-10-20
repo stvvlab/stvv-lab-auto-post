@@ -19,17 +19,28 @@ class ScheduledStadiumTests(unittest.TestCase):
             publish = stack.enter_context(patch.object(posting, 'publish'))
             for old in ['generic_topic_media', 'faceless_player_media', 'media_for']:
                 stack.enter_context(patch.object(posting, old, side_effect=AssertionError('Old card fallback used')))
-            posting.main()
-            return image, publish
+            result = posting.main()
+            return image, publish, result
 
     def test_verified_image_flows_to_buffer_publication(self):
         url = 'https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/revision/generated/content.jpg'
-        image, publish = self.run_scheduled_vote(url)
+        image, publish, result = self.run_scheduled_vote(url)
         image.assert_called_once_with('vote', '2026-10-21', '次に読みたい分析は？', source=None)
         publish.assert_called_once()
         self.assertEqual(publish.call_args.args[2], '次に読みたい分析は？' + posting.HASHTAGS)
         self.assertEqual(publish.call_args.args[6], url)
+        self.assertEqual(result, 'submitted_to_buffer')
 
     def test_failed_image_never_falls_back_or_publishes(self):
-        _, publish = self.run_scheduled_vote(None)
+        _, publish, result = self.run_scheduled_vote(None)
         publish.assert_not_called()
+        self.assertEqual(result, 'skipped_image_verification')
+
+    def test_no_verified_non_vote_content_is_an_explicit_skip(self):
+        history = {'used_posts': [], 'pending_posts': {}, 'publication_log': []}
+        with patch.object(posting, 'load', return_value=history), \
+             patch.object(posting, 'load_feedback', return_value=[]), \
+             patch.object(posting, 'feedback_scores', return_value={}), \
+             patch.object(posting, 'auto_feedback_scores', return_value={}), \
+             patch.object(posting, 'slot_for_run', return_value=('player', '2026-10-21')):
+            self.assertEqual(posting.main(), 'skipped_no_verified_content')

@@ -103,6 +103,28 @@ def log(message):
     )
 
 
+def run_result(status, detail):
+    """Expose a machine-readable result without changing posting state."""
+    payload = {
+        "status": status,
+        "detail": detail,
+        "recorded_at": datetime.now(JST).isoformat(),
+    }
+    log("RUN_RESULT " + json.dumps(payload, ensure_ascii=False))
+    summary = os.getenv("GITHUB_STEP_SUMMARY")
+    if summary:
+        try:
+            with Path(summary).open("a", encoding="utf-8") as handle:
+                handle.write(
+                    "### STVV scheduled run result\n\n"
+                    f"- Status: `{status}`\n"
+                    f"- Detail: {detail}\n"
+                )
+        except OSError as error:
+            log(f"実行結果サマリー保存不可: {error}")
+    return status
+
+
 def git(*args):
     subprocess.run(["git", *args], check=True)
 
@@ -989,7 +1011,7 @@ def main():
             "低評価の投稿文: "
             f"{sum(score <= 2 for score in scores.values())}件"
         )
-        return
+        return run_result("manual_check_only", "定期枠外のため投稿なし")
 
     daily = f"daily_{day}_{slot}"
 
@@ -998,7 +1020,7 @@ def main():
         or daily in history["pending_posts"]
     ):
         log(f"{day} {slot} は処理済み／確認待ちです")
-        return
+        return run_result("skipped_duplicate", f"{day} {slot} は処理済み／確認待ち")
 
     log(f"定期投稿: {day} {slot}")
 
@@ -1066,13 +1088,16 @@ def main():
         # non-news fallback. All other slots require fresh verified content.
         if slot != "vote":
             log(f"品質ゲート: {slot} に検証済み新情報がないため投稿見送り")
-            return
+            return run_result(
+                "skipped_no_verified_content",
+                f"{day} {slot}: 検証済み新情報なし",
+            )
         message = choose_fallback(
             slot, day, scores, automatic_scores, history['publication_log']
         )
         if message is None:
             log("品質ゲート: vote 候補なし、投稿見送り")
-            return
+            return run_result("skipped_no_vote_candidate", f"{day} {slot}: 候補なし")
         log("ファン参加型の質問を投稿")
 
     # Build the detailed visual first. A teaser is only appropriate when
@@ -1082,13 +1107,16 @@ def main():
     )
     if not image_url:
         log("採用デザイン画像を公開確認できないため、安全に投稿見送り")
-        return
+        return run_result(
+            "skipped_image_verification",
+            f"{day} {slot}: 生成画像の公開バイト未確認",
+        )
     # Restore useful, specific captions. Generic image-tap teasers hid
     # the actual topic and repeated identical hooks across days.
     # Keep the original fact-checked text alongside the visual.
     message += HASHTAGS
 
-    publish(
+    submitted = publish(
         history,
         daily,
         message,
@@ -1097,6 +1125,9 @@ def main():
         news_url,
         image_url,
     )
+    if submitted:
+        return run_result("submitted_to_buffer", f"{day} {slot}: Buffer受付成功")
+    return run_result("skipped_duplicate", f"{day} {slot}: 投稿済み／確認待ち")
 
 
 if __name__ == "__main__":
