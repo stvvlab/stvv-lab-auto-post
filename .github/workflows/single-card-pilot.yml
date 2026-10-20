@@ -1,0 +1,53 @@
+name: STVV Single Verified Image Pilot
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['editorial/first_verified_card.json']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stvv-auto-post
+  cancel-in-progress: false
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - run: sudo apt-get update -qq && sudo apt-get install -y fonts-noto-cjk
+      - name: Test before any publication
+        run: python -m unittest discover -s tests -v
+      - name: Publish exactly one verified image through Buffer
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python publish_single_card.py --publish
+      - name: Save pilot result
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if [ -f reports/single-card-pilot.json ]; then
+            git add reports/single-card-pilot.json
+            if ! git diff --cached --quiet; then
+              git commit -m 'Record single image pilot result'
+              git push origin HEAD:main
+            fi
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: single-card-pilot
+          path: |
+            generated/first_verified_card.png
+            reports/single-card-pilot.json
