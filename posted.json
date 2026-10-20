@@ -115,7 +115,8 @@
     "daily_2026-10-20_news",
     "daily_2026-10-20_vote",
     "daily_2026-10-20_recap",
-    "editorial_image_pilot_lommel_20261019_v1"
+    "editorial_image_pilot_lommel_20261019_v1",
+    "approved_stadium_review_lommel_20261019_v1"
   ],
   "publication_log": [
     {
@@ -814,16 +815,18 @@
       "submitted_at": "2026-10-21T03:39:19.326364+09:00",
       "text": "⚽ STVV、4–1でカップ戦初戦を突破！\n松澤海斗の同点弾、新川志音の加入後初ゴールも生まれ、ロンメルに逆転勝利。\nあなたが注目したプレーは？\n\n公式：https://stvv.jp/news/game/20261019_1/\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/583b6ac1202bd182ee2e4438cbe18505b88cd1b8/generated/first_verified_card.png"
-    }
-  ],
-  "pending_posts": {
-    "approved_stadium_review_lommel_20261019_v1": {
+    },
+    {
+      "key": "approved_stadium_review_lommel_20261019_v1",
       "slot": "recap",
       "source": "https://stvv.jp/news/game/20261019_1/",
+      "buffer_id": "6ad7b75025c4beedd139fd70",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-21T03:47:47.055840+09:00",
       "text": "⚽ STVV、4–1でカップ戦初戦を突破！\n松澤海斗の同点弾、新川志音の加入後初ゴールも生まれ、ロンメルに逆転勝利。\nあなたが注目したプレーは？\n\n公式：https://stvv.jp/news/game/20261019_1/\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12a96e0d797ab1a48b1dd2f1b5f2af05c29838a3/generated/approved_review_lommel_20261019.jpg",
-      "created_at": "2026-10-21T03:47:41.974321+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12a96e0d797ab1a48b1dd2f1b5f2af05c29838a3/generated/approved_review_lommel_20261019.jpg"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
