@@ -108,7 +108,8 @@
     "daily_2026-10-19_news",
     "daily_2026-10-19_vote",
     "daily_2026-10-19_recap",
-    "daily_2026-10-20_player"
+    "daily_2026-10-20_player",
+    "daily_2026-10-20_compare"
   ],
   "publication_log": [
     {
@@ -737,16 +738,18 @@
       "submitted_at": "2026-10-20T08:18:44.813565+09:00",
       "text": "🇯🇵 STVVの選手を見るとき、注目したいポイントは？\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/c74e4146f1a6c6ee207712c8387f26d04dbdf5dc/generated/content_2026-10-20_player.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-20_compare": {
+    },
+    {
+      "key": "daily_2026-10-20_compare",
       "slot": "compare",
       "source": null,
+      "buffer_id": "6ad6caf3b81183413da9b0c3",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-20T10:59:17.515092+09:00",
       "text": "⚔️ 数字を並べると、違いが見えてくる。\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/e40112ea9d3eb047ae9030c5b8cf3fe8dd7d7060/generated/content_2026-10-20_compare.png",
-      "created_at": "2026-10-20T10:59:13.894146+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/e40112ea9d3eb047ae9030c5b8cf3fe8dd7d7060/generated/content_2026-10-20_compare.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
