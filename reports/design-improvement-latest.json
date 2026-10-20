@@ -16,7 +16,7 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "pending",
+  "ci_status": "passed",
   "publication_status": "No extra X post sent. At 2026-10-21 07:01 JST, no normal scheduled run using the new renderer had occurred. The 08:00 player slot will be explicitly recorded as a safe skip when it lacks verified new content, rather than being confused with an error.",
   "remaining": [
     "Review the explicit outcome of the JST08:00 player slot",
@@ -24,12 +24,12 @@
     "Verify next scheduled Buffer result and X image display"
   ],
   "next_priority": "Inspect the 08:00 result; if submitted, verify public image bytes, Buffer result and X display. If skipped, preserve the exact reason and inspect the next eligible slot.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 46,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39505402748",
+  "implementation_commit": "265e44911384e9662f5c824829fd197d195979ed",
   "visual_review": "Fresh preview rendered and inspected at full size. This pass changes run observability only; the approved stadium composition, brush sweep, score and panel hierarchy remain visually intact.",
   "baseline_commit": "6eb24bda07e711824f9bf0e2db43262713df916e",
   "pending_posts_observed": 0,
-  "ci_artifact_id": 12298077319,
+  "ci_artifact_id": 12302043848,
   "additional_local_preview_path": "generated/auto_stadium_preview.jpg"
 }
