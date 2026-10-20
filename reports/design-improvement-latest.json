@@ -15,12 +15,16 @@
   "local_tests": {
     "passed": 42
   },
-  "ci_status": "pending",
+  "ci_status": "passed",
   "publication_status": "No extra X test post sent; next scheduled run remains unverified",
   "remaining": [
     "Continue matching headline brush character to approved artwork",
     "Review actual news and data cards after scheduled generation",
     "Verify next scheduled Buffer result and X image display"
   ],
-  "next_priority": "Review actual scheduled output and adjust information hierarchy without inventing missing data"
+  "next_priority": "Review actual scheduled output and adjust information hierarchy without inventing missing data",
+  "ci_tests_passed": 42,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39481062274",
+  "implementation_commit": "ebea73a247ef21f88516c5c0abb97f16f66f6792",
+  "visual_review": "A fresh render was visually inspected: brush headings, score, two adaptive panels and Japanese line breaks match the recorded layout."
 }
