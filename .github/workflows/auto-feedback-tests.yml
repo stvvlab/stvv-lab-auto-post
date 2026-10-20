@@ -38,4 +38,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: automatic-stadium-preview
-          path: generated/auto_stadium_preview.jpg
+          path: |
+            generated/auto_stadium_preview.jpg
+            generated/auto_stadium_preview.layout.json

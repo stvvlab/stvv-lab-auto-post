@@ -744,6 +744,9 @@ def content_card_media(slot, day, message, source=None):
         git("config", "user.name", "github-actions[bot]")
         git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
         git("add", "--", str(path))
+        layout = path.with_suffix('.layout.json')
+        if layout.is_file():
+            git("add", "--", str(layout))
         changed = subprocess.run(["git", "diff", "--cached", "--quiet"])
         if changed.returncode == 1:
             git("commit", "-m", f"Create {slot} content card for {day}")

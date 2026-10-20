@@ -1,9 +1,11 @@
 """Smoke-test all seven Japanese editorial layouts."""
 import tempfile
 import unittest
+import json
 from pathlib import Path
 from PIL import Image
-from content_card import LABELS, render_content_card, story
+from content_card import LABELS, render_content_card, story, wrap, font, panel_boxes
+from PIL import ImageDraw
 
 class ContentCardSmokeTests(unittest.TestCase):
     def test_all_layouts(self):
@@ -49,3 +51,34 @@ class ContentCardSmokeTests(unittest.TestCase):
             self.assertEqual(paths[0].read_bytes(), paths[1].read_bytes())
             with Image.open(paths[0]) as image:
                 self.assertEqual(image.format, 'JPEG')
+
+    def test_no_empty_panels_and_width_adapts_to_content(self):
+        self.assertEqual(panel_boxes(['', '', '']), [])
+        single = panel_boxes(['本文', '', ''])
+        pair = panel_boxes(['本文一', '本文二', ''])
+        self.assertEqual(len(single), 1)
+        self.assertEqual(len(pair), 2)
+        self.assertGreater(single[0][1][2], pair[0][1][2])
+        self.assertLessEqual(pair[-1][1][0] + pair[-1][1][2], 1332)
+
+    def test_quality_audit_contains_real_copy_and_font_sizes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'audit.jpg'
+            render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
+            audit = json.loads(output.with_suffix('.layout.json').read_text())
+            self.assertEqual(audit['template_version'], 2)
+            self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
+            self.assertEqual(len(audit['panels']), 1)
+            self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
+            self.assertGreaterEqual(audit['panels'][0]['font_size'], 22)
+
+    def test_japanese_names_and_units_are_not_split_when_they_fit(self):
+        draw = ImageDraw.Draw(Image.new('RGB', (800, 600)))
+        face = font(40)
+        for text in ['松澤海斗、同点ゴール。', 'ソエル・ソエル62分／ムブク71分。', '新川志音、加入後初ゴール。']:
+            rows = wrap(draw, text, face, 360)
+            self.assertEqual(''.join(rows), text)
+            self.assertTrue(all(draw.textlength(row, font=face) <= 360 for row in rows))
+            self.assertFalse(any(row.startswith(('、', '。', 'ー')) for row in rows))
+        rows = wrap(draw, '松澤海斗、同点ゴール。', face, 360)
+        self.assertTrue(any('ゴール' in row for row in rows))

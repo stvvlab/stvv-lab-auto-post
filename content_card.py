@@ -6,6 +6,7 @@ image-generation API, and never invents a score, opponent or statistic.
 import os
 import re
 import random
+import json
 from functools import lru_cache
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -21,6 +22,12 @@ LABELS = {
 }
 BACKGROUND = ROOT / 'assets/stadium_background.jpg'
 BRUSH = ROOT / 'assets/fonts/PermanentMarker-Regular.ttf'
+TOKENS = re.compile(
+    r'[0-9０-９]+(?:[–−:/.-][0-9０-９]+)*(?:分|本|位|人|%|％)?'
+    r'|[A-Za-z]+(?:[\x27-][A-Za-z]+)*'
+    r'|[ァ-ヺー]+(?:・[ァ-ヺー]+)*|[一-龥々]+|.', re.S)
+LINE_START_PROHIBITED = set('、。，．！？!?：:；;）)]｝}」』】〉》ーっゃゅょぁぃぅぇぉッャュョァィゥェォ')
+LINE_END_PROHIBITED = set('（([｛{「『【〈《')
 
 
 @lru_cache(maxsize=200)
@@ -48,15 +55,60 @@ def wrap(draw, value, face, width):
     result = []
     for paragraph in value.splitlines():
         current = ''
-        for char in paragraph:
-            if current and draw.textlength(current + char, font=face) > width:
-                result.append(current)
-                current = char
+        tokens = TOKENS.findall(paragraph)
+        expanded = []
+        for token in tokens:
+            # Preserve names, words and number/unit pairs whenever they fit.
+            expanded.extend([token] if draw.textlength(token, font=face) <= width else list(token))
+        for token in expanded:
+            if current and draw.textlength(current + token, font=face) > width:
+                if token[0] in LINE_START_PROHIBITED:
+                    # Move the last glyph with the punctuation to the next line.
+                    last = current[-1:]
+                    current = current[:-1]
+                    result.append(current)
+                    current = last + token
+                elif current[-1] in LINE_END_PROHIBITED:
+                    last = current[-1:]
+                    result.append(current[:-1])
+                    current = last + token
+                else:
+                    result.append(current)
+                    current = token
             else:
-                current += char
+                current += token
         if current:
             result.append(current)
     return result
+
+
+def brush_title(draw, value, box, color):
+    x, y, width, height = box
+    for size in range(180, 64, -1):
+        face = font(size, True)
+        bounds = face.getbbox(value)
+        mask = Image.new('L', (bounds[2] - bounds[0] + 12, bounds[3] - bounds[1] + 12), 0)
+        md = ImageDraw.Draw(mask)
+        md.text((6 - bounds[0], 6 - bounds[1]), value, font=face, fill=255)
+        rng = random.Random(value + str(size))
+        for _ in range(mask.width * mask.height // 240):
+            px, py = rng.randrange(mask.width), rng.randrange(mask.height)
+            md.line((px, py, px + rng.randrange(2, 8), py - 1), fill=0)
+        tilted = mask.rotate(4, Image.Resampling.BICUBIC, expand=True)
+        if tilted.width <= width and tilted.height <= height:
+            draw.bitmap((x, y + (height - tilted.height) // 2), tilted, fill=color)
+            return {'font_size': size, 'angle': 4, 'box': list(box)}
+    raise ValueError('Brush heading does not fit')
+
+
+def panel_boxes(groups):
+    values = [value for value in groups if value.strip()]
+    if not values:
+        return []
+    gap, left, available = 18, 42, 1290
+    width = (available - gap * (len(values) - 1)) // len(values)
+    return [(value, (left + index * (width + gap), 807, width, 258))
+            for index, value in enumerate(values)]
 
 
 def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False):
@@ -68,7 +120,7 @@ def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False):
         lines = wrap(draw, value, face, width)
         # anchor='lt' removes language-dependent ascender offsets.
         step = size + max(4, size // 10)
-        if len(lines) * step <= height:
+        if len(lines) * step <= height and all(draw.textlength(line, font=face) <= width for line in lines):
             for index, line in enumerate(lines):
                 if brush:
                     mask = Image.new('L', (width, step), 0)
@@ -82,7 +134,7 @@ def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False):
                 else:
                     draw.text((x, y + index * step), line, font=face,
                               fill=color, anchor='lt', stroke_width=0)
-            return
+            return {'font_size': size, 'lines': lines, 'box': list(box)}
     raise ValueError('Editorial text does not fit; refusing clipped or truncated image')
 
 
@@ -126,24 +178,32 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
+    audit = {'schema_version': 1, 'template_version': 2, 'slot': slot,
+             'dimensions': [W, H], 'source': source,
+             'headline': headline, 'score_from_caption': list(match) if match else None,
+             'panels': []}
     fitted(d, 'STVV LAB', (109, 28, 300, 46), 42, 30)
     fitted(d, '非公式ファンメディア', (112, 79, 300, 26), 20, 18)
     first, second = LABELS[slot]
-    fitted(d, first, (395, 12, 755, 170), 155, 65, YELLOW, True)
-    fitted(d, second, (392, 177, 790, 185), 158, 65, WHITE, True)
+    audit['headings'] = [brush_title(d, first, (388, 8, 760, 170), YELLOW),
+                         brush_title(d, second, (382, 169, 790, 193), WHITE)]
     if match:
         own, other, opponent = match
         fitted(d, 'STVV', (365, 424, 290, 65), 52, 30, YELLOW)
         fitted(d, opponent, (755, 425, 250, 88), 43, 23)
         fitted(d, own + '–' + other, (540, 505, 470, 155), 142, 85, YELLOW)
-        fitted(d, headline, (365, 678, 650, 70), 46, 23)
+        audit['headline_layout'] = fitted(d, headline, (365, 678, 650, 70), 46, 23)
     else:
-        fitted(d, headline, (368, 440, 632, 267), 70, 24)
-    for index, value in enumerate(groups):
-        left = 68 + index * 433
-        if value:
-            d.rectangle((left, 823, left + 51, 830), fill=YELLOW)
-            fitted(d, value.replace('、', '、\n'), (left, 854, 371, 194), 40, 22)
+        audit['headline_layout'] = fitted(d, headline, (368, 440, 632, 267), 70, 24)
+    for value, (left, top, width, height) in panel_boxes(groups):
+        plate = Image.new('RGBA', (width, height), (2, 12, 28, 230))
+        pd = ImageDraw.Draw(plate)
+        pd.rectangle((0, 0, width - 1, height - 1), outline=(140, 168, 190, 160), width=2)
+        im.paste(plate, (left, top), plate)
+        d.rectangle((left + 26, top + 25, left + 80, top + 32), fill=YELLOW)
+        details = fitted(d, value.replace('、', '、\n'),
+                         (left + 26, top + 62, width - 52, height - 83), 48, 22)
+        audit['panels'].append({'text': value, **details})
     urls = re.findall(r'https?://[^\s]+', message)
     original = source or (urls[0] if urls else '')
     if original.startswith('https://stvv.jp/'):
@@ -160,4 +220,6 @@ def render_content_card(slot, message, destination, source=None):
         im.save(destination, format='JPEG', quality=94, subsampling=0, optimize=True)
     else:
         im.save(destination, format='PNG', optimize=True)
+    destination.with_suffix('.layout.json').write_text(
+        json.dumps(audit, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return destination

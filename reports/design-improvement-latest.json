@@ -1,0 +1,26 @@
+{
+  "updated_at": "2026-10-21T04:09:28.553423+09:00",
+  "template_version": 2,
+  "hourly_automation_enabled": true,
+  "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
+  "changes": [
+    "Empty fixed columns replaced with content-dependent panels",
+    "Japanese names, katakana terms and time/unit pairs kept together when they fit",
+    "Tilted brush headings with deterministic wear",
+    "Per-image layout audit committed with the image"
+  ],
+  "preview_path": "generated/auto_stadium_preview.jpg",
+  "preview_layout_path": "generated/auto_stadium_preview.layout.json",
+  "ci_artifact_name": "automatic-stadium-preview",
+  "local_tests": {
+    "passed": 42
+  },
+  "ci_status": "pending",
+  "publication_status": "No extra X test post sent; next scheduled run remains unverified",
+  "remaining": [
+    "Continue matching headline brush character to approved artwork",
+    "Review actual news and data cards after scheduled generation",
+    "Verify next scheduled Buffer result and X image display"
+  ],
+  "next_priority": "Review actual scheduled output and adjust information hierarchy without inventing missing data"
+}

@@ -24,3 +24,17 @@ scheduled workflow also runs the tests before allowing a Buffer send.
 This is one reusable composition adapted to each category, not seven separate
 AI illustrations. Only the source data already provided by the posting script
 are visualized; it does not create new player scouting or tactical assessments.
+
+## Quality pass 2
+
+Lower panels are drawn only for actual supplied content, and expand to one,
+two or three columns. Empty decorative columns are no longer baked into the
+background. Japanese wrapping preserves names, katakana terms and number/unit
+pairs when they fit, while avoiding leading punctuation. Brush headers have
+controlled tilt and deterministic wear.
+
+Every output has a `.layout.json` companion recording source text, font sizes,
+line breaks, coordinates and whether a score was present in the caption. The
+posting script commits this audit together with the image; CI also uploads it
+with the preview. This gives each improvement run evidence instead of relying
+on a successful file write as proof of visual quality.
