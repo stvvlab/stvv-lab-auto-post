@@ -1058,16 +1058,19 @@ def main():
             log(f"試合取得不可: {error}")
 
     if not message:
-        message = choose_fallback(slot, day, scores, automatic_scores, history['publication_log'])
-
-        if message is None:
-            log(
-                f"{slot} の候補がすべて低評価のため、"
-                "この枠の投稿を見送ります"
-            )
+        # A daily quota is not a reason to publish recycled generic advice.
+        # Only the interactive fan question may use a clearly labelled
+        # non-news fallback. All other slots require fresh verified content.
+        if slot != "vote":
+            log(f"品質ゲート: {slot} に検証済み新情報がないため投稿見送り")
             return
-
-        log(f"評価フィルター適用: {slot}")
+        message = choose_fallback(
+            slot, day, scores, automatic_scores, history['publication_log']
+        )
+        if message is None:
+            log("品質ゲート: vote 候補なし、投稿見送り")
+            return
+        log("ファン参加型の質問を投稿")
 
     # Build the detailed visual first. A teaser is only appropriate when
     # an image was actually prepared; otherwise publish the full explanation.
