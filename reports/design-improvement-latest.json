@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T05:12:05.031223+09:00",
+  "updated_at": "2026-10-20T20:13:41.304Z",
   "template_version": 3,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -16,7 +16,7 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "pending",
+  "ci_status": "passed",
   "publication_status": "No extra X post sent. No normal scheduled run since rollout was present at inspection; next JST08:00 scheduled output and X display remain unverified.",
   "remaining": [
     "Brush headline fidelity still differs from approved artwork",
@@ -24,10 +24,12 @@
     "Verify next scheduled Buffer result and X image display"
   ],
   "next_priority": "Inspect next regular scheduled run, distinguish source-quality skips from errors, verify public image bytes, Buffer result and X display.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 45,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39489977943",
+  "implementation_commit": "0be584eef34225ccb6afc374f692818da777ccb3",
   "visual_review": "Compared approved artwork and freshly rendered preview: larger white player names and smaller yellow detail improve information hierarchy; metadata no longer consumes a story panel. Exact source copy is retained in layout audit.",
   "baseline_commit": "96e9a2027354917685712fdf2ec44613db0568a0",
-  "pending_posts_observed": 0
+  "pending_posts_observed": 0,
+  "ci_artifact_id": 12295012222,
+  "additional_local_preview_path": "generated/match_metadata_preview.jpg"
 }
