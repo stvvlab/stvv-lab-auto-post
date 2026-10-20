@@ -3,6 +3,14 @@
   "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/583b6ac1202bd182ee2e4438cbe18505b88cd1b8/generated/first_verified_card.png",
   "buffer_id": "6ad7b55559e93798fafb6b38",
   "buffer_status": "sent",
-  "x_display_verified": false,
-  "x_url": null
+  "x_display_verified": true,
+  "x_url": "https://x.com/stvvlabo/status/2112614651674390600",
+  "verification_method": "Manual browser visual inspection of the public X post: caption, attached PNG, score and Japanese labels matched; 2026-10-21 JST.",
+  "tests": {
+    "local": 31,
+    "github_actions": 31,
+    "result": "passed",
+    "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39476574544"
+  },
+  "design_note": "Code-native navy/yellow adaptation of PR21; original adopted raster could not be materialized. PR20/21 were reviewed but not merged."
 }
