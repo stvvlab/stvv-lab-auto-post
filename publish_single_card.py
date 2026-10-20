@@ -8,6 +8,7 @@ from pathlib import Path
 
 import stvv_post as posting
 from single_card import render, validate
+from PIL import Image as PILImage
 
 MANIFEST = Path('editorial/first_verified_card.json')
 IMAGE = Path('generated/first_verified_card.png')
@@ -19,11 +20,27 @@ def write_report(value):
     REPORT.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
+def prepare_image(data):
+    """Use approved raster bytes verbatim; never replace them with a redraw."""
+    if 'asset_path' not in data:
+        return render(data, IMAGE)
+    path = Path(data['asset_path'])
+    if path.parent != Path('generated') or path.suffix not in {'.jpg', '.png'}:
+        raise ValueError('Approved image must be a generated JPEG or PNG')
+    if hashlib.sha256(path.read_bytes()).hexdigest() != data.get('asset_sha256'):
+        raise ValueError('Approved asset digest mismatch; no post sent')
+    with PILImage.open(path) as image:
+        if list(image.size) != data.get('asset_dimensions'):
+            raise ValueError('Approved image dimensions differ')
+        image.verify()
+    return path
+
+
 def main(publish=False):
     data = validate(json.loads(MANIFEST.read_text()))
     if posting.x_length(data['text']) > 270:
         raise ValueError('Caption exceeds X safety limit')
-    render(data, IMAGE)
+    image_path = prepare_image(data)
     if not publish:
         print('RENDER_OK: no Buffer request sent')
         return
@@ -34,7 +51,7 @@ def main(publish=False):
     # Publish the PNG first. No fallback to a different card or text-only post.
     posting.git('config', 'user.name', 'github-actions[bot]')
     posting.git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
-    posting.git('add', '--', str(IMAGE))
+    posting.git('add', '--', str(image_path))
     changed = subprocess.run(['git', 'diff', '--cached', '--quiet']).returncode
     if changed == 1:
         posting.git('commit', '-m', 'Render one verified STVV editorial pilot card')
@@ -42,10 +59,10 @@ def main(publish=False):
     elif changed != 0:
         raise RuntimeError('Cannot check image commit')
     rev = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
-    url = f'https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/{rev}/{IMAGE}'
+    url = f'https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/{rev}/{image_path}'
     remote = posting.SESSION.get(url, timeout=30)
     remote.raise_for_status()
-    if hashlib.sha256(remote.content).digest() != hashlib.sha256(IMAGE.read_bytes()).digest():
+    if hashlib.sha256(remote.content).digest() != hashlib.sha256(image_path.read_bytes()).digest():
         raise RuntimeError('Public PNG mismatch; no post sent')
     posting.publish(history, data['key'], data['text'], 'recap',
                     source=data['source_url'], image_url=url)

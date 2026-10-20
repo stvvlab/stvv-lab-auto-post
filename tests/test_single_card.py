@@ -43,3 +43,13 @@ class SingleCardTests(unittest.TestCase):
                  patch.object(pilot.posting, 'publish') as publish:
                 pilot.main(True)
                 publish.assert_not_called()
+
+    def test_approved_asset_is_used_without_redrawing(self):
+        with patch.object(pilot, 'render') as render:
+            self.assertEqual(pilot.prepare_image(self.data), Path(self.data['asset_path']))
+            render.assert_not_called()
+
+    def test_modified_asset_fails_before_send(self):
+        data = dict(self.data, asset_sha256='0' * 64)
+        with self.assertRaises(ValueError):
+            pilot.prepare_image(data)

@@ -50,4 +50,5 @@ jobs:
           name: single-card-pilot
           path: |
             generated/first_verified_card.png
+            generated/approved_review_lommel_20261019.jpg
             reports/single-card-pilot.json
