@@ -16,7 +16,7 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "pending",
+  "ci_status": "passed",
   "publication_status": "No extra X post sent. At 2026-10-21 06:01 JST, no normal scheduled run using the new renderer had occurred; the next JST08:00 output and X display remain unverified.",
   "remaining": [
     "Japanese and data-card output still needs review after a real scheduled generation",
@@ -24,12 +24,12 @@
     "Verify next scheduled Buffer result and X image display"
   ],
   "next_priority": "Inspect next regular scheduled run, distinguish source-quality skips from errors, verify public image bytes, Buffer result and X display.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 45,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39497691359",
+  "implementation_commit": "bd59d048108511c0d3f535bbfa579b9f68254a95",
   "visual_review": "Compared before and after at full size: the white tapered sweep adds the missing brush follow-through under REVIEW while staying clear of the match card. Headline, score, panels and verified source copy are unchanged.",
   "baseline_commit": "d4fd5484b58c3c968b8f41067889cbb9d47063a9",
   "pending_posts_observed": 0,
-  "ci_artifact_id": 12295012222,
+  "ci_artifact_id": 12298077319,
   "additional_local_preview_path": "generated/auto_stadium_preview.jpg"
 }
