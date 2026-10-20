@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T07:05:00+09:00",
+  "updated_at": "2026-10-21T08:06:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -17,19 +17,27 @@
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "No extra X post sent. At 2026-10-21 07:01 JST, no normal scheduled run using the new renderer had occurred. The 08:00 player slot will be explicitly recorded as a safe skip when it lacks verified new content, rather than being confused with an error.",
+  "publication_status": "At 2026-10-21 08:06 JST, GitHub had not created the 08:00 scheduled workflow run. This is schedule-start delay, not a content skip or processing error. posted.json remained at 103 used posts and 0 pending posts; no Buffer submission or X post occurred.",
   "remaining": [
-    "Review the explicit outcome of the JST08:00 player slot",
+    "Review the delayed JST08:00 player run when GitHub creates it",
     "Review actual news/data cards after a scheduled generation",
     "Verify next scheduled Buffer result and X image display"
   ],
-  "next_priority": "Inspect the 08:00 result; if submitted, verify public image bytes, Buffer result and X display. If skipped, preserve the exact reason and inspect the next eligible slot.",
+  "next_priority": "Recheck whether GitHub created the delayed 08:00 run. If submitted, verify image bytes, Buffer and X; if skipped, record the explicit RUN_RESULT.",
   "ci_tests_passed": 46,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39505402748",
   "implementation_commit": "265e44911384e9662f5c824829fd197d195979ed",
   "visual_review": "Fresh preview rendered and inspected at full size. This pass changes run observability only; the approved stadium composition, brush sweep, score and panel hierarchy remain visually intact.",
   "baseline_commit": "6eb24bda07e711824f9bf0e2db43262713df916e",
   "pending_posts_observed": 0,
+  "scheduled_run_observation": {
+    "slot": "2026-10-21 08:00 JST player",
+    "checked_at": "2026-10-21T08:06:00+09:00",
+    "workflow_run_created": false,
+    "classification": "schedule_start_delayed",
+    "buffer_submission_observed": false,
+    "x_post_observed": false
+  },
   "ci_artifact_id": 12302043848,
   "additional_local_preview_path": "generated/auto_stadium_preview.jpg"
 }
