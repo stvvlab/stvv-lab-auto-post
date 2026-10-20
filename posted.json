@@ -109,7 +109,8 @@
     "daily_2026-10-19_vote",
     "daily_2026-10-19_recap",
     "daily_2026-10-20_player",
-    "daily_2026-10-20_compare"
+    "daily_2026-10-20_compare",
+    "daily_2026-10-20_data"
   ],
   "publication_log": [
     {
@@ -748,16 +749,18 @@
       "submitted_at": "2026-10-20T10:59:17.515092+09:00",
       "text": "⚔️ 数字を並べると、違いが見えてくる。\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/e40112ea9d3eb047ae9030c5b8cf3fe8dd7d7060/generated/content_2026-10-20_compare.png"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-20_data": {
+    },
+    {
+      "key": "daily_2026-10-20_data",
       "slot": "data",
       "source": null,
+      "buffer_id": "6ad6e7302d48e20f64c791db",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-20T12:59:46.307715+09:00",
       "text": "📊 数字だけでは見えないポイント、整理しました。\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/13a2471f4b9618009e8c4e22b5f9505f280f8d6d/generated/content_2026-10-20_data.png",
-      "created_at": "2026-10-20T12:59:42.277157+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/13a2471f4b9618009e8c4e22b5f9505f280f8d6d/generated/content_2026-10-20_data.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
