@@ -1077,8 +1077,9 @@ def main():
         or media_for(source, slot)
         or generic_topic_media(slot)
     )
-    if image_url and "/generated/content_" in image_url:
-        message = image_teaser(slot, message, source)
+    # Restore useful, specific captions. Generic image-tap teasers hid
+    # the actual topic and repeated identical hooks across days.
+    # Keep the original fact-checked text alongside the visual.
     message += HASHTAGS
 
     publish(
