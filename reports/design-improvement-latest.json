@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-10-20T20:13:41.304Z",
-  "template_version": 3,
+  "updated_at": "2026-10-21T06:07:00+09:00",
+  "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Separate existing short panel leads from details using larger white type and smaller yellow type; preserve original copy exactly",
-    "Move explicit match date and home/away text into match metadata only when an explicit score exists",
-    "Fall back to full-panel layout when separate lead/detail cannot fit without losing text"
+    "Add a deterministic tapered paint sweep below the large brush heading",
+    "Use five irregular local bristle trails to strengthen motion without adding content",
+    "Record the accent bounds and strokes in the per-image layout audit"
   ],
   "preview_path": "generated/auto_stadium_preview.jpg",
   "preview_layout_path": "generated/auto_stadium_preview.layout.json",
@@ -16,20 +16,20 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "No extra X post sent. No normal scheduled run since rollout was present at inspection; next JST08:00 scheduled output and X display remain unverified.",
+  "ci_status": "pending",
+  "publication_status": "No extra X post sent. At 2026-10-21 06:01 JST, no normal scheduled run using the new renderer had occurred; the next JST08:00 output and X display remain unverified.",
   "remaining": [
-    "Brush headline fidelity still differs from approved artwork",
+    "Japanese and data-card output still needs review after a real scheduled generation",
     "Review actual news/data cards after scheduled generation",
     "Verify next scheduled Buffer result and X image display"
   ],
   "next_priority": "Inspect next regular scheduled run, distinguish source-quality skips from errors, verify public image bytes, Buffer result and X display.",
-  "ci_tests_passed": 45,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39489977943",
-  "implementation_commit": "0be584eef34225ccb6afc374f692818da777ccb3",
-  "visual_review": "Compared approved artwork and freshly rendered preview: larger white player names and smaller yellow detail improve information hierarchy; metadata no longer consumes a story panel. Exact source copy is retained in layout audit.",
-  "baseline_commit": "96e9a2027354917685712fdf2ec44613db0568a0",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Compared before and after at full size: the white tapered sweep adds the missing brush follow-through under REVIEW while staying clear of the match card. Headline, score, panels and verified source copy are unchanged.",
+  "baseline_commit": "d4fd5484b58c3c968b8f41067889cbb9d47063a9",
   "pending_posts_observed": 0,
   "ci_artifact_id": 12295012222,
-  "additional_local_preview_path": "generated/match_metadata_preview.jpg"
+  "additional_local_preview_path": "generated/auto_stadium_preview.jpg"
 }

@@ -66,11 +66,14 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 3)
+            self.assertEqual(audit['template_version'], 4)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
             self.assertGreaterEqual(audit['panels'][0]['font_size'], 22)
+            sweep = audit['heading_sweep']
+            self.assertEqual(sweep['box'], [448, 350, 520, 35])
+            self.assertEqual(len(sweep['bristles']), 5)
 
     def test_panel_hierarchy_preserves_exact_claim(self):
         with tempfile.TemporaryDirectory() as tmp:

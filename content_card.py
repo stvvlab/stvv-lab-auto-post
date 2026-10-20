@@ -101,6 +101,31 @@ def brush_title(draw, value, box, color):
     raise ValueError('Brush heading does not fit')
 
 
+def brush_sweep(draw, box, color=WHITE):
+    """Add a deterministic paint-brush finish below the editorial heading."""
+    x, y, width, height = box
+    mask = Image.new('L', (width, height), 0)
+    md = ImageDraw.Draw(mask)
+    # A tapered main stroke plus broken bristle trails. All marks stay inside
+    # the heading area and carry no information of their own.
+    md.polygon([(0, 5), (width - 44, 0), (width, 4),
+                (width - 86, 11), (22, 17)], fill=220)
+    rng = random.Random('stvv-lab-brush-sweep-v1')
+    bristles = []
+    for index in range(5):
+        start = rng.randrange(32, 160)
+        end = width - rng.randrange(12, 150)
+        row = 18 + index * 5
+        thickness = rng.randrange(2, 6)
+        md.polygon([(start, row), (end, row - rng.randrange(0, 4)),
+                    (end - rng.randrange(12, 46), row + thickness),
+                    (start + rng.randrange(8, 36), row + thickness + 1)],
+                   fill=rng.randrange(105, 205))
+        bristles.append([start, row, end])
+    draw.bitmap((x, y), mask, fill=color)
+    return {'box': list(box), 'bristles': bristles}
+
+
 def panel_boxes(groups):
     values = [value for value in groups if value.strip()]
     if not values:
@@ -194,7 +219,7 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 3, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 4, 'slot': slot,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
@@ -203,6 +228,7 @@ def render_content_card(slot, message, destination, source=None):
     first, second = LABELS[slot]
     audit['headings'] = [brush_title(d, first, (388, 8, 760, 170), YELLOW),
                          brush_title(d, second, (382, 169, 790, 193), WHITE)]
+    audit['heading_sweep'] = brush_sweep(d, (448, 350, 520, 35))
     if match:
         own, other, opponent = match
         if metadata:

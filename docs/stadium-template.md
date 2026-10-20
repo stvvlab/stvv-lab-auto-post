@@ -49,3 +49,10 @@ layout rather than losing text or failing on a narrower detail area.
 An explicit ISO match date plus home/away line is displayed as small match
 metadata when the caption also supplies an explicit score. Without a score,
 that line remains in the story content. No date is inferred.
+
+## Quality pass 4
+
+The large brush heading now ends in a deterministic tapered paint sweep and
+seven broken bristle trails. The accent stays above the information card and
+is generated locally from the bundled assets; it carries no fixture or player
+data. Its exact bounds and strokes are recorded in the layout audit.
