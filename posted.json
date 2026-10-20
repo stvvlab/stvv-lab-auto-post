@@ -794,6 +794,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/608f7386fd9af4ddeddabc24cdf8b85a5933c7b8/generated/content_2026-10-20_vote.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-20_recap": {
+      "slot": "recap",
+      "source": "thesportsdb:2611487",
+      "text": "⚽ STVVを振り返るとき、何が重要？\n\n👇 画像をタップして詳しくチェック！\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/2bb1e05b78ecd91e6677ce5ab99ecf59478ea510/generated/content_2026-10-20_recap.png",
+      "created_at": "2026-10-20T23:24:36.406788+09:00"
+    }
+  },
   "tracked_topics": {}
 }
