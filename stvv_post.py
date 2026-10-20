@@ -735,12 +735,12 @@ def generic_topic_media(slot):
 
 
 
-def content_card_media(slot, day, message):
+def content_card_media(slot, day, message, source=None):
     """Create a post-specific, faceless card and publish it before Buffer."""
     try:
         from content_card import render_content_card
-        path = Path("generated") / f"content_{day}_{slot}.png"
-        render_content_card(slot, message, path)
+        path = Path("generated") / f"content_{day}_{slot}.jpg"
+        render_content_card(slot, message, path, source=source)
         git("config", "user.name", "github-actions[bot]")
         git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
         git("add", "--", str(path))
@@ -768,7 +768,7 @@ def content_card_media(slot, day, message):
                 log(f"画像公開待ち {attempt + 1}/5: {error}")
             if attempt < 4:
                 time.sleep(3)
-        log("投稿内容入り画像の公開を確認できず、固定画像へフォールバック")
+        log("投稿内容入り画像の公開を確認できず、投稿を見送ります")
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError,
             requests.RequestException) as error:
         log(f"投稿内容入り画像生成不可: {error}")
@@ -1075,11 +1075,11 @@ def main():
     # Build the detailed visual first. A teaser is only appropriate when
     # an image was actually prepared; otherwise publish the full explanation.
     image_url = (
-        content_card_media(slot, day, message)
-        or faceless_player_media(slot, source)
-        or media_for(source, slot)
-        or generic_topic_media(slot)
+        content_card_media(slot, day, message, source=source)
     )
+    if not image_url:
+        log("採用デザイン画像を公開確認できないため、安全に投稿見送り")
+        return
     # Restore useful, specific captions. Generic image-tap teasers hid
     # the actual topic and repeated identical hooks across days.
     # Keep the original fact-checked text alongside the visual.
