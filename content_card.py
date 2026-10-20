@@ -111,7 +111,16 @@ def panel_boxes(groups):
             for index, value in enumerate(values)]
 
 
-def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False):
+def panel_parts(value):
+    """Promote only an existing short lead; never summarize or add a claim."""
+    if '\n' not in value:
+        found = re.fullmatch(r'([^、：:]{1,12})([、：:])(.+)', value)
+        if found:
+            return found.groups()
+    return None
+
+
+def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, dry_run=False):
     if not value:
         return
     x, y, width, height = box
@@ -121,6 +130,8 @@ def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False):
         # anchor='lt' removes language-dependent ascender offsets.
         step = size + max(4, size // 10)
         if len(lines) * step <= height and all(draw.textlength(line, font=face) <= width for line in lines):
+            if dry_run:
+                return {'font_size': size, 'lines': lines, 'box': list(box)}
             for index, line in enumerate(lines):
                 if brush:
                     mask = Image.new('L', (width, step), 0)
@@ -138,7 +149,7 @@ def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False):
     raise ValueError('Editorial text does not fit; refusing clipped or truncated image')
 
 
-def story(message):
+def story(message, include_metadata=False):
     paragraphs = [p.strip(' ｜|') for p in clean(message).splitlines() if p.strip(' ｜|')]
     if not paragraphs:
         raise ValueError('No publishable card text')
@@ -159,12 +170,17 @@ def story(message):
             match = found.groups()
         else:
             rest.append(line)
+    metadata = []
+    if match:
+        metadata = [line for line in rest if re.fullmatch(r'\d{4}-\d{2}-\d{2}｜(?:ホーム|アウェイ)', line)]
+        rest = [line for line in rest if line not in metadata]
     # Spread the verbatim paragraphs across three columns without adding data.
     groups = ['', '', '']
     for line in rest:
         index = min(range(3), key=lambda i: len(groups[i]))
         groups[index] += ('\n' if groups[index] else '') + line
-    return headline, match, groups
+    result = (headline, match, groups)
+    return (*result, metadata) if include_metadata else result
 
 
 def render_content_card(slot, message, destination, source=None):
@@ -172,16 +188,16 @@ def render_content_card(slot, message, destination, source=None):
         raise ValueError('Unknown slot')
     if len(clean(message)) > 600:
         raise ValueError('Caption exceeds supported card length')
-    headline, match, groups = story(message)
+    headline, match, groups, metadata = story(message, include_metadata=True)
     with Image.open(BACKGROUND) as background:
         if background.size != (W, H):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 2, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 3, 'slot': slot,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
-             'panels': []}
+             'match_metadata': metadata, 'panels': []}
     fitted(d, 'STVV LAB', (109, 28, 300, 46), 42, 30)
     fitted(d, '非公式ファンメディア', (112, 79, 300, 26), 20, 18)
     first, second = LABELS[slot]
@@ -189,8 +205,11 @@ def render_content_card(slot, message, destination, source=None):
                          brush_title(d, second, (382, 169, 790, 193), WHITE)]
     if match:
         own, other, opponent = match
-        fitted(d, 'STVV', (365, 424, 290, 65), 52, 30, YELLOW)
-        fitted(d, opponent, (755, 425, 250, 88), 43, 23)
+        if metadata:
+            audit['metadata_layout'] = fitted(d, ' / '.join(metadata), (365, 402, 650, 27), 22, 18)
+        team_y = 444 if metadata else 424
+        fitted(d, 'STVV', (365, team_y, 290, 65), 52, 30, YELLOW)
+        fitted(d, opponent, (755, team_y + 1, 250, 75), 43, 23)
         fitted(d, own + '–' + other, (540, 505, 470, 155), 142, 85, YELLOW)
         audit['headline_layout'] = fitted(d, headline, (365, 678, 650, 70), 46, 23)
     else:
@@ -201,9 +220,27 @@ def render_content_card(slot, message, destination, source=None):
         pd.rectangle((0, 0, width - 1, height - 1), outline=(140, 168, 190, 160), width=2)
         im.paste(plate, (left, top), plate)
         d.rectangle((left + 26, top + 25, left + 80, top + 32), fill=YELLOW)
-        details = fitted(d, value.replace('、', '、\n'),
-                         (left + 26, top + 62, width - 52, height - 83), 48, 22)
-        audit['panels'].append({'text': value, **details})
+        parts = panel_parts(value)
+        if parts:
+            lead, _, body = parts
+            try:
+                fitted(d, lead, (left + 26, top + 61, width - 52, 76), 62, 24, dry_run=True)
+                fitted(d, body, (left + 26, top + 149, width - 52, 88), 40, 22, dry_run=True)
+            except ValueError:
+                # Long copy keeps the proven full-panel layout; no dropped text.
+                parts = None
+        if parts:
+            lead, delimiter, body = parts
+            lead_layout = fitted(d, lead, (left + 26, top + 61, width - 52, 76), 62, 24)
+            body_layout = fitted(d, body, (left + 26, top + 149, width - 52, 88), 40, 22, YELLOW)
+            audit['panels'].append({'text': value, 'hierarchy': 'lead-and-detail',
+                                    'delimiter': delimiter, 'parts': [lead, body],
+                                    'font_size': min(lead_layout['font_size'], body_layout['font_size']),
+                                    'lead_layout': lead_layout, 'body_layout': body_layout})
+        else:
+            details = fitted(d, value.replace('、', '、\n'),
+                             (left + 26, top + 62, width - 52, height - 83), 48, 22)
+            audit['panels'].append({'text': value, 'hierarchy': 'body', **details})
     urls = re.findall(r'https?://[^\s]+', message)
     original = source or (urls[0] if urls else '')
     if original.startswith('https://stvv.jp/'):

@@ -66,11 +66,37 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 2)
+            self.assertEqual(audit['template_version'], 3)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
             self.assertGreaterEqual(audit['panels'][0]['font_size'], 22)
+
+    def test_panel_hierarchy_preserves_exact_claim(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'hierarchy.jpg'
+            render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
+            panel = json.loads(output.with_suffix('.layout.json').read_text())['panels'][0]
+            self.assertEqual(panel['delimiter'].join(panel['parts']), panel['text'])
+            self.assertGreater(panel['lead_layout']['font_size'], panel['body_layout']['font_size'])
+
+    def test_match_date_is_metadata_not_a_statistics_panel(self):
+        message = '試合結果\n2026-10-19｜ホーム\nSTVV 4–1 ロンメル\n結果：勝利。'
+        _, _, groups, metadata = story(message, include_metadata=True)
+        self.assertEqual(metadata, ['2026-10-19｜ホーム'])
+        self.assertNotIn('2026-10-19｜ホーム', groups)
+        # A date outside an explicit match must not disappear from the story.
+        _, _, groups = story('日程のお知らせ\n2026-10-19｜ホーム')
+        self.assertIn('2026-10-19｜ホーム', groups)
+
+    def test_long_detail_retains_full_panel_layout_without_losing_copy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'long.jpg'
+            detail = '注目点、' + '攻撃の組み立てを確認。' * 20
+            render_content_card('analysis', '戦術の見方\n' + detail, output)
+            panel = json.loads(output.with_suffix('.layout.json').read_text())['panels'][0]
+            self.assertEqual(panel['hierarchy'], 'body')
+            self.assertEqual(panel['text'], detail)
 
     def test_japanese_names_and_units_are_not_split_when_they_fit(self):
         draw = ImageDraw.Draw(Image.new('RGB', (800, 600)))

@@ -38,3 +38,14 @@ line breaks, coordinates and whether a score was present in the caption. The
 posting script commits this audit together with the image; CI also uploads it
 with the preview. This gives each improvement run evidence instead of relying
 on a successful file write as proof of visual quality.
+
+## Quality pass 3
+
+Short leads already separated from details by a source comma or colon can use
+larger white text above smaller yellow details. The exact original text and
+delimiter remain in the layout audit. Long copy falls back to the full-panel
+layout rather than losing text or failing on a narrower detail area.
+
+An explicit ISO match date plus home/away line is displayed as small match
+metadata when the caption also supplies an explicit score. Without a score,
+that line remains in the story content. No date is inferred.
