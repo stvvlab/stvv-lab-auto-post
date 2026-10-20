@@ -1,0 +1,13 @@
+{
+  "implemented": true,
+  "implementation_commit": "adc21beb90f74370866b18eaa54725362d326157",
+  "integration_tests_commit": "141bcbc6ebd0e1bec3838ffb5b4772841cb9a5cb",
+  "ci_tests_passed": 39,
+  "ci_preview_generated": true,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39479366844",
+  "paid_image_api_required": false,
+  "seven_scheduled_slots_preserved": true,
+  "background_asset": "assets/stadium_background.jpg",
+  "scheduled_post_after_rollout_verified_on_x": false,
+  "notes": "Existing Buffer path previously verified with approved raster. New source-text-driven renderer passed CI and mock scheduled routing tests. Actual next scheduled X publication remains to be observed; content quality gate may skip a slot."
+}
