@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#071329"/><stop offset=".58" stop-color="#12345a"/><stop offset="1" stop-color="#050b18"/></linearGradient><pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" fill="none" stroke="#42688a" stroke-opacity=".25" stroke-width="2"/></pattern><filter id="shadow"><feDropShadow dx="8" dy="12" stdDeviation="8" flood-color="#000" flood-opacity=".7"/></filter></defs>
+<rect width="1080" height="1350" fill="url(#bg)"/><rect width="1080" height="1350" fill="url(#grid)"/>
+<path d="M0 90L1080 0V210L0 460Z" fill="#123b65" opacity=".7"/><path d="M0 660L1080 350V480L0 780Z" fill="#ffdd00" opacity=".14"/>
+<path d="M0 880L1080 570" stroke="#ffdf00" stroke-width="18"/><path d="M0 930L1080 620" stroke="#fff" stroke-opacity=".25" stroke-width="5"/>
+<g opacity=".4" fill="none" stroke="#c3d5e9" stroke-width="5"><path d="M100 670Q540 300 980 670"/><path d="M100 690Q540 340 980 690"/><path d="M170 680L170 960M910 680L910 960"/></g>
+<rect x="0" y="0" width="1080" height="22" fill="#ffe100"/><text x="60" y="112" fill="#fff" font-size="64" font-family="Arial,sans-serif" font-weight="900">STVV LAB</text><text x="65" y="160" fill="#ffe100" font-size="25" font-family="Arial,sans-serif" font-weight="700">INDEPENDENT FOOTBALL MEDIA</text>
+<g filter="url(#shadow)"><text x="54" y="340" fill="#fff" font-size="112" font-family="Arial,sans-serif" font-weight="900">MATCH</text><text x="54" y="465" fill="#ffe100" font-size="138" font-family="Arial,sans-serif" font-weight="900">LAB.</text></g>
+<path d="M60 515H1020" stroke="#ffe100" stroke-width="7"/><text x="65" y="585" fill="#fff" font-size="36" font-family="Arial,sans-serif" font-weight="700">STVV  /  ANALYSIS  /  DATA</text>
+<rect x="58" y="770" width="964" height="340" rx="18" fill="#071423" fill-opacity=".94" stroke="#ffe100" stroke-width="4"/>
+<rect x="58" y="770" width="20" height="340" fill="#ffe100"/>
+<text x="112" y="860" fill="#ffe100" font-size="40" font-family="sans-serif" font-weight="800">STVV LAB</text>
+<text x="112" y="942" fill="#fff" font-size="64" font-family="sans-serif" font-weight="800">FACTS FIRST.</text>
+<text x="112" y="1010" fill="#c9d6e6" font-size="32" font-family="sans-serif">試合情報は検証後に掲載</text>
+<rect y="1170" width="1080" height="180" fill="#030b18"/><path d="M60 1200H1020" stroke="#ffe100" stroke-width="6"/><text x="60" y="1270" fill="#fff" font-size="35" font-family="Arial,sans-serif" font-weight="700">STVV LAB  /  FOOTBALL INTELLIGENCE</text>
+</svg>
