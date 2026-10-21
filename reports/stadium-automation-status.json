@@ -11,11 +11,14 @@
   "scheduled_post_after_rollout_verified_on_x": true,
   "notes": "The 2026-10-21 12:30 data slot executed at 13:00 JST. Official scorer facts revalidated, image and audit committed, public JPEG bytes matched, pending saved before Buffer, Buffer reported sent, and actual X caption and image were visually verified. No extra test post.",
   "verified_x_post_url": "https://x.com/stvvlabo/status/2112755968006099372",
-  "latest_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
+  "latest_implementation_commit": "2c0908414212cc4873df04846a6bde1727304594",
   "latest_renderer_template_version": 5,
   "latest_renderer_verified_on_x": false,
   "content_repetition_guard_live_verified": false,
   "content_repetition_guard_commit": "8db4cc9a348896d0ab4e28fdb4fb20700381d8e0",
-  "latest_ci_tests_passed": 64,
-  "latest_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39547553372"
+  "latest_ci_tests_passed": 66,
+  "latest_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903",
+  "latest_renderer_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
+  "news_candidate_repetition_filter_commit": "2c0908414212cc4873df04846a6bde1727304594",
+  "news_candidate_repetition_filter_live_verified": false
 }

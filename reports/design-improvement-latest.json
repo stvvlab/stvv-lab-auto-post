@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T15:08:55+09:00",
+  "updated_at": "2026-10-21T15:10:19+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -16,7 +16,7 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "awaiting_commit_checks",
+  "ci_status": "passed",
   "publication_status": "No new scheduled run or post observed; next regular news slot is 2026-10-21 15:30 JST. Live v5 and repetition gate remain unverified.",
   "remaining": [
     "Template v5 and repetition gate have not yet been observed in a subsequent live regular run",
@@ -24,9 +24,9 @@
     "Conservative duplicate matching does not provide general semantic understanding"
   ],
   "next_priority": "Inspect the regular 15:30 news run: repeated candidates must be excluded; a distinct verified article may pass all existing media/pending/byte checks.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 66,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903",
+  "implementation_commit": "2c0908414212cc4873df04846a6bde1727304594",
   "visual_review": "Regenerated existing v5 review/scorer previews and compared approved reference. Intact white scorer names and aligned yellow times remain readable. No new evidenced visual defect or style change this pass.",
   "baseline_commit": "34fa882b5a72014ba7bfda5fc431159681a9f1db",
   "pending_posts_observed": 0,
@@ -64,7 +64,11 @@
     "latest_scheduled_run_id": 39541618920,
     "new_scheduled_run_after_guard": false,
     "regression_failed_before_fix": true,
-    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599"
+    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599",
+    "ci_tests_passed": 66,
+    "ci_preview_rendered": true,
+    "ci_preview_artifact_uploaded": true,
+    "real_post_verification_this_pass": false
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
