@@ -60,3 +60,30 @@ class ScheduledStadiumTests(unittest.TestCase):
              patch.object(posting, 'auto_feedback_scores', return_value={}), \
              patch.object(posting, 'slot_for_run', return_value=('player', '2026-10-21')):
             self.assertEqual(posting.main(), 'skipped_no_verified_content')
+
+    def test_official_data_reaches_image_but_never_reposts_same_copy(self):
+        message, source = '公式得点時間データ', 'https://stvv.jp/news/game/20261019_1/'
+        for state in ['new', 'published', 'pending']:
+            history = {'used_posts': [], 'pending_posts': {}, 'publication_log': []}
+            old = {'text': message + posting.HASHTAGS}
+            if state == 'published':
+                history['publication_log'].append(old)
+            if state == 'pending':
+                history['pending_posts']['older_data'] = old
+            with ExitStack() as stack:
+                for name, value in [('load', history), ('load_feedback', []),
+                                    ('feedback_scores', {}), ('auto_feedback_scores', {}),
+                                    ('slot_for_run', ('data', '2026-10-21')), ('latest_match', None)]:
+                    stack.enter_context(patch.object(posting, name, return_value=value))
+                stack.enter_context(patch('official_match_data.scoring_data', return_value=(message, source)))
+                image = stack.enter_context(patch.object(posting, 'content_card_media', return_value='https://example.org/card.jpg'))
+                publish = stack.enter_context(patch.object(posting, 'publish', return_value=True))
+                result = posting.main()
+                if state == 'new':
+                    self.assertEqual(result, 'submitted_to_buffer')
+                    image.assert_called_once_with('data', '2026-10-21', message, source=source)
+                    publish.assert_called_once()
+                else:
+                    self.assertEqual(result, 'skipped_no_verified_content')
+                    image.assert_not_called()
+                    publish.assert_not_called()

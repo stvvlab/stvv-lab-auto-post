@@ -1,29 +1,33 @@
 {
-  "updated_at": "2026-10-21T11:20:00+09:00",
+  "updated_at": "2026-10-21T12:09:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/auto_stadium_preview.jpg",
-  "preview_layout_path": "generated/auto_stadium_preview.layout.json",
+  "changes": [
+    "Add official scoring-time fallback for the existing data slot when detailed stats are unavailable",
+    "Revalidate saved date, opponent, score and full scorer row against the live STVV official article on each use; expire after seven days",
+    "Block repeated/pending identical official data; render four scorers chronologically in two panels and remove orphan source-only labels"
+  ],
+  "preview_path": "generated/official_scoring_preview_v2.jpg",
+  "preview_layout_path": "generated/official_scoring_preview_v2.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 48,
+    "passed": 54,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "JST10:30 compare run began at 11:00:38, finished posting step at 11:01:15 with skipped_no_verified_content. No source-fetch error logged; image generation and Buffer submission were not reached. used_posts=103, pending_posts=0.",
+  "ci_status": "pending",
+  "publication_status": "No extra post sent. 12:30 regular data slot has not run yet. Real new-renderer Buffer submission and X display remain unverified.",
   "remaining": [
     "Review actual scheduled images when eligible content exists",
     "Verify scheduled Buffer acceptance and actual X image display"
   ],
-  "next_priority": "Check official sources for detailed statistics before adding any new data provider or content fallback; inspect 12:30 outcome without weakening source-content gate.",
-  "ci_tests_passed": 48,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39525383302",
-  "implementation_commit": "4f9a5539022fff41f3c369211b796ee4a48cb9af",
-  "visual_review": "Renderer unchanged. Regenerated image SHA256 matches previously visually verified preview: 35d725092c842b29531aad1e433d49ad5fbd1a9b5ea4f02b5b9902beac6e9220. No visual improvement claimed this pass.",
-  "baseline_commit": "8e7a07869960652001822d016a1515e0844b4822",
+  "next_priority": "Inspect 12:30 regular data run: verify official revalidation, JPEG/layout commit, matching public bytes, Buffer submission and X image display.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Live official verification passed. Data card generated and inspected: four named scorer times in chronological two-column panels; source-only orphan label removed. Existing adopted stadium palette and faceless composition retained.",
+  "baseline_commit": "489bd0033c97ab95b4a81ab2b9bf1d232296025c",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 10:30 JST compare",
@@ -38,22 +42,19 @@
     "x_post_observed": false
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Read-only source diagnosis found latest completed match selectable, but lookupeventstats returned eventstats:null. Existing content gate is behaving as intended; no unverified figures or renderer changes added.",
+  "latest_run_review": "Implemented source-verified data-slot fallback; no additional scheduled slot or manual send.",
   "checks_this_pass": {
-    "type": "read_only_free_source_availability_check",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
+    "official_page_fetched": true,
+    "official_facts_match": true,
+    "weighted_caption_length": 167,
+    "new_image_rendered": true,
+    "new_local_tests_run": true,
     "paid_api_used": false
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
-    "checked_at": "2026-10-21T11:20:00+09:00",
-    "provider": "TheSportsDB free public endpoints",
-    "latest_match_available": true,
-    "event_id": "2611487",
-    "eventstats": null,
-    "match_dates_and_scores_officially_reverified_this_pass": false,
-    "diagnosis": "Required detailed statistics currently absent, consistent with compare content-gate skip",
-    "raw_snapshot_path": "reports/source-availability-latest.json"
+    "detailed_stats_missing": true,
+    "official_scorer_times_available": true,
+    "source_url": "https://stvv.jp/news/game/20261019_1/"
   }
 }

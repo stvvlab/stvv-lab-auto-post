@@ -74,3 +74,13 @@ Buffer submissions in the posting summary.
 Trailing Japanese punctuation stays with the preceding intact name or term.
 When that combined unit exceeds the current width, the fitter reduces type
 size instead of moving only the last character of a name to the next line.
+
+## Official scoring-time data
+
+When the data slot lacks detailed statistics, a saved official match manifest
+can supply scorer names and times. Every use fetches the live STVV official
+article and checks its date, home opponent, score and complete scorer row.
+Facts expire after seven days; missing or changed evidence blocks the card.
+Identical text already published or pending is not reused. Four scorer rows
+appear in chronological order across two panels; the source URL is credited
+in the footer. No extra slot or test publication is created.

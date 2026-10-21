@@ -44,6 +44,9 @@ def font(size, brush=False):
 
 
 def clean(message):
+    # The real URL is credited in the footer. Do not leave an orphan label
+    # after removing a source-only caption line from the picture.
+    message = re.sub(r'(?m)^[ \t]*(?:公式|公式情報|出典)[：:][ \t]*https?://\S+[ \t]*$', '', message)
     message = re.sub(r'https?://\S+', '', message)
     message = re.sub(r'(?<!\w)#[^\s#]+', '', message)
     # Emoji are decoration in the caption, not Japanese font glyphs.
@@ -208,6 +211,10 @@ def story(message, include_metadata=False):
         rest = [line for line in rest if line not in metadata]
     # Spread the verbatim paragraphs across three columns without adding data.
     groups = ['', '', '']
+    if len(rest) == 4 and all(re.fullmatch(r'.+[：:]\d{1,3}分', line) for line in rest):
+        # Four scorer rows read chronologically in two equally sized panels.
+        groups = ['\n'.join(rest[:2]), '\n'.join(rest[2:]), '']
+        rest = []
     for line in rest:
         index = min(range(3), key=lambda i: len(groups[i]))
         groups[index] += ('\n' if groups[index] else '') + line

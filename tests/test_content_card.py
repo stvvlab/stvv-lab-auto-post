@@ -25,6 +25,12 @@ class ContentCardSmokeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 render_content_card("unknown", "text", Path(tmp) / "x.png")
 
+    def test_scorer_panels_keep_order_and_source_label_is_not_orphaned(self):
+        rows = ['松澤海斗：15分', '新川志音：39分', 'ソエル・ソエル：62分', 'ムブク：71分']
+        _, _, groups = story('\n'.join(['得点時間', 'STVV 4–1 ロンメル', *rows,
+                                        '公式：https://stvv.jp/news/game/20261019_1/']))
+        self.assertEqual(groups, ['\n'.join(rows[:2]), '\n'.join(rows[2:]), ''])
+
     def test_source_text_only_no_invented_score(self):
         headline, match, groups = story('STVV公式ニュース\n新川志音が加入後初ゴール。\nhttps://stvv.jp/news/game/20261019_1/')
         self.assertEqual(headline, '新川志音が加入後初ゴール。')

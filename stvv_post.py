@@ -1084,6 +1084,21 @@ def main():
         ) as error:
             log(f"試合取得不可: {error}")
 
+    if not message and slot == "data":
+        try:
+            from official_match_data import scoring_data
+            official = scoring_data(SESSION, now)
+            if official and x_length(official[0] + HASHTAGS) <= 270:
+                previous = history['publication_log'] + list(history['pending_posts'].values())
+                if not any(normalize_text(item.get('text', '')) == normalize_text(official[0])
+                           for item in previous):
+                    message, source = official
+                    log("詳細スタッツ不足を公式確認済みの得点時間データで補完")
+                else:
+                    log("公式得点時間データは投稿済み／確認待ちのため再利用しません")
+        except (OSError, ValueError, KeyError, TypeError, requests.RequestException) as error:
+            log(f"公式得点データ確認不可: {error}")
+
     if not message:
         # A daily quota is not a reason to publish recycled generic advice.
         # Only the interactive fan question may use a clearly labelled
