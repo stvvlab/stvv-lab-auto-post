@@ -4,7 +4,7 @@ import unittest
 import json
 from pathlib import Path
 from PIL import Image
-from content_card import LABELS, render_content_card, story, wrap, font, panel_boxes
+from content_card import LABELS, render_content_card, story, wrap, font, panel_boxes, fitted
 from PIL import ImageDraw
 
 class ContentCardSmokeTests(unittest.TestCase):
@@ -111,3 +111,15 @@ class ContentCardSmokeTests(unittest.TestCase):
             self.assertFalse(any(row.startswith(('、', '。', 'ー')) for row in rows))
         rows = wrap(draw, '松澤海斗、同点ゴール。', face, 360)
         self.assertTrue(any('ゴール' in row for row in rows))
+
+    def test_punctuation_at_width_boundary_shrinks_without_splitting_name(self):
+        draw = ImageDraw.Draw(Image.new('RGB', (400, 300)))
+        for text, word in [('松澤海斗、同点ゴール。', '松澤海斗、'),
+                           ('ゴール。', 'ゴール。')]:
+            width = int(draw.textlength(word[:-1], font=font(40)))
+            layout = fitted(draw, text, (0, 0, width, 200), 40, 22)
+            self.assertLess(layout['font_size'], 40)
+            self.assertIn(word, layout['lines'])
+            self.assertEqual(''.join(layout['lines']), text)
+            self.assertTrue(all(draw.textlength(line, font=font(layout['font_size'])) <= width
+                                for line in layout['lines']))

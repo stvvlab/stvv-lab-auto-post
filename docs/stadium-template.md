@@ -65,3 +65,9 @@ duplicate protection, missing verified content, missing vote candidates and
 failed public-image byte verification have distinct statuses. An unexpected
 exception still fails the workflow, so a safe skip is not confused with an
 error.
+
+## Punctuation at narrow widths
+
+Trailing Japanese punctuation stays with the preceding intact name or term.
+When that combined unit exceeds the current width, the fitter reduces type
+size instead of moving only the last character of a name to the next line.

@@ -1,43 +1,40 @@
 {
-  "updated_at": "2026-10-21T08:06:00+09:00",
+  "updated_at": "2026-10-21T09:11:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Emit one machine-readable RUN_RESULT for every normal scheduled outcome",
-    "Distinguish Buffer acceptance, duplicate protection, missing verified content, missing vote candidates and failed image-byte verification",
-    "Write the same outcome to the GitHub Actions step summary without changing posting state"
+    "Keep trailing punctuation with intact names and terms at narrow width boundaries; reduce type size instead of splitting the final name glyph"
   ],
   "preview_path": "generated/auto_stadium_preview.jpg",
   "preview_layout_path": "generated/auto_stadium_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 46,
+    "passed": 47,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "At 2026-10-21 08:06 JST, GitHub had not created the 08:00 scheduled workflow run. This is schedule-start delay, not a content skip or processing error. posted.json remained at 103 used posts and 0 pending posts; no Buffer submission or X post occurred.",
+  "ci_status": "pending",
+  "publication_status": "JST08:00 player run started at 08:16:32, safely skipped at 08:17:10: skipped_no_verified_content. No Buffer submission or X post; no extra test post sent.",
   "remaining": [
-    "Review the delayed JST08:00 player run when GitHub creates it",
-    "Review actual news/data cards after a scheduled generation",
-    "Verify next scheduled Buffer result and X image display"
+    "Review actual scheduled images when eligible content exists",
+    "Verify scheduled Buffer acceptance and actual X image display"
   ],
-  "next_priority": "Recheck whether GitHub created the delayed 08:00 run. If submitted, verify image bytes, Buffer and X; if skipped, record the explicit RUN_RESULT.",
-  "ci_tests_passed": 46,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39505402748",
-  "implementation_commit": "265e44911384e9662f5c824829fd197d195979ed",
-  "visual_review": "Fresh preview rendered and inspected at full size. This pass changes run observability only; the approved stadium composition, brush sweep, score and panel hierarchy remain visually intact.",
-  "baseline_commit": "6eb24bda07e711824f9bf0e2db43262713df916e",
+  "next_priority": "Inspect JST10:30 compare outcome; verify public bytes, Buffer and X if submitted. Preserve safe content skips.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Fresh stadium and narrow-width previews inspected. 松澤海斗、 stays on one line at 36px instead of splitting 松澤海 / 斗、 at 40px. Source characters preserved.",
+  "baseline_commit": "6a9d0cd942ea4936e93eba13de8787203b70bf78",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 08:00 JST player",
-    "checked_at": "2026-10-21T08:06:00+09:00",
-    "workflow_run_created": false,
-    "classification": "schedule_start_delayed",
+    "workflow_run_created": true,
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39513922988",
+    "classification": "skipped_no_verified_content",
+    "workflow_conclusion": "success",
     "buffer_submission_observed": false,
     "x_post_observed": false
   },
-  "ci_artifact_id": 12302043848,
-  "additional_local_preview_path": "generated/auto_stadium_preview.jpg"
+  "additional_local_preview_path": "generated/wrapping_boundary_preview.png"
 }

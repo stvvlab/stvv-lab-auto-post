@@ -59,6 +59,13 @@ def wrap(draw, value, face, width):
         expanded = []
         for token in tokens:
             # Preserve names, words and number/unit pairs whenever they fit.
+            if (expanded and token[0] in LINE_START_PROHIBITED
+                    and draw.textlength(expanded[-1], font=face) <= width):
+                # Keep punctuation with the preceding intact word. A line may
+                # exceed width here: fitted() then shrinks the font instead
+                # of tearing the last glyph off a player's name or term.
+                expanded[-1] += token
+                continue
             expanded.extend([token] if draw.textlength(token, font=face) <= width else list(token))
         for token in expanded:
             if current and draw.textlength(current + token, font=face) > width:
