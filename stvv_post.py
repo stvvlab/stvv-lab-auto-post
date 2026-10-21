@@ -1117,6 +1117,12 @@ def main():
             return run_result("skipped_no_vote_candidate", f"{day} {slot}: 候補なし")
         log("ファン参加型の質問を投稿")
 
+    from content_guard import duplicate_reason
+    repeated = duplicate_reason(history, message, source, now)
+    if repeated:
+        log(f"内容重複ゲート: {repeated}")
+        return run_result("skipped_repeated_content", f"{day} {slot}: {repeated}")
+
     # Build the detailed visual first. A teaser is only appropriate when
     # an image was actually prepared; otherwise publish the full explanation.
     image_url = (

@@ -6,6 +6,9 @@ on:
     paths:
       - 'content_card.py'
       - 'stvv_post.py'
+      - 'content_guard.py'
+      - 'official_match_data.py'
+      - 'editorial/official_match_facts.json'
       - 'assets/**'
       - 'render_stadium_preview.py'
       - 'tests/**'
@@ -14,6 +17,10 @@ on:
     paths:
       - 'auto_feedback.py'
       - 'content_card.py'
+      - 'stvv_post.py'
+      - 'content_guard.py'
+      - 'official_match_data.py'
+      - 'editorial/official_match_facts.json'
       - 'discovery_brief.py'
       - 'tests/**'
       - '.github/workflows/auto-feedback-tests.yml'

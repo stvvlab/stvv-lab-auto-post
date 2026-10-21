@@ -1,0 +1,63 @@
+"""Regression cases from the two overlapping official Lommel posts."""
+import unittest
+from datetime import datetime, timezone, timedelta
+from unittest.mock import patch
+from contextlib import ExitStack
+from content_guard import duplicate_reason
+import stvv_post as posting
+
+URL = 'https://stvv.jp/news/game/20261019_1/'
+OLD = '⚽ STVV、4–1でカップ戦初戦を突破！\n松澤海斗の同点弾、新川志音の加入後初ゴールも生まれ、ロンメルに逆転勝利。'
+TIMES = '📊 公式記録で振り返る得点時間\nSTVV 4–1 ロンメル\n松澤海斗：15分\n新川志音：39分\nソエル・ソエル：62分\nムブク：71分'
+SHOTS = '⚔️ シュート数比較\nSTVV 4–1 ロンメル\nSTVV 14／相手 6'
+NOW = datetime(2026, 10, 21, 14, tzinfo=timezone(timedelta(hours=9)))
+
+
+class ContentGuardTests(unittest.TestCase):
+    def history(self, text=OLD, source=URL, pending=False):
+        item = {'text': text, 'source': source, 'submitted_at': NOW.isoformat()}
+        return {'used_posts': [], 'publication_log': [] if pending else [item],
+                'pending_posts': {'older': item} if pending else {}}
+
+    def test_result_then_goal_minutes_is_blocked_across_slots(self):
+        self.assertIsNotNone(duplicate_reason(self.history(), TIMES, URL, NOW))
+
+    def test_pending_and_tracking_url_variations_are_blocked(self):
+        self.assertIsNotNone(duplicate_reason(self.history(pending=True), TIMES, URL+'?utm_source=x', NOW))
+
+    def test_same_match_across_official_and_stats_provider_is_blocked(self):
+        self.assertIsNotNone(duplicate_reason(self.history(), TIMES.replace('ロンメル', 'Lommel'), 'thesportsdb:2611487', NOW))
+
+    def test_new_shot_comparison_is_allowed_once(self):
+        self.assertIsNone(duplicate_reason(self.history(), SHOTS, 'thesportsdb:2611487', NOW))
+        self.assertIsNotNone(duplicate_reason(self.history(SHOTS), SHOTS.replace('比較', 'データ'), URL, NOW))
+
+    def test_unrelated_new_official_news_is_allowed(self):
+        self.assertIsNone(duplicate_reason(self.history(), '新しい公式発表', 'https://stvv.jp/news/new-announcement/', NOW))
+
+    def test_expired_publication_does_not_block_new_coverage(self):
+        history = self.history()
+        history['publication_log'][0]['submitted_at'] = (NOW - timedelta(days=8)).isoformat()
+        self.assertIsNone(duplicate_reason(history, TIMES, URL, NOW))
+
+    def test_previous_comparison_cannot_be_reused_as_new_data(self):
+        history = self.history(SHOTS)
+        history['publication_log'].append({'text': OLD, 'source': URL})
+        rewritten = 'シュート：14 対 6\nSTVV 4–1 ロンメル'
+        self.assertIsNotNone(duplicate_reason(history, rewritten, URL, NOW))
+
+    def test_whitespace_punctuation_and_hashtags_do_not_evade_exact_guard(self):
+        self.assertIsNotNone(duplicate_reason(self.history('質問：どのプレー？'), '質問 どのプレー！\n#STVV', None, NOW))
+
+    def test_repeated_content_stops_before_image_or_buffer(self):
+        with ExitStack() as stack:
+            for name, value in [('load', self.history()), ('load_feedback', []),
+                                ('feedback_scores', {}), ('auto_feedback_scores', {}),
+                                ('slot_for_run', ('data', '2026-10-21')), ('latest_match', None)]:
+                stack.enter_context(patch.object(posting, name, return_value=value))
+            stack.enter_context(patch('official_match_data.scoring_data', return_value=(TIMES, URL)))
+            image = stack.enter_context(patch.object(posting, 'content_card_media'))
+            publish = stack.enter_context(patch.object(posting, 'publish'))
+            self.assertEqual(posting.main(), 'skipped_repeated_content')
+            image.assert_not_called()
+            publish.assert_not_called()

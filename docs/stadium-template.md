@@ -84,3 +84,20 @@ Facts expire after seven days; missing or changed evidence blocks the card.
 Identical text already published or pending is not reused. Four scorer rows
 appear in chronological order across two panels; the source URL is credited
 in the footer. No extra slot or test publication is created.
+
+## Repeated match coverage
+
+Before image generation and Buffer submission, `content_guard.py` compares
+the proposed caption with published and pending entries from the last seven
+days. It ignores cosmetic punctuation, whitespace and hashtag changes;
+canonical source URLs ignore query strings and trailing slashes. Shared
+sources or recognized opponent/score combinations identify repeated match
+coverage, including saved Japanese/English opponent aliases.
+
+A second result/scorer/goal-minute recap is skipped with
+`skipped_repeated_content`. A new structured shot, shots-on-target or
+possession comparison can pass once; existing source verification remains
+required. These are conservative local rules, not general semantic AI:
+an update to the same article without a recognized new comparison is also
+held back. Different official announcements remain eligible. Existing slot,
+pending-before-send and public-image byte checks are unchanged.
