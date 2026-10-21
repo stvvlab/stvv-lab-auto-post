@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T14:04:00+09:00",
+  "updated_at": "2026-10-21T14:07:00+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -16,7 +16,7 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "awaiting_commit_checks",
+  "ci_status": "passed",
   "publication_status": "No regular posting run after content guard rollout as of 2026-10-21 14:04 JST. Existing template v4 post remains verified; template v5 has only offline preview verification.",
   "remaining": [
     "Template v5 and repetition gate have not yet been observed in a subsequent live regular run",
@@ -24,9 +24,9 @@
     "Conservative duplicate matching does not provide general semantic understanding"
   ],
   "next_priority": "Confirm repetition guard in the next eligible regular run; inspect v5 live only when verified nonrepeated content is available.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 64,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39547553372",
+  "implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
   "visual_review": "Compared approved review, actual v4 data card and newly rendered v5 preview: scorer names remain white and intact; yellow 52px scoring times align right with a 24px reserved gap and chronological rows. Source text is unchanged; no new facts or faces.",
   "baseline_commit": "0c1576d622fe4cedd7b438af6f6280cd8d16d973",
   "pending_posts_observed": 0,
@@ -62,7 +62,11 @@
     "x_checked_this_pass": false,
     "production_tests_run": false,
     "latest_scheduled_run_id": 39541618920,
-    "new_scheduled_run_after_guard": false
+    "new_scheduled_run_after_guard": false,
+    "ci_preview_rendered": true,
+    "ci_preview_artifact_uploaded": true,
+    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599",
+    "ci_tests_passed": 64
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
