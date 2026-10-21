@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T00:07:38+09:00",
+  "updated_at": "2026-10-22T01:08:08+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -21,12 +21,12 @@
     "Template v5 still awaits eligible nonrepeated publication for actual X image verification",
     "Schedule trigger delays persist; root cause unknown"
   ],
-  "next_priority": "Next eligible regular slot: verify source facts and nonrepetition, then image/public bytes/pending-before-Buffer/X if submitted. Observe vote replacement on next regular vote run. Do not replay completed recap or force repeated facts.",
+  "next_priority": "Next regular slot is 2026-10-22 08:00 JST player. Inspect outcome without filling missing verified facts. Observe vote replacement on next regular vote run; verify v5 image on X only after an eligible scheduled publication.",
   "ci_tests_passed": 70,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39605924442",
   "implementation_commit": "586d753900fd30fc35327ebac38f97567bc64220",
   "visual_review": "Approved flag/stadium/navy-yellow composition preserved. Vote question remains readable with intact Japanese lines; scoring rows retain white names and larger yellow aligned minutes. Reproduced bytes identical to prior previews. No new style change.",
-  "baseline_commit": "2f98ce0ccdf69e798e55bdfc4da77b0caf4374dc",
+  "baseline_commit": "6f2c5034c1019da8f5229a61bec1ecbe0a43af61",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 23:00 JST recap",
@@ -54,19 +54,18 @@
     "reason": "同じ出典／試合の内容で、新しい比較データがないため見送り"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Read latest main, template documentation, both reports and posted.json. Reviewed real posting step separately from mock test logs. Latest regular run passed 70 tests and emitted skipped_repeated_content; no image or Buffer call. No new renderer defect established and no justified code change.",
+  "latest_run_review": "Latest main, template documentation, both reports, posted.json and Actions checked. No new scheduled run since the already recorded 23:00 recap. Reviewed current typography fit/wrap, panel hierarchy and source-only rendering against established preview review; no newly evidenced defect warrants a change. No extra posting or redundant test rerun.",
   "checks_this_pass": {
-    "type": "regular_recap_production_log_and_history_review",
+    "type": "current_state_and_renderer_code_review",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": true,
-    "production_tests_passed": 70,
-    "production_test_duration_seconds": 19.297,
+    "production_tests_run": false,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
     "latest_scheduled_run_id": 39616657973,
-    "diff_check": "passed"
+    "diff_check": "passed",
+    "new_scheduled_run_since_previous_pass": false
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -149,5 +148,6 @@
     "buffer_submission_reached": null,
     "x_post_url": null,
     "reason": "No 23:00 scheduled workflow run visible in GitHub Actions at 23:10:47 JST; this is not a content skip or a posting error."
-  }
+  },
+  "visual_review_performed_this_pass": false
 }
