@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T22:11:57+09:00",
+  "updated_at": "2026-10-21T22:13:18+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -18,7 +18,7 @@
     "diff_check": "passed",
     "initial_environment_failure": "15 render errors from truncated local Japanese font; replaced with complete free official Noto font and final suite passed"
   },
-  "ci_status": "awaiting_commit_checks",
+  "ci_status": "passed",
   "publication_status": "21:00 vote regular run safely skipped repeated match content at 21:30:55 before media/Buffer. The new fallback-selection fix is for future regular runs only; no replay or extra post.",
   "remaining": [
     "New vote fallback transition has not yet been observed in a subsequent regular run",
@@ -26,9 +26,9 @@
     "Schedule trigger delays persist; root cause unknown"
   ],
   "next_priority": "Observe next regular outcomes; verify media/pending/Buffer/X if eligible content proceeds. Do not rerun the completed 21:00 slot or bypass the duplicate guard.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 70,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39605924442",
+  "implementation_commit": "586d753900fd30fc35327ebac38f97567bc64220",
   "visual_review": "Existing v5 fan preview retains two-line 70px headline and yellow question, full original text, adopted navy/yellow flags/stadium/brush composition, no score/date or player face. Renderer style is unchanged.",
   "baseline_commit": "e0a96f5b79d47fc8f1fc28bc21dfde2192f4b201",
   "pending_posts_observed": 0,
@@ -70,7 +70,10 @@
     "regression_failed_before_fix": true,
     "local_environment_font_repaired": true,
     "preview_sha256": "822bbd08efcf7d4d5378bd065ca8997182a053c11b8f58159686ff5679ef30c2",
-    "finished_slot_not_replayed": true
+    "finished_slot_not_replayed": true,
+    "ci_tests_passed": 70,
+    "ci_preview_rendered": true,
+    "ci_preview_artifact_uploaded": true
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
