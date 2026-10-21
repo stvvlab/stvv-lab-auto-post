@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-10-21T14:07:00+09:00",
+  "updated_at": "2026-10-21T15:08:55+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Scorer panels separate intact white names from larger yellow right-aligned goal times",
-    "Preserve exact scorer ordering and delimiters in layout audit; fall back if a name cannot fit",
-    "CI preview artifact now includes scorer alignment image and audit"
+    "News selection now excludes repeated published or pending articles before choosing a candidate",
+    "Continues to the next distinct eligible official article rather than skipping the entire news slot",
+    "All-repeated candidates retain skipped_repeated_content and never reach image generation or Buffer"
   ],
   "preview_path": "generated/scorer_alignment_preview.jpg",
   "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 64,
+    "passed": 66,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "No regular posting run after content guard rollout as of 2026-10-21 14:04 JST. Existing template v4 post remains verified; template v5 has only offline preview verification.",
+  "ci_status": "awaiting_commit_checks",
+  "publication_status": "No new scheduled run or post observed; next regular news slot is 2026-10-21 15:30 JST. Live v5 and repetition gate remain unverified.",
   "remaining": [
     "Template v5 and repetition gate have not yet been observed in a subsequent live regular run",
     "Detailed statistics remain unavailable; do not fill gaps or repeat the scorer recap",
     "Conservative duplicate matching does not provide general semantic understanding"
   ],
-  "next_priority": "Confirm repetition guard in the next eligible regular run; inspect v5 live only when verified nonrepeated content is available.",
-  "ci_tests_passed": 64,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39547553372",
-  "implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
-  "visual_review": "Compared approved review, actual v4 data card and newly rendered v5 preview: scorer names remain white and intact; yellow 52px scoring times align right with a 24px reserved gap and chronological rows. Source text is unchanged; no new facts or faces.",
-  "baseline_commit": "0c1576d622fe4cedd7b438af6f6280cd8d16d973",
+  "next_priority": "Inspect the regular 15:30 news run: repeated candidates must be excluded; a distinct verified article may pass all existing media/pending/byte checks.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Regenerated existing v5 review/scorer previews and compared approved reference. Intact white scorer names and aligned yellow times remain readable. No new evidenced visual defect or style change this pass.",
+  "baseline_commit": "34fa882b5a72014ba7bfda5fc431159681a9f1db",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 12:30 JST data",
@@ -52,9 +52,9 @@
     "x_image_visually_verified": true
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main and Actions inspected: guard CI passed 63 tests; no subsequent scheduled run or new publication. Rendering improvement tested locally with 64 passing tests.",
+  "latest_run_review": "Reproduced blocked fresh-news selection with a failing regression, implemented candidate-level repetition filtering, and passed 66 local tests. No scheduled post after prior rollout as of this check.",
   "checks_this_pass": {
-    "type": "approved_baseline_comparison_local_render_and_regression",
+    "type": "news_candidate_regression_and_v5_visual_review",
     "new_local_tests_run": true,
     "new_image_rendered": true,
     "paid_api_used": false,
@@ -63,10 +63,8 @@
     "production_tests_run": false,
     "latest_scheduled_run_id": 39541618920,
     "new_scheduled_run_after_guard": false,
-    "ci_preview_rendered": true,
-    "ci_preview_artifact_uploaded": true,
-    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599",
-    "ci_tests_passed": 64
+    "regression_failed_before_fix": true,
+    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599"
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -81,5 +79,5 @@
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
   },
-  "previous_implementation_commit": "8db4cc9a348896d0ab4e28fdb4fb20700381d8e0"
+  "previous_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a"
 }

@@ -1026,11 +1026,13 @@ def main():
 
     log(f"定期投稿: {day} {slot}")
 
+    from content_guard import duplicate_reason
     message = None
     source = None
     news_url = None
 
     if slot == "news":
+        repeated_news = False
         try:
             for url, (_, title) in articles(now):
                 if url in history["news"]:
@@ -1043,6 +1045,11 @@ def main():
                 )
 
                 if x_length(candidate + HASHTAGS) <= 270:
+                    repeated = duplicate_reason(history, candidate, url, now)
+                    if repeated:
+                        repeated_news = True
+                        log(f"ニュース候補を重複除外: {url} / {repeated}")
+                        continue
                     message = candidate
                     source = url
                     news_url = url
@@ -1053,6 +1060,12 @@ def main():
             ValueError,
         ) as error:
             log(f"ニュース取得不可: {error}")
+
+        if not message and repeated_news:
+            return run_result(
+                "skipped_repeated_content",
+                f"{day} {slot}: ニュース候補を照合したが未投稿の別内容なし",
+            )
 
     if (
         not message
@@ -1117,7 +1130,6 @@ def main():
             return run_result("skipped_no_vote_candidate", f"{day} {slot}: 候補なし")
         log("ファン参加型の質問を投稿")
 
-    from content_guard import duplicate_reason
     repeated = duplicate_reason(history, message, source, now)
     if repeated:
         log(f"内容重複ゲート: {repeated}")

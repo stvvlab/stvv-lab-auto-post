@@ -102,6 +102,13 @@ an update to the same article without a recognized new comparison is also
 held back. Different official announcements remain eligible. Existing slot,
 pending-before-send and public-image byte checks are unchanged.
 
+News candidates are checked for repetition before selection. A repeated
+match article is excluded and the remaining verified official articles are
+considered in order; it cannot hide a later distinct announcement. When all
+otherwise eligible candidates repeat published or pending content, the run
+reports `skipped_repeated_content` before image creation or Buffer. The final
+pre-media repetition gate still checks the selected caption for every slot.
+
 ## Quality pass 5
 
 One or two explicitly supplied `name：minute分` rows in a lower panel use

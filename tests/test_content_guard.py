@@ -61,3 +61,36 @@ class ContentGuardTests(unittest.TestCase):
             self.assertEqual(posting.main(), 'skipped_repeated_content')
             image.assert_not_called()
             publish.assert_not_called()
+
+    def run_news_candidates(self, candidates, pending=False):
+        history = self.history(pending=pending)
+        history['news'] = []
+        with ExitStack() as stack:
+            for name, value in [('load', history), ('load_feedback', []),
+                                ('feedback_scores', {}), ('auto_feedback_scores', {}),
+                                ('slot_for_run', ('news', '2026-10-21')),
+                                ('articles', candidates)]:
+                stack.enter_context(patch.object(posting, name, return_value=value))
+            image = stack.enter_context(patch.object(posting, 'content_card_media', return_value='https://example.test/card.jpg'))
+            publish = stack.enter_context(patch.object(posting, 'publish', return_value=True))
+            result = posting.main()
+            return result, image, publish
+
+    def test_repeated_news_candidate_does_not_hide_next_distinct_article(self):
+        fresh = 'https://stvv.jp/news/team/20261020_1/'
+        result, image, publish = self.run_news_candidates([
+            (URL, (NOW.date(), 'ロンメル戦の試合結果について')),
+            (fresh, (NOW.date(), '別の公式発表について'))])
+        self.assertEqual(result, 'submitted_to_buffer')
+        self.assertEqual(image.call_args.kwargs['source'], fresh)
+        self.assertEqual(publish.call_args.args[4], fresh)
+        self.assertNotIn('ロンメル', publish.call_args.args[2])
+
+    def test_all_news_candidates_pending_or_published_stop_before_image(self):
+        for pending in (False, True):
+            with self.subTest(pending=pending):
+                result, image, publish = self.run_news_candidates([
+                    (URL+'?utm_source=x', (NOW.date(), 'ロンメル戦の試合結果について'))], pending)
+                self.assertEqual(result, 'skipped_repeated_content')
+                image.assert_not_called()
+                publish.assert_not_called()
