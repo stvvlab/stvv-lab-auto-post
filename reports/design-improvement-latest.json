@@ -1,36 +1,83 @@
 {
-  "updated_at": "2026-10-21T15:10:19+09:00",
+  "updated_at": "2026-10-21T16:05:10+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "News selection now excludes repeated published or pending articles before choosing a candidate",
-    "Continues to the next distinct eligible official article rather than skipping the entire news slot",
-    "All-repeated candidates retain skipped_repeated_content and never reach image generation or Buffer"
-  ],
+  "changes": [],
   "preview_path": "generated/scorer_alignment_preview.jpg",
   "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
     "passed": 66,
     "command": "python3 -m unittest discover -s tests",
-    "diff_check": "passed"
+    "diff_check": "passed",
+    "performed_this_pass": false,
+    "verified_by_prior_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903"
   },
   "ci_status": "passed",
-  "publication_status": "No new scheduled run or post observed; next regular news slot is 2026-10-21 15:30 JST. Live v5 and repetition gate remain unverified.",
+  "publication_status": "15:30 regular news slot has no observable Actions run as of this check. This is not a content skip, Buffer failure, or successful publication; cause remains unknown.",
   "remaining": [
-    "Template v5 and repetition gate have not yet been observed in a subsequent live regular run",
-    "Detailed statistics remain unavailable; do not fill gaps or repeat the scorer recap",
-    "Conservative duplicate matching does not provide general semantic understanding"
+    "15:30 schedule event is not observable; trigger delay or absence cause is unknown",
+    "Workflow active/disabled state cannot be fetched through the available connector endpoint",
+    "Template v5 and repetition filters still await a real regular run",
+    "Detailed match statistics remain unavailable"
   ],
-  "next_priority": "Inspect the regular 15:30 news run: repeated candidates must be excluded; a distinct verified article may pass all existing media/pending/byte checks.",
+  "next_priority": "Check whether the 15:30 schedule run appears; inspect actual posting logs if created. Preserve seven slots and do not create an extra test post.",
   "ci_tests_passed": 66,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903",
   "implementation_commit": "2c0908414212cc4873df04846a6bde1727304594",
-  "visual_review": "Regenerated existing v5 review/scorer previews and compared approved reference. Intact white scorer names and aligned yellow times remain readable. No new evidenced visual defect or style change this pass.",
-  "baseline_commit": "34fa882b5a72014ba7bfda5fc431159681a9f1db",
+  "visual_review": "Regenerated v5 scoring preview remains unchanged and readable against the approved reference. Names remain intact, time column is yellow and aligned; no visual modification made.",
+  "baseline_commit": "cba4f647ffb0f5dc2c83828ec07e78b999226471",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
+    "slot": "2026-10-21 15:30 JST news",
+    "checked_at": "2026-10-21T16:05:10+09:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_conclusion": null,
+    "production_tests_passed": null,
+    "image_generation_reached": false,
+    "public_byte_match": null,
+    "pending_saved_before_buffer": null,
+    "buffer_status": null,
+    "x_post_url": null,
+    "x_text_verified": false,
+    "x_image_visually_verified": false,
+    "reason": "No schedule event since 2026-10-21T04:00:05Z in Actions API; posted.json unchanged",
+    "cause": "unknown"
+  },
+  "additional_local_preview_path": null,
+  "latest_run_review": "Latest main, docs, reports, posted.json and schedule-filtered Actions read. No new run after the 13:00 execution, 104 used keys and zero pending entries. Regenerated v5 previews; no evidenced visual improvement warrants a code change.",
+  "checks_this_pass": {
+    "type": "scheduled_run_absence_and_visual_regeneration",
+    "new_local_tests_run": false,
+    "new_image_rendered": true,
+    "paid_api_used": false,
+    "new_public_post": false,
+    "x_checked_this_pass": false,
+    "production_tests_run": false,
+    "latest_scheduled_run_id": 39541618920,
+    "new_scheduled_run_after_guard": false,
+    "workflow_activation_metadata": "unavailable_in_connector_fetch_endpoint",
+    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599",
+    "prior_ci_tests_passed": 66
+  },
+  "actual_new_renderer_post_verified_on_x": false,
+  "source_availability": {
+    "detailed_stats_missing": true,
+    "official_scorer_times_available": true,
+    "source_url": "https://stvv.jp/news/game/20261019_1/"
+  },
+  "used_posts_observed": 104,
+  "content_overlap_review": {
+    "user_report_confirmed": true,
+    "actual_history_replay": "skipped_repeated_content",
+    "previous_transport_success_preserved": true,
+    "deleted_existing_posts": false
+  },
+  "previous_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
+  "code_changes_this_pass": false,
+  "previous_verified_scheduled_run": {
     "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39541618920",
@@ -50,38 +97,5 @@
     "x_post_url": "https://x.com/stvvlabo/status/2112755968006099372",
     "x_text_verified": true,
     "x_image_visually_verified": true
-  },
-  "additional_local_preview_path": null,
-  "latest_run_review": "Reproduced blocked fresh-news selection with a failing regression, implemented candidate-level repetition filtering, and passed 66 local tests. No scheduled post after prior rollout as of this check.",
-  "checks_this_pass": {
-    "type": "news_candidate_regression_and_v5_visual_review",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
-    "paid_api_used": false,
-    "new_public_post": false,
-    "x_checked_this_pass": false,
-    "production_tests_run": false,
-    "latest_scheduled_run_id": 39541618920,
-    "new_scheduled_run_after_guard": false,
-    "regression_failed_before_fix": true,
-    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599",
-    "ci_tests_passed": 66,
-    "ci_preview_rendered": true,
-    "ci_preview_artifact_uploaded": true,
-    "real_post_verification_this_pass": false
-  },
-  "actual_new_renderer_post_verified_on_x": false,
-  "source_availability": {
-    "detailed_stats_missing": true,
-    "official_scorer_times_available": true,
-    "source_url": "https://stvv.jp/news/game/20261019_1/"
-  },
-  "used_posts_observed": 104,
-  "content_overlap_review": {
-    "user_report_confirmed": true,
-    "actual_history_replay": "skipped_repeated_content",
-    "previous_transport_success_preserved": true,
-    "deleted_existing_posts": false
-  },
-  "previous_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a"
+  }
 }
