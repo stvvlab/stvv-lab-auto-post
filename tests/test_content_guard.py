@@ -94,3 +94,36 @@ class ContentGuardTests(unittest.TestCase):
                 self.assertEqual(result, 'skipped_repeated_content')
                 image.assert_not_called()
                 publish.assert_not_called()
+
+    def run_repeated_match_vote(self, fallback_already_posted=False):
+        fallback = 'MOMを決めるなら、どのプレーを重視する？'
+        history = self.history(TIMES)
+        if fallback_already_posted:
+            history['publication_log'].append({'text': fallback, 'source': None})
+        with ExitStack() as stack:
+            for name, value in [('load', history), ('load_feedback', []),
+                                ('feedback_scores', {}), ('auto_feedback_scores', {}),
+                                ('slot_for_run', ('vote', '2026-10-21')),
+                                ('latest_match', {'idEvent': '2611487'}),
+                                ('match_post', TIMES + '\nこの試合で印象に残った場面は？')]:
+                stack.enter_context(patch.object(posting, name, return_value=value))
+            choose = stack.enter_context(patch.object(posting, 'choose_fallback', return_value=fallback))
+            image = stack.enter_context(patch.object(posting, 'content_card_media', return_value='https://example.test/card.jpg'))
+            publish = stack.enter_context(patch.object(posting, 'publish', return_value=True))
+            return posting.main(), choose, image, publish, fallback
+
+    def test_repeated_match_vote_uses_distinct_fan_question(self):
+        result, choose, image, publish, fallback = self.run_repeated_match_vote()
+        self.assertEqual(result, 'submitted_to_buffer')
+        choose.assert_called_once()
+        self.assertEqual(image.call_args.args[2], fallback)
+        self.assertIsNone(image.call_args.kwargs['source'])
+        self.assertIsNone(publish.call_args.args[4])
+        self.assertNotIn('4–1', publish.call_args.args[2])
+
+    def test_repeated_match_and_repeated_fallback_still_stop_before_media(self):
+        result, choose, image, publish, _ = self.run_repeated_match_vote(True)
+        self.assertEqual(result, 'skipped_repeated_content')
+        choose.assert_called_once()
+        image.assert_not_called()
+        publish.assert_not_called()

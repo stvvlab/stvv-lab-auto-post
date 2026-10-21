@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "template_version": 5,
+  "slot": "vote",
+  "dimensions": [
+    1374,
+    1145
+  ],
+  "source": null,
+  "headline": "得点した選手と、試合を支えた選手。",
+  "score_from_caption": null,
+  "match_metadata": [],
+  "panels": [
+    {
+      "text": "MOMを決めるなら、どっちを重視する？",
+      "hierarchy": "lead-and-detail",
+      "delimiter": "、",
+      "parts": [
+        "MOMを決めるなら",
+        "どっちを重視する？"
+      ],
+      "font_size": 40,
+      "lead_layout": {
+        "font_size": 62,
+        "lines": [
+          "MOMを決めるなら"
+        ],
+        "box": [
+          68,
+          868,
+          1238,
+          76
+        ]
+      },
+      "body_layout": {
+        "font_size": 40,
+        "lines": [
+          "どっちを重視する？"
+        ],
+        "box": [
+          68,
+          956,
+          1238,
+          88
+        ]
+      }
+    }
+  ],
+  "headings": [
+    {
+      "font_size": 177,
+      "angle": 4,
+      "box": [
+        388,
+        8,
+        760,
+        170
+      ]
+    },
+    {
+      "font_size": 180,
+      "angle": 4,
+      "box": [
+        382,
+        169,
+        790,
+        193
+      ]
+    }
+  ],
+  "heading_sweep": {
+    "box": [
+      448,
+      350,
+      520,
+      35
+    ],
+    "bristles": [
+      [
+        32,
+        18,
+        434
+      ],
+      [
+        157,
+        23,
+        441
+      ],
+      [
+        74,
+        28,
+        507
+      ],
+      [
+        85,
+        33,
+        501
+      ],
+      [
+        94,
+        38,
+        418
+      ]
+    ]
+  },
+  "headline_layout": {
+    "font_size": 70,
+    "lines": [
+      "得点した選手と、",
+      "試合を支えた選手。"
+    ],
+    "box": [
+      368,
+      440,
+      632,
+      267
+    ]
+  }
+}

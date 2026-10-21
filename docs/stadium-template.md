@@ -122,6 +122,12 @@ otherwise eligible candidates repeat published or pending content, the run
 reports `skipped_repeated_content` before image creation or Buffer. The final
 pre-media repetition gate still checks the selected caption for every slot.
 
+For the vote slot only, a repeated match-based question is discarded before
+choosing the existing fact-free fan question fallback. The replacement has
+no match source and must pass the same final repetition gate. A repeated
+fallback still skips before image creation and Buffer; no retry or extra
+publication is triggered for a slot that has already finished.
+
 The official news list wraps a heading, `<time>` date and preview paragraph
 inside one link. Article selection uses the supplied h2/h3 heading and
 removes the time element, rather than accidentally treating the whole card

@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 from content_card import render_content_card
+from style_posts import STYLE_POSTS
 
 
 def main():
@@ -22,6 +23,8 @@ def main():
     news = json.loads(Path('editorial/verified_news_heading.json').read_text())
     render_content_card('news', 'STVV公式ニュース\n' + news['headline'],
                         'generated/news_heading_preview.jpg', source=news['source_url'])
+    vote = next(text for style, text in STYLE_POSTS['vote'] if style == 'short')
+    render_content_card('vote', vote, 'generated/vote_candidate_preview.jpg')
     print('STADIUM_PREVIEW_OK: no Buffer or X request sent')
 
 

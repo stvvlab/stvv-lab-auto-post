@@ -1118,6 +1118,13 @@ def main():
         except (OSError, ValueError, KeyError, TypeError, requests.RequestException) as error:
             log(f"公式得点データ確認不可: {error}")
 
+    if message and slot == "vote" and duplicate_reason(history, message, source, now):
+        # A repeated match recap must not hide the existing fact-free fan
+        # question route. The replacement still passes the final guard.
+        log("既報の試合質問を除外し、別のファン参加型候補を確認します")
+        message = None
+        source = None
+
     if not message:
         # A daily quota is not a reason to publish recycled generic advice.
         # Only the interactive fan question may use a clearly labelled

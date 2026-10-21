@@ -6,6 +6,7 @@ on:
     paths:
       - 'content_card.py'
       - 'stvv_post.py'
+      - 'style_posts.py'
       - 'content_guard.py'
       - 'official_match_data.py'
       - 'editorial/official_match_facts.json'
@@ -19,6 +20,7 @@ on:
       - 'auto_feedback.py'
       - 'content_card.py'
       - 'stvv_post.py'
+      - 'style_posts.py'
       - 'content_guard.py'
       - 'official_match_data.py'
       - 'editorial/official_match_facts.json'
@@ -54,3 +56,5 @@ jobs:
             generated/scorer_alignment_preview.layout.json
             generated/news_heading_preview.jpg
             generated/news_heading_preview.layout.json
+            generated/vote_candidate_preview.jpg
+            generated/vote_candidate_preview.layout.json
