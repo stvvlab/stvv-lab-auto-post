@@ -112,7 +112,9 @@ def run_result(status, detail):
     }
     log("RUN_RESULT " + json.dumps(payload, ensure_ascii=False))
     summary = os.getenv("GITHUB_STEP_SUMMARY")
-    if summary:
+    # The test step has GITHUB_STEP_SUMMARY too, but only the real posting
+    # step receives a recognized schedule. Never label mocked tests as posts.
+    if summary and os.getenv("GITHUB_SCHEDULE") in SLOTS:
         try:
             with Path(summary).open("a", encoding="utf-8") as handle:
                 handle.write(

@@ -65,6 +65,9 @@ duplicate protection, missing verified content, missing vote candidates and
 failed public-image byte verification have distinct statuses. An unexpected
 exception still fails the workflow, so a safe skip is not confused with an
 error.
+Only the real posting step with a recognized `GITHUB_SCHEDULE` writes this
+summary. Offline test results remain in test logs and cannot appear as actual
+Buffer submissions in the posting summary.
 
 ## Punctuation at narrow widths
 

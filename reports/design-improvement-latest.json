@@ -1,31 +1,31 @@
 {
-  "updated_at": "2026-10-21T09:11:00+09:00",
+  "updated_at": "2026-10-21T10:08:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Keep trailing punctuation with intact names and terms at narrow width boundaries; reduce type size instead of splitting the final name glyph"
+    "Restrict Actions posting summaries to recognized scheduled posting steps so offline mock Buffer acceptance cannot appear as real publication"
   ],
   "preview_path": "generated/auto_stadium_preview.jpg",
   "preview_layout_path": "generated/auto_stadium_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 47,
+    "passed": 48,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
+  "ci_status": "pending",
   "publication_status": "JST08:00 player run started at 08:16:32, safely skipped at 08:17:10: skipped_no_verified_content. No Buffer submission or X post; no extra test post sent.",
   "remaining": [
     "Review actual scheduled images when eligible content exists",
     "Verify scheduled Buffer acceptance and actual X image display"
   ],
   "next_priority": "Inspect JST10:30 compare outcome; verify public bytes, Buffer and X if submitted. Preserve safe content skips.",
-  "ci_tests_passed": 47,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39519764280",
-  "implementation_commit": "eed8ebccdfd521e567fb669bc04c6754216b470c",
-  "visual_review": "Fresh stadium and narrow-width previews inspected. 松澤海斗、 stays on one line at 36px instead of splitting 松澤海 / 斗、 at 40px. Source characters preserved.",
-  "baseline_commit": "6a9d0cd942ea4936e93eba13de8787203b70bf78",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Renderer unchanged this pass. Regenerated stadium preview to confirm established composition.",
+  "baseline_commit": "8e7a07869960652001822d016a1515e0844b4822",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 08:00 JST player",
@@ -36,5 +36,5 @@
     "buffer_submission_observed": false,
     "x_post_observed": false
   },
-  "additional_local_preview_path": "generated/wrapping_boundary_preview.png"
+  "additional_local_preview_path": null
 }

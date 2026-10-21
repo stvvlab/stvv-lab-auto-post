@@ -1,11 +1,27 @@
 """Scheduled path must attach the adopted image or send nothing. Offline."""
 import unittest
+import tempfile
+from pathlib import Path
 from contextlib import ExitStack
 from unittest.mock import patch
 import stvv_post as posting
 
 
 class ScheduledStadiumTests(unittest.TestCase):
+    def test_mock_results_do_not_pollute_actions_posting_summary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            summary = Path(tmp) / 'summary.md'
+            for schedule in ['', 'invalid', '0 23 * * *']:
+                with patch.dict(posting.os.environ, {
+                    'GITHUB_STEP_SUMMARY': str(summary),
+                    'GITHUB_SCHEDULE': schedule,
+                }), patch.object(posting, 'log'):
+                    posting.run_result('submitted_to_buffer', 'test result')
+                if schedule in posting.SLOTS:
+                    self.assertIn('submitted_to_buffer', summary.read_text())
+                else:
+                    self.assertFalse(summary.exists())
+
     def run_scheduled_vote(self, media):
         history = {'used_posts': [], 'pending_posts': {}, 'publication_log': []}
         with ExitStack() as stack:
