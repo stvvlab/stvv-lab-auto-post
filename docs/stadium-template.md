@@ -148,3 +148,11 @@ layout. The layout audit retains the exact delimiter and both text boxes.
 The CI preview artifact also includes `scorer_alignment_preview.jpg` and
 its audit, rendered offline from the saved verified manifest. These design
 previews are never sent to Buffer or exempted from the repetition gate.
+
+## Quality pass 6
+
+Body paragraphs that wrap to two very uneven lines can move intact tokens
+to a supplied Japanese clause boundary. This avoids leaving a short ending
+alone on the second line. The original characters, type size and line count
+are preserved. Explicit newlines, headings, scorer rows and lead/detail
+panels retain their existing layout; no copy is summarized or invented.

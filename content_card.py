@@ -187,13 +187,41 @@ def scorer_rows(draw, value, box, dry_run=False):
     return layouts
 
 
-def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, dry_run=False):
+def balanced_body_wrap(draw, value, face, width):
+    """Avoid an orphan ending in a two-line paragraph without rewriting it."""
+    lines = wrap(draw, value, face, width)
+    if '\n' in value or len(lines) != 2:
+        return lines
+    lengths = [draw.textlength(line, font=face) for line in lines]
+    if not max(lengths) or min(lengths) / max(lengths) >= 0.5:
+        return lines
+    best, ratio = lines, min(lengths) / max(lengths)
+    # Retain the same type size and line count; only move intact wrap tokens.
+    for candidate_width in range(width - 8, width // 2, -8):
+        candidate = wrap(draw, value, face, candidate_width)
+        if len(candidate) != 2:
+            continue
+        # Prefer an existing clause boundary over separating a compound
+        # such as 加入後初ゴール merely to make the line lengths equal.
+        if not candidate[0].endswith(tuple('でがはをにともへ、。！？＆')):
+            continue
+        lengths = [draw.textlength(line, font=face) for line in candidate]
+        if max(lengths) > width:
+            continue
+        candidate_ratio = min(lengths) / max(lengths)
+        if candidate_ratio > ratio:
+            best, ratio = candidate, candidate_ratio
+    return best
+
+
+def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, dry_run=False, balance=False):
     if not value:
         return
     x, y, width, height = box
     for size in range(maximum, minimum - 1, -1):
         face = font(size, brush)
-        lines = wrap(draw, value, face, width)
+        lines = (balanced_body_wrap(draw, value, face, width) if balance
+                 else wrap(draw, value, face, width))
         # anchor='lt' removes language-dependent ascender offsets.
         step = size + max(4, size // 10)
         if len(lines) * step <= height and all(draw.textlength(line, font=face) <= width for line in lines):
@@ -265,7 +293,7 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 5, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 6, 'slot': slot,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
@@ -322,7 +350,8 @@ def render_content_card(slot, message, destination, source=None):
                                     'lead_layout': lead_layout, 'body_layout': body_layout})
         else:
             details = fitted(d, value.replace('、', '、\n'),
-                             (left + 26, top + 62, width - 52, height - 83), 48, 22)
+                             (left + 26, top + 62, width - 52, height - 83), 48, 22,
+                             balance=True)
             audit['panels'].append({'text': value, 'hierarchy': 'body', **details})
     urls = re.findall(r'https?://[^\s]+', message)
     original = source or (urls[0] if urls else '')

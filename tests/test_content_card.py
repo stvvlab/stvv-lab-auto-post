@@ -72,7 +72,7 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 5)
+            self.assertEqual(audit['template_version'], 6)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
@@ -105,6 +105,28 @@ class ContentCardSmokeTests(unittest.TestCase):
                     name_box, time_box = row['name_layout']['box'], row['time_layout']['box']
                     self.assertLess(name_box[0] + name_box[2], time_box[0])
             self.assertEqual(reconstructed, rows)
+
+    def test_news_body_balances_orphan_ending_without_changing_copy_or_size(self):
+        news = json.loads(Path('editorial/verified_news_heading.json').read_text())
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'news.jpg'
+            render_content_card('news', 'STVV公式ニュース\n' + news['headline'], output)
+            panel = json.loads(output.with_suffix('.layout.json').read_text())['panels'][0]
+            self.assertEqual(''.join(panel['lines']), panel['text'])
+            self.assertEqual(panel['font_size'], 48)
+            self.assertEqual(len(panel['lines']), 2)
+            draw = ImageDraw.Draw(Image.new('RGB', (1374, 1145)))
+            lengths = [draw.textlength(line, font=font(48)) for line in panel['lines']]
+            self.assertGreater(min(lengths) / max(lengths), 0.55)
+            self.assertTrue(all(length <= panel['box'][2] for length in lengths))
+            self.assertTrue(any('ゴール' in line for line in panel['lines']))
+            self.assertTrue(any('加入後初ゴール' in line for line in panel['lines']))
+
+    def test_balancing_keeps_explicit_line_breaks(self):
+        draw = ImageDraw.Draw(Image.new('RGB', (1400, 300)))
+        value = '攻撃の組み立てを確認する。\n守備。'
+        layout = fitted(draw, value, (0, 0, 1238, 175), 48, 22, dry_run=True, balance=True)
+        self.assertEqual(layout['lines'], value.splitlines())
 
     def test_match_date_is_metadata_not_a_statistics_panel(self):
         message = '試合結果\n2026-10-19｜ホーム\nSTVV 4–1 ロンメル\n結果：勝利。'
