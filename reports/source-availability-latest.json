@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-10-21T11:20:00+09:00",
+  "purpose": "Read-only diagnosis; not publication content",
+  "latest_match_endpoint": "https://www.thesportsdb.com/api/v1/json/123/eventslast.php?id=135461",
+  "latest_match_result_count": 1,
+  "selected_event_id": "2611487",
+  "statistics_endpoint": "https://www.thesportsdb.com/api/v1/json/123/lookupeventstats.php?id=2611487",
+  "statistics_response": {"eventstats": null},
+  "public_post_sent": false,
+  "paid_api_used": false,
+  "conclusion": "Match is selectable but detailed statistics required by compare/data/analysis are unavailable at this check. No new figures approved for publication."
+}

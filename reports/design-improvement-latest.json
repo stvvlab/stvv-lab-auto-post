@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T11:10:00+09:00",
+  "updated_at": "2026-10-21T11:20:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -18,7 +18,7 @@
     "Review actual scheduled images when eligible content exists",
     "Verify scheduled Buffer acceptance and actual X image display"
   ],
-  "next_priority": "Inspect JST12:30 data run. If source-content gate skips again, diagnose source availability and official verification before changing any gate.",
+  "next_priority": "Check official sources for detailed statistics before adding any new data provider or content fallback; inspect 12:30 outcome without weakening source-content gate.",
   "ci_tests_passed": 48,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39525383302",
   "implementation_commit": "4f9a5539022fff41f3c369211b796ee4a48cb9af",
@@ -38,11 +38,22 @@
     "x_post_observed": false
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Reviewed production compare run and renderer code. No verified visual improvement identified this pass; no implementation changes made.",
+  "latest_run_review": "Read-only source diagnosis found latest completed match selectable, but lookupeventstats returned eventstats:null. Existing content gate is behaving as intended; no unverified figures or renderer changes added.",
   "checks_this_pass": {
-    "type": "read_only_production_log_and_state_review",
+    "type": "read_only_free_source_availability_check",
     "new_local_tests_run": false,
-    "new_image_rendered": false
+    "new_image_rendered": false,
+    "paid_api_used": false
   },
-  "actual_new_renderer_post_verified_on_x": false
+  "actual_new_renderer_post_verified_on_x": false,
+  "source_availability": {
+    "checked_at": "2026-10-21T11:20:00+09:00",
+    "provider": "TheSportsDB free public endpoints",
+    "latest_match_available": true,
+    "event_id": "2611487",
+    "eventstats": null,
+    "match_dates_and_scores_officially_reverified_this_pass": false,
+    "diagnosis": "Required detailed statistics currently absent, consistent with compare content-gate skip",
+    "raw_snapshot_path": "reports/source-availability-latest.json"
+  }
 }
