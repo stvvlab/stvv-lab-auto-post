@@ -1,32 +1,36 @@
 {
-  "updated_at": "2026-10-22T01:08:08+09:00",
-  "template_version": 5,
+  "updated_at": "2026-10-22T02:12:41+09:00",
+  "template_version": 6,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/vote_candidate_preview.jpg",
-  "preview_layout_path": "generated/vote_candidate_preview.layout.json",
+  "changes": [
+    "Balance a two-line body paragraph when the ending is less than half the longer line, using existing Japanese clause boundaries",
+    "Preserve verbatim characters, font size and line count; leave explicit newlines and other layout hierarchies unchanged",
+    "Add real saved official-headline regression and explicit-newline regression; update v6 layout audits"
+  ],
+  "preview_path": "generated/news_heading_preview.jpg",
+  "preview_layout_path": "generated/news_heading_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 70,
+    "passed": 72,
     "command": "python3 -m unittest discover -s tests",
-    "performed_this_pass": false,
-    "diff_check": "passed",
-    "initial_environment_failure": "15 render errors from truncated local Japanese font; replaced with complete free official Noto font and final suite passed"
+    "performed_this_pass": true,
+    "duration_seconds": 19.953,
+    "diff_check": "passed"
   },
   "ci_status": "passed",
   "publication_status": "23:00 recap ran at 23:25 JST and safely skipped repeated match coverage before image generation or Buffer. Not a send failure. History remains 104 used keys, zero pending.",
   "remaining": [
-    "New vote fallback transition has not yet been observed in a subsequent regular run",
-    "Template v5 still awaits eligible nonrepeated publication for actual X image verification",
-    "Schedule trigger delays persist; root cause unknown"
+    "Template v6 awaits eligible nonrepeated regular publication for actual X display verification",
+    "Vote fallback transition still awaits subsequent regular vote execution",
+    "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Next regular slot is 2026-10-22 08:00 JST player. Inspect outcome without filling missing verified facts. Observe vote replacement on next regular vote run; verify v5 image on X only after an eligible scheduled publication.",
-  "ci_tests_passed": 70,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39605924442",
-  "implementation_commit": "586d753900fd30fc35327ebac38f97567bc64220",
-  "visual_review": "Approved flag/stadium/navy-yellow composition preserved. Vote question remains readable with intact Japanese lines; scoring rows retain white names and larger yellow aligned minutes. Reproduced bytes identical to prior previews. No new style change.",
-  "baseline_commit": "6f2c5034c1019da8f5229a61bec1ecbe0a43af61",
+  "next_priority": "Observe next regular slots, preserving missing-facts and duplicate skips; verify v6 media/public bytes/pending/Buffer/X only when eligible content proceeds. Do not replay finished slots.",
+  "ci_tests_passed": 72,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39641545486",
+  "implementation_commit": "8bf607f9336489157dab8aa32ebd9782a0e5e218",
+  "visual_review": "Verified actual before/after JPEG. Before: short orphan ending 逆転勝利！. After: 松澤の同点弾＆新川の加入後初ゴールで / STVVが4-1の逆転勝利！. Same 48px font, exact original text, two lines. Adopted flags/stadium/brush/navy-yellow composition unchanged; no new factual content.",
+  "baseline_commit": "0205a09d198c975d427137e77176a70bac408f45",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 23:00 JST recap",
@@ -54,18 +58,21 @@
     "reason": "同じ出典／試合の内容で、新しい比較データがないため見送り"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main, template documentation, both reports, posted.json and Actions checked. No new scheduled run since the already recorded 23:00 recap. Reviewed current typography fit/wrap, panel hierarchy and source-only rendering against established preview review; no newly evidenced defect warrants a change. No extra posting or redundant test rerun.",
+  "latest_run_review": "Latest main/docs/reports/posted and Actions read; no new regular run since known 23:00 duplicate skip. Reproduced saved news heading, confirmed short-ending imbalance, implemented clause-aware balancing and visually verified improved paragraph. All four previews generated; local 72 tests pass. No additional public post.",
   "checks_this_pass": {
-    "type": "current_state_and_renderer_code_review",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
+    "type": "official_news_body_wrap_improvement",
+    "new_local_tests_run": true,
+    "new_image_rendered": true,
     "production_tests_run": false,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
     "latest_scheduled_run_id": 39616657973,
+    "preview_sha256": "35a1a9dd40b7ea9c4fb41e5c7f4f57193a21546cea74cf4a1388aac2c2d2ac35",
     "diff_check": "passed",
-    "new_scheduled_run_since_previous_pass": false
+    "ci_tests_passed": 72,
+    "ci_preview_rendered": true,
+    "ci_preview_artifact_uploaded": true
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -80,8 +87,8 @@
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
   },
-  "previous_implementation_commit": "d644af9fade1e21c5e91322549ff6a071c186692",
-  "code_changes_this_pass": false,
+  "previous_implementation_commit": "586d753900fd30fc35327ebac38f97567bc64220",
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,
@@ -135,8 +142,8 @@
     "x_image_visually_verified": false,
     "reason": "同じ出典／試合の内容で、新しい比較データがないため見送り"
   },
-  "preview_caption": "🇯🇵 得点した選手と、試合を支えた選手。\n\nMOMを決めるなら、どっちを重視する？",
-  "reflection_commit": "This report commit; implementation remains 586d753900fd30fc35327ebac38f97567bc64220",
+  "preview_caption": "STVV公式ニュース\nCroky Cup初戦は日本人選手が躍動！松澤の同点弾＆新川の加入後初ゴールでSTVVが4-1の逆転勝利！",
+  "reflection_commit": "This report commit; implementation_commit identifies deployed code",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-21 23:00 JST recap",
     "schedule_cron": "0 14 * * *",
@@ -149,5 +156,5 @@
     "x_post_url": null,
     "reason": "No 23:00 scheduled workflow run visible in GitHub Actions at 23:10:47 JST; this is not a content skip or a posting error."
   },
-  "visual_review_performed_this_pass": false
+  "visual_review_performed_this_pass": true
 }
