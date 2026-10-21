@@ -16,16 +16,16 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "pending",
+  "ci_status": "passed",
   "publication_status": "No extra post sent. 12:30 regular data slot has not run yet. Real new-renderer Buffer submission and X display remain unverified.",
   "remaining": [
     "Review actual scheduled images when eligible content exists",
     "Verify scheduled Buffer acceptance and actual X image display"
   ],
   "next_priority": "Inspect 12:30 regular data run: verify official revalidation, JPEG/layout commit, matching public bytes, Buffer submission and X image display.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 54,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39536966403",
+  "implementation_commit": "ac32cd470561bb9be9a82ca8ebe5a7b10672c69d",
   "visual_review": "Live official verification passed. Data card generated and inspected: four named scorer times in chronological two-column panels; source-only orphan label removed. Existing adopted stadium palette and faceless composition retained.",
   "baseline_commit": "489bd0033c97ab95b4a81ab2b9bf1d232296025c",
   "pending_posts_observed": 0,
