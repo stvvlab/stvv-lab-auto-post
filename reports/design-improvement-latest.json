@@ -1,11 +1,9 @@
 {
-  "updated_at": "2026-10-21T10:08:00+09:00",
+  "updated_at": "2026-10-21T11:10:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "Restrict Actions posting summaries to recognized scheduled posting steps so offline mock Buffer acceptance cannot appear as real publication"
-  ],
+  "changes": [],
   "preview_path": "generated/auto_stadium_preview.jpg",
   "preview_layout_path": "generated/auto_stadium_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
@@ -15,12 +13,12 @@
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "JST08:00 player run started at 08:16:32, safely skipped at 08:17:10: skipped_no_verified_content. No Buffer submission or X post; no extra test post sent.",
+  "publication_status": "JST10:30 compare run began at 11:00:38, finished posting step at 11:01:15 with skipped_no_verified_content. No source-fetch error logged; image generation and Buffer submission were not reached. used_posts=103, pending_posts=0.",
   "remaining": [
     "Review actual scheduled images when eligible content exists",
     "Verify scheduled Buffer acceptance and actual X image display"
   ],
-  "next_priority": "Inspect JST10:30 compare outcome; verify public bytes, Buffer and X if submitted. Preserve safe content skips.",
+  "next_priority": "Inspect JST12:30 data run. If source-content gate skips again, diagnose source availability and official verification before changing any gate.",
   "ci_tests_passed": 48,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39525383302",
   "implementation_commit": "4f9a5539022fff41f3c369211b796ee4a48cb9af",
@@ -28,13 +26,23 @@
   "baseline_commit": "8e7a07869960652001822d016a1515e0844b4822",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
-    "slot": "2026-10-21 08:00 JST player",
+    "slot": "2026-10-21 10:30 JST compare",
     "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39513922988",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39530580164",
     "classification": "skipped_no_verified_content",
     "workflow_conclusion": "success",
+    "production_tests_passed": 48,
+    "source_fetch_error_logged": false,
+    "image_generation_reached": false,
     "buffer_submission_observed": false,
     "x_post_observed": false
   },
-  "additional_local_preview_path": null
+  "additional_local_preview_path": null,
+  "latest_run_review": "Reviewed production compare run and renderer code. No verified visual improvement identified this pass; no implementation changes made.",
+  "checks_this_pass": {
+    "type": "read_only_production_log_and_state_review",
+    "new_local_tests_run": false,
+    "new_image_rendered": false
+  },
+  "actual_new_renderer_post_verified_on_x": false
 }
