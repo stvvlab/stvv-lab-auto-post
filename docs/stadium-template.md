@@ -122,6 +122,15 @@ otherwise eligible candidates repeat published or pending content, the run
 reports `skipped_repeated_content` before image creation or Buffer. The final
 pre-media repetition gate still checks the selected caption for every slot.
 
+The official news list wraps a heading, `<time>` date and preview paragraph
+inside one link. Article selection uses the supplied h2/h3 heading and
+removes the time element, rather than accidentally treating the whole card
+as a headline and rejecting it for length. Simple text links remain supported;
+the domain, freshness, excluded-topic, weighted-length and repetition gates
+still apply. No claim is rewritten or summarized by an external API.
+Excluded-topic keywords are still checked across the original whole card,
+so removing an excerpt from the displayed headline does not weaken filtering.
+
 ## Quality pass 5
 
 One or two explicitly supplied `name：minute分` rows in a lower panel use

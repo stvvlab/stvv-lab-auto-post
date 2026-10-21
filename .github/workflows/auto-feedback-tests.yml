@@ -9,6 +9,7 @@ on:
       - 'content_guard.py'
       - 'official_match_data.py'
       - 'editorial/official_match_facts.json'
+      - 'editorial/verified_news_heading.json'
       - 'assets/**'
       - 'render_stadium_preview.py'
       - 'tests/**'
@@ -21,6 +22,7 @@ on:
       - 'content_guard.py'
       - 'official_match_data.py'
       - 'editorial/official_match_facts.json'
+      - 'editorial/verified_news_heading.json'
       - 'discovery_brief.py'
       - 'tests/**'
       - '.github/workflows/auto-feedback-tests.yml'
@@ -50,3 +52,5 @@ jobs:
             generated/auto_stadium_preview.layout.json
             generated/scorer_alignment_preview.jpg
             generated/scorer_alignment_preview.layout.json
+            generated/news_heading_preview.jpg
+            generated/news_heading_preview.layout.json

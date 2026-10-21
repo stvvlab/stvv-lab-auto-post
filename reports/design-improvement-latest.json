@@ -1,34 +1,36 @@
 {
-  "updated_at": "2026-10-21T17:06:09+09:00",
+  "updated_at": "2026-10-21T18:14:21+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Corrected prior reporting: 15:30 is analysis, 18:00 is news; documented authoritative SLOTS mapping"
+    "Extract actual h2/h3 official news heading, removing nested time and excluding excerpt from caption",
+    "Preserve whole-card excluded-topic filtering and all source/length/repetition gates",
+    "Store verified headline for offline-only news preview and include image/audit in CI artifact"
   ],
-  "preview_path": "generated/scorer_alignment_preview.jpg",
-  "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
+  "preview_path": "generated/news_heading_preview.jpg",
+  "preview_layout_path": "generated/news_heading_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 66,
+    "passed": 68,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed",
-    "performed_this_pass": false,
-    "verified_by_prior_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903"
+    "performed_this_pass": true,
+    "final_targeted_news_tests_passed": 2
   },
-  "ci_status": "passed",
-  "publication_status": "15:30 analysis schedule created at 16:17:39 JST and safely skipped at 16:18:18 because verified analysis content was unavailable. No production image, Buffer submission or new X post.",
+  "ci_status": "awaiting_commit_checks",
+  "publication_status": "18:00 news schedule not observable as of this check. Read-only official listing probe found one existing match article: heading extraction now fits, but repetition guard still excludes it. No Buffer send or new X post.",
   "remaining": [
-    "Template v5 live image publication and repetition filters have not yet been reached in a real eligible regular run",
-    "Detailed statistics remain unavailable; do not manufacture analysis",
-    "Schedule creation delay occurred, but its underlying cause is unknown"
+    "18:00 news run has not appeared; schedule trigger delay cause is unknown",
+    "Only eligible official article found in read-only probe is already covered; do not force a post",
+    "Template v5 and final news-heading change remain unverified on a new actual X publication"
   ],
-  "next_priority": "Inspect 18:00 JST news slot (0 9 * * *) for candidate-level duplicate filtering and eligible verified content; preserve media/pending/public-byte protections.",
-  "ci_tests_passed": 66,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903",
-  "implementation_commit": "2c0908414212cc4873df04846a6bde1727304594",
-  "visual_review": "Regenerated v5 scoring preview stays readable: intact names, yellow right-aligned times, adopted stadium/flag/brush composition. No evidenced visual change warranted.",
-  "baseline_commit": "769abc2ac7e4304d13fee87e761d3f65bcd15fb2",
+  "next_priority": "Inspect the real 18:00 news run when it appears. Repeated match article must not be sent; only distinct eligible official news may proceed.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Rendered the verified full official headline through the existing v5 news layout: lead and detail split at existing exclamation boundary, large readable Japanese, no invented score block. No template style changes.",
+  "baseline_commit": "5f0ca2754b06a46550b2a0c8c3341c967e88e0b5",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 15:30 JST analysis",
@@ -54,21 +56,24 @@
     "trigger_delay_cause": "unknown"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Actual production step (not mock test logs) confirms analysis quality skip. Schedule ran 47m39s late; previous unobserved status resolved. No source-code defect demonstrated; only slot reporting corrected.",
+  "latest_run_review": "Confirmed real official card wraps heading/date/excerpt in one link. Regression failed before fix; fixed caption weighted length is 162 versus 399. Actual history replay still excludes the repeated match article.",
   "checks_this_pass": {
-    "type": "actual_scheduled_step_log_and_visual_regeneration",
-    "new_local_tests_run": false,
+    "type": "live_official_heading_probe_regression_and_preview",
+    "new_local_tests_run": true,
     "new_image_rendered": true,
-    "production_tests_run": true,
-    "production_tests_passed": 66,
+    "production_tests_run": false,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
     "latest_scheduled_run_id": 39560966677,
-    "new_scheduled_run_after_guard": true,
-    "content_repetition_guard_reached": false,
-    "news_filter_reached": false,
-    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599"
+    "news_slot_run_created": false,
+    "news_probe_checked_at": "2026-10-21T18:09:24+09:00",
+    "candidate_count": 1,
+    "caption_weighted_length_before": 399,
+    "caption_weighted_length_after": 162,
+    "actual_history_replay": "skipped_repeated_content",
+    "regression_failed_before_fix": true,
+    "preview_sha256": "49d8276125507f5de210055e97ad6fb8a54f4fb91a76b5052225f49c911cc563"
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -83,8 +88,8 @@
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
   },
-  "previous_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
-  "code_changes_this_pass": false,
+  "previous_implementation_commit": "2c0908414212cc4873df04846a6bde1727304594",
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,

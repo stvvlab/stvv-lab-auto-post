@@ -19,6 +19,9 @@ def main():
         *[f'{name}：{minute}分' for name, minute in facts['goals']]])
     render_content_card('data', scorer_message, 'generated/scorer_alignment_preview.jpg',
                         source=facts['source_url'])
+    news = json.loads(Path('editorial/verified_news_heading.json').read_text())
+    render_content_card('news', 'STVV公式ニュース\n' + news['headline'],
+                        'generated/news_heading_preview.jpg', source=news['source_url'])
     print('STADIUM_PREVIEW_OK: no Buffer or X request sent')
 
 

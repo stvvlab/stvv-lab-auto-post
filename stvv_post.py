@@ -650,12 +650,18 @@ def articles(now):
         if not 0 <= (now.date() - day).days <= 7:
             continue
 
+        # The official list wraps h3 + date + a long excerpt in one link.
+        # Use the heading, not the entire card, without summarizing its claim.
+        heading = anchor.find(['h2', 'h3'])
+        title_node = BeautifulSoup(str(heading if heading is not None else anchor), 'html.parser')
+        for timestamp in title_node.find_all('time'):
+            timestamp.decompose()
         title = re.sub(
             r"\s+",
             " ",
             BeautifulSoup(
                 html.unescape(
-                    anchor.get_text(" ", strip=True)
+                    title_node.get_text(" ", strip=True)
                 ),
                 "html.parser",
             ).get_text(" ", strip=True),
@@ -663,7 +669,7 @@ def articles(now):
 
         if (
             len(title) < 8
-            or any(word in title for word in SPONSORS)
+            or any(word in html.unescape(anchor.get_text(" ", strip=True)) for word in SPONSORS)
             or not any(word in title for word in WORDS)
         ):
             continue
