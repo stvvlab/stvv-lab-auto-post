@@ -1,20 +1,16 @@
 {
-  "updated_at": "2026-10-22T02:12:41+09:00",
+  "updated_at": "2026-10-22T03:07:00+09:00",
   "template_version": 6,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "Balance a two-line body paragraph when the ending is less than half the longer line, using existing Japanese clause boundaries",
-    "Preserve verbatim characters, font size and line count; leave explicit newlines and other layout hierarchies unchanged",
-    "Add real saved official-headline regression and explicit-newline regression; update v6 layout audits"
-  ],
+  "changes": [],
   "preview_path": "generated/news_heading_preview.jpg",
   "preview_layout_path": "generated/news_heading_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
     "passed": 72,
     "command": "python3 -m unittest discover -s tests",
-    "performed_this_pass": true,
+    "performed_this_pass": false,
     "duration_seconds": 19.953,
     "diff_check": "passed"
   },
@@ -25,12 +21,12 @@
     "Vote fallback transition still awaits subsequent regular vote execution",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe next regular slots, preserving missing-facts and duplicate skips; verify v6 media/public bytes/pending/Buffer/X only when eligible content proceeds. Do not replay finished slots.",
+  "next_priority": "Inspect 2026-10-22 08:00 JST player slot after execution. Preserve safe skip if verified content is unavailable. Check v6 public image bytes, pending-before-Buffer and actual X display only after an eligible regular submission. Vote replacement still awaits next regular vote run.",
   "ci_tests_passed": 72,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39641545486",
   "implementation_commit": "8bf607f9336489157dab8aa32ebd9782a0e5e218",
   "visual_review": "Verified actual before/after JPEG. Before: short orphan ending 逆転勝利！. After: 松澤の同点弾＆新川の加入後初ゴールで / STVVが4-1の逆転勝利！. Same 48px font, exact original text, two lines. Adopted flags/stadium/brush/navy-yellow composition unchanged; no new factual content.",
-  "baseline_commit": "0205a09d198c975d427137e77176a70bac408f45",
+  "baseline_commit": "6d2e49494e8b71a7b7d13ffa52e8c00cf2caec4c",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 23:00 JST recap",
@@ -58,21 +54,18 @@
     "reason": "同じ出典／試合の内容で、新しい比較データがないため見送り"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main/docs/reports/posted and Actions read; no new regular run since known 23:00 duplicate skip. Reproduced saved news heading, confirmed short-ending imbalance, implemented clause-aware balancing and visually verified improved paragraph. All four previews generated; local 72 tests pass. No additional public post.",
+  "latest_run_review": "Checked latest main, docs, both reports, posted.json and latest Actions. The v6 implementation and 72-test successful CI remain current. No regular run or publication has occurred since the previously recorded recap duplicate skip. No new evidence warrants changing the renderer or repeating the already passed tests.",
   "checks_this_pass": {
-    "type": "official_news_body_wrap_improvement",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
+    "type": "post_change_state_review",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
     "production_tests_run": false,
+    "new_scheduled_run_since_previous_pass": false,
+    "latest_scheduled_run_id": 39616657973,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
-    "latest_scheduled_run_id": 39616657973,
-    "preview_sha256": "35a1a9dd40b7ea9c4fb41e5c7f4f57193a21546cea74cf4a1388aac2c2d2ac35",
-    "diff_check": "passed",
-    "ci_tests_passed": 72,
-    "ci_preview_rendered": true,
-    "ci_preview_artifact_uploaded": true
+    "diff_check": "passed"
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -88,7 +81,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "586d753900fd30fc35327ebac38f97567bc64220",
-  "code_changes_this_pass": true,
+  "code_changes_this_pass": false,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,
@@ -156,5 +149,5 @@
     "x_post_url": null,
     "reason": "No 23:00 scheduled workflow run visible in GitHub Actions at 23:10:47 JST; this is not a content skip or a posting error."
   },
-  "visual_review_performed_this_pass": true
+  "visual_review_performed_this_pass": false
 }
