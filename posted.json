@@ -827,6 +827,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12a96e0d797ab1a48b1dd2f1b5f2af05c29838a3/generated/approved_review_lommel_20261019.jpg"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-21_data": {
+      "slot": "data",
+      "source": "https://stvv.jp/news/game/20261019_1/",
+      "text": "📊 公式記録で振り返る得点時間\nSTVV 4–1 ロンメル\n松澤海斗：15分\n新川志音：39分\nソエル・ソエル：62分\nムブク：71分\n公式：https://stvv.jp/news/game/20261019_1/\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12af3d5f82ac3b4430c9dc5dfc83d03237c9df89/generated/content_2026-10-21_data.jpg",
+      "created_at": "2026-10-21T13:00:48.277342+09:00"
+    }
+  },
   "tracked_topics": {}
 }
