@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T13:23:00+09:00",
+  "updated_at": "2026-10-21T13:25:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -17,7 +17,7 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "awaiting_commit_checks",
+  "ci_status": "passed",
   "publication_status": "12:30 regular data slot started at 13:00:05; official revalidation, JPEG generation, public byte verification, pending persistence and Buffer submission succeeded. Actual X text and rendered image visually verified.",
   "remaining": [
     "New guard has not yet been observed in a live scheduled run",
@@ -25,9 +25,9 @@
     "Detailed match statistics still unavailable"
   ],
   "next_priority": "Confirm skipped_repeated_content in the next eligible regular slot; only verified new coverage should pass.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
+  "ci_tests_passed": 63,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39543811095",
+  "implementation_commit": "8db4cc9a348896d0ab4e28fdb4fb20700381d8e0",
   "visual_review": "Actual X post displayed adopted navy/yellow flag-stadium composition, MATCH DATA brush heading, 4–1 score and all four scoring times in two chronological panels. Caption matches publication_log, including official link and hashtags.",
   "baseline_commit": "7b40cce03c4c63d4f0493b03c7654f703e69b13e",
   "pending_posts_observed": 0,
@@ -59,7 +59,10 @@
     "new_local_tests_run": true,
     "new_image_rendered": false,
     "paid_api_used": false,
-    "new_public_post": false
+    "new_public_post": false,
+    "ci_preview_rendered": true,
+    "ci_preview_artifact_uploaded": true,
+    "ci_tests_passed": 63
   },
   "actual_new_renderer_post_verified_on_x": true,
   "source_availability": {
