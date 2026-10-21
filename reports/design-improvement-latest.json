@@ -1,9 +1,11 @@
 {
-  "updated_at": "2026-10-21T16:05:10+09:00",
+  "updated_at": "2026-10-21T17:06:09+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
+  "changes": [
+    "Corrected prior reporting: 15:30 is analysis, 18:00 is news; documented authoritative SLOTS mapping"
+  ],
   "preview_path": "generated/scorer_alignment_preview.jpg",
   "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
@@ -15,52 +17,58 @@
     "verified_by_prior_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903"
   },
   "ci_status": "passed",
-  "publication_status": "15:30 regular news slot has no observable Actions run as of this check. This is not a content skip, Buffer failure, or successful publication; cause remains unknown.",
+  "publication_status": "15:30 analysis schedule created at 16:17:39 JST and safely skipped at 16:18:18 because verified analysis content was unavailable. No production image, Buffer submission or new X post.",
   "remaining": [
-    "15:30 schedule event is not observable; trigger delay or absence cause is unknown",
-    "Workflow active/disabled state cannot be fetched through the available connector endpoint",
-    "Template v5 and repetition filters still await a real regular run",
-    "Detailed match statistics remain unavailable"
+    "Template v5 live image publication and repetition filters have not yet been reached in a real eligible regular run",
+    "Detailed statistics remain unavailable; do not manufacture analysis",
+    "Schedule creation delay occurred, but its underlying cause is unknown"
   ],
-  "next_priority": "Check whether the 15:30 schedule run appears; inspect actual posting logs if created. Preserve seven slots and do not create an extra test post.",
+  "next_priority": "Inspect 18:00 JST news slot (0 9 * * *) for candidate-level duplicate filtering and eligible verified content; preserve media/pending/public-byte protections.",
   "ci_tests_passed": 66,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903",
   "implementation_commit": "2c0908414212cc4873df04846a6bde1727304594",
-  "visual_review": "Regenerated v5 scoring preview remains unchanged and readable against the approved reference. Names remain intact, time column is yellow and aligned; no visual modification made.",
-  "baseline_commit": "cba4f647ffb0f5dc2c83828ec07e78b999226471",
+  "visual_review": "Regenerated v5 scoring preview stays readable: intact names, yellow right-aligned times, adopted stadium/flag/brush composition. No evidenced visual change warranted.",
+  "baseline_commit": "769abc2ac7e4304d13fee87e761d3f65bcd15fb2",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
-    "slot": "2026-10-21 15:30 JST news",
-    "checked_at": "2026-10-21T16:05:10+09:00",
-    "workflow_run_created": false,
-    "classification": "not_observed_no_run_created",
-    "workflow_conclusion": null,
-    "production_tests_passed": null,
+    "slot": "2026-10-21 15:30 JST analysis",
+    "schedule_cron": "30 6 * * *",
+    "workflow_run_created": true,
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39560966677",
+    "workflow_created_at": "2026-10-21T16:17:39+09:00",
+    "posting_step_started_at": "2026-10-21T16:18:17+09:00",
+    "schedule_creation_delay_seconds": 2859,
+    "classification": "skipped_no_verified_content",
+    "workflow_conclusion": "success",
+    "production_tests_passed": 66,
     "image_generation_reached": false,
     "public_byte_match": null,
     "pending_saved_before_buffer": null,
+    "buffer_submission_reached": false,
     "buffer_status": null,
     "x_post_url": null,
     "x_text_verified": false,
     "x_image_visually_verified": false,
-    "reason": "No schedule event since 2026-10-21T04:00:05Z in Actions API; posted.json unchanged",
-    "cause": "unknown"
+    "repetition_gate_reached": false,
+    "reason": "analysis: 検証済み新情報なし",
+    "trigger_delay_cause": "unknown"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main, docs, reports, posted.json and schedule-filtered Actions read. No new run after the 13:00 execution, 104 used keys and zero pending entries. Regenerated v5 previews; no evidenced visual improvement warrants a code change.",
+  "latest_run_review": "Actual production step (not mock test logs) confirms analysis quality skip. Schedule ran 47m39s late; previous unobserved status resolved. No source-code defect demonstrated; only slot reporting corrected.",
   "checks_this_pass": {
-    "type": "scheduled_run_absence_and_visual_regeneration",
+    "type": "actual_scheduled_step_log_and_visual_regeneration",
     "new_local_tests_run": false,
     "new_image_rendered": true,
+    "production_tests_run": true,
+    "production_tests_passed": 66,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
-    "production_tests_run": false,
-    "latest_scheduled_run_id": 39541618920,
-    "new_scheduled_run_after_guard": false,
-    "workflow_activation_metadata": "unavailable_in_connector_fetch_endpoint",
-    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599",
-    "prior_ci_tests_passed": 66
+    "latest_scheduled_run_id": 39560966677,
+    "new_scheduled_run_after_guard": true,
+    "content_repetition_guard_reached": false,
+    "news_filter_reached": false,
+    "preview_sha256": "e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599"
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -97,5 +105,14 @@
     "x_post_url": "https://x.com/stvvlabo/status/2112755968006099372",
     "x_text_verified": true,
     "x_image_visually_verified": true
+  },
+  "slot_schedule_jst": {
+    "08:00": "player",
+    "10:30": "compare",
+    "12:30": "data",
+    "15:30": "analysis",
+    "18:00": "news",
+    "21:00": "vote",
+    "23:00": "recap"
   }
 }

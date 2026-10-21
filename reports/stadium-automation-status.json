@@ -20,5 +20,10 @@
   "latest_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39553683903",
   "latest_renderer_implementation_commit": "12899e3445281876fa75c86660a3a826c3e6f00a",
   "news_candidate_repetition_filter_commit": "2c0908414212cc4873df04846a6bde1727304594",
-  "news_candidate_repetition_filter_live_verified": false
+  "news_candidate_repetition_filter_live_verified": false,
+  "latest_production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39560966677",
+  "latest_production_tests_passed": 66,
+  "latest_production_result": "skipped_no_verified_content",
+  "latest_production_slot": "2026-10-21 15:30 JST analysis",
+  "latest_production_started_at": "2026-10-21T16:17:39+09:00"
 }

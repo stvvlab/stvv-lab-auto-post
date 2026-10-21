@@ -12,6 +12,19 @@ No external generative or paid API is called during rendering. In particular,
 the imagegen tool used to prepare the background is not needed on the runner.
 
 The existing seven scheduled slots and content source policy stay in place.
+The authoritative category mapping is `stvv_post.SLOTS`; workflow comments
+show times only. Reports must use this mapping rather than infer a category.
+
+| JST | Category |
+| --- | --- |
+| 08:00 | player |
+| 10:30 | compare |
+| 12:30 | data |
+| 15:30 | analysis |
+| 18:00 | news |
+| 21:00 | vote |
+| 23:00 | recap |
+
 Each eligible post generates one JPEG, commits it, verifies identical public
 bytes and sends it through Buffer. Posts without verified content are skipped
 by the existing quality gate. Failed image generation/publication now skips
