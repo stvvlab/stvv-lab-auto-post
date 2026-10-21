@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21T20:08:33+09:00",
+  "updated_at": "2026-10-21T21:01:52+09:00",
   "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -21,12 +21,12 @@
     "No distinct eligible official news was available in this run; do not recycle the Lommel recap",
     "Schedule creation delay cause remains unknown"
   ],
-  "next_priority": "Inspect real 21:00 vote schedule outcome. Production may select verified match content or recompute fallback using then-current history; this preview does not bypass any guard or preapprove a send.",
+  "next_priority": "Inspect 21:00 vote execution once a schedule event is observable; do not label startup delay as a content skip or a send failure. Verify the actual image/pending/Buffer/X chain only if a real publication proceeds.",
   "ci_tests_passed": 68,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39575405959",
   "implementation_commit": "d644af9fade1e21c5e91322549ff6a071c186692",
   "visual_review": "Vote candidate preview: intact two-line Japanese headline at 70px, 62px MOM lead and 40px yellow question, no clipped text, no score/date invented, adopted navy/yellow stadium and brush headings preserved. No evidenced change warranted.",
-  "baseline_commit": "080ae147dd473762758b0505b1d7e25178b39c0d",
+  "baseline_commit": "e6f6bcd6a286fa1ee592085c837abb327df4a176",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 18:00 JST news",
@@ -55,21 +55,18 @@
     "reason": "ニュース候補を照合したが未投稿の別内容なし"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main and schedule history unchanged since verified 18:00 repetition skip; 104 used keys, zero pending. Rendered today's fallback vote candidate using real saved feedback/history, without latest-match selection or any send. This is not a reserved or guaranteed 21:00 caption.",
+  "latest_run_review": "At 21:01:52 JST the 21:00 schedule has no observable run yet. Latest actual scheduled outcome remains the verified 18:00 repetition skip. Latest source code unchanged, 104 used keys and zero pending; prior vote preview retained without new rendering or unnecessary tests.",
   "checks_this_pass": {
-    "type": "offline_next_vote_candidate_render_and_history_check",
+    "type": "current_main_schedule_and_history_review",
     "new_local_tests_run": false,
-    "new_image_rendered": true,
+    "new_image_rendered": false,
+    "reused_previous_visual_review": true,
     "production_tests_run": false,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
     "new_scheduled_run_since_last_review": false,
-    "latest_scheduled_run_id": 39576386126,
-    "candidate_duplicate_reason": null,
-    "candidate_only": true,
-    "live_match_candidate_not_selected_this_pass": true,
-    "preview_sha256": "822bbd08efcf7d4d5378bd065ca8997182a053c11b8f58159686ff5679ef30c2"
+    "latest_scheduled_run_id": 39576386126
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -139,5 +136,14 @@
     "reason": "analysis: 検証済み新情報なし",
     "trigger_delay_cause": "unknown"
   },
-  "preview_caption": "🇯🇵 得点した選手と、試合を支えた選手。\n\nMOMを決めるなら、どっちを重視する？"
+  "preview_caption": "🇯🇵 得点した選手と、試合を支えた選手。\n\nMOMを決めるなら、どっちを重視する？",
+  "expected_scheduled_run_observation": {
+    "slot": "2026-10-21 21:00 JST vote",
+    "schedule_cron": "0 12 * * *",
+    "checked_at": "2026-10-21T21:01:52+09:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "image_generation_reached": false,
+    "buffer_submission_reached": false
+  }
 }
