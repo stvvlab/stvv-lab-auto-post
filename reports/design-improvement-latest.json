@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T04:07:06+09:00",
+  "updated_at": "2026-10-22T05:03:30+09:00",
   "template_version": 6,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -26,7 +26,7 @@
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39641545486",
   "implementation_commit": "8bf607f9336489157dab8aa32ebd9782a0e5e218",
   "visual_review": "Verified actual before/after JPEG. Before: short orphan ending 逆転勝利！. After: 松澤の同点弾＆新川の加入後初ゴールで / STVVが4-1の逆転勝利！. Same 48px font, exact original text, two lines. Adopted flags/stadium/brush/navy-yellow composition unchanged; no new factual content.",
-  "baseline_commit": "904254a4e6ae8fede02e274a6634c2161a89176c",
+  "baseline_commit": "7d489c5a2c635c038d134bc5216b67bed76227cb",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 23:00 JST recap",
@@ -54,9 +54,9 @@
     "reason": "同じ出典／試合の内容で、新しい比較データがないため見送り"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main/docs/status/design report/posted.json read. New Auto Feedback scheduled workflow completed successfully and saved feedback/report at commit 904254a. Collection checked 30 eligible entries, status ok, metrics now stored for 66 posts; zero automatic comparative ratings. This is feedback collection, not a new X submission or evidence of v6 image effectiveness. Renderer and posting state unchanged; no justified code change or duplicate testing.",
+  "latest_run_review": "Read latest main, template docs, both reports, posted.json and recent Actions. No new posting or feedback workflow since previous pass. History stays 104 used keys and zero pending. V6 implementation and successful 72-test CI remain current; no new failure or evidenced quality regression requiring a change. Existing visual review retained as prior evidence, not a new visual check.",
   "checks_this_pass": {
-    "type": "feedback_collection_and_publication_state_review",
+    "type": "unchanged_pre_regular_slot_state",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
