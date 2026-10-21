@@ -2,12 +2,14 @@
   "implemented": true,
   "implementation_commit": "adc21beb90f74370866b18eaa54725362d326157",
   "integration_tests_commit": "141bcbc6ebd0e1bec3838ffb5b4772841cb9a5cb",
-  "ci_tests_passed": 39,
+  "ci_tests_passed": 54,
   "ci_preview_generated": true,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39479366844",
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39541618920",
   "paid_image_api_required": false,
   "seven_scheduled_slots_preserved": true,
   "background_asset": "assets/stadium_background.jpg",
-  "scheduled_post_after_rollout_verified_on_x": false,
-  "notes": "Existing Buffer path previously verified with approved raster. New source-text-driven renderer passed CI and mock scheduled routing tests. Actual next scheduled X publication remains to be observed; content quality gate may skip a slot."
+  "scheduled_post_after_rollout_verified_on_x": true,
+  "notes": "The 2026-10-21 12:30 data slot executed at 13:00 JST. Official scorer facts revalidated, image and audit committed, public JPEG bytes matched, pending saved before Buffer, Buffer reported sent, and actual X caption and image were visually verified. No extra test post.",
+  "verified_x_post_url": "https://x.com/stvvlabo/status/2112755968006099372",
+  "latest_implementation_commit": "ac32cd470561bb9be9a82ca8ebe5a7b10672c69d"
 }

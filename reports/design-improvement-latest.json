@@ -1,15 +1,11 @@
 {
-  "updated_at": "2026-10-21T12:09:00+09:00",
+  "updated_at": "2026-10-21T13:08:00+09:00",
   "template_version": 4,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "Add official scoring-time fallback for the existing data slot when detailed stats are unavailable",
-    "Revalidate saved date, opponent, score and full scorer row against the live STVV official article on each use; expire after seven days",
-    "Block repeated/pending identical official data; render four scorers chronologically in two panels and remove orphan source-only labels"
-  ],
-  "preview_path": "generated/official_scoring_preview_v2.jpg",
-  "preview_layout_path": "generated/official_scoring_preview_v2.layout.json",
+  "changes": [],
+  "preview_path": "generated/content_2026-10-21_data.jpg",
+  "preview_layout_path": "generated/content_2026-10-21_data.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
     "passed": 54,
@@ -17,44 +13,53 @@
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "No extra post sent. 12:30 regular data slot has not run yet. Real new-renderer Buffer submission and X display remain unverified.",
+  "publication_status": "12:30 regular data slot started at 13:00:05; official revalidation, JPEG generation, public byte verification, pending persistence and Buffer submission succeeded. Actual X text and rendered image visually verified.",
   "remaining": [
-    "Review actual scheduled images when eligible content exists",
-    "Verify scheduled Buffer acceptance and actual X image display"
+    "Detailed shot/possession statistics remain unavailable for compare/analysis",
+    "Continue reviewing future eligible scheduled content; do not recycle already posted scorer-time data"
   ],
-  "next_priority": "Inspect 12:30 regular data run: verify official revalidation, JPEG/layout commit, matching public bytes, Buffer submission and X image display.",
+  "next_priority": "Preserve duplicate protection for the completed official data post; review subsequent scheduled outcomes and only make evidenced image improvements.",
   "ci_tests_passed": 54,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39536966403",
   "implementation_commit": "ac32cd470561bb9be9a82ca8ebe5a7b10672c69d",
-  "visual_review": "Live official verification passed. Data card generated and inspected: four named scorer times in chronological two-column panels; source-only orphan label removed. Existing adopted stadium palette and faceless composition retained.",
+  "visual_review": "Actual X post displayed adopted navy/yellow flag-stadium composition, MATCH DATA brush heading, 4–1 score and all four scoring times in two chronological panels. Caption matches publication_log, including official link and hashtags.",
   "baseline_commit": "489bd0033c97ab95b4a81ab2b9bf1d232296025c",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
-    "slot": "2026-10-21 10:30 JST compare",
+    "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39530580164",
-    "classification": "skipped_no_verified_content",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39541618920",
+    "classification": "submitted_to_buffer_and_verified_on_x",
     "workflow_conclusion": "success",
-    "production_tests_passed": 48,
-    "source_fetch_error_logged": false,
-    "image_generation_reached": false,
-    "buffer_submission_observed": false,
-    "x_post_observed": false
+    "production_tests_passed": 54,
+    "image_generation_reached": true,
+    "public_byte_match": true,
+    "public_image_sha256": "9d1272dfd6115ec5440c0775afa0eea5b9a853f32a43fee65a81e34dc6fc99d1",
+    "public_image_bytes": 849627,
+    "image_commit": "12af3d5f82ac3b4430c9dc5dfc83d03237c9df89",
+    "pending_saved_before_buffer": true,
+    "pending_commit": "d303882",
+    "buffer_id": "6ad838f1a9967de049732ff2",
+    "buffer_status": "sent",
+    "submitted_at": "2026-10-21T13:00:52.217513+09:00",
+    "x_post_url": "https://x.com/stvvlabo/status/2112755968006099372",
+    "x_text_verified": true,
+    "x_image_visually_verified": true
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Implemented source-verified data-slot fallback; no additional scheduled slot or manual send.",
+  "latest_run_review": "Verified first real scheduled publication using the new renderer end-to-end; no new implementation changes this pass.",
   "checks_this_pass": {
-    "official_page_fetched": true,
-    "official_facts_match": true,
-    "weighted_caption_length": 167,
-    "new_image_rendered": true,
-    "new_local_tests_run": true,
+    "type": "production_log_public_bytes_and_live_X_UI_verification",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
+    "production_tests_passed": 54,
     "paid_api_used": false
   },
-  "actual_new_renderer_post_verified_on_x": false,
+  "actual_new_renderer_post_verified_on_x": true,
   "source_availability": {
     "detailed_stats_missing": true,
     "official_scorer_times_available": true,
     "source_url": "https://stvv.jp/news/game/20261019_1/"
-  }
+  },
+  "used_posts_observed": 104
 }
