@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T05:03:30+09:00",
+  "updated_at": "2026-10-22T06:03:40+09:00",
   "template_version": 6,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -26,7 +26,7 @@
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39641545486",
   "implementation_commit": "8bf607f9336489157dab8aa32ebd9782a0e5e218",
   "visual_review": "Verified actual before/after JPEG. Before: short orphan ending 逆転勝利！. After: 松澤の同点弾＆新川の加入後初ゴールで / STVVが4-1の逆転勝利！. Same 48px font, exact original text, two lines. Adopted flags/stadium/brush/navy-yellow composition unchanged; no new factual content.",
-  "baseline_commit": "7d489c5a2c635c038d134bc5216b67bed76227cb",
+  "baseline_commit": "3c135b8e0573fa391d5bcb5614ba519f239dd2ca",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 23:00 JST recap",
@@ -54,7 +54,7 @@
     "reason": "同じ出典／試合の内容で、新しい比較データがないため見送り"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Read latest main, template docs, both reports, posted.json and recent Actions. No new posting or feedback workflow since previous pass. History stays 104 used keys and zero pending. V6 implementation and successful 72-test CI remain current; no new failure or evidenced quality regression requiring a change. Existing visual review retained as prior evidence, not a new visual check.",
+  "latest_run_review": "Checked latest main, template documentation, status/design reports, posted.json and recent Actions. No new scheduled post or feedback collection since the previous check. V6 remains deployed, prior 72-test CI passed, 104 used entries and zero pending unchanged. No new evidence justifies renderer changes or redundant testing; actual X verification remains outstanding for eligible regular publication.",
   "checks_this_pass": {
     "type": "unchanged_pre_regular_slot_state",
     "new_local_tests_run": false,
