@@ -155,6 +155,38 @@ def panel_parts(value):
     return None
 
 
+def scorer_rows(draw, value, box, dry_run=False):
+    """Align supplied scoring times without changing names or chronology."""
+    rows = [re.fullmatch(r'(.+?)([：:])(\d{1,3}分)', row)
+            for row in value.splitlines()]
+    if not 1 <= len(rows) <= 2 or not all(rows):
+        return None
+    left, top, width, height = box
+    step = height // len(rows)
+    layouts = []
+    for index, row in enumerate(rows):
+        name, delimiter, minute = row.groups()
+        minute_width = int(draw.textlength(minute, font=font(52))) + 2
+        name_box = (left, top + index * step, width - minute_width - 24, step - 10)
+        time_box = (left + width - minute_width, top + index * step,
+                    minute_width, step - 10)
+        name_layout = fitted(draw, name, name_box, 48, 30, dry_run=True)
+        time_layout = fitted(draw, minute, time_box, 52, 40, dry_run=True)
+        # Keep each name on one row. Narrow or unfamiliar copy uses the
+        # existing full-panel fitter rather than clipping or dropping text.
+        if len(name_layout['lines']) != 1 or len(time_layout['lines']) != 1:
+            return None
+        layouts.append({'name': name, 'delimiter': delimiter, 'time': minute,
+                        'name_layout': name_layout, 'time_layout': time_layout})
+    if not dry_run:
+        for row in layouts:
+            fitted(draw, row['name'], row['name_layout']['box'],
+                   row['name_layout']['font_size'], row['name_layout']['font_size'])
+            fitted(draw, row['time'], row['time_layout']['box'],
+                   row['time_layout']['font_size'], row['time_layout']['font_size'], YELLOW)
+    return layouts
+
+
 def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, dry_run=False):
     if not value:
         return
@@ -233,7 +265,7 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 4, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 5, 'slot': slot,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
@@ -260,6 +292,17 @@ def render_content_card(slot, message, destination, source=None):
         pd.rectangle((0, 0, width - 1, height - 1), outline=(140, 168, 190, 160), width=2)
         im.paste(plate, (left, top), plate)
         d.rectangle((left + 26, top + 25, left + 80, top + 32), fill=YELLOW)
+        rows_box = (left + 26, top + 62, width - 52, height - 83)
+        try:
+            rows = scorer_rows(d, value, rows_box, dry_run=True)
+        except ValueError:
+            rows = None
+        if rows:
+            scorer_rows(d, value, rows_box)
+            audit['panels'].append({'text': value, 'hierarchy': 'scorer-times',
+                                    'font_size': min(row['name_layout']['font_size'] for row in rows),
+                                    'rows': rows})
+            continue
         parts = panel_parts(value)
         if parts:
             lead, _, body = parts

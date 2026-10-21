@@ -101,3 +101,15 @@ required. These are conservative local rules, not general semantic AI:
 an update to the same article without a recognized new comparison is also
 held back. Different official announcements remain eligible. Existing slot,
 pending-before-send and public-image byte checks are unchanged.
+
+## Quality pass 5
+
+One or two explicitly supplied `name：minute分` rows in a lower panel use
+white intact names and larger yellow times aligned at the right edge. This
+restores the scoring-time hierarchy of the approved review without adding
+facts, icons or new copy. Names and times are fitted separately with a gap;
+copy that cannot fit a single row falls back to the existing full-panel
+layout. The layout audit retains the exact delimiter and both text boxes.
+The CI preview artifact also includes `scorer_alignment_preview.jpg` and
+its audit, rendered offline from the saved verified manifest. These design
+previews are never sent to Buffer or exempted from the repetition gate.

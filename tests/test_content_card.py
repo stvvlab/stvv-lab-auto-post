@@ -72,7 +72,7 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 4)
+            self.assertEqual(audit['template_version'], 5)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
@@ -88,6 +88,23 @@ class ContentCardSmokeTests(unittest.TestCase):
             panel = json.loads(output.with_suffix('.layout.json').read_text())['panels'][0]
             self.assertEqual(panel['delimiter'].join(panel['parts']), panel['text'])
             self.assertGreater(panel['lead_layout']['font_size'], panel['body_layout']['font_size'])
+
+    def test_scoring_times_align_without_splitting_or_losing_names(self):
+        rows = ['松澤海斗：15分', '新川志音：39分', 'ソエル・ソエル：62分', 'ムブク：71分']
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'scorers.jpg'
+            render_content_card('data', '\n'.join(['得点時間', 'STVV 4–1 ロンメル', *rows]), output)
+            panels = json.loads(output.with_suffix('.layout.json').read_text())['panels']
+            reconstructed = []
+            for panel in panels:
+                self.assertEqual(panel['hierarchy'], 'scorer-times')
+                self.assertEqual(len({row['time_layout']['box'][0] for row in panel['rows']}), 1)
+                for row in panel['rows']:
+                    reconstructed.append(row['name'] + row['delimiter'] + row['time'])
+                    self.assertEqual(row['name_layout']['lines'], [row['name']])
+                    name_box, time_box = row['name_layout']['box'], row['time_layout']['box']
+                    self.assertLess(name_box[0] + name_box[2], time_box[0])
+            self.assertEqual(reconstructed, rows)
 
     def test_match_date_is_metadata_not_a_statistics_panel(self):
         message = '試合結果\n2026-10-19｜ホーム\nSTVV 4–1 ロンメル\n結果：勝利。'

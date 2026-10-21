@@ -1,35 +1,34 @@
 {
-  "updated_at": "2026-10-21T13:25:00+09:00",
-  "template_version": 4,
+  "updated_at": "2026-10-21T14:04:00+09:00",
+  "template_version": 5,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Added pre-media content repetition gate covering publication_log and pending_posts for seven days",
-    "Canonical source and opponent/score matching block cosmetic rewrites and result-to-goal-minute recaps",
-    "Permit genuinely new structured shot/target/possession pairs once; preserve upstream verification",
-    "Added regression tests and CI path coverage"
+    "Scorer panels separate intact white names from larger yellow right-aligned goal times",
+    "Preserve exact scorer ordering and delimiters in layout audit; fall back if a name cannot fit",
+    "CI preview artifact now includes scorer alignment image and audit"
   ],
-  "preview_path": "generated/content_2026-10-21_data.jpg",
-  "preview_layout_path": "generated/content_2026-10-21_data.layout.json",
+  "preview_path": "generated/scorer_alignment_preview.jpg",
+  "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 63,
+    "passed": 64,
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "12:30 regular data slot started at 13:00:05; official revalidation, JPEG generation, public byte verification, pending persistence and Buffer submission succeeded. Actual X text and rendered image visually verified.",
+  "ci_status": "awaiting_commit_checks",
+  "publication_status": "No regular posting run after content guard rollout as of 2026-10-21 14:04 JST. Existing template v4 post remains verified; template v5 has only offline preview verification.",
   "remaining": [
-    "New guard has not yet been observed in a live scheduled run",
-    "Rules are conservative source/match/stat matching, not unrestricted semantic understanding",
-    "Detailed match statistics still unavailable"
+    "Template v5 and repetition gate have not yet been observed in a subsequent live regular run",
+    "Detailed statistics remain unavailable; do not fill gaps or repeat the scorer recap",
+    "Conservative duplicate matching does not provide general semantic understanding"
   ],
-  "next_priority": "Confirm skipped_repeated_content in the next eligible regular slot; only verified new coverage should pass.",
-  "ci_tests_passed": 63,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39543811095",
-  "implementation_commit": "8db4cc9a348896d0ab4e28fdb4fb20700381d8e0",
-  "visual_review": "Actual X post displayed adopted navy/yellow flag-stadium composition, MATCH DATA brush heading, 4–1 score and all four scoring times in two chronological panels. Caption matches publication_log, including official link and hashtags.",
-  "baseline_commit": "7b40cce03c4c63d4f0493b03c7654f703e69b13e",
+  "next_priority": "Confirm repetition guard in the next eligible regular run; inspect v5 live only when verified nonrepeated content is available.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": null,
+  "visual_review": "Compared approved review, actual v4 data card and newly rendered v5 preview: scorer names remain white and intact; yellow 52px scoring times align right with a 24px reserved gap and chronological rows. Source text is unchanged; no new facts or faces.",
+  "baseline_commit": "0c1576d622fe4cedd7b438af6f6280cd8d16d973",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-21 12:30 JST data",
@@ -53,18 +52,19 @@
     "x_image_visually_verified": true
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Replayed the actual 03:47 result and 13:00 scorer-time captions: later caption is now skipped before image creation or Buffer.",
+  "latest_run_review": "Latest main and Actions inspected: guard CI passed 63 tests; no subsequent scheduled run or new publication. Rendering improvement tested locally with 64 passing tests.",
   "checks_this_pass": {
-    "type": "offline_regression_and_actual_history_replay",
+    "type": "approved_baseline_comparison_local_render_and_regression",
     "new_local_tests_run": true,
-    "new_image_rendered": false,
+    "new_image_rendered": true,
     "paid_api_used": false,
     "new_public_post": false,
-    "ci_preview_rendered": true,
-    "ci_preview_artifact_uploaded": true,
-    "ci_tests_passed": 63
+    "x_checked_this_pass": false,
+    "production_tests_run": false,
+    "latest_scheduled_run_id": 39541618920,
+    "new_scheduled_run_after_guard": false
   },
-  "actual_new_renderer_post_verified_on_x": true,
+  "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
     "detailed_stats_missing": true,
     "official_scorer_times_available": true,
@@ -76,5 +76,6 @@
     "actual_history_replay": "skipped_repeated_content",
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
-  }
+  },
+  "previous_implementation_commit": "8db4cc9a348896d0ab4e28fdb4fb20700381d8e0"
 }

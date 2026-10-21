@@ -48,3 +48,5 @@ jobs:
           path: |
             generated/auto_stadium_preview.jpg
             generated/auto_stadium_preview.layout.json
+            generated/scorer_alignment_preview.jpg
+            generated/scorer_alignment_preview.layout.json

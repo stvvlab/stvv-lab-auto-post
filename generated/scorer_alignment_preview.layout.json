@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "template_version": 5,
+  "slot": "data",
+  "dimensions": [
+    1374,
+    1145
+  ],
+  "source": "https://stvv.jp/news/game/20261019_1/",
+  "headline": "公式記録で振り返る得点時間",
+  "score_from_caption": [
+    "4",
+    "1",
+    "ロンメル"
+  ],
+  "match_metadata": [],
+  "panels": [
+    {
+      "text": "松澤海斗：15分\n新川志音：39分",
+      "hierarchy": "scorer-times",
+      "font_size": 48,
+      "rows": [
+        {
+          "name": "松澤海斗",
+          "delimiter": "：",
+          "time": "15分",
+          "name_layout": {
+            "font_size": 48,
+            "lines": [
+              "松澤海斗"
+            ],
+            "box": [
+              68,
+              869,
+              445,
+              77
+            ]
+          },
+          "time_layout": {
+            "font_size": 52,
+            "lines": [
+              "15分"
+            ],
+            "box": [
+              537,
+              869,
+              115,
+              77
+            ]
+          }
+        },
+        {
+          "name": "新川志音",
+          "delimiter": "：",
+          "time": "39分",
+          "name_layout": {
+            "font_size": 48,
+            "lines": [
+              "新川志音"
+            ],
+            "box": [
+              68,
+              956,
+              445,
+              77
+            ]
+          },
+          "time_layout": {
+            "font_size": 52,
+            "lines": [
+              "39分"
+            ],
+            "box": [
+              537,
+              956,
+              115,
+              77
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "text": "ソエル・ソエル：62分\nムブク：71分",
+      "hierarchy": "scorer-times",
+      "font_size": 48,
+      "rows": [
+        {
+          "name": "ソエル・ソエル",
+          "delimiter": "：",
+          "time": "62分",
+          "name_layout": {
+            "font_size": 48,
+            "lines": [
+              "ソエル・ソエル"
+            ],
+            "box": [
+              722,
+              869,
+              445,
+              77
+            ]
+          },
+          "time_layout": {
+            "font_size": 52,
+            "lines": [
+              "62分"
+            ],
+            "box": [
+              1191,
+              869,
+              115,
+              77
+            ]
+          }
+        },
+        {
+          "name": "ムブク",
+          "delimiter": "：",
+          "time": "71分",
+          "name_layout": {
+            "font_size": 48,
+            "lines": [
+              "ムブク"
+            ],
+            "box": [
+              722,
+              956,
+              445,
+              77
+            ]
+          },
+          "time_layout": {
+            "font_size": 52,
+            "lines": [
+              "71分"
+            ],
+            "box": [
+              1191,
+              956,
+              115,
+              77
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "headings": [
+    {
+      "font_size": 154,
+      "angle": 4,
+      "box": [
+        388,
+        8,
+        760,
+        170
+      ]
+    },
+    {
+      "font_size": 180,
+      "angle": 4,
+      "box": [
+        382,
+        169,
+        790,
+        193
+      ]
+    }
+  ],
+  "heading_sweep": {
+    "box": [
+      448,
+      350,
+      520,
+      35
+    ],
+    "bristles": [
+      [
+        32,
+        18,
+        434
+      ],
+      [
+        157,
+        23,
+        441
+      ],
+      [
+        74,
+        28,
+        507
+      ],
+      [
+        85,
+        33,
+        501
+      ],
+      [
+        94,
+        38,
+        418
+      ]
+    ]
+  },
+  "headline_layout": {
+    "font_size": 46,
+    "lines": [
+      "公式記録で振り返る得点時間"
+    ],
+    "box": [
+      365,
+      678,
+      650,
+      70
+    ]
+  }
+}
