@@ -14,17 +14,17 @@
     "command": "python3 -m unittest discover -s tests",
     "diff_check": "passed"
   },
-  "ci_status": "pending",
+  "ci_status": "passed",
   "publication_status": "JST08:00 player run started at 08:16:32, safely skipped at 08:17:10: skipped_no_verified_content. No Buffer submission or X post; no extra test post sent.",
   "remaining": [
     "Review actual scheduled images when eligible content exists",
     "Verify scheduled Buffer acceptance and actual X image display"
   ],
   "next_priority": "Inspect JST10:30 compare outcome; verify public bytes, Buffer and X if submitted. Preserve safe content skips.",
-  "ci_tests_passed": null,
-  "ci_run_url": null,
-  "implementation_commit": null,
-  "visual_review": "Renderer unchanged this pass. Regenerated stadium preview to confirm established composition.",
+  "ci_tests_passed": 48,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39525383302",
+  "implementation_commit": "4f9a5539022fff41f3c369211b796ee4a48cb9af",
+  "visual_review": "Renderer unchanged. Regenerated image SHA256 matches previously visually verified preview: 35d725092c842b29531aad1e433d49ad5fbd1a9b5ea4f02b5b9902beac6e9220. No visual improvement claimed this pass.",
   "baseline_commit": "8e7a07869960652001822d016a1515e0844b4822",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
