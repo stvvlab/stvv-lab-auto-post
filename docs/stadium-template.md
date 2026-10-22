@@ -206,3 +206,14 @@ headline, match context and details. Selection happens after editorial and
 repetition gates; publication/pending and public-byte checks remain unchanged.
 Three offline variant previews are included in the CI artifact and never posted
 as tests. Variation does not establish editorial quality or improved engagement.
+
+## Bounded runner font setup
+
+The October 22 23:00 recap run was cancelled while downloading the 61.2 MB
+Ubuntu font package; no posting step ran. `scripts/install-card-font.sh` now
+reuses an installed Noto CJK Bold font, limits index refresh to 45 seconds,
+and permits at most two 90-second package-install attempts (plus termination
+grace). Connection timeouts are 20 seconds with no nested apt retries. If no
+usable font exists afterwards, setup fails before tests or Buffer submission.
+The posting and preview workflows use the same installer. This handles setup
+stalls, not GitHub schedule creation delays; cancelled slots are not replayed.
