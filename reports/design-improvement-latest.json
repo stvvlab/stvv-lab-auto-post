@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T19:05:00+09:00",
+  "updated_at": "2026-10-22T20:01:00+09:00",
   "template_version": 7,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -15,7 +15,7 @@
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "18:00 regular news ran at 18:23 JST and safely skipped repeated content before media/Buffer. Not a sending error. Latest v7 X display remains unverified.",
+  "publication_status": "Unchanged since recorded 18:00 news repetition skip. No new Buffer submission or public post. Template v7 X display unverified.",
   "remaining": [
     "Official player source route awaits next regular player run; current live article is duplicate-blocked",
     "Template v7 still awaits eligible nonrepeated actual X publication",
@@ -27,7 +27,7 @@
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39732650053",
   "implementation_commit": "d34a7a51ed0f442d3da94d091abbed7fc8890da7",
   "visual_review": "Compared approved review with current previews. Original unscored news/vote headlines left excessive blank space below. New headline moved down 56px with unchanged copy, font and line breaks; inspected news and vote for balanced margins/no overlap. Scorer image SHA256 unchanged: e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599.",
-  "baseline_commit": "da06d4e9242cbc9304513ed60d0c00bc8aeddfe1",
+  "baseline_commit": "5b75197afe0fdd61c1e8fb47951155fa05881a1b",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-22 18:00 JST news",
@@ -53,13 +53,13 @@
     "reason": "Official news candidate repeats already covered source/match; no unpublished distinct eligible news remained."
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main, docs, both reports, posted.json and Actions reviewed. Actual 18:00 news run executed at 18:23 after 93 passing tests. Real posting-step log confirms official Lommel article rejected by candidate repetition filter and RUN_RESULT skipped_repeated_content; no media/pending/Buffer submission. Used 104, pending zero unchanged. Existing v7 renderer has no observed regression requiring speculative changes. Separate database-sync failures remain outside this posting workflow.",
+  "latest_run_review": "Read latest main, adopted template documentation, status/design reports and posted.json, and checked recent Actions. No posting run after already recorded 18:00 news duplicate skip. Used 104, pending zero unchanged; v7 CI remains successful. No newly confirmed design defect or code regression justifies speculative edits or another identical render/test cycle. Next regular posting slot is 21:00 vote. Separate database-sync failure is not a Buffer/X posting failure.",
   "checks_this_pass": {
-    "type": "regular_news_candidate_repetition_production_verification",
+    "type": "pre_vote_state_review",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39754971707,
     "paid_api_used": false,
     "new_public_post": false,
