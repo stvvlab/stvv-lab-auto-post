@@ -1119,6 +1119,10 @@ def main():
                     log("詳細スタッツ不足を公式確認済みの得点時間データで補完")
                 else:
                     log("公式得点時間データは投稿済み／確認待ちのため再利用しません")
+                    return run_result(
+                        "skipped_repeated_content",
+                        f"{day} {slot}: 公式得点時間データは投稿済み／確認待ち",
+                    )
         except (OSError, ValueError, KeyError, TypeError, requests.RequestException) as error:
             log(f"公式得点データ確認不可: {error}")
 

@@ -97,6 +97,9 @@ Facts expire after seven days; missing or changed evidence blocks the card.
 Identical text already published or pending is not reused. Four scorer rows
 appear in chronological order across two panels; the source URL is credited
 in the footer. No extra slot or test publication is created.
+An exact published/pending official scorer caption reports
+`skipped_repeated_content`, while absent verified facts report
+`skipped_no_verified_content`; neither generates media or sends to Buffer.
 
 ## Repeated match coverage
 
