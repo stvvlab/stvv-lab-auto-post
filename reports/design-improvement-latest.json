@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T14:19:22Z",
+  "updated_at": "2026-10-22T14:31:30.373094+00:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -22,17 +22,16 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "queued",
+  "ci_status": "success",
   "publication_status": "Template v9 deployed; visual rotation not yet verified on a regular X post. Prior v7 transport proof remains historical; v8/v9 preview approval and engagement remain unverified.",
   "remaining": [
-    "Full final98-test CI queued; not yet confirmed",
     "Template v9 composition rotation awaits eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
   "next_priority": "Inspect eligible regular publication with selected audit.variant; preserve source and repetition gates, never repost preview match as a test. Assess new composition on actual mobile X view.",
-  "ci_tests_passed": null,
+  "ci_tests_passed": 98,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39794562298",
   "implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
   "visual_review": "Inspected full-resolution split and poster outputs plus contact sheet. Final split question has two intact lines and no orphan る？; removed old baked central plate by cropping clean right region. Stadium, dark split-photo and bright yellow poster are visually distinct, with same factual text and choices. No face, external asset, new statistic or claim added. User has not approved new designs; engagement not measured.",
@@ -71,7 +70,7 @@
     "x_image_visually_verified": true
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Implemented user request to vary the outer design instead of changing only text. All posting source/repetition/pending/public byte safeguards remain; content_card_media receives a deterministic composition chosen after content gates. Publication history advances only after Buffer success, retaining stable retry layout. Generated and visually reviewed three saved-asset compositions and comparison sheet;97 suite tests and2 final focused tests passed. New third regression added after suite is included in final CI. No manual dispatch or additional public post.",
+  "latest_run_review": "Clarified user request as editorial supplement replies, audited Buffer API limitation, implemented fail-closed guard before network/pending to prevent standalone fallback. No reply delivery or public reply claimed.",
   "checks_this_pass": {
     "type": "user_requested_composition_rotation",
     "new_local_tests_run": true,
@@ -275,5 +274,28 @@
     "next_variant": "poster",
     "advance_on": "successful_publication_only",
     "retry_deterministic": true
-  }
+  },
+  "supplemental_replies": {
+    "requested_behavior": "Supplement and analysis replies to an existing own X post, not analytics reports or standalone posts",
+    "implemented": false,
+    "delivery_status": "blocked_unsupported_reply",
+    "reason": "Current Buffer API has no reply-to-existing-post input; new thread includes a new root and is not a substitute.",
+    "source": "https://support.buffer.com/articles/using-buffers-api-GtIYIQilz5",
+    "guard_implemented": true,
+    "focused_tests_passed": 2,
+    "actual_reply_published": false,
+    "next_priority": "Establish a no-extra-cost authenticated reply-capable route, then parent URL mapping, verified novel evidence, duplicate and pending protection.",
+    "documentation": "docs/supplemental-replies.md",
+    "implementation_commit": "This report commit contains reply safety guard only; actual reply delivery is unimplemented",
+    "local_full_suite": {
+      "passed": 100,
+      "duration_seconds": 87.821,
+      "command": "python3 -m unittest discover -s tests"
+    }
+  },
+  "changes_this_interactive_pass": [
+    "Explicit reply_to safety guard in send/publish",
+    "Two reply delivery regression tests",
+    "Documented actual API limitation and remaining implementation"
+  ]
 }

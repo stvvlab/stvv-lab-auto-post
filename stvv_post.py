@@ -856,7 +856,17 @@ def media_for(source, slot):
         return None
 
 
-def send(message, image_url=None):
+def require_supported_delivery(reply_to=None):
+    """Never turn a requested reply into a new standalone Buffer post."""
+    if reply_to is not None:
+        raise RuntimeError(
+            "blocked_unsupported_reply: Buffer API cannot append replies to "
+            "published X posts; no standalone fallback is allowed"
+        )
+
+
+def send(message, image_url=None, *, reply_to=None):
+    require_supported_delivery(reply_to)
     key = os.getenv("BUFFER_API_KEY")
 
     if not key or not CHANNEL:
@@ -932,7 +942,11 @@ def publish(
     source=None,
     news_url=None,
     image_url=None,
+    *,
+    reply_to=None,
 ):
+    # Check before saving pending: an unsupported delivery was never attempted.
+    require_supported_delivery(reply_to)
     if key in history["used_posts"]:
         log(f"投稿済み: {key}")
         return False
