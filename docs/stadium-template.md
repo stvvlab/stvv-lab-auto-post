@@ -125,11 +125,10 @@ otherwise eligible candidates repeat published or pending content, the run
 reports `skipped_repeated_content` before image creation or Buffer. The final
 pre-media repetition gate still checks the selected caption for every slot.
 
-For the vote slot only, a repeated match-based question is discarded before
-choosing the existing fact-free fan question fallback. The replacement has
-no match source and must pass the same final repetition gate. A repeated
-fallback still skips before image creation and Buffer; no retry or extra
-publication is triggered for a slot that has already finished.
+The vote slot also requires a verified, nonrepeated match context. Missing
+context skips as `skipped_no_verified_content`; repeated coverage skips as
+`skipped_repeated_content`. Generic fan-question fallback selection is disabled
+in the scheduled route. The seven slots remain, but do not impose a quota.
 
 The official news list wraps a heading, `<time>` date and preview paragraph
 inside one link. Article selection uses the supplied h2/h3 heading and
@@ -177,3 +176,18 @@ headline area. Short one- or two-line headlines no longer leave most of the
 central card empty below the text. Copy, line breaks and type size are preserved;
 score cards, lower panels and all publication gates retain their existing layout.
 The audit records the actual centered text box for overflow and margin checks.
+
+## Quality pass 8: participation cards
+
+The vote composition places a large Japanese question above the supplied match
+context and three equally sized choice panels. FAN VOICE is a compact single
+line, rather than the dominant two-line headline. Choice labels describe what
+the reader wants reviewed (attack, defence or players), not unverified claims
+about the match. Line breaks keep `どこから` intact. Other categories retain
+their existing composition. Offline previews reuse the saved verified match
+only to review layout; repetition checks still prevent publishing it again.
+
+Transport verification and editorial approval are separate: a successful X
+image display does not establish that the image or question meets the quality
+bar. The October 22 v7 vote passed transport but received negative user review;
+v8 is a response to that review, not a claim of improved engagement.

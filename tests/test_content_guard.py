@@ -138,18 +138,16 @@ class ContentGuardTests(unittest.TestCase):
             publish = stack.enter_context(patch.object(posting, 'publish', return_value=True))
             return posting.main(), choose, image, publish, fallback
 
-    def test_repeated_match_vote_uses_distinct_fan_question(self):
+    def test_repeated_match_vote_does_not_fill_slot_with_generic_question(self):
         result, choose, image, publish, fallback = self.run_repeated_match_vote()
-        self.assertEqual(result, 'submitted_to_buffer')
-        choose.assert_called_once()
-        self.assertEqual(image.call_args.args[2], fallback)
-        self.assertIsNone(image.call_args.kwargs['source'])
-        self.assertIsNone(publish.call_args.args[4])
-        self.assertNotIn('4–1', publish.call_args.args[2])
+        self.assertEqual(result, 'skipped_repeated_content')
+        choose.assert_not_called()
+        image.assert_not_called()
+        publish.assert_not_called()
 
     def test_repeated_match_and_repeated_fallback_still_stop_before_media(self):
         result, choose, image, publish, _ = self.run_repeated_match_vote(True)
         self.assertEqual(result, 'skipped_repeated_content')
-        choose.assert_called_once()
+        choose.assert_not_called()
         image.assert_not_called()
         publish.assert_not_called()

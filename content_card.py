@@ -92,9 +92,9 @@ def wrap(draw, value, face, width):
     return result
 
 
-def brush_title(draw, value, box, color):
+def brush_title(draw, value, box, color, maximum=180):
     x, y, width, height = box
-    for size in range(180, 64, -1):
+    for size in range(maximum, 64, -1):
         face = font(size, True)
         bounds = face.getbbox(value)
         mask = Image.new('L', (bounds[2] - bounds[0] + 12, bounds[3] - bounds[1] + 12), 0)
@@ -285,6 +285,40 @@ def story(message, include_metadata=False):
     return (*result, metadata) if include_metadata else result
 
 
+def vote_layout(im, draw, headline, match, groups, metadata):
+    """Japanese question first, explicit supplied context and equal choices."""
+    overlay = Image.new('RGBA', (1010, 445), (2, 12, 28, 235))
+    im.paste(overlay, (324, 270), overlay)
+    heading = brush_title(draw, 'FAN VOICE', (397, 35, 850, 150), YELLOW, maximum=120)
+    question_text = headline.replace('戦をどこから', '戦を\nどこから')
+    question = fitted(draw, question_text, (365, 303, 908, 275), 100, 32,
+                      center_vertical=True)
+    context = []
+    if match:
+        own, other, opponent = match
+        context.append(fitted(draw, f'STVV {own}–{other} {opponent}',
+                              (365, 596, 908, 64), 56, 28, YELLOW))
+        if metadata:
+            context.append(fitted(draw, ' / '.join(metadata),
+                                  (365, 675, 908, 28), 23, 18))
+    panels = []
+    values = [value for value in groups if value]
+    count = len(values)
+    if count:
+        width = (1288 - 20 * (count - 1)) // count
+        for index, value in enumerate(values):
+            left = 43 + index * (width + 20)
+            plate = Image.new('RGBA', (width, 258), (2, 12, 28, 240))
+            pd = ImageDraw.Draw(plate)
+            pd.rectangle((0, 0, width - 1, 257), outline=YELLOW, width=3)
+            im.paste(plate, (left, 792), plate)
+            details = fitted(draw, value, (left + 28, 826, width - 56, 190),
+                             78 if count > 1 else 64, 28, center_vertical=True)
+            panels.append({'text': value, 'hierarchy': 'choice', **details})
+    return {'composition': 'japanese-question-and-choices', 'headings': [heading],
+            'headline_layout': question, 'context_layout': context, 'panels': panels}
+
+
 def render_content_card(slot, message, destination, source=None):
     if slot not in LABELS:
         raise ValueError('Unknown slot')
@@ -296,17 +330,23 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 7, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 8, 'slot': slot,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
     fitted(d, 'STVV LAB', (109, 28, 300, 46), 42, 30)
     fitted(d, '非公式ファンメディア', (112, 79, 300, 26), 20, 18)
-    first, second = LABELS[slot]
-    audit['headings'] = [brush_title(d, first, (388, 8, 760, 170), YELLOW),
-                         brush_title(d, second, (382, 169, 790, 193), WHITE)]
-    audit['heading_sweep'] = brush_sweep(d, (448, 350, 520, 35))
-    if match:
+    if slot == 'vote':
+        audit.update(vote_layout(im, d, headline, match, groups, metadata))
+        groups = []
+    else:
+        first, second = LABELS[slot]
+        audit['headings'] = [brush_title(d, first, (388, 8, 760, 170), YELLOW),
+                             brush_title(d, second, (382, 169, 790, 193), WHITE)]
+        audit['heading_sweep'] = brush_sweep(d, (448, 350, 520, 35))
+    if slot == 'vote':
+        pass
+    elif match:
         own, other, opponent = match
         if metadata:
             audit['metadata_layout'] = fitted(d, ' / '.join(metadata), (365, 402, 650, 27), 22, 18)

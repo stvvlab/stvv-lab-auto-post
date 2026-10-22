@@ -1,119 +1,101 @@
 {
   "schema_version": 1,
-  "template_version": 7,
+  "template_version": 8,
   "slot": "vote",
   "dimensions": [
     1374,
     1145
   ],
-  "source": null,
-  "headline": "得点した選手と、試合を支えた選手。",
-  "score_from_caption": null,
+  "source": "https://stvv.jp/news/game/20261019_1/",
+  "headline": "ロンメル戦をどこから振り返る？",
+  "score_from_caption": [
+    "4",
+    "1",
+    "ロンメル"
+  ],
   "match_metadata": [],
   "panels": [
     {
-      "text": "MOMを決めるなら、どっちを重視する？",
-      "hierarchy": "lead-and-detail",
-      "delimiter": "、",
-      "parts": [
-        "MOMを決めるなら",
-        "どっちを重視する？"
+      "text": "① 攻撃",
+      "hierarchy": "choice",
+      "font_size": 78,
+      "lines": [
+        "① 攻撃"
       ],
-      "font_size": 40,
-      "lead_layout": {
-        "font_size": 62,
-        "lines": [
-          "MOMを決めるなら"
-        ],
-        "box": [
-          68,
-          868,
-          1238,
-          76
-        ]
-      },
-      "body_layout": {
-        "font_size": 40,
-        "lines": [
-          "どっちを重視する？"
-        ],
-        "box": [
-          68,
-          956,
-          1238,
-          88
-        ]
-      }
-    }
-  ],
-  "headings": [
-    {
-      "font_size": 177,
-      "angle": 4,
       "box": [
-        388,
-        8,
-        760,
-        170
+        71,
+        878,
+        360,
+        85
       ]
     },
     {
-      "font_size": 180,
-      "angle": 4,
+      "text": "② 守備",
+      "hierarchy": "choice",
+      "font_size": 78,
+      "lines": [
+        "② 守備"
+      ],
       "box": [
-        382,
-        169,
-        790,
-        193
+        507,
+        878,
+        360,
+        85
+      ]
+    },
+    {
+      "text": "③ 選手",
+      "hierarchy": "choice",
+      "font_size": 78,
+      "lines": [
+        "③ 選手"
+      ],
+      "box": [
+        943,
+        878,
+        360,
+        85
       ]
     }
   ],
-  "heading_sweep": {
-    "box": [
-      448,
-      350,
-      520,
-      35
-    ],
-    "bristles": [
-      [
-        32,
-        18,
-        434
-      ],
-      [
-        157,
-        23,
-        441
-      ],
-      [
-        74,
-        28,
-        507
-      ],
-      [
-        85,
-        33,
-        501
-      ],
-      [
-        94,
-        38,
-        418
+  "composition": "japanese-question-and-choices",
+  "headings": [
+    {
+      "font_size": 120,
+      "angle": 4,
+      "box": [
+        397,
+        35,
+        850,
+        150
       ]
+    }
+  ],
+  "headline_layout": {
+    "font_size": 100,
+    "lines": [
+      "ロンメル戦を",
+      "どこから振り返る？"
+    ],
+    "box": [
+      365,
+      330,
+      908,
+      220
     ]
   },
-  "headline_layout": {
-    "font_size": 70,
-    "lines": [
-      "得点した選手と、",
-      "試合を支えた選手。"
-    ],
-    "box": [
-      368,
-      496,
-      632,
-      154
-    ]
-  }
+  "context_layout": [
+    {
+      "font_size": 56,
+      "lines": [
+        "STVV 4–1 ロンメル"
+      ],
+      "box": [
+        365,
+        596,
+        908,
+        64
+      ]
+    }
+  ]
 }

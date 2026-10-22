@@ -2,7 +2,6 @@
 import json
 from pathlib import Path
 from content_card import render_content_card
-from style_posts import STYLE_POSTS
 
 
 def main():
@@ -25,8 +24,12 @@ def main():
                         'generated/news_heading_preview.jpg', source=news['source_url'])
     render_content_card('player', 'STVV公式ニュース\n' + news['headline'],
                         'generated/player_official_preview.jpg', source=news['source_url'])
-    vote = next(text for style, text in STYLE_POSTS['vote'] if style == 'short')
-    render_content_card('vote', vote, 'generated/vote_candidate_preview.jpg')
+    # Design evidence only: this already covered match is NOT eligible to post.
+    vote = '\n'.join([f"{facts['opponent']}戦をどこから振り返る？",
+                      f"STVV {facts['score'].replace('-', '–')} {facts['opponent']}",
+                      '① 攻撃', '② 守備', '③ 選手'])
+    render_content_card('vote', vote, 'generated/vote_candidate_preview.jpg',
+                        source=facts['source_url'])
     print('STADIUM_PREVIEW_OK: no Buffer or X request sent')
 
 

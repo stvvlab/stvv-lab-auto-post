@@ -72,7 +72,7 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 7)
+            self.assertEqual(audit['template_version'], 8)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
@@ -80,6 +80,26 @@ class ContentCardSmokeTests(unittest.TestCase):
             sweep = audit['heading_sweep']
             self.assertEqual(sweep['box'], [448, 350, 520, 35])
             self.assertEqual(len(sweep['bristles']), 5)
+
+    def test_vote_question_and_choices_are_prominent_without_invented_data(self):
+        message = 'ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手'
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'vote.jpg'
+            render_content_card('vote', message, output)
+            audit = json.loads(output.with_suffix('.layout.json').read_text())
+            self.assertEqual(audit['composition'], 'japanese-question-and-choices')
+            question = audit['headline_layout']
+            self.assertEqual(''.join(question['lines']), audit['headline'])
+            self.assertEqual(question['lines'], ['ロンメル戦を', 'どこから振り返る？'])
+            self.assertGreaterEqual(question['font_size'], 90)
+            self.assertEqual([p['text'] for p in audit['panels']], ['① 攻撃', '② 守備', '③ 選手'])
+            for panel in audit['panels']:
+                self.assertEqual(len(panel['lines']), 1)
+                self.assertGreaterEqual(panel['font_size'], 70)
+                x, y, w, h = panel['box']
+                self.assertLessEqual(x + w, 1332)
+                self.assertLessEqual(y + h, 1050)
+            self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
 
     def test_unscored_headline_balances_vertical_space_without_changing_copy(self):
         draw = ImageDraw.Draw(Image.new('RGB', (1374, 1145)))

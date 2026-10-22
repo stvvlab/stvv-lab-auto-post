@@ -28,7 +28,8 @@ class ScheduledStadiumTests(unittest.TestCase):
             for name, value in [
                 ('load', history), ('load_feedback', []), ('feedback_scores', {}),
                 ('auto_feedback_scores', {}), ('slot_for_run', ('vote', '2026-10-21')),
-                ('latest_match', None), ('choose_fallback', '次に読みたい分析は？'),
+                ('latest_match', {'idEvent': 'new-match'}),
+                ('match_post', '対戦相手戦をどこから振り返る？\n① 攻撃\n② 守備\n③ 選手'),
             ]:
                 stack.enter_context(patch.object(posting, name, return_value=value))
             image = stack.enter_context(patch.object(posting, 'content_card_media', return_value=media))
@@ -41,9 +42,9 @@ class ScheduledStadiumTests(unittest.TestCase):
     def test_verified_image_flows_to_buffer_publication(self):
         url = 'https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/revision/generated/content.jpg'
         image, publish, result = self.run_scheduled_vote(url)
-        image.assert_called_once_with('vote', '2026-10-21', '次に読みたい分析は？', source=None)
+        image.assert_called_once_with('vote', '2026-10-21', '対戦相手戦をどこから振り返る？\n① 攻撃\n② 守備\n③ 選手', source='thesportsdb:new-match')
         publish.assert_called_once()
-        self.assertEqual(publish.call_args.args[2], '次に読みたい分析は？' + posting.HASHTAGS)
+        self.assertIn('① 攻撃\n② 守備\n③ 選手', publish.call_args.args[2])
         self.assertEqual(publish.call_args.args[6], url)
         self.assertEqual(result, 'submitted_to_buffer')
 
@@ -61,6 +62,21 @@ class ScheduledStadiumTests(unittest.TestCase):
              patch.object(posting, 'articles', return_value=[]), \
              patch.object(posting, 'slot_for_run', return_value=('player', '2026-10-21')):
             self.assertEqual(posting.main(), 'skipped_no_verified_content')
+
+    def test_vote_without_verified_context_never_uses_generic_fallback(self):
+        history = {'used_posts': [], 'pending_posts': {}, 'publication_log': []}
+        with ExitStack() as stack:
+            for name, value in [('load', history), ('load_feedback', []),
+                                ('feedback_scores', {}), ('auto_feedback_scores', {}),
+                                ('slot_for_run', ('vote', '2026-10-22')), ('latest_match', None)]:
+                stack.enter_context(patch.object(posting, name, return_value=value))
+            choose = stack.enter_context(patch.object(posting, 'choose_fallback'))
+            image = stack.enter_context(patch.object(posting, 'content_card_media'))
+            publish = stack.enter_context(patch.object(posting, 'publish'))
+            self.assertEqual(posting.main(), 'skipped_no_verified_content')
+            choose.assert_not_called()
+            image.assert_not_called()
+            publish.assert_not_called()
 
     def test_official_data_reaches_image_but_never_reposts_same_copy(self):
         message, source = '公式得点時間データ', 'https://stvv.jp/news/game/20261019_1/'

@@ -507,8 +507,8 @@ def match_post(event, slot):
 
     if slot == "vote":
         return (
-            f"🗳️ STVVファンに質問\n{base}\n"
-            "この試合で最も印象に残った場面は？"
+            f"🗳️ {opponent}戦をどこから振り返る？\n{base}\n"
+            "① 攻撃\n② 守備\n③ 選手"
         )
 
     if slot not in {"data", "compare", "analysis"}:
@@ -1127,29 +1127,15 @@ def main():
             log(f"公式得点データ確認不可: {error}")
 
     if message and slot == "vote" and duplicate_reason(history, message, source, now):
-        # A repeated match recap must not hide the existing fact-free fan
-        # question route. The replacement still passes the final guard.
-        log("既報の試合質問を除外し、別のファン参加型候補を確認します")
-        message = None
-        source = None
+        # Do not fill a slot with an unrelated generic question.
+        return run_result("skipped_repeated_content", f"{day} {slot}: 既報の試合内容")
 
     if not message:
-        # A daily quota is not a reason to publish recycled generic advice.
-        # Only the interactive fan question may use a clearly labelled
-        # non-news fallback. All other slots require fresh verified content.
-        if slot != "vote":
-            log(f"品質ゲート: {slot} に検証済み新情報がないため投稿見送り")
-            return run_result(
-                "skipped_no_verified_content",
-                f"{day} {slot}: 検証済み新情報なし",
-            )
-        message = choose_fallback(
-            slot, day, scores, automatic_scores, history['publication_log']
+        log(f"品質ゲート: {slot} に検証済み新情報がないため投稿見送り")
+        return run_result(
+            "skipped_no_verified_content",
+            f"{day} {slot}: 検証済み新情報なし",
         )
-        if message is None:
-            log("品質ゲート: vote 候補なし、投稿見送り")
-            return run_result("skipped_no_vote_candidate", f"{day} {slot}: 候補なし")
-        log("ファン参加型の質問を投稿")
 
     repeated = duplicate_reason(history, message, source, now)
     if repeated:
