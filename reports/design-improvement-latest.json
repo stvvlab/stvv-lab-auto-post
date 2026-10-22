@@ -1,19 +1,15 @@
 {
-  "updated_at": "2026-10-22T09:13:52+09:00",
+  "updated_at": "2026-10-22T10:09:00+09:00",
   "template_version": 6,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "Enable previously unreachable player source selection using the existing live official article reader, requiring 選手 in the supplied headline",
-    "Preserve freshness/domain/excluded-topic/weighted length/used-news/content-duplicate gates and final image/public-byte/pending-before-Buffer safety",
-    "Add three player-route regression cases and an offline saved-official-headline player preview to CI"
-  ],
+  "changes": [],
   "preview_path": "generated/player_official_preview.jpg",
   "preview_layout_path": "generated/player_official_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
     "passed": 75,
-    "performed_this_pass": true,
+    "performed_this_pass": false,
     "command": "python3 -m unittest discover -s tests",
     "duration_seconds": 18.755,
     "diff_check": "passed"
@@ -26,12 +22,12 @@
     "Vote fallback transition awaits next regular vote run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe upcoming regular slots; do not replay finished 08:00. Verify player route on next regular player run, with all source/duplicate/media/pending gates; verify X only if eligible publication occurs.",
+  "next_priority": "Observe 2026-10-22 10:30 JST compare regular run when due; distinguish unavailable verified statistics from failure. Player route awaits next 08:00 regular run. Verify actual v6 media/public bytes/pending/Buffer/X only if eligible content proceeds.",
   "ci_tests_passed": 75,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39698299503",
   "implementation_commit": "4a7f0df91f983eb8eb3561f44bee44536e2b95ed",
   "visual_review": "Rendered real saved official headline in PLAYER LAB composition. Intact two-line 70px headline and clause-balanced 48px body, navy/yellow stadium/flags/brush retained, no face or invented facts. The historical headline is offline design evidence only and remains duplicate-blocked for publication.",
-  "baseline_commit": "c59e0cbeb9d2d064bb95958b2d047b723e8ebc77",
+  "baseline_commit": "c77254fc6fa4bccae1a5566a008fa0717fb72d3f",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-22 08:00 JST player",
@@ -56,23 +52,18 @@
     "reason": "player に検証済み新情報がないため投稿見送り; code inspection found no player source selection branch before this fix"
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Inspected actual 08:00 posting step (72 tests, safe no-content skip), found player had no source branch, enabled constrained official player-headline selection. Local 75 tests passed; saved headline preview visually reviewed. Read-only live official reader found one player headline, which correctly failed duplicate guard. No extra post.",
+  "latest_run_review": "Read latest main, stadium docs, both status reports, posted.json and recent Actions. No new regular posting run since recorded 08:00 skip. Latest player-source implementation and successful 75-test CI remain current. Publication state unchanged: 104 used keys, zero pending. No evidenced renderer or posting defect warrants another change; no redundant tests or extra post.",
   "checks_this_pass": {
-    "type": "player_source_route_fix_after_production_skip",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
-    "production_tests_run": true,
-    "production_tests_passed": 72,
+    "type": "post_player_route_change_review",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39692249579,
     "paid_api_used": false,
     "new_public_post": false,
     "x_checked_this_pass": false,
-    "live_official_source_read_only": true,
-    "preview_sha256": "80669454b23c3a9b2fb0b9e8f83f1ab6648db2add74e1cfb37a8a99d56e01104",
-    "diff_check": "passed",
-    "ci_tests_passed": 75,
-    "ci_preview_rendered": true,
-    "ci_preview_artifact_uploaded": true
+    "diff_check": "passed"
   },
   "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
@@ -90,7 +81,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "8bf607f9336489157dab8aa32ebd9782a0e5e218",
-  "code_changes_this_pass": true,
+  "code_changes_this_pass": false,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,
@@ -160,7 +151,7 @@
     "x_post_url": null,
     "reason": "08:00 posting workflow is not visible at 08:06:38 JST; no content skip or sending error can be inferred."
   },
-  "visual_review_performed_this_pass": true,
+  "visual_review_performed_this_pass": false,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39653172370",
     "workflow_conclusion": "success",
