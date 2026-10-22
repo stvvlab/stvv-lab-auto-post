@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T21:05:42.318490+00:00",
+  "updated_at": "2026-10-22T22:10:02.537167+00:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -53,9 +53,9 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Fresh read-only official article check succeeded: only eligible source is previously covered Oct19 Lommel article; repetition guard blocks it for player/news. No distinct new eligible player story at06:05JST. No new scheduled run; history unchanged77 publications,105 used,0 pending. No renderer changes or duplicate/public test post. Actual08:00 result must be observed separately; this read-only check does not count as a scheduled skip.",
+  "latest_run_review": "Latest main/docs/status/history checked before08:00 regular slot: no new Auto Post run, publication_log77 used105 pending0 unchanged. Previous06:05 read-only source result is retained with its original timestamp, not represented as a new fetch. No verified new visual defect or source change; no code edits, re-render, tests or public actions this pass. Next regular result still awaits observation.",
   "checks_this_pass": {
-    "type": "read_only_official_source_check",
+    "type": "pre_0800_regular_slot_state_check",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -327,10 +327,10 @@
   },
   "local_tests_this_pass": {
     "performed": false,
-    "reason": "No source code change; read-only live source and duplicate eligibility check"
+    "reason": "No code change; full103-test CI remains latest verification"
   },
   "no_change_observation": {
-    "baseline_commit": "a4e89b32b5be5d933fa1a0699949aed38bf41308",
+    "baseline_commit": "9dd66d4dbdd144e178a732c344eded202cafb331",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
