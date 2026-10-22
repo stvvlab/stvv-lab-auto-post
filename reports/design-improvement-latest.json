@@ -1,33 +1,42 @@
 {
-  "updated_at": "2026-10-22T23:06:00+09:00",
-  "template_version": 8,
+  "updated_at": "2026-10-22T14:19:22Z",
+  "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/vote_candidate_preview.jpg",
-  "preview_layout_path": "generated/vote_candidate_preview.layout.json",
+  "changes": [
+    "Rotate stadium/split-photo/yellow-poster compositions using accepted publication_log length, not random selection or skipped slots.",
+    "New split layout uses only clean saved stadium/flag crop without mirroring; yellow poster is locally drawn.",
+    "All variants preserve supplied headline, match context and lower detail text; tests cover vote choices, scorer names/times and news copy.",
+    "CI generates eight card previews and a three-variant comparison sheet; no public test post."
+  ],
+  "preview_path": "generated/composition_variants_preview.jpg",
+  "preview_layout_path": "generated/variant_split_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 95,
-    "performed_this_pass": false,
+    "passed": 97,
+    "performed_this_pass": true,
     "command": "python3 -m unittest discover -s tests",
-    "duration_seconds": 102.919,
+    "duration_seconds": 125.52,
+    "focused_final_cases_passed": 2,
+    "focused_duration_seconds": 4.039,
+    "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "passed",
-  "publication_status": "v8 deployed; no v8 actual X post yet.23:00 recap not observed at initial check. No new public post.",
+  "ci_status": "queued",
+  "publication_status": "Template v9 deployed; visual rotation not yet verified on a regular X post. Prior v7 transport proof remains historical; v8/v9 preview approval and engagement remain unverified.",
   "remaining": [
-    "Template v8 actual regular-slot X display not yet verified",
-    "New missing/repeated vote policy awaits regular vote execution",
-    "Official player source route awaits eligible regular run",
+    "Full final98-test CI queued; not yet confirmed",
+    "Template v9 composition rotation awaits eligible regular publication and X verification",
+    "No claim of user design approval or improved engagement",
+    "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Inspect actual23:00 recap result when created, then next player/data source outcomes. v8 participation design and missing/repeated-context policy await eligible regular execution. Preserve no generic filler/no old-match replay.",
-  "ci_tests_passed": 95,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39788891595",
-  "implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
-  "visual_review": "Compared the user-supplied v7 X screenshot with newly rendered v8 preview. Japanese question now100px in two natural lines (ロンメル戦を / どこから振り返る？), options78px on equal panels. English consolidated to one120px line. No faces, new facts or clipping observed. PreviewSHA2562f3515eeb3511eb390ab244f473676703b7d12f2eb317993faad7a9c44ee35f2. User has not yet approved this preview; improved engagement not established.",
-  "baseline_commit": "6a3c335582b29247ea8a6f21c75a6141c1da16ac",
+  "next_priority": "Inspect eligible regular publication with selected audit.variant; preserve source and repetition gates, never repost preview match as a test. Assess new composition on actual mobile X view.",
+  "ci_tests_passed": null,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39794562298",
+  "implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
+  "visual_review": "Inspected full-resolution split and poster outputs plus contact sheet. Final split question has two intact lines and no orphan る？; removed old baked central plate by cropping clean right region. Stadium, dark split-photo and bright yellow poster are visually distinct, with same factual text and choices. No face, external asset, new statistic or claim added. User has not approved new designs; engagement not measured.",
+  "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-22 21:00 JST vote",
@@ -61,12 +70,12 @@
     "x_text_verified": true,
     "x_image_visually_verified": true
   },
-  "additional_local_preview_path": null,
-  "latest_run_review": "Read latest main, docs, status/design reports, posted.json and recent Actions. User feedback response v8 is deployed and CI completed successfully with95 tests and five offline previews. No regular posting run since v7 vote. Used105/pending0 unchanged;23:00 recap not yet observed. No new visual defect or regression justifies quota-driven modifications or repeated tests. Keep user editorial rejection of v7 separate from its transport proof. Separate database-sync failure is not a Buffer failure.",
+  "additional_local_preview_path": "generated/variant_poster_preview.jpg",
+  "latest_run_review": "Implemented user request to vary the outer design instead of changing only text. All posting source/repetition/pending/public byte safeguards remain; content_card_media receives a deterministic composition chosen after content gates. Publication history advances only after Buffer success, retaining stable retry layout. Generated and visually reviewed three saved-asset compositions and comparison sheet;97 suite tests and2 final focused tests passed. New third regression added after suite is included in final CI. No manual dispatch or additional public post.",
   "checks_this_pass": {
-    "type": "post_user_feedback_v8_rollout_state_review",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
+    "type": "user_requested_composition_rotation",
+    "new_local_tests_run": true,
+    "new_image_rendered": true,
     "production_tests_run": false,
     "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39779085761,
@@ -91,8 +100,8 @@
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
   },
-  "previous_implementation_commit": "d34a7a51ed0f442d3da94d091abbed7fc8890da7",
-  "code_changes_this_pass": false,
+  "previous_implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -171,7 +180,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": false,
+  "visual_review_performed_this_pass": true,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39653172370",
     "workflow_conclusion": "success",
@@ -250,5 +259,21 @@
     "buffer_submission_reached": null,
     "x_post_url": null,
     "reason": "23:00 recap run not yet visible at initial check; no content skip or sending error inferred."
+  },
+  "variant_preview_paths": [
+    "generated/variant_stadium_preview.jpg",
+    "generated/variant_split_preview.jpg",
+    "generated/variant_poster_preview.jpg"
+  ],
+  "composition_rotation": {
+    "variants": [
+      "stadium",
+      "split",
+      "poster"
+    ],
+    "accepted_publications_observed": 77,
+    "next_variant": "poster",
+    "advance_on": "successful_publication_only",
+    "retry_deterministic": true
   }
 }
