@@ -53,11 +53,12 @@ class ScheduledStadiumTests(unittest.TestCase):
         self.assertEqual(result, 'skipped_image_verification')
 
     def test_no_verified_non_vote_content_is_an_explicit_skip(self):
-        history = {'used_posts': [], 'pending_posts': {}, 'publication_log': []}
+        history = {'used_posts': [], 'pending_posts': {}, 'publication_log': [], 'news': []}
         with patch.object(posting, 'load', return_value=history), \
              patch.object(posting, 'load_feedback', return_value=[]), \
              patch.object(posting, 'feedback_scores', return_value={}), \
              patch.object(posting, 'auto_feedback_scores', return_value={}), \
+             patch.object(posting, 'articles', return_value=[]), \
              patch.object(posting, 'slot_for_run', return_value=('player', '2026-10-21')):
             self.assertEqual(posting.main(), 'skipped_no_verified_content')
 

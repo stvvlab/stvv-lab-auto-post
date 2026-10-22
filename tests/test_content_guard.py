@@ -62,13 +62,13 @@ class ContentGuardTests(unittest.TestCase):
             image.assert_not_called()
             publish.assert_not_called()
 
-    def run_news_candidates(self, candidates, pending=False):
+    def run_news_candidates(self, candidates, pending=False, slot='news'):
         history = self.history(pending=pending)
         history['news'] = []
         with ExitStack() as stack:
             for name, value in [('load', history), ('load_feedback', []),
                                 ('feedback_scores', {}), ('auto_feedback_scores', {}),
-                                ('slot_for_run', ('news', '2026-10-21')),
+                                ('slot_for_run', (slot, '2026-10-21')),
                                 ('articles', candidates)]:
                 stack.enter_context(patch.object(posting, name, return_value=value))
             image = stack.enter_context(patch.object(posting, 'content_card_media', return_value='https://example.test/card.jpg'))
@@ -94,6 +94,32 @@ class ContentGuardTests(unittest.TestCase):
                 self.assertEqual(result, 'skipped_repeated_content')
                 image.assert_not_called()
                 publish.assert_not_called()
+
+    def test_player_slot_selects_official_player_headline_after_unrelated_article(self):
+        fresh = 'https://stvv.jp/news/team/player-announcement/'
+        result, image, publish = self.run_news_candidates([
+            ('https://stvv.jp/news/team/general/', (NOW.date(), '公式の試合日程')),
+            (fresh, (NOW.date(), '選手の復帰について'))], slot='player')
+        self.assertEqual(result, 'submitted_to_buffer')
+        self.assertEqual(image.call_args.args[0], 'player')
+        self.assertEqual(image.call_args.kwargs['source'], fresh)
+        self.assertEqual(publish.call_args.args[5], fresh)
+
+    def test_player_slot_without_player_article_skips_before_media(self):
+        result, image, publish = self.run_news_candidates([
+            ('https://stvv.jp/news/team/general/', (NOW.date(), '公式の試合日程'))], slot='player')
+        self.assertEqual(result, 'skipped_no_verified_content')
+        image.assert_not_called()
+        publish.assert_not_called()
+
+    def test_player_slot_keeps_published_and_pending_source_guard(self):
+        for pending in (False, True):
+            result, image, publish = self.run_news_candidates([
+                (URL, (NOW.date(), '日本人選手のロンメル戦での得点について'))],
+                pending=pending, slot='player')
+            self.assertEqual(result, 'skipped_repeated_content')
+            image.assert_not_called()
+            publish.assert_not_called()
 
     def run_repeated_match_vote(self, fallback_already_posted=False):
         fallback = 'MOMを決めるなら、どのプレーを重視する？'

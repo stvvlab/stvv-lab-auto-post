@@ -156,3 +156,13 @@ to a supplied Japanese clause boundary. This avoids leaving a short ending
 alone on the second line. The original characters, type size and line count
 are preserved. Explicit newlines, headings, scorer rows and lead/detail
 panels retain their existing layout; no copy is summarized or invented.
+
+## Official source route for the player slot
+
+The player slot checks the same live official article list as the news slot,
+requiring `選手` in the supplied headline. Domain, freshness, excluded-topic,
+caption length and source/content repetition checks apply before rendering.
+An accepted source is recorded as used news across slots. Without a suitable
+new article the player slot still skips; no generic scouting claim is added.
+The offline player preview reuses the saved official headline only as design
+evidence. It is not a publication candidate and cannot bypass source checks.

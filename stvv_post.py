@@ -1037,11 +1037,15 @@ def main():
     source = None
     news_url = None
 
-    if slot == "news":
+    if slot in {"news", "player"}:
         repeated_news = False
         try:
             for url, (_, title) in articles(now):
                 if url in history["news"]:
+                    continue
+                # Use a supplied official player headline, never an inferred
+                # scouting assessment or a generic daily fallback.
+                if slot == "player" and "選手" not in title:
                     continue
 
                 candidate = (

@@ -58,3 +58,5 @@ jobs:
             generated/news_heading_preview.layout.json
             generated/vote_candidate_preview.jpg
             generated/vote_candidate_preview.layout.json
+            generated/player_official_preview.jpg
+            generated/player_official_preview.layout.json
