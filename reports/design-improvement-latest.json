@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T16:03:01.035622+00:00",
+  "updated_at": "2026-10-22T17:01:27.193420+00:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -53,9 +53,9 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Verified CI39801196426: shared installer downloaded and installed61.2MB font successfully;103 tests passed in23.690s; eight preview cards and contact sheet uploaded. No new regular posting run, publication_log unchanged77 and pending0. Compared approved review and three-composition contact sheet visually; no renderer change without demonstrated improvement.",
+  "latest_run_review": "Read latest main, template documentation, status and publication history. No new Auto Post run since cancelled23:00 recap; publication_log77,used105,pending0 unchanged. Font fix CI remains103 passing. No new visual evidence justifies renderer edits; no images regenerated or tests rerun. Preserve next08:00 regular verification and reply transport limitations.",
   "checks_this_pass": {
-    "type": "font_setup_ci_verification",
+    "type": "unchanged_pre_next_slot_check",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -171,7 +171,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": true,
+  "visual_review_performed_this_pass": false,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39653172370",
     "workflow_conclusion": "success",
@@ -307,9 +307,7 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [
-    "Recorded successful shared font installer and103-test CI; no renderer or posting code changed"
-  ],
+  "changes_this_pass": [],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -321,5 +319,15 @@
   "local_tests_this_pass": {
     "performed": false,
     "reason": "No code change; verified new103-test CI instead"
+  },
+  "no_change_observation": {
+    "baseline_commit": "d085e9d576b79a2eb85eeb454ff15ea0c50c3539",
+    "publication_log_count": 77,
+    "used_posts_count": 105,
+    "pending_posts_count": 0,
+    "new_posting_run": false,
+    "next_regular_slot_jst": "2026-10-23 08:00",
+    "classification": "no_new_posting_evidence",
+    "action": "Preserve renderer and publication gates; do not manufacture code changes or replay cancelled slot"
   }
 }
