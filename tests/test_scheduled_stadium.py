@@ -8,6 +8,17 @@ import stvv_post as posting
 
 
 class ScheduledStadiumTests(unittest.TestCase):
+    def test_composition_cycle_advances_only_with_publication_history(self):
+        history = {'publication_log': [], 'pending_posts': {}}
+        observed = []
+        for index in range(6):
+            observed.append(posting.next_card_variant(history))
+            self.assertEqual(posting.next_card_variant(history), observed[-1])
+            history['pending_posts']['unconfirmed'] = {}
+            self.assertEqual(posting.next_card_variant(history), observed[-1])
+            history['publication_log'].append({'key': str(index)})
+        self.assertEqual(observed, ['stadium', 'split', 'poster'] * 2)
+
     def test_mock_results_do_not_pollute_actions_posting_summary(self):
         with tempfile.TemporaryDirectory() as tmp:
             summary = Path(tmp) / 'summary.md'
@@ -42,7 +53,7 @@ class ScheduledStadiumTests(unittest.TestCase):
     def test_verified_image_flows_to_buffer_publication(self):
         url = 'https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/revision/generated/content.jpg'
         image, publish, result = self.run_scheduled_vote(url)
-        image.assert_called_once_with('vote', '2026-10-21', '対戦相手戦をどこから振り返る？\n① 攻撃\n② 守備\n③ 選手', source='thesportsdb:new-match')
+        image.assert_called_once_with('vote', '2026-10-21', '対戦相手戦をどこから振り返る？\n① 攻撃\n② 守備\n③ 選手', source='thesportsdb:new-match', variant='stadium')
         publish.assert_called_once()
         self.assertIn('① 攻撃\n② 守備\n③ 選手', publish.call_args.args[2])
         self.assertEqual(publish.call_args.args[6], url)
@@ -99,7 +110,7 @@ class ScheduledStadiumTests(unittest.TestCase):
                 result = posting.main()
                 if state == 'new':
                     self.assertEqual(result, 'submitted_to_buffer')
-                    image.assert_called_once_with('data', '2026-10-21', message, source=source)
+                    image.assert_called_once_with('data', '2026-10-21', message, source=source, variant='stadium')
                     publish.assert_called_once()
                 else:
                     self.assertEqual(result, 'skipped_no_verified_content' if state == 'unavailable'

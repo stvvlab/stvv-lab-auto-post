@@ -9,11 +9,12 @@ import random
 import json
 from functools import lru_cache
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parent
 W, H = 1374, 1145
 YELLOW, WHITE = '#ffe100', '#ffffff'
+VARIANTS = ('stadium', 'split', 'poster')
 LABELS = {
     'player': ('PLAYER', 'LAB'), 'compare': ('MATCH', 'COMPARE'),
     'data': ('MATCH', 'DATA'), 'analysis': ('TACTICAL', 'LAB'),
@@ -319,9 +320,62 @@ def vote_layout(im, draw, headline, match, groups, metadata):
             'headline_layout': question, 'context_layout': context, 'panels': panels}
 
 
-def render_content_card(slot, message, destination, source=None):
+def alternate_layout(im, draw, variant, slot, headline, match, groups, metadata):
+    """Distinct compositions using the same saved asset and verbatim facts."""
+    navy = '#061b36'
+    if variant == 'split':
+        # The saved asset contains a central plate. Use only its clean right
+        # stadium/flag region so a second empty plate is not exposed.
+        photo = ImageOps.fit(im.crop((1042, 0, W, 807)), (500, 792), centering=(1, 0.5))
+        im.paste(photo, (874, 0))
+        draw.rectangle((0, 0, 873, H), fill=navy)
+        draw.rectangle((874, 792, W, H), fill=navy)
+        draw.polygon([(825, 0), (882, 0), (830, 770), (773, 770)], fill=YELLOW)
+        heading_box, question_box = (68, 151, 720, 110), (68, 297, 696, 295)
+        question_color = WHITE
+        context_box = (68, 641, 695, 72)
+    else:
+        draw.rectangle((0, 0, W, H), fill=YELLOW)
+        draw.rectangle((0, 0, W, 180), fill=navy)
+        draw.polygon([(0, 180), (W, 180), (W, 208), (0, 250)], fill=navy)
+        heading_box, question_box = (439, 25, 850, 125), (68, 287, 1238, 265)
+        question_color = navy
+        context_box = (68, 620, 1238, 72)
+    # Common footer and lower information panels stay dark for legibility.
+    draw.rectangle((0, 1080, W, H), fill=navy)
+    first, second = LABELS[slot]
+    heading = brush_title(draw, first + ' ' + second, heading_box, YELLOW,
+                          maximum=95 if variant == 'split' else 110)
+    question_text = headline.replace('戦をどこから', '戦を\nどこから')
+    question = fitted(draw, question_text, question_box,
+                      76 if variant == 'split' else 100, 28,
+                      question_color, center_vertical=True)
+    context = []
+    if match:
+        own, other, opponent = match
+        context.append(fitted(draw, f'STVV {own}–{other} {opponent}', context_box,
+                              56, 24, YELLOW if variant == 'split' else navy))
+    if metadata:
+        context.append(fitted(draw, ' / '.join(metadata),
+                              (context_box[0], 737, context_box[2], 30), 23, 18,
+                              WHITE if variant == 'split' else navy))
+    panels = []
+    for value, (left, top, width, height) in panel_boxes(groups):
+        draw.rectangle((left, top, left + width - 1, top + height - 1), fill=navy)
+        draw.rectangle((left, top, left + width - 1, top + 6), fill=YELLOW if variant == 'split' else navy)
+        layout = fitted(draw, value, (left + 26, top + 42, width - 52, height - 65),
+                        70 if slot == 'vote' else 48, 22,
+                        center_vertical=True, balance=slot != 'vote')
+        panels.append({'text': value, 'hierarchy': 'choice' if slot == 'vote' else 'body', **layout})
+    return {'composition': variant, 'headings': [heading], 'headline_layout': question,
+            'context_layout': context, 'panels': panels}
+
+
+def render_content_card(slot, message, destination, source=None, variant='stadium'):
     if slot not in LABELS:
         raise ValueError('Unknown slot')
+    if variant not in VARIANTS:
+        raise ValueError('Unknown composition')
     if len(clean(message)) > 600:
         raise ValueError('Caption exceeds supported card length')
     headline, match, groups, metadata = story(message, include_metadata=True)
@@ -330,13 +384,18 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 8, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 9, 'slot': slot, 'variant': variant,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
+    if variant != 'stadium':
+        audit.update(alternate_layout(im, d, variant, slot, headline, match, groups, metadata))
+        groups = []
     fitted(d, 'STVV LAB', (109, 28, 300, 46), 42, 30)
     fitted(d, '非公式ファンメディア', (112, 79, 300, 26), 20, 18)
-    if slot == 'vote':
+    if variant != 'stadium':
+        pass
+    elif slot == 'vote':
         audit.update(vote_layout(im, d, headline, match, groups, metadata))
         groups = []
     else:
@@ -344,7 +403,7 @@ def render_content_card(slot, message, destination, source=None):
         audit['headings'] = [brush_title(d, first, (388, 8, 760, 170), YELLOW),
                              brush_title(d, second, (382, 169, 790, 193), WHITE)]
         audit['heading_sweep'] = brush_sweep(d, (448, 350, 520, 35))
-    if slot == 'vote':
+    if variant != 'stadium' or slot == 'vote':
         pass
     elif match:
         own, other, opponent = match

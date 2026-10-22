@@ -1,7 +1,8 @@
 {
   "schema_version": 1,
-  "template_version": 8,
+  "template_version": 9,
   "slot": "player",
+  "variant": "stadium",
   "dimensions": [
     1374,
     1145

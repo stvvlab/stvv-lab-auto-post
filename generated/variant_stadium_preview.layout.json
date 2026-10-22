@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "template_version": 9,
+  "slot": "vote",
+  "variant": "stadium",
+  "dimensions": [
+    1374,
+    1145
+  ],
+  "source": "https://stvv.jp/news/game/20261019_1/",
+  "headline": "ロンメル戦をどこから振り返る？",
+  "score_from_caption": [
+    "4",
+    "1",
+    "ロンメル"
+  ],
+  "match_metadata": [],
+  "panels": [
+    {
+      "text": "① 攻撃",
+      "hierarchy": "choice",
+      "font_size": 78,
+      "lines": [
+        "① 攻撃"
+      ],
+      "box": [
+        71,
+        878,
+        360,
+        85
+      ]
+    },
+    {
+      "text": "② 守備",
+      "hierarchy": "choice",
+      "font_size": 78,
+      "lines": [
+        "② 守備"
+      ],
+      "box": [
+        507,
+        878,
+        360,
+        85
+      ]
+    },
+    {
+      "text": "③ 選手",
+      "hierarchy": "choice",
+      "font_size": 78,
+      "lines": [
+        "③ 選手"
+      ],
+      "box": [
+        943,
+        878,
+        360,
+        85
+      ]
+    }
+  ],
+  "composition": "japanese-question-and-choices",
+  "headings": [
+    {
+      "font_size": 120,
+      "angle": 4,
+      "box": [
+        397,
+        35,
+        850,
+        150
+      ]
+    }
+  ],
+  "headline_layout": {
+    "font_size": 100,
+    "lines": [
+      "ロンメル戦を",
+      "どこから振り返る？"
+    ],
+    "box": [
+      365,
+      330,
+      908,
+      220
+    ]
+  },
+  "context_layout": [
+    {
+      "font_size": 56,
+      "lines": [
+        "STVV 4–1 ロンメル"
+      ],
+      "box": [
+        365,
+        596,
+        908,
+        64
+      ]
+    }
+  ]
+}

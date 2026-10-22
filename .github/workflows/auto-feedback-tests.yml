@@ -60,3 +60,6 @@ jobs:
             generated/vote_candidate_preview.layout.json
             generated/player_official_preview.jpg
             generated/player_official_preview.layout.json
+            generated/variant_*_preview.jpg
+            generated/variant_*_preview.layout.json
+            generated/composition_variants_preview.jpg

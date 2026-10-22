@@ -8,6 +8,25 @@ from content_card import LABELS, render_content_card, story, wrap, font, panel_b
 from PIL import ImageDraw
 
 class ContentCardSmokeTests(unittest.TestCase):
+    def test_alternate_compositions_preserve_question_match_and_choices(self):
+        message = 'ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手'
+        with tempfile.TemporaryDirectory() as tmp:
+            images = []
+            for variant in ['stadium', 'split', 'poster']:
+                path = Path(tmp) / (variant + '.jpg')
+                render_content_card('vote', message, path, variant=variant)
+                audit = json.loads(path.with_suffix('.layout.json').read_text())
+                images.append(path.read_bytes())
+                self.assertEqual(audit['variant'], variant)
+                self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
+                self.assertEqual(''.join(audit['headline_layout']['lines']), audit['headline'])
+                self.assertEqual(audit['headline_layout']['lines'], ['ロンメル戦を', 'どこから振り返る？'])
+                self.assertEqual([p['text'] for p in audit['panels']], ['① 攻撃', '② 守備', '③ 選手'])
+                for panel in audit['panels']:
+                    self.assertEqual(len(panel['lines']), 1)
+                    self.assertGreaterEqual(panel['font_size'], 65)
+            self.assertEqual(len(set(images)), 3)
+
     def test_all_layouts(self):
         sample = "⚽ STVV試合分析\n日本人選手の動きと守備の切り替えを確認。\nシュート数と枠内シュートを比較。"
         with tempfile.TemporaryDirectory() as tmp:
@@ -19,6 +38,24 @@ class ContentCardSmokeTests(unittest.TestCase):
                         self.assertEqual(image.size, (1374, 1145))
                         self.assertEqual(image.format, "PNG")
                         self.assertGreater(output.stat().st_size, 10000)
+
+    def test_alternate_layouts_retain_scorer_names_times_and_news_copy(self):
+        facts = json.loads(Path('editorial/official_match_facts.json').read_text())
+        news = json.loads(Path('editorial/verified_news_heading.json').read_text())
+        data = '\n'.join(['得点時間', f"STVV {facts['score'].replace('-', '–')} {facts['opponent']}",
+                          *[f'{name}：{minute}分' for name, minute in facts['goals']]])
+        with tempfile.TemporaryDirectory() as tmp:
+            for slot, message in [('data', data), ('news', 'STVV公式ニュース\n' + news['headline'])]:
+                expected_headline, expected_match, expected_groups = story(message)
+                for variant in ['split', 'poster']:
+                    output = Path(tmp) / f'{slot}_{variant}.jpg'
+                    render_content_card(slot, message, output, variant=variant)
+                    audit = json.loads(output.with_suffix('.layout.json').read_text())
+                    self.assertEqual(''.join(audit['headline_layout']['lines']), expected_headline)
+                    self.assertEqual(audit['score_from_caption'], list(expected_match) if expected_match else None)
+                    self.assertEqual([p['text'] for p in audit['panels']], [g for g in expected_groups if g])
+                    for panel in audit['panels']:
+                        self.assertEqual(''.join(panel['lines']).replace('\n', ''), panel['text'].replace('\n', ''))
 
     def test_unknown_slot(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -72,7 +109,7 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 8)
+            self.assertEqual(audit['template_version'], 9)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')

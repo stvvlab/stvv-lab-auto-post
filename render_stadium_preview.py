@@ -1,7 +1,8 @@
 """Reproducible preview from the already verified editorial manifest. No posts."""
 import json
 from pathlib import Path
-from content_card import render_content_card
+from content_card import render_content_card, VARIANTS, font
+from PIL import Image, ImageDraw
 
 
 def main():
@@ -30,6 +31,16 @@ def main():
                       '① 攻撃', '② 守備', '③ 選手'])
     render_content_card('vote', vote, 'generated/vote_candidate_preview.jpg',
                         source=facts['source_url'])
+    for variant in VARIANTS:
+        render_content_card('vote', vote, f'generated/variant_{variant}_preview.jpg',
+                            source=facts['source_url'], variant=variant)
+    sheet = Image.new('RGB', (1374, 432), '#061b36')
+    draw = ImageDraw.Draw(sheet)
+    for index, variant in enumerate(VARIANTS):
+        draw.text((index * 458 + 18, 10), variant.upper(), font=font(26), fill='#ffe100')
+        with Image.open(f'generated/variant_{variant}_preview.jpg') as preview:
+            sheet.paste(preview.resize((458, 382), Image.Resampling.LANCZOS), (index * 458, 50))
+    sheet.save('generated/composition_variants_preview.jpg', quality=94)
     print('STADIUM_PREVIEW_OK: no Buffer or X request sent')
 
 

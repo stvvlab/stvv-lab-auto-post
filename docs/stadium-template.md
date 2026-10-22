@@ -191,3 +191,18 @@ Transport verification and editorial approval are separate: a successful X
 image display does not establish that the image or question meets the quality
 bar. The October 22 v7 vote passed transport but received negative user review;
 v8 is a response to that review, not a claim of improved engagement.
+
+## Quality pass 9: composition rotation
+
+Accepted publication history selects stadium, split-photo and yellow-poster
+compositions in order. A successful publication advances the cycle; skips,
+pending entries and failed image checks do not. The same retry is deterministic.
+The split-photo version crops the saved asset without mirroring crests or flags.
+The poster version uses local colour blocks and typography. No additional
+image-generation call, external asset or paid API is introduced.
+
+The layout audit records `variant`. All compositions render the same supplied
+headline, match context and details. Selection happens after editorial and
+repetition gates; publication/pending and public-byte checks remain unchanged.
+Three offline variant previews are included in the CI artifact and never posted
+as tests. Variation does not establish editorial quality or improved engagement.

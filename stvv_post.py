@@ -765,12 +765,18 @@ def generic_topic_media(slot):
 
 
 
-def content_card_media(slot, day, message, source=None):
+def next_card_variant(history):
+    # Only accepted publications advance the cycle. Skips and failed image
+    # checks must not consume a style; retries reproduce the same graphic.
+    return ('stadium', 'split', 'poster')[len(history['publication_log']) % 3]
+
+
+def content_card_media(slot, day, message, source=None, variant='stadium'):
     """Create a post-specific, faceless card and publish it before Buffer."""
     try:
         from content_card import render_content_card
         path = Path("generated") / f"content_{day}_{slot}.jpg"
-        render_content_card(slot, message, path, source=source)
+        render_content_card(slot, message, path, source=source, variant=variant)
         git("config", "user.name", "github-actions[bot]")
         git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
         git("add", "--", str(path))
@@ -1145,7 +1151,8 @@ def main():
     # Build the detailed visual first. A teaser is only appropriate when
     # an image was actually prepared; otherwise publish the full explanation.
     image_url = (
-        content_card_media(slot, day, message, source=source)
+        content_card_media(slot, day, message, source=source,
+                           variant=next_card_variant(history))
     )
     if not image_url:
         log("採用デザイン画像を公開確認できないため、安全に投稿見送り")
