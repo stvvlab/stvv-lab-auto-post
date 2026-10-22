@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "template_version": 6,
+  "template_version": 7,
   "slot": "player",
   "dimensions": [
     1374,
@@ -92,9 +92,9 @@
     ],
     "box": [
       368,
-      440,
+      496,
       632,
-      267
+      154
     ]
   }
 }

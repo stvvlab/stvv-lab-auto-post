@@ -72,7 +72,7 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 6)
+            self.assertEqual(audit['template_version'], 7)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
@@ -80,6 +80,26 @@ class ContentCardSmokeTests(unittest.TestCase):
             sweep = audit['heading_sweep']
             self.assertEqual(sweep['box'], [448, 350, 520, 35])
             self.assertEqual(len(sweep['bristles']), 5)
+
+    def test_unscored_headline_balances_vertical_space_without_changing_copy(self):
+        draw = ImageDraw.Draw(Image.new('RGB', (1374, 1145)))
+        for value in ['公式のお知らせ', 'Croky Cup初戦は日本人選手が躍動！', '選手情報' * 18]:
+            with self.subTest(value=value):
+                original = fitted(draw, value, (368, 440, 632, 267), 70, 24, dry_run=True)
+                centered = fitted(draw, value, (368, 440, 632, 267), 70, 24,
+                                  dry_run=True, center_vertical=True)
+                self.assertEqual(centered['lines'], original['lines'])
+                self.assertEqual(centered['font_size'], original['font_size'])
+                _, y, _, height = centered['box']
+                self.assertLessEqual(abs((y - 440) - (707 - y - height)), 1)
+                self.assertGreaterEqual(y, 440)
+                self.assertLessEqual(y + height, 707)
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'centered.jpg'
+            render_content_card('news', 'STVV公式ニュース\n公式のお知らせ', output)
+            audit = json.loads(output.with_suffix('.layout.json').read_text())
+            self.assertGreater(audit['headline_layout']['box'][1], 440)
+            self.assertIsNone(audit['score_from_caption'])
 
     def test_panel_hierarchy_preserves_exact_claim(self):
         with tempfile.TemporaryDirectory() as tmp:

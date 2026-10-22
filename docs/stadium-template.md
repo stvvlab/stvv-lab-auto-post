@@ -169,3 +169,11 @@ An accepted source is recorded as used news across slots. Without a suitable
 new article the player slot still skips; no generic scouting claim is added.
 The offline player preview reuses the saved official headline only as design
 evidence. It is not a publication candidate and cannot bypass source checks.
+
+## Quality pass 7
+
+Headlines without an explicit score are vertically centered within the existing
+headline area. Short one- or two-line headlines no longer leave most of the
+central card empty below the text. Copy, line breaks and type size are preserved;
+score cards, lower panels and all publication gates retain their existing layout.
+The audit records the actual centered text box for overflow and margin checks.

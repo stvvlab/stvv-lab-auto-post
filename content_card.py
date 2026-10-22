@@ -214,7 +214,7 @@ def balanced_body_wrap(draw, value, face, width):
     return best
 
 
-def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, dry_run=False, balance=False):
+def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, dry_run=False, balance=False, center_vertical=False):
     if not value:
         return
     x, y, width, height = box
@@ -225,6 +225,9 @@ def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, d
         # anchor='lt' removes language-dependent ascender offsets.
         step = size + max(4, size // 10)
         if len(lines) * step <= height and all(draw.textlength(line, font=face) <= width for line in lines):
+            if center_vertical:
+                y += (height - len(lines) * step) // 2
+                box = (x, y, width, len(lines) * step)
             if dry_run:
                 return {'font_size': size, 'lines': lines, 'box': list(box)}
             for index, line in enumerate(lines):
@@ -293,7 +296,7 @@ def render_content_card(slot, message, destination, source=None):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 6, 'slot': slot,
+    audit = {'schema_version': 1, 'template_version': 7, 'slot': slot,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
@@ -313,7 +316,8 @@ def render_content_card(slot, message, destination, source=None):
         fitted(d, own + '–' + other, (540, 505, 470, 155), 142, 85, YELLOW)
         audit['headline_layout'] = fitted(d, headline, (365, 678, 650, 70), 46, 23)
     else:
-        audit['headline_layout'] = fitted(d, headline, (368, 440, 632, 267), 70, 24)
+        audit['headline_layout'] = fitted(d, headline, (368, 440, 632, 267), 70, 24,
+                                          center_vertical=True)
     for value, (left, top, width, height) in panel_boxes(groups):
         plate = Image.new('RGBA', (width, height), (2, 12, 28, 230))
         pd = ImageDraw.Draw(plate)
