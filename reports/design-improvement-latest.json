@@ -1,34 +1,36 @@
 {
-  "updated_at": "2026-10-22T14:06:30+09:00",
-  "template_version": 6,
+  "updated_at": "2026-10-22T15:15:00+09:00",
+  "template_version": 7,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/scorer_alignment_preview.jpg",
-  "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
+  "changes": [
+    "Vertically center only unscored headlines inside their existing card region; preserve copy, wrapping and font size.",
+    "Record actual centered text boxes; cover short, two-line and near-full-height headlines with margin/overflow regressions."
+  ],
+  "preview_path": "generated/news_heading_preview.jpg",
+  "preview_layout_path": "generated/news_heading_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 92,
-    "performed_this_pass": false,
+    "passed": 93,
+    "performed_this_pass": true,
     "command": "python3 -m unittest discover -s tests",
-    "duration_seconds": 19.239,
-    "focused_cases_passed": 5,
+    "duration_seconds": 19.32,
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "12:30 data ran at 13:02 JST and safely blocked reused official scorer caption before image/Buffer. Reporting-only fix applies to future runs; no replay or extra public post.",
+  "publication_status": "No additional public post; template v7 awaits eligible regular submission and actual X verification.",
   "remaining": [
     "Official player source route awaits next regular player run; current live article is duplicate-blocked",
-    "Template v6 still awaits eligible nonrepeated actual X publication",
+    "Template v7 still awaits eligible nonrepeated actual X publication",
     "Vote fallback transition awaits next regular vote run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Inspect next regular 15:30 analysis outcome; verify improved scorer duplicate classification on next relevant regular data run. Preserve all missing-fact/duplicate/image gates; actual v6 X verification still awaits eligible nonrepeated submission.",
-  "ci_tests_passed": 92,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39720635270",
-  "implementation_commit": "c48b0f97769962bb5cc3548f4ff838f772b294bc",
-  "visual_review": "Regenerated previews and inspected scorer JPEG; names and aligned yellow times remain readable with approved navy/yellow flag/stadium/brush design. JPEG hash identical to previously validated scorer preview, since this change only clarifies skip reporting.",
-  "baseline_commit": "d4b3f46e4c012c71f0a9bcaf984bea2af2ca1bb3",
+  "next_priority": "Inspect next regular 15:30 analysis outcome, verify v7 on X only after an eligible regular submission, and check scorer duplicate classification at next relevant data run. Preserve duplicate/pending/image-byte/missing-fact gates.",
+  "ci_tests_passed": 93,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39732650053",
+  "implementation_commit": "d34a7a51ed0f442d3da94d091abbed7fc8890da7",
+  "visual_review": "Compared approved review with current previews. Original unscored news/vote headlines left excessive blank space below. New headline moved down 56px with unchanged copy, font and line breaks; inspected news and vote for balanced margins/no overlap. Scorer image SHA256 unchanged: e1049b9942cfb913993348ee71297bac49415f5e23e7d0ba69cf7e0997ccd599.",
+  "baseline_commit": "375e868d3d20cda81e3d8184134baaab8cab1f9c",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-22 12:30 JST data",
@@ -55,11 +57,11 @@
     "reason": "Official scorer caption already published/pending, detailed stats absent; pre-fix code classified this as no verified content. Future exact-scorer duplicate skips now use skipped_repeated_content."
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Latest main/docs/status/design report/posted.json and recent Actions checked. Scorer duplicate-result fix is deployed and its 92-test CI remains successful. No new regular posting run or media submission since recorded data skip. Used keys 104, pending zero unchanged. No new visual defect or regression justifies renderer changes or repeated testing; separate database sync failures are outside posting results.",
+  "latest_run_review": "Latest main, docs, both reports, posted.json and Actions inspected. No newer posting run since 12:30 data skip; next 15:30 analysis slot has not occurred. 104 used keys and zero pending unchanged. Separate database-sync failure is not a posting failure.",
   "checks_this_pass": {
-    "type": "post_scorer_reporting_fix_state_review",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
+    "type": "unscored_headline_vertical_balance",
+    "new_local_tests_run": true,
+    "new_image_rendered": true,
     "production_tests_run": false,
     "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39720068526,
@@ -84,7 +86,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "4a7f0df91f983eb8eb3561f44bee44536e2b95ed",
-  "code_changes_this_pass": false,
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-21 12:30 JST data",
     "workflow_run_created": true,
@@ -138,7 +140,7 @@
     "x_image_visually_verified": false,
     "reason": "compare に検証済み新情報がないため投稿見送り"
   },
-  "preview_caption": "公式記録で振り返る得点時間\nSTVV 4–1 ロンメル\n松澤海斗：15分\n新川志音：39分\nソエル・ソエル：62分\nムブク：71分",
+  "preview_caption": "STVV公式ニュース\nCroky Cup初戦は日本人選手が躍動！松澤の同点弾＆新川の加入後初ゴールでSTVVが4-1の逆転勝利！",
   "reflection_commit": "This report commit; implementation_commit identifies deployed code",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-22 08:00 JST player",
@@ -152,7 +154,7 @@
     "x_post_url": null,
     "reason": "08:00 posting workflow is not visible at 08:06:38 JST; no content skip or sending error can be inferred."
   },
-  "visual_review_performed_this_pass": false,
+  "visual_review_performed_this_pass": true,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39653172370",
     "workflow_conclusion": "success",
@@ -182,5 +184,10 @@
     "buffer_called": false
   },
   "player_source_route_live_verified": false,
-  "scorer_duplicate_result_live_verified": false
+  "scorer_duplicate_result_live_verified": false,
+  "local_render_environment": {
+    "initial_attempt": "failed: local font env not set",
+    "corrected_attempt": "passed: configured existing free Noto font and dependency path",
+    "preview_count": 5
+  }
 }
