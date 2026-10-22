@@ -838,6 +838,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12af3d5f82ac3b4430c9dc5dfc83d03237c9df89/generated/content_2026-10-21_data.jpg"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-22_vote": {
+      "slot": "vote",
+      "source": null,
+      "text": "🗳️ スコアと試合内容。\n\nSTVVの評価で重く見るのはどちら？ その理由も聞いてみたい。\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/3d50af3161aa8469fb6637fea2d2fa46019f07be/generated/content_2026-10-22_vote.jpg",
+      "created_at": "2026-10-22T21:38:36.502714+09:00"
+    }
+  },
   "tracked_topics": {}
 }
