@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T20:00:29.143978+00:00",
+  "updated_at": "2026-10-22T21:05:42.318490+00:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -53,9 +53,9 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Report accuracy fix passed full103-test CI in21.448s and preview rendering/upload. Feedback job also succeeded,75 posts have metrics; corrected report explicitly says no automatic format selection or supplement replies. No new regular posting run; publication_log77 used105 pending0. No new renderer/content changes justified; no local renders/tests repeated.",
+  "latest_run_review": "Fresh read-only official article check succeeded: only eligible source is previously covered Oct19 Lommel article; repetition guard blocks it for player/news. No distinct new eligible player story at06:05JST. No new scheduled run; history unchanged77 publications,105 used,0 pending. No renderer changes or duplicate/public test post. Actual08:00 result must be observed separately; this read-only check does not count as a scheduled skip.",
   "checks_this_pass": {
-    "type": "report_accuracy_ci_verification",
+    "type": "read_only_official_source_check",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -193,14 +193,23 @@
     "new_verified_facts": false
   },
   "live_source_check": {
-    "checked_at": "2026-10-22T18:04:42.912038+09:00",
-    "official_articles": 1,
-    "source_url": "https://stvv.jp/news/game/20261019_1/",
-    "weighted_length_ok": true,
-    "duplicate_blocked": true,
-    "eligible_new_article_observed": false,
+    "checked_at": "2026-10-23T06:05:12.010210+09:00",
+    "check_only": true,
     "buffer_called": false,
-    "check_only": true
+    "eligible_player": [],
+    "articles": [
+      {
+        "url": "https://stvv.jp/news/game/20261019_1/",
+        "title": "Croky Cup初戦は日本人選手が躍動！松澤の同点弾＆新川の加入後初ゴールでSTVVが4-1の逆転勝利！",
+        "used": false,
+        "repeat_reason": "同じ出典／試合の内容で、新しい比較データがないため見送り",
+        "length_ok": true,
+        "player_headline": true
+      }
+    ],
+    "status": "ok",
+    "official_articles": 1,
+    "eligible_new_player_article_observed": false
   },
   "player_source_route_live_verified": false,
   "scorer_duplicate_result_live_verified": false,
@@ -318,10 +327,10 @@
   },
   "local_tests_this_pass": {
     "performed": false,
-    "reason": "No code change; verified full CI instead"
+    "reason": "No source code change; read-only live source and duplicate eligibility check"
   },
   "no_change_observation": {
-    "baseline_commit": "e463a8e1ebe063e83cf2adf4e349f1c22ed94a38",
+    "baseline_commit": "a4e89b32b5be5d933fa1a0699949aed38bf41308",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
