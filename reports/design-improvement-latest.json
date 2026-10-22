@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T17:01:27.193420+00:00",
+  "updated_at": "2026-10-22T18:08:09.480059+00:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -53,7 +53,7 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Read latest main, template documentation, status and publication history. No new Auto Post run since cancelled23:00 recap; publication_log77,used105,pending0 unchanged. Font fix CI remains103 passing. No new visual evidence justifies renderer edits; no images regenerated or tests rerun. Preserve next08:00 regular verification and reply transport limitations.",
+  "latest_run_review": "Latest main/docs/status/posted.json reviewed again: no new regular Auto Post run, publication_log77 used105 pending0 unchanged. CI103 remains successful; no new content/image/publication evidence. Retained renderer and seven slots. No new tests/renders/network publication performed; next regular08:00 verification remains outstanding.",
   "checks_this_pass": {
     "type": "unchanged_pre_next_slot_check",
     "new_local_tests_run": false,
@@ -158,7 +158,7 @@
     "x_image_visually_verified": true
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
-  "reflection_commit": "This report commit; implementation_commit identifies deployed code",
+  "reflection_commit": "This report-only commit; renderer and font setup implementation hashes remain separate",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -321,7 +321,7 @@
     "reason": "No code change; verified new103-test CI instead"
   },
   "no_change_observation": {
-    "baseline_commit": "d085e9d576b79a2eb85eeb454ff15ea0c50c3539",
+    "baseline_commit": "e463a8e1ebe063e83cf2adf4e349f1c22ed94a38",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
