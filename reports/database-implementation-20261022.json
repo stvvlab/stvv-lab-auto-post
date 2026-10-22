@@ -15,12 +15,23 @@
     "errors": [],
     "warning": "This test used the connected Google Drive adapter; it does not prove GitHub Actions Google authentication."
   },
-  "standalone_google_authentication": "not_configured_in_local_runtime; GitHub configuration unverified",
-  "github_hourly_run": "not_yet_verified",
+  "standalone_google_authentication": "blocked: STVV_DB_GOOGLE_CREDENTIALS is not configured",
+  "github_hourly_run": "workflow_merged_with_hourly_17_minute_schedule; scheduled_run_not_yet_verified",
   "chatgpt_hourly_task": "retained_until_cutover",
   "unimplemented": [
     "new_match_id_assignment_and_row_insertion",
     "automatic_goal_event_and_player_record_ingestion",
     "automatic_detailed_match_statistics_ingestion"
-  ]
+  ],
+  "github_main_commit": "315ea808a8d1aead0d7a47d724d764ae5ef9f9d3",
+  "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/22",
+  "github_unit_tests": "passed",
+  "existing_regression_tests": "passed",
+  "github_initial_audit_run": {
+    "url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39705520508",
+    "status": "failed",
+    "reason": "STVV_DB_GOOGLE_CREDENTIALS is not configured",
+    "added_rows": 0,
+    "modified_cells": 0
+  }
 }
