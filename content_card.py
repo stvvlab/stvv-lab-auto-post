@@ -248,6 +248,24 @@ def fitted(draw, value, box, maximum=64, minimum=22, color=WHITE, brush=False, d
     raise ValueError('Editorial text does not fit; refusing clipped or truncated image')
 
 
+def score_line(draw, own, other, box):
+    """Colour STVV's supplied score yellow; keep all glyphs on one baseline."""
+    value = own + '–' + other
+    layout = fitted(draw, value, box, 142, 85, dry_run=True)
+    if layout['lines'] != [value]:
+        raise ValueError('Score must fit on one line')
+    face = font(layout['font_size'])
+    x, y = box[:2]
+    baseline = y - face.getbbox(value, anchor='ls')[1]
+    pieces = []
+    for text, color in [(own, YELLOW), ('–' + other, WHITE)]:
+        width = draw.textlength(text, font=face)
+        draw.text((x, baseline), text, font=face, fill=color, anchor='ls')
+        pieces.append({'text': text, 'color': color, 'x': x, 'width': width})
+        x += width
+    return {**layout, 'segments': pieces, 'baseline': baseline}
+
+
 def story(message, include_metadata=False):
     paragraphs = [p.strip(' ｜|') for p in clean(message).splitlines() if p.strip(' ｜|')]
     if not paragraphs:
@@ -384,7 +402,7 @@ def render_content_card(slot, message, destination, source=None, variant='stadiu
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 9, 'slot': slot, 'variant': variant,
+    audit = {'schema_version': 1, 'template_version': 10, 'slot': slot, 'variant': variant,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
@@ -412,7 +430,7 @@ def render_content_card(slot, message, destination, source=None, variant='stadiu
         team_y = 444 if metadata else 424
         fitted(d, 'STVV', (365, team_y, 290, 65), 52, 30, YELLOW)
         fitted(d, opponent, (755, team_y + 1, 250, 75), 43, 23)
-        fitted(d, own + '–' + other, (540, 505, 470, 155), 142, 85, YELLOW)
+        audit['score_layout'] = score_line(d, own, other, (540, 505, 470, 155))
         audit['headline_layout'] = fitted(d, headline, (365, 678, 650, 70), 46, 23)
     else:
         audit['headline_layout'] = fitted(d, headline, (368, 440, 632, 267), 70, 24,

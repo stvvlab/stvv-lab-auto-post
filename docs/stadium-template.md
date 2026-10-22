@@ -217,3 +217,12 @@ grace). Connection timeouts are 20 seconds with no nested apt retries. If no
 usable font exists afterwards, setup fails before tests or Buffer submission.
 The posting and preview workflows use the same installer. This handles setup
 stalls, not GitHub schedule creation delays; cancelled slots are not replayed.
+
+## Quality pass 10: score contrast
+
+For scored stadium cards, STVV's supplied score remains yellow while the dash
+and opponent score are white, matching the approved review's hierarchy. Both
+segments share one measured baseline and fitted type size, including two-digit
+scores. The audit records exact segments, colours and baseline. No score is
+created without an explicit caption score; vote and alternate layouts retain
+their compositions. This is a colour/readability change, not a new fact or post.

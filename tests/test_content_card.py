@@ -8,6 +8,23 @@ from content_card import LABELS, render_content_card, story, wrap, font, panel_b
 from PIL import ImageDraw
 
 class ContentCardSmokeTests(unittest.TestCase):
+    def test_score_colours_and_multidigit_fit_on_shared_baseline(self):
+        from content_card import score_line
+        for own, other in [('4', '1'), ('0', '0'), ('12', '10')]:
+            with self.subTest(score=(own, other)):
+                canvas = Image.new('RGB', (500, 180), 'black')
+                layout = score_line(ImageDraw.Draw(canvas), own, other, (0, 0, 470, 155))
+                self.assertEqual(layout['lines'], [own + '–' + other])
+                self.assertLessEqual(sum(s['width'] for s in layout['segments']), 470)
+                pixels = {color for _, color in canvas.getcolors(maxcolors=500 * 180)}
+                self.assertIn((255, 225, 0), pixels)
+                self.assertIn((255, 255, 255), pixels)
+                face = font(layout['font_size'])
+                for segment in layout['segments']:
+                    bounds = face.getbbox(segment['text'], anchor='ls')
+                    self.assertGreaterEqual(layout['baseline'] + bounds[1], 0)
+                    self.assertLessEqual(layout['baseline'] + bounds[3], 155)
+
     def test_alternate_compositions_preserve_question_match_and_choices(self):
         message = 'ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手'
         with tempfile.TemporaryDirectory() as tmp:
@@ -109,8 +126,13 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 9)
+            self.assertEqual(audit['template_version'], 10)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
+            score = audit['score_layout']
+            self.assertEqual(score['lines'], ['4–1'])
+            self.assertEqual([(s['text'], s['color']) for s in score['segments']],
+                             [('4', '#ffe100'), ('–1', '#ffffff')])
+            self.assertLessEqual(sum(s['width'] for s in score['segments']), score['box'][2])
             self.assertEqual(len(audit['panels']), 1)
             self.assertEqual(audit['panels'][0]['text'], '松澤海斗、同点ゴール。')
             self.assertGreaterEqual(audit['panels'][0]['font_size'], 22)

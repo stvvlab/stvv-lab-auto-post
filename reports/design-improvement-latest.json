@@ -1,15 +1,15 @@
 {
-  "updated_at": "2026-10-22T22:10:02.537167+00:00",
-  "template_version": 9,
+  "updated_at": "2026-10-22T23:08:10.041492+00:00",
+  "template_version": 10,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Reuse installed Japanese font; bound apt index refresh and two installation attempts",
-    "Use shared installer for posting and preview CI; add offline recovery/failure tests",
-    "No renderer or caption changes; regenerate previews for visual confirmation"
+    "Stadium score: STVV yellow, separator/opponent white on shared baseline",
+    "Record exact score segments/colors/baseline in audit",
+    "Test rendered colors and one/two-digit score fit"
   ],
-  "preview_path": "generated/composition_variants_preview.jpg",
-  "preview_layout_path": "generated/variant_split_preview.layout.json",
+  "preview_path": "generated/scorer_alignment_preview.jpg",
+  "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
     "passed": 97,
@@ -21,20 +21,20 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "success",
-  "publication_status": "Template v9 deployed; visual rotation not yet verified on a regular X post. Prior v7 transport proof remains historical; v8/v9 preview approval and engagement remain unverified.",
+  "ci_status": "pending",
+  "publication_status": "Template10 score contrast deployed; no actual post verification yet",
   "remaining": [
-    "Template v9 composition rotation awaits eligible regular publication and X verification",
+    "Template v10 composition rotation awaits eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown",
     "Font setup fix passed CI; awaits next scheduled execution. Cancelled recap was not replayed"
   ],
-  "next_priority": "Observe next regular08:00 JST player run: distinguish source skip from font setup failure, then verify image/Buffer/X only if eligible. No replay or extra post. Supplemental reply transport still unimplemented.",
-  "ci_tests_passed": 103,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603",
-  "implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
-  "visual_review": "Regenerated and visually inspected stadium/split/poster contact sheet. Japanese question and three choices remain readable; layouts visibly differ. Renderer unchanged, no claim of new aesthetic improvement or user approval.",
+  "next_priority": "Verify final104-test CI and observe delayed08:00 player run; if eligible, inspect actual image/Buffer/X. Do not replay or weaken repetition/source gates.",
+  "ci_tests_passed": null,
+  "ci_run_url": null,
+  "implementation_commit": "This commit contains score contrast renderer",
+  "visual_review": "Compared approved review and before/after scorer card at full resolution. STVV4 remains yellow; separator and opponent1 white, same size/baseline/position. Scorer rows, source, title and saved background unchanged. No new facts, faces or paid generation. User approval and engagement unverified.",
   "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
@@ -53,11 +53,11 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Latest main/docs/status/history checked before08:00 regular slot: no new Auto Post run, publication_log77 used105 pending0 unchanged. Previous06:05 read-only source result is retained with its original timestamp, not represented as a new fetch. No verified new visual defect or source change; no code edits, re-render, tests or public actions this pass. Next regular result still awaits observation.",
+  "latest_run_review": "Implemented measurable score hierarchy alignment with approved design. Rendered eight previews/contact sheet and inspected changed scorer image.103 suite tests passed before adding color/multidigit test; final22 card tests and focused test passed. No publication.08:00 player workflow not yet created at check, so no skip/error inferred.",
   "checks_this_pass": {
-    "type": "pre_0800_regular_slot_state_check",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
+    "type": "approved_score_colour_hierarchy",
+    "new_local_tests_run": true,
+    "new_image_rendered": true,
     "production_tests_run": false,
     "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39795634307,
@@ -82,8 +82,8 @@
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
   },
-  "previous_implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
-  "code_changes_this_pass": false,
+  "previous_implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -171,7 +171,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": false,
+  "visual_review_performed_this_pass": true,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802590",
     "workflow_conclusion": "success",
@@ -186,9 +186,9 @@
     "latest_renderer_effectiveness_verified": false
   },
   "discovery_observation": {
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39690361847",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39868838229",
     "workflow_conclusion": "success",
-    "saved_commit": "bf129eec52b1616e5ee91de999e24c75fc826e09",
+    "saved_commit": "e24512aabb95e3add619596429cafdc520969888",
     "report_only": true,
     "new_verified_facts": false
   },
@@ -248,7 +248,14 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": null,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-23 08:00 JST player",
+    "schedule_cron": "0 23 * * *",
+    "observed_at": "2026-10-22T23:08:10.041505+00:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "reason": "No08:00 Auto Post run visible yet; not a content skip or Buffer error"
+  },
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -316,7 +323,11 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [],
+  "changes_this_pass": [
+    "Stadium score: STVV yellow, separator/opponent white on shared baseline",
+    "Record exact score segments/colors/baseline in audit",
+    "Test rendered colors and one/two-digit score fit"
+  ],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -326,8 +337,15 @@
     "full_suite_rerun": false
   },
   "local_tests_this_pass": {
-    "performed": false,
-    "reason": "No code change; full103-test CI remains latest verification"
+    "performed": true,
+    "full_suite_passed": 103,
+    "duration_seconds": 20.333,
+    "final_card_suite_passed": 22,
+    "final_card_duration_seconds": 19.215,
+    "final_focused_test_passed": 1,
+    "focused_seconds": 0.01,
+    "final_ci_expected_tests": 104,
+    "diff_check": "passed"
   },
   "no_change_observation": {
     "baseline_commit": "9dd66d4dbdd144e178a732c344eded202cafb331",
