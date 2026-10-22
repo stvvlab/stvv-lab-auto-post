@@ -1,0 +1,26 @@
+{
+  "scope": "existing_match_results_sync_and_eight_tab_validation",
+  "official_matches_parsed": 68,
+  "existing_match_identities_matched": 68,
+  "source_identity_pending": 0,
+  "unit_tests_passed": 17,
+  "live_connector_test": {
+    "write": "succeeded",
+    "separate_read_verification": "succeeded",
+    "unrelated_values_formulas_formats_validation_preserved": true,
+    "data_rows_added": 0,
+    "data_cells_modified": 0,
+    "operations_note_cells_modified": 1,
+    "sorted": false,
+    "errors": [],
+    "warning": "This test used the connected Google Drive adapter; it does not prove GitHub Actions Google authentication."
+  },
+  "standalone_google_authentication": "not_configured_in_local_runtime; GitHub configuration unverified",
+  "github_hourly_run": "not_yet_verified",
+  "chatgpt_hourly_task": "retained_until_cutover",
+  "unimplemented": [
+    "new_match_id_assignment_and_row_insertion",
+    "automatic_goal_event_and_player_record_ingestion",
+    "automatic_detailed_match_statistics_ingestion"
+  ]
+}

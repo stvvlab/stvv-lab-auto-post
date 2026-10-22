@@ -1,0 +1,76 @@
+name: STVV Database Sync
+
+on:
+  push:
+    branches: [main]
+    paths: ['stvv_database/**', 'tests/test_database.py', 'config/database-requirements.txt', '.github/workflows/database-sync.yml']
+  pull_request:
+    paths: ['stvv_database/**', 'tests/test_database.py', 'config/database-requirements.txt', '.github/workflows/database-sync.yml']
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'audit = no writes; apply = verified updates; write-test = operations note + updates'
+        required: true
+        default: audit
+        type: choice
+        options: [audit, apply, write-test]
+  schedule:
+    - cron: '17 * * * *'  # Every hour at :17 (UTC and JST minutes are identical).
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stvv-database-sync
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r config/database-requirements.txt
+      - run: python -m unittest discover -s tests -p 'test_database.py' -v
+
+  sync:
+    needs: test
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r config/database-requirements.txt
+      - name: Read official sources and synchronise only when explicitly enabled
+        env:
+          STVV_DB_GOOGLE_CREDENTIALS: ${{ secrets.STVV_DB_GOOGLE_CREDENTIALS }}
+          WRITES_ENABLED: ${{ vars.STVV_DB_WRITES_ENABLED }}
+          REQUESTED_MODE: ${{ inputs.mode }}
+          EVENT_NAME: ${{ github.event_name }}
+        shell: bash
+        run: |
+          args=()
+          if [[ "$EVENT_NAME" != "push" && "$WRITES_ENABLED" == "true" ]]; then
+            if [[ "$EVENT_NAME" == "schedule" || "$REQUESTED_MODE" == "apply" ]]; then
+              args+=(--apply)
+            elif [[ "$REQUESTED_MODE" == "write-test" ]]; then
+              args+=(--apply --write-test)
+            fi
+          fi
+          python -m stvv_database "${args[@]}"
+      - name: Retain actual results, including connection and source failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            reports/database/latest.json
+            reports/database/latest.md
+          if-no-files-found: warn
+          retention-days: 30
