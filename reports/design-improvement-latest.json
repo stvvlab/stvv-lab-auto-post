@@ -1,38 +1,33 @@
 {
-  "updated_at": "2026-10-22T22:40:00+09:00",
+  "updated_at": "2026-10-22T23:06:00+09:00",
   "template_version": 8,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "New vote-specific composition: one compact FAN VOICE line, Japanese question100px and equal choice panels78px; natural clause line break.",
-    "Verified match context retained; choices ask which area to review without inventing match assessments.",
-    "Scheduled generic vote fallback disabled. Missing facts safely skip, repeated match safely skips before media/Buffer.",
-    "Preview only reuses already-verified Lommel data and remains ineligible to repost. Transport verification no longer labelled editorial approval."
-  ],
+  "changes": [],
   "preview_path": "generated/vote_candidate_preview.jpg",
   "preview_layout_path": "generated/vote_candidate_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
     "passed": 95,
-    "performed_this_pass": true,
+    "performed_this_pass": false,
     "command": "python3 -m unittest discover -s tests",
     "duration_seconds": 102.919,
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "v8 implemented with offline preview only; no new public post. Prior v7 X transport proof preserved separately and rejected as editorial-quality proof.",
+  "publication_status": "v8 deployed; no v8 actual X post yet.23:00 recap not observed at initial check. No new public post.",
   "remaining": [
     "Template v8 actual regular-slot X display not yet verified",
     "New missing/repeated vote policy awaits regular vote execution",
     "Official player source route awaits eligible regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Check user review of v8 preview and eligible regular submissions. Do not replay old Lommel content or replace absent facts with generic questions. Preserve last v7 transport proof but do not claim v8 or editorial approval from it.",
+  "next_priority": "Inspect actual23:00 recap result when created, then next player/data source outcomes. v8 participation design and missing/repeated-context policy await eligible regular execution. Preserve no generic filler/no old-match replay.",
   "ci_tests_passed": 95,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39788891595",
   "implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
   "visual_review": "Compared the user-supplied v7 X screenshot with newly rendered v8 preview. Japanese question now100px in two natural lines (ロンメル戦を / どこから振り返る？), options78px on equal panels. English consolidated to one120px line. No faces, new facts or clipping observed. PreviewSHA2562f3515eeb3511eb390ab244f473676703b7d12f2eb317993faad7a9c44ee35f2. User has not yet approved this preview; improved engagement not established.",
-  "baseline_commit": "134bad729b1dfa1404cd79f68fa761401b12a3c2",
+  "baseline_commit": "6a3c335582b29247ea8a6f21c75a6141c1da16ac",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-22 21:00 JST vote",
@@ -67,11 +62,11 @@
     "x_image_visually_verified": true
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Responded to explicit user feedback and implementation authorization. Kept background and all transport/duplicate gates; changed vote composition and disabled generic filler in scheduled path. Rendered five offline previews, visually inspected final vote image,95 tests passed. Source/scorer previews unchanged in pixel hashes. No Buffer request or publication performed.",
+  "latest_run_review": "Read latest main, docs, status/design reports, posted.json and recent Actions. User feedback response v8 is deployed and CI completed successfully with95 tests and five offline previews. No regular posting run since v7 vote. Used105/pending0 unchanged;23:00 recap not yet observed. No new visual defect or regression justifies quota-driven modifications or repeated tests. Keep user editorial rejection of v7 separate from its transport proof. Separate database-sync failure is not a Buffer failure.",
   "checks_this_pass": {
-    "type": "user_feedback_vote_composition_and_editorial_gate",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
+    "type": "post_user_feedback_v8_rollout_state_review",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
     "production_tests_run": false,
     "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39779085761,
@@ -97,7 +92,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "d34a7a51ed0f442d3da94d091abbed7fc8890da7",
-  "code_changes_this_pass": true,
+  "code_changes_this_pass": false,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -176,7 +171,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": true,
+  "visual_review_performed_this_pass": false,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39653172370",
     "workflow_conclusion": "success",
@@ -243,5 +238,17 @@
     "feedback": "English dominated, vague generic question, small Japanese copy and duplicated caption/image",
     "v8_user_approved": false
   },
-  "generic_vote_fallback_disabled": true
+  "generic_vote_fallback_disabled": true,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-22 23:00 JST recap",
+    "schedule_cron": "0 14 * * *",
+    "observed_at": "2026-10-22T23:06:00+09:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_run_url": null,
+    "image_generation_reached": null,
+    "buffer_submission_reached": null,
+    "x_post_url": null,
+    "reason": "23:00 recap run not yet visible at initial check; no content skip or sending error inferred."
+  }
 }
