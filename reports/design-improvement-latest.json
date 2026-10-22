@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T18:08:09.480059+00:00",
+  "updated_at": "2026-10-23T04:03:31.926167+09:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -53,10 +53,10 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Latest main/docs/status/posted.json reviewed again: no new regular Auto Post run, publication_log77 used105 pending0 unchanged. CI103 remains successful; no new content/image/publication evidence. Retained renderer and seven slots. No new tests/renders/network publication performed; next regular08:00 verification remains outstanding.",
+  "latest_run_review": "Daily metrics collection succeeded at03:28JST. Discovered report promised score-driven next candidate selection although scheduled generic fallback route is disabled. Corrected report to state metrics-only collection, no automatic format selection and no supplemental reply publishing. Eight offline feedback tests passed and real stored-data report regenerated without API requests. No image/renderer/publication changes.",
   "checks_this_pass": {
-    "type": "unchanged_pre_next_slot_check",
-    "new_local_tests_run": false,
+    "type": "feedback_report_accuracy_fix",
+    "new_local_tests_run": true,
     "new_image_rendered": false,
     "production_tests_run": false,
     "new_scheduled_post_run_since_previous_pass": false,
@@ -83,7 +83,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
-  "code_changes_this_pass": false,
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -173,15 +173,15 @@
   },
   "visual_review_performed_this_pass": false,
   "feedback_observation": {
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39653172370",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39831732146",
     "workflow_conclusion": "success",
-    "saved_commit": "904254a4e6ae8fede02e274a6634c2161a89176c",
-    "checked_at": "2026-10-22T03:29:33.704884+09:00",
-    "checked": 30,
+    "saved_commit": "d183e9d83f970780b9f432a7d1c0ac8223405bdb",
+    "checked_at": "2026-10-23T03:28:50.503755+09:00",
     "eligible": 30,
-    "collection_status": "ok",
+    "checked": 30,
+    "status": "ok",
     "error_class": null,
-    "posts_with_metrics": 66,
+    "posts_with_metrics": 73,
     "comparative_automatic_ratings": 0,
     "latest_renderer_effectiveness_verified": false
   },
@@ -307,7 +307,11 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [],
+  "changes_this_pass": [
+    "Corrected misleading report claim about scheduled automatic format selection",
+    "Explicitly distinguished metric collection from unimplemented editorial reply delivery",
+    "Added auto_feedback.py to main push safety CI path filter"
+  ],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -317,8 +321,10 @@
     "full_suite_rerun": false
   },
   "local_tests_this_pass": {
-    "performed": false,
-    "reason": "No code change; verified new103-test CI instead"
+    "performed": true,
+    "passed": 8,
+    "duration_seconds": 0.002,
+    "command": "python3 -m unittest discover -s tests -p test_auto_feedback.py -v"
   },
   "no_change_observation": {
     "baseline_commit": "e463a8e1ebe063e83cf2adf4e349f1c22ed94a38",
@@ -329,5 +335,10 @@
     "next_regular_slot_jst": "2026-10-23 08:00",
     "classification": "no_new_posting_evidence",
     "action": "Preserve renderer and publication gates; do not manufacture code changes or replay cancelled slot"
+  },
+  "report_accuracy_fix": {
+    "implementation_commit": "This report commit",
+    "ci_status": "pending",
+    "publication_behavior_changed": false
   }
 }
