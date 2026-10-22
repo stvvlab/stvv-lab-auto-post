@@ -1,33 +1,38 @@
 {
-  "updated_at": "2026-10-22T22:12:00+09:00",
-  "template_version": 7,
+  "updated_at": "2026-10-22T22:40:00+09:00",
+  "template_version": 8,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/content_2026-10-22_vote.jpg",
-  "preview_layout_path": "generated/content_2026-10-22_vote.layout.json",
+  "changes": [
+    "New vote-specific composition: one compact FAN VOICE line, Japanese question100px and equal choice panels78px; natural clause line break.",
+    "Verified match context retained; choices ask which area to review without inventing match assessments.",
+    "Scheduled generic vote fallback disabled. Missing facts safely skip, repeated match safely skips before media/Buffer.",
+    "Preview only reuses already-verified Lommel data and remains ineligible to repost. Transport verification no longer labelled editorial approval."
+  ],
+  "preview_path": "generated/vote_candidate_preview.jpg",
+  "preview_layout_path": "generated/vote_candidate_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 93,
-    "performed_this_pass": false,
+    "passed": 95,
+    "performed_this_pass": true,
     "command": "python3 -m unittest discover -s tests",
-    "duration_seconds": 19.32,
+    "duration_seconds": 102.919,
     "diff_check": "passed"
   },
   "ci_status": "passed",
-  "publication_status": "Regular21:00 vote sent21:38; template v7 caption and image actually verified on X. No extra test post.",
+  "publication_status": "v8 implemented with offline preview only; no new public post. Prior v7 X transport proof preserved separately and rejected as editorial-quality proof.",
   "remaining": [
-    "Official player source route awaits next regular player run with eligible new official article",
-    "Scorer exact-duplicate result classification awaits next relevant data run",
-    "Schedule trigger delay root cause unknown",
-    "Optional visual polish: source space at beginning of wrapped lower paragraph line"
+    "Template v8 actual regular-slot X display not yet verified",
+    "New missing/repeated vote policy awaits regular vote execution",
+    "Official player source route awaits eligible regular run",
+    "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Preserve verified v7 transport and safety gates; inspect next23:00 recap outcome and next player/data regular source outcomes. Only change renderer for a demonstrated improvement.",
-  "ci_tests_passed": 93,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39732650053",
-  "implementation_commit": "d34a7a51ed0f442d3da94d091abbed7fc8890da7",
-  "visual_review": "Actual X post opened in browser. Caption matches publication_log; attached image visibly contains navy/yellow stadium/flag background, FAN VOICE brush heading, vertically centered スコアと試合内容。 and readable lower question. No invented score/date/player facts or faces added. Layout audit confirms template v7. Actual public JPEG830108 bytes; runner's verification completed before pending/Buffer. Minor optional future polish: wrapped lower line starts with source space; no clipping or lost copy observed.",
-  "baseline_commit": "166eac0f650ede1bc8eda3b63422d0e491a35e76",
+  "next_priority": "Check user review of v8 preview and eligible regular submissions. Do not replay old Lommel content or replace absent facts with generic questions. Preserve last v7 transport proof but do not claim v8 or editorial approval from it.",
+  "ci_tests_passed": 95,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39788891595",
+  "implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
+  "visual_review": "Compared the user-supplied v7 X screenshot with newly rendered v8 preview. Japanese question now100px in two natural lines (ロンメル戦を / どこから振り返る？), options78px on equal panels. English consolidated to one120px line. No faces, new facts or clipping observed. PreviewSHA2562f3515eeb3511eb390ab244f473676703b7d12f2eb317993faad7a9c44ee35f2. User has not yet approved this preview; improved engagement not established.",
+  "baseline_commit": "134bad729b1dfa1404cd79f68fa761401b12a3c2",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-22 21:00 JST vote",
@@ -62,22 +67,21 @@
     "x_image_visually_verified": true
   },
   "additional_local_preview_path": null,
-  "latest_run_review": "Read latest main/docs/status/design/posted and real scheduled posting logs. Production vote replaced repeated match question, selected distinct fact-free fan question, rendered/committed v7 image and layout, verified public bytes, committed pending before Buffer, accepted sent response and saved final history. Browser directly verified exact X caption and attached image. No replay or additional test post. 93 production tests passed; no code change needed to obtain this evidence.",
+  "latest_run_review": "Responded to explicit user feedback and implementation authorization. Kept background and all transport/duplicate gates; changed vote composition and disabled generic filler in scheduled path. Rendered five offline previews, visually inspected final vote image,95 tests passed. Source/scorer previews unchanged in pixel hashes. No Buffer request or publication performed.",
   "checks_this_pass": {
-    "type": "v7_regular_vote_end_to_end_verification",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
-    "production_tests_run": true,
-    "production_image_generated": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "type": "user_feedback_vote_composition_and_editorial_gate",
+    "new_local_tests_run": true,
+    "new_image_rendered": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39779085761,
     "paid_api_used": false,
-    "new_public_post": true,
+    "new_public_post": false,
     "extra_test_post": false,
-    "x_checked_this_pass": true,
+    "x_checked_this_pass": false,
     "diff_check": "passed"
   },
-  "actual_new_renderer_post_verified_on_x": true,
+  "actual_new_renderer_post_verified_on_x": false,
   "source_availability": {
     "detailed_stats_missing": true,
     "official_scorer_times_available": true,
@@ -92,8 +96,8 @@
     "previous_transport_success_preserved": true,
     "deleted_existing_posts": false
   },
-  "previous_implementation_commit": "4a7f0df91f983eb8eb3561f44bee44536e2b95ed",
-  "code_changes_this_pass": false,
+  "previous_implementation_commit": "d34a7a51ed0f442d3da94d091abbed7fc8890da7",
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -158,7 +162,7 @@
     "x_image_visually_verified": false,
     "reason": "Official news candidate repeats already covered source/match; no unpublished distinct eligible news remained."
   },
-  "preview_caption": "スコアと試合内容。\nSTVVの評価で重く見るのはどちら？ その理由も聞いてみたい。",
+  "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
   "reflection_commit": "This report commit; implementation_commit identifies deployed code",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-22 21:00 JST vote",
@@ -232,5 +236,12 @@
     "x_text_verified": true,
     "x_image_visually_verified": true
   },
-  "vote_replacement_live_verified": true
+  "vote_replacement_live_verified": false,
+  "user_editorial_review": {
+    "v7_transport_success": true,
+    "v7_editorial_approved": false,
+    "feedback": "English dominated, vague generic question, small Japanese copy and duplicated caption/image",
+    "v8_user_approved": false
+  },
+  "generic_vote_fallback_disabled": true
 }
