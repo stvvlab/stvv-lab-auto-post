@@ -117,7 +117,8 @@
     "daily_2026-10-20_recap",
     "editorial_image_pilot_lommel_20261019_v1",
     "approved_stadium_review_lommel_20261019_v1",
-    "daily_2026-10-21_data"
+    "daily_2026-10-21_data",
+    "daily_2026-10-22_vote"
   ],
   "publication_log": [
     {
@@ -836,16 +837,18 @@
       "submitted_at": "2026-10-21T13:00:52.217513+09:00",
       "text": "📊 公式記録で振り返る得点時間\nSTVV 4–1 ロンメル\n松澤海斗：15分\n新川志音：39分\nソエル・ソエル：62分\nムブク：71分\n公式：https://stvv.jp/news/game/20261019_1/\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12af3d5f82ac3b4430c9dc5dfc83d03237c9df89/generated/content_2026-10-21_data.jpg"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-22_vote": {
+    },
+    {
+      "key": "daily_2026-10-22_vote",
       "slot": "vote",
       "source": null,
+      "buffer_id": "6ada03cee8cca8cdcc503081",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-22T21:38:40.351962+09:00",
       "text": "🗳️ スコアと試合内容。\n\nSTVVの評価で重く見るのはどちら？ その理由も聞いてみたい。\n\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/3d50af3161aa8469fb6637fea2d2fa46019f07be/generated/content_2026-10-22_vote.jpg",
-      "created_at": "2026-10-22T21:38:36.502714+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/3d50af3161aa8469fb6637fea2d2fa46019f07be/generated/content_2026-10-22_vote.jpg"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
