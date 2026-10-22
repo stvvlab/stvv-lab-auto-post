@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-22T15:03:03.545891+00:00",
+  "updated_at": "2026-10-22T16:03:01.035622+00:00",
   "template_version": 9,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -21,17 +21,17 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "queued",
+  "ci_status": "success",
   "publication_status": "Template v9 deployed; visual rotation not yet verified on a regular X post. Prior v7 transport proof remains historical; v8/v9 preview approval and engagement remain unverified.",
   "remaining": [
     "Template v9 composition rotation awaits eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown",
-    "Font setup fix awaits CI and next scheduled execution; latest cancelled recap was not replayed"
+    "Font setup fix passed CI; awaits next scheduled execution. Cancelled recap was not replayed"
   ],
-  "next_priority": "Verify new shared installer in CI and next eligible scheduled slot. Do not replay cancelled slot or bypass source/repetition/image gates. Supplemental reply transport remains unavailable.",
-  "ci_tests_passed": null,
+  "next_priority": "Observe next regular08:00 JST player run: distinguish source skip from font setup failure, then verify image/Buffer/X only if eligible. No replay or extra post. Supplemental reply transport still unimplemented.",
+  "ci_tests_passed": 103,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
   "implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
   "visual_review": "Regenerated and visually inspected stadium/split/poster contact sheet. Japanese question and three choices remain readable; layouts visibly differ. Renderer unchanged, no claim of new aesthetic improvement or user approval.",
@@ -53,13 +53,13 @@
     "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Investigated cancelled recap run and bounded font setup with two attempts; no replay. Rendered eight offline previews plus comparison and visually confirmed three distinct unchanged layouts. Previous main CI passed100; new installer offline tests passed3. New workflow requires CI verification.",
+  "latest_run_review": "Verified CI39801196426: shared installer downloaded and installed61.2MB font successfully;103 tests passed in23.690s; eight preview cards and contact sheet uploaded. No new regular posting run, publication_log unchanged77 and pending0. Compared approved review and three-composition contact sheet visually; no renderer change without demonstrated improvement.",
   "checks_this_pass": {
-    "type": "font_setup_stall_fix",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
+    "type": "font_setup_ci_verification",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
     "production_tests_run": false,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39795634307,
     "paid_api_used": false,
     "new_public_post": false,
@@ -83,7 +83,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "0be10f1355fe50c633cab7cb4cb158a2b859bb55",
-  "code_changes_this_pass": true,
+  "code_changes_this_pass": false,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -267,7 +267,7 @@
     "actual_reply_published": false,
     "next_priority": "Establish a no-extra-cost authenticated reply-capable route, then parent URL mapping, verified novel evidence, duplicate and pending protection.",
     "documentation": "docs/supplemental-replies.md",
-    "implementation_commit": "This report commit contains reply safety guard only; actual reply delivery is unimplemented",
+    "implementation_commit": "a26f400d2b3b8f441a5a82833648670a37062ce1",
     "local_full_suite": {
       "passed": 100,
       "duration_seconds": 87.821,
@@ -279,14 +279,6 @@
     "Two reply delivery regression tests",
     "Documented actual API limitation and remaining implementation"
   ],
-  "local_tests_this_pass": {
-    "passed": 3,
-    "duration_seconds": 0.155,
-    "command": "python3 -m unittest discover -s tests -p test_font_setup.py -v",
-    "shell_syntax": "passed",
-    "preview_generation": "passed; eight cards plus contact sheet",
-    "full_suite_rerun": false
-  },
   "previous_main_ci": {
     "commit": "a26f400d2b3b8f441a5a82833648670a37062ce1",
     "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39796540775",
@@ -296,8 +288,38 @@
   },
   "font_setup_fix": {
     "implementation_commit": "566b0e8eb21255dd8165527efe4a5e01c222fa2d",
-    "ci_status": "queued",
+    "ci_status": "success",
     "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
-    "production_verified": false
+    "production_verified": false,
+    "ci_tests_passed": 103,
+    "ci_preview_generated": true
+  },
+  "ci_test_duration_seconds": 23.69,
+  "font_setup_ci_evidence": {
+    "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
+    "conclusion": "success",
+    "job_id": 119902026959,
+    "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426/artifacts/12435707276",
+    "font_download_seconds": 1,
+    "font_package_bytes_approx": 61200000,
+    "tests_passed": 103,
+    "test_duration_seconds": 23.69,
+    "image_generation": true,
+    "buffer_called": false
+  },
+  "changes_this_pass": [
+    "Recorded successful shared font installer and103-test CI; no renderer or posting code changed"
+  ],
+  "previous_local_tests": {
+    "passed": 3,
+    "duration_seconds": 0.155,
+    "command": "python3 -m unittest discover -s tests -p test_font_setup.py -v",
+    "shell_syntax": "passed",
+    "preview_generation": "passed; eight cards plus contact sheet",
+    "full_suite_rerun": false
+  },
+  "local_tests_this_pass": {
+    "performed": false,
+    "reason": "No code change; verified new103-test CI instead"
   }
 }
