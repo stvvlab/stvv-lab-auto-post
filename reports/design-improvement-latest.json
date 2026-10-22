@@ -21,17 +21,18 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "success",
+  "ci_status": "queued",
   "publication_status": "Template v9 deployed; visual rotation not yet verified on a regular X post. Prior v7 transport proof remains historical; v8/v9 preview approval and engagement remain unverified.",
   "remaining": [
     "Template v9 composition rotation awaits eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
-    "Schedule trigger delay root cause unknown"
+    "Schedule trigger delay root cause unknown",
+    "Font setup fix awaits CI and next scheduled execution; latest cancelled recap was not replayed"
   ],
   "next_priority": "Verify new shared installer in CI and next eligible scheduled slot. Do not replay cancelled slot or bypass source/repetition/image gates. Supplemental reply transport remains unavailable.",
-  "ci_tests_passed": 98,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39794562298",
+  "ci_tests_passed": null,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
   "implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
   "visual_review": "Regenerated and visually inspected stadium/split/poster contact sheet. Japanese question and three choices remain readable; layouts visibly differ. Renderer unchanged, no claim of new aesthetic improvement or user approval.",
   "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
@@ -294,8 +295,9 @@
     "preview_artifact": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39796540775/artifacts/12433108525"
   },
   "font_setup_fix": {
-    "implementation_commit": "This report commit",
-    "ci_status": "pending",
+    "implementation_commit": "566b0e8eb21255dd8165527efe4a5e01c222fa2d",
+    "ci_status": "queued",
+    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
     "production_verified": false
   }
 }
