@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "template_version": 7,
+  "slot": "vote",
+  "dimensions": [
+    1374,
+    1145
+  ],
+  "source": null,
+  "headline": "スコアと試合内容。",
+  "score_from_caption": null,
+  "match_metadata": [],
+  "panels": [
+    {
+      "text": "STVVの評価で重く見るのはどちら？ その理由も聞いてみたい。",
+      "hierarchy": "body",
+      "font_size": 48,
+      "lines": [
+        "STVVの評価で重く見るのはどちら？",
+        " その理由も聞いてみたい。"
+      ],
+      "box": [
+        68,
+        869,
+        1238,
+        175
+      ]
+    }
+  ],
+  "headings": [
+    {
+      "font_size": 177,
+      "angle": 4,
+      "box": [
+        388,
+        8,
+        760,
+        170
+      ]
+    },
+    {
+      "font_size": 180,
+      "angle": 4,
+      "box": [
+        382,
+        169,
+        790,
+        193
+      ]
+    }
+  ],
+  "heading_sweep": {
+    "box": [
+      448,
+      350,
+      520,
+      35
+    ],
+    "bristles": [
+      [
+        32,
+        18,
+        434
+      ],
+      [
+        157,
+        23,
+        441
+      ],
+      [
+        74,
+        28,
+        507
+      ],
+      [
+        85,
+        33,
+        501
+      ],
+      [
+        94,
+        38,
+        418
+      ]
+    ]
+  },
+  "headline_layout": {
+    "font_size": 70,
+    "lines": [
+      "スコアと試合内容。"
+    ],
+    "box": [
+      368,
+      535,
+      632,
+      77
+    ]
+  }
+}
