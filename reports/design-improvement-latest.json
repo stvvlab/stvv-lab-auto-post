@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T04:10:05.369044+09:00",
+  "updated_at": "2026-10-24T05:06:17.120651+09:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -24,7 +24,7 @@
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
   "visual_review": "Compared before/after poster scorer cards at full resolution and inspected revised split scorer card. Times now align at panel right in yellow at52px; white names retain complete text at48px when fitting. Additional row spacing makes four goal times easier to scan; no name/time/source/score added or removed. User approval and X display unverified.",
-  "baseline_commit": "787e647ac8ada0e890bc0e9d9a8d9c2c38380009",
+  "baseline_commit": "f9e39c0b63889a840f99f5d6197353f0bb98ac99",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-23 23:00 JST recap",
@@ -48,9 +48,9 @@
     "reason": "Recap repeats same source/match without new comparison data; final duplicate gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Main787e647ac8ada0e890bc0e9d9a8d9c2c38380009 retains template11. Read current template/status/history and latest Actions. No new regular posting run after October23 recap; next08:00 not due. New feedback collection succeeded30/30,76 saved metrics,0 comparative ratings. This is metrics collection only, not supplemental replies or evidence of template11 effectiveness. No code change, render, test rerun, Buffer submission or X inspection.",
+  "latest_run_review": "Read latest main, template documentation, automation status, design report, posted history and latest Actions. Renderer/posting/preview code unchanged since template11. No new scheduled Auto Post since October23 recap; next08:00 player slot not due. History77 publications105 used0 pending unchanged. No new feedback collection after previously reviewed30/30 success. No new defect evidence or justified code change; no image render, tests, Buffer or X check performed this pass. Prior preview paths, CI evidence and unresolved supplemental reply transport retained.",
   "checks_this_pass": {
-    "type": "main_history_actions_and_feedback_review",
+    "type": "unchanged_main_history_and_actions_review",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -316,7 +316,7 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "787e647ac8ada0e890bc0e9d9a8d9c2c38380009",
+    "baseline_commit": "f9e39c0b63889a840f99f5d6197353f0bb98ac99",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
