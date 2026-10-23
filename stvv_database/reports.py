@@ -13,11 +13,12 @@ REPORT_URL = re.compile(r'https://stvv\.jp/news/(?:game|uefa-news)/[^?#]+/')
 PLAYER_ALIASES = {'畑': '畑大雅', '高井': '高井幸大', '谷口': '谷口彰悟',
                   '小久保': '小久保玲央ブライアン', '石渡': '石渡ネルソン',
                   '松澤': '松澤海斗', '新川': '新川志音', '荒木': '荒木遼太郎',
-                  '伊藤': '伊藤涼太郎', '山本': '山本理仁', '後藤': '後藤啓介', 'ピュぺ': 'ピュペ'}
+                  '伊藤': '伊藤涼太郎', '山本': '山本理仁', '後藤': '後藤啓介', 'ピュぺ': 'ピュペ',
+                  'セヴァウィ': 'セヴァウイ', 'OG': 'オウンゴール'}
 
 
 def player(name):
-    name = clean(name)
+    name = re.sub(r'\(背番号\d+\)$', '', clean(name))
     return PLAYER_ALIASES.get(name, name)
 
 
@@ -28,6 +29,7 @@ class ClubReport:
     digest: str
     goals: tuple  # (得点/失点, minute string, scorer), explicit score lists only
     appearances: tuple  # (name, role); no derived playing minutes
+    lineup_issue: str | None = None
 
 
 def parse_report(html, match, url):
@@ -70,7 +72,14 @@ def parse_report(html, match, url):
     result = [x for x in summary if x.startswith('結果:')]
     home, away = ((match.goals_for, match.goals_against) if match.venue == 'HOME' else
                   (match.goals_against, match.goals_for))
-    if result != [f'結果:{home}-{away}']:
+    # A blank template result is not a conflicting result. In that case BOTH
+    # explicit scorer lists must account for the schedule's entire score below.
+    # Some legacy reports display STVV-first even for away matches. The labelled
+    # scorer lists below independently bind both goal totals to the right teams.
+    orientations = {f'{home}-{away}', f'{match.goals_for}-{match.goals_against}'}
+    if result != ['結果:'] and not (len(result) == 1 and any(
+            result[0] == f'結果:{score}' or (home == away and re.fullmatch(
+                rf'結果:{score}\(PK\d{{1,2}}-\d{{1,2}}\)', result[0])) for score in orientations)):
         raise ValueError('Official report result conflicts with schedule')
     goals = []
     for label, count, kind in [('STVV', match.goals_for, '得点'),
@@ -88,7 +97,8 @@ def parse_report(html, match, url):
             raise ValueError('Official scorer notation unsupported')
         start = len(goals)
         for entry in entries:
-            times = re.sub(r'(?:、|,)?PK$', '', entry[2])
+            times = re.sub(r'^(?:PK)', '', re.sub(r'(?:、|,|/)?PK$', '', entry[2]))
+            times = re.sub(r'(\d+)分\+(\d+)分', r'\1+\2分', times)
             for tm in re.split('[、,]', times):
                 m = re.fullmatch(r'(\d{1,3}(?:\+\d{1,2})?)分', tm)
                 if not m or not 1 <= int(m[1].split('+')[0]) <= 120:
@@ -96,6 +106,17 @@ def parse_report(html, match, url):
                 goals.append((kind, m[1], entry[1]))
         if len(goals) - start != count:
             raise ValueError('Official scorer count does not match result')
+    try:
+        appearances = parse_lineup(paragraphs)
+        issue = None
+    except ValueError as exc:
+        # A complex substitution does not invalidate the separate scorer lists.
+        # Retain no partial lineup, and explicitly report the missing section.
+        appearances, issue = [], str(exc)
+    return ClubReport(match.key, url, sha256(html.encode()).hexdigest(), tuple(goals), tuple(appearances), issue)
+
+
+def parse_lineup(paragraphs):
     appearances, lineup = [], False
     for text in paragraphs:
         if text == '【先発】' or text == '[先発]':
@@ -107,7 +128,9 @@ def parse_report(html, match, url):
             if text:
                 break
             continue
-        for item in text.split('/', 1)[1].split('、'):
+        for item in text.split('/', 1)[1].rstrip('、').split('、'):
+            if any(mark in item for mark in ('⇒', '→')):
+                raise ValueError('Chained substitutions require manual review')
             m = re.fullmatch(r'([^()]+)(?:\(([^()]+)\))?', item)
             if not m:
                 raise ValueError('Official lineup notation unsupported')
@@ -123,13 +146,28 @@ def parse_report(html, match, url):
     starters = [n for n, role in appearances if role == '先発']
     if appearances and (len(starters) != 11 or len({player(n) for n, _ in appearances}) != len(appearances)):
         raise ValueError('Official lineup is incomplete or duplicate')
-    return ClubReport(match.key, url, sha256(html.encode()).hexdigest(), tuple(goals), tuple(appearances))
+    return appearances
 
 
 def collect_reports(snapshot, matches, read=fetch):
     """URLs come from exact schedule blocks or the matched master row, never guesses."""
     from .engine import TABS
     grouped = {m.key: m for m in matches}
+    related = {}
+    # Validated article URLs already registered beside goals, players and stats
+    # are discovery sources too. Parsing still binds every article to the master.
+    for tab, id_col, url_col in [(TABS[1], 1, 13), (TABS[3], 0, 5), (TABS[4], 0, 13)]:
+        for _, row in snapshot.rows(tab):
+            related.setdefault(row[id_col], []).extend(u for u in str(row[url_col] or '').splitlines()
+                                                       if REPORT_URL.fullmatch(u))
+        for row_index, row in snapshot.rows(tab):
+            # Evidence notes preserve added official URLs when the original
+            # URL cell has a single-link format that must remain unchanged.
+            for col in range(snapshot.props[tab]['gridProperties']['columnCount']):
+                for line in snapshot.cell(tab, row_index, col).get('note', '').splitlines():
+                    for prefix in ('STVV公式戦評：', '出典：'):
+                        if line.startswith(prefix) and REPORT_URL.fullmatch(line[len(prefix):]):
+                            related.setdefault(row[id_col], []).append(line[len(prefix):])
     tasks, pending = [], []
     for _, r in snapshot.rows(TABS[0]):
         from .source import competition
@@ -138,7 +176,8 @@ def collect_reports(snapshot, matches, read=fetch):
         if not match or match.goals_for is None:
             continue
         urls = tuple(dict.fromkeys([*match.report_urls,
-            *(u for u in str(r[10] or '').splitlines() if REPORT_URL.fullmatch(u))]))
+            *(u for u in str(r[10] or '').splitlines() if REPORT_URL.fullmatch(u)),
+            *related.get(r[0], [])]))
         if not urls:
             pending.append({'match_id': r[0], 'reason': 'club_report_url_not_published_or_registered'})
         for url in urls:
@@ -148,7 +187,9 @@ def collect_reports(snapshot, matches, read=fetch):
     def one(task):
         match_id, match, url = task
         try:
-            return parse_report(read(url), match, url), None
+            report = parse_report(read(url), match, url)
+            return report, ({'match_id': match_id, 'url': url, 'reason': report.lineup_issue}
+                            if report.lineup_issue else None)
         except Exception as exc:
             # Do not expose remote payloads or request credentials in CI artifacts.
             reason = str(exc) if isinstance(exc, ValueError) else type(exc).__name__

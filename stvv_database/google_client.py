@@ -5,7 +5,8 @@ import time
 
 from .engine import SHEET_ID, TABS, Snapshot
 
-FIELDS = ('userEnteredValue,effectiveValue,userEnteredFormat,dataValidation,note,chipRuns')
+FIELDS = ('userEnteredValue,effectiveValue,userEnteredFormat,dataValidation,note,chipRuns,'
+          'effectiveFormat(textFormat(link)),hyperlink')
 
 
 class GoogleSheets:

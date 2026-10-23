@@ -258,6 +258,17 @@ def verify(before, after, changes):
                 if (tab, *coord, field) in expected:
                     continue
                 if before.cell(tab, *coord).get(field) != after.cell(tab, *coord).get(field):
+                    # Google may canonicalise an explicit single-URL link into
+                    # its automatic hyperlink representation after restoration.
+                    # Accept only the exact unchanged URL with the same resolved
+                    # link, never the loss of a link or any other format change.
+                    old, new = before.cell(tab, *coord), after.cell(tab, *coord)
+                    uri = old.get('userEnteredFormat', {}).get('textFormat', {}).get('link', {}).get('uri')
+                    if (field == 'userEnteredFormat' and uri and
+                            old.get(field) == {'textFormat': {'link': {'uri': uri}}} and not new.get(field) and
+                            value(old) == value(new) == uri and new.get('hyperlink') == uri and
+                            new.get('effectiveFormat', {}).get('textFormat', {}).get('link', {}).get('uri') == uri):
+                        continue
                     raise ValueError(f'Unexpected change: {tab} R{coord[0]+1}C{coord[1]+1} {field}')
     review = audit(after)
     if review['errors']:
