@@ -1,23 +1,15 @@
 {
-  "updated_at": "2026-10-23T05:11:28.011752+00:00",
+  "updated_at": "2026-10-23T06:08:49.360777+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "Reuse measured scorer rows in split and poster compositions: white names, larger yellow right-aligned times.",
-    "Add preservation, box separation and rendered yellow-pixel assertions for both alternate scorer cards.",
-    "Generate/upload split and poster scorer previews in CI."
-  ],
+  "changes": [],
   "preview_path": "generated/scorer_poster_preview.jpg",
   "preview_layout_path": "generated/scorer_poster_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "performed": true,
-    "performed_this_pass": true,
-    "passed": 125,
-    "duration_seconds": 27.264,
-    "command": "python -m unittest discover -s tests",
-    "diff_check": "passed"
+    "performed_this_pass": false,
+    "reason": "No code change; previous template11 full suite125 passed locally and on CI."
   },
   "ci_status": "success",
   "publication_status": "Template11 scorer hierarchy in split/poster deployed; actual publication/X unverified",
@@ -57,11 +49,11 @@
     "reason": "Live official scoring_data returned previously published scorer caption; exact normalized-caption gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "No newer regular posting run observed after12:30 data; publication77/used105/pending0 unchanged. Previous scheduled duplicate skip remains valid. This pass changes renderer only; no Buffer send or X check.",
+  "latest_run_review": "Main874a678f3cc78a2af0cf47025f101365699b9ad9 retains template11; CI39904350400 remains successful. No new regular posting run after12:30 data.15:30 analysis is not due at this check, not a skip/error. Posted history remains77 publications105 used0 pending. No demonstrably beneficial additional renderer change identified; no render/test/publication repeated.",
   "checks_this_pass": {
-    "type": "alternate_scorer_readability_implementation",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
+    "type": "no_new_posting_evidence",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
     "production_tests_run": false,
     "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39897966856,
@@ -87,7 +79,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
-  "code_changes_this_pass": true,
+  "code_changes_this_pass": false,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -151,7 +143,7 @@
     "reason": "No verified new comparison data; quality gate stopped before image/Buffer"
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
-  "reflection_commit": "Renderer implementation33c662b0e066b16abf1017aa63d1881216165c22; this following report-only commit records validation.",
+  "reflection_commit": "This report-only commit; renderer implementation remains33c662b0e066b16abf1017aa63d1881216165c22.",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -164,7 +156,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": true,
+  "visual_review_performed_this_pass": false,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802590",
     "workflow_conclusion": "success",
@@ -310,11 +302,7 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [
-    "Reuse measured scorer rows in split and poster compositions: white names, larger yellow right-aligned times.",
-    "Add preservation, box separation and rendered yellow-pixel assertions for both alternate scorer cards.",
-    "Generate/upload split and poster scorer previews in CI."
-  ],
+  "changes_this_pass": [],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -324,22 +312,18 @@
     "full_suite_rerun": false
   },
   "local_tests_this_pass": {
-    "performed": true,
-    "performed_this_pass": true,
-    "passed": 125,
-    "duration_seconds": 27.264,
-    "command": "python -m unittest discover -s tests",
-    "diff_check": "passed"
+    "performed": false,
+    "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "52c3b0ca0a1e0227b9fd6885d07795d96b105144",
+    "baseline_commit": "874a678f3cc78a2af0cf47025f101365699b9ad9",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
-    "new_posting_run": true,
+    "new_posting_run": false,
     "next_regular_slot_jst": "2026-10-23 15:30",
-    "classification": "skipped_repeated_content",
-    "action": "Preserve duplicate guard; do not repost old match to prove renderer transport."
+    "classification": "next_slot_not_due",
+    "action": "Preserve latest validated renderer and safety gates; no extra test post."
   },
   "report_accuracy_fix": {
     "implementation_commit": "48c9cf47bb6b0fecd830e9f9fe7ca3ec726ee01e",
@@ -372,30 +356,16 @@
     "public_image_verified": false
   },
   "previous_local_test_evidence": {
-    "passed": 97,
+    "performed": true,
     "performed_this_pass": true,
-    "command": "python3 -m unittest discover -s tests",
-    "duration_seconds": 125.52,
-    "focused_final_cases_passed": 2,
-    "focused_duration_seconds": 4.039,
-    "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
+    "passed": 125,
+    "duration_seconds": 27.264,
+    "command": "python -m unittest discover -s tests",
     "diff_check": "passed"
   },
   "preview_render_this_pass": {
-    "status": "passed",
-    "cards": 10,
-    "contact_sheet": "generated/composition_variants_preview.jpg",
-    "comparison_before_paths": [
-      "generated/scorer_split_before.jpg",
-      "generated/scorer_poster_before.jpg"
-    ],
-    "comparison_after_paths": [
-      "generated/scorer_split_after.jpg",
-      "generated/scorer_poster_after.jpg"
-    ],
-    "local_directory": "/workspace/scratch/23f59373d1c0/stvv-1400/generated",
-    "buffer_called": false,
-    "facts": "Saved verified manifest for offline design only; not a publication candidate."
+    "status": "not_performed",
+    "reason": "Template11 unchanged; successful prior10-card CI artifact retained."
   },
   "ci_preview_generated": true
 }
