@@ -633,7 +633,7 @@ def articles(now):
         path = parsed.path.rstrip("/") + "/"
 
         match = re.fullmatch(
-            r"/news/(game|team)/(20\d{6}[^/]*)/",
+            r"/news/(game|team|uefa-news)/(20\d{6}[^/]*)/",
             path,
             re.I,
         )

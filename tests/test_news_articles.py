@@ -6,9 +6,9 @@ import stvv_post as posting
 
 
 class NewsArticleTests(unittest.TestCase):
-    def articles_from(self, markup):
+    def articles_from(self, markup, now=None):
         response = Mock(text=markup)
-        now = datetime(2026, 10, 21, 18, tzinfo=posting.JST)
+        now = now or datetime(2026, 10, 21, 18, tzinfo=posting.JST)
         with patch.object(posting.SESSION, 'get', return_value=response):
             return posting.articles(now)
 
@@ -32,3 +32,15 @@ class NewsArticleTests(unittest.TestCase):
         <a href="/news/team/20261001_4/"><h3>選手の試合出場について</h3></a>'''
         articles = self.articles_from(markup)
         self.assertEqual([url for url, _ in articles], ['https://stvv.jp/news/team/20261021_1/'])
+
+    def test_uefa_result_is_discovered_without_bypassing_safety_filters(self):
+        title = 'STVVが敵地でFCミッティランに0-1で勝利！クラブ史上初の欧州挑戦で開幕2連勝を達成！'
+        path = '/news/uefa-news/20261023_1/'
+        markup = f'<a href="{path}"><h3>{title}</h3></a>'
+        markup += f'<a href="https://example.test{path}"><h3>{title}</h3></a>'
+        markup += '<a href="/news/uefa-news/20261001_1/"><h3>STVVが勝利！</h3></a>'
+        markup += '<a href="/news/uefa-news/20261025_1/"><h3>STVVが勝利！</h3></a>'
+        markup += '<a href="/news/uefa-news/20261023_2/"><h3>試合スポンサー募集</h3></a>'
+        now = datetime(2026, 10, 24, 8, tzinfo=posting.JST)
+        self.assertEqual(self.articles_from(markup, now),
+                         [('https://stvv.jp' + path, (now.date().replace(day=23), title))])
