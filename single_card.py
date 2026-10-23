@@ -64,7 +64,10 @@ def render(data, destination):
     text(66, 551, 'CROKY CUP  /  ROUND OF 32', 32, YELLOW)
     text(66, 619, data['home'], 48)
     text(450, 630, f"{data['home_score']}–{data['away_score']}", 170, YELLOW, 560)
-    text(880, 640, data['away'], 48, max_width=270)
+    away_size = 48
+    while away_size > 24 and d.textbbox((0, 0), data['away'], font=face(away_size))[2] > 270:
+        away_size -= 1
+    text(880, 640, data['away'], away_size, max_width=270)
     text(66, 900, data['headline'], 70)
 
     d.rectangle((64, 1040, 1136, 1280), fill='#071423')
