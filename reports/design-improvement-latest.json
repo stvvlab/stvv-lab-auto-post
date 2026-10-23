@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T23:00:43.655688+09:00",
+  "updated_at": "2026-10-23T15:06:08.238774+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -18,7 +18,7 @@
     "No claim of user design approval or improved engagement",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe23:00 recap regular run with font cache and repeated-content gate preserved. Actual template11 public image/Buffer/X awaits distinct verified content; existing-post supplemental reply transport remains unimplemented.",
+  "next_priority": "Recheck fresh official content and next08:00 player run. Continue only demonstrated visual improvements; do not force publication for template11 proof. Existing-post supplemental reply transport remains unimplemented.",
   "ci_tests_passed": 125,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
@@ -26,37 +26,35 @@
   "baseline_commit": "57b59b6c0609c74a76d1eebc195ca1f999f946a3",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
-    "slot": "2026-10-23 21:00 JST vote",
-    "schedule_cron": "0 12 * * *",
+    "slot": "2026-10-23 23:00 JST recap",
+    "schedule_cron": "0 14 * * *",
     "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39953297423",
-    "job_id": 120412832262,
-    "workflow_created_at": "2026-10-23T21:26:17+09:00",
-    "posting_step_started_at": "2026-10-23T21:26:44+09:00",
-    "result_recorded_at": "2026-10-23T21:26:45.041101+09:00",
-    "schedule_creation_delay_seconds": 1577,
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39969789197",
+    "job_id": 120469108436,
+    "workflow_created_at": "2026-10-23T23:27:30+09:00",
+    "posting_step_started_at": "2026-10-23T23:27:59+09:00",
+    "result_recorded_at": "2026-10-23T23:27:59.617318+09:00",
+    "schedule_creation_delay_seconds": 1650,
     "classification": "skipped_repeated_content",
     "workflow_conclusion": "success",
     "production_tests_passed": 125,
-    "production_test_duration_seconds": 15.072,
+    "production_test_duration_seconds": 18.671,
     "font_cache_hit": true,
     "font_download_required": false,
-    "vote_repeated_context_gate_verified": true,
-    "generic_vote_fallback_used": false,
     "image_generation_reached": false,
     "buffer_submission_reached": false,
     "x_post_url": null,
-    "reason": "Vote candidate refers to already covered match; context repetition gate skipped before media/Buffer, without a generic standalone question fallback."
+    "reason": "Recap repeats same source/match without new comparison data; final duplicate gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Latest main678b74d561214f9be91c61c328bcb7871dbcceec retains tested template11 and verified21:00 vote suppression. No new regular Auto Post after39953297423 at this check.23:00 recap actual execution is not yet observed; this is not a content skip or send error. History77 publications105 used0 pending unchanged. No new demonstrable visual improvement; renderer/tests/previews retained without repeat work.",
+  "latest_run_review": "Verified23:00 recap ran23:27 JST:125 tests passed in18.671s, font cache restored, actual RUN_RESULT skipped_repeated_content. Unlike previous-day font cancellation, this job reached posting quality gate and completed successfully. No image/Buffer/X stage; publication77 used105 pending0 unchanged. No new visual defect justifies renderer changes this pass.",
   "checks_this_pass": {
-    "type": "recap_schedule_boundary_no_new_evidence",
+    "type": "recap_duplicate_skip_verified",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": false,
-    "new_scheduled_post_run_since_previous_pass": false,
-    "latest_scheduled_run_id": 39953297423,
+    "production_tests_run": true,
+    "new_scheduled_post_run_since_previous_pass": true,
+    "latest_scheduled_run_id": 39969789197,
     "paid_api_used": false,
     "new_public_post": false,
     "extra_test_post": false,
@@ -122,39 +120,41 @@
     "23:00": "recap"
   },
   "previous_scheduled_run_observation": {
-    "slot": "2026-10-23 18:00 JST news",
-    "schedule_cron": "0 9 * * *",
+    "slot": "2026-10-23 21:00 JST vote",
+    "schedule_cron": "0 12 * * *",
     "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39931259477",
-    "job_id": 120339818768,
-    "workflow_created_at": "2026-10-23T18:21:24+09:00",
-    "posting_step_started_at": "2026-10-23T18:21:54+09:00",
-    "result_recorded_at": "2026-10-23T18:21:56.208270+09:00",
-    "schedule_creation_delay_seconds": 1284,
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39953297423",
+    "job_id": 120412832262,
+    "workflow_created_at": "2026-10-23T21:26:17+09:00",
+    "posting_step_started_at": "2026-10-23T21:26:44+09:00",
+    "result_recorded_at": "2026-10-23T21:26:45.041101+09:00",
+    "schedule_creation_delay_seconds": 1577,
     "classification": "skipped_repeated_content",
     "workflow_conclusion": "success",
     "production_tests_passed": 125,
-    "production_test_duration_seconds": 21.568,
+    "production_test_duration_seconds": 15.072,
     "font_cache_hit": true,
     "font_download_required": false,
+    "vote_repeated_context_gate_verified": true,
+    "generic_vote_fallback_used": false,
     "image_generation_reached": false,
     "buffer_submission_reached": false,
     "x_post_url": null,
-    "reason": "Official October19 news candidate excluded for existing source/match coverage; no distinct unpublished eligible candidate remained. Not a Buffer error."
+    "reason": "Vote candidate refers to already covered match; context repetition gate skipped before media/Buffer, without a generic standalone question fallback."
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
   "reflection_commit": "This report-only commit; renderer implementation remains33c662b0e066b16abf1017aa63d1881216165c22.",
   "previous_unobserved_schedule_check": {
-    "slot": "2026-10-23 21:00 JST vote",
-    "schedule_cron": "0 12 * * *",
-    "observed_at": "2026-10-23T12:01:05.112609+00:00",
+    "slot": "2026-10-23 23:00 JST recap",
+    "schedule_cron": "0 14 * * *",
+    "observed_at": "2026-10-23T23:00:43.655688+09:00",
     "workflow_run_created": false,
     "classification": "not_observed_no_run_created",
     "workflow_run_url": null,
     "image_generation_reached": null,
     "buffer_submission_reached": null,
     "x_post_url": null,
-    "reason": "Boundary check shows no21:00 run yet; do not infer skip or send error."
+    "reason": "No recap run yet at boundary check. No manual replay or test publication."
   },
   "visual_review_performed_this_pass": false,
   "feedback_observation": {
@@ -231,18 +231,7 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": {
-    "slot": "2026-10-23 23:00 JST recap",
-    "schedule_cron": "0 14 * * *",
-    "observed_at": "2026-10-23T23:00:43.655688+09:00",
-    "workflow_run_created": false,
-    "classification": "not_observed_no_run_created",
-    "workflow_run_url": null,
-    "image_generation_reached": null,
-    "buffer_submission_reached": null,
-    "x_post_url": null,
-    "reason": "No recap run yet at boundary check. No manual replay or test publication."
-  },
+  "unobserved_schedule_check": null,
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -311,7 +300,9 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [],
+  "changes_this_pass": [
+    "Record23:00 recap duplicate skip and completed October23 seven-slot verification. No code or visual changes."
+  ],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -325,13 +316,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "678b74d561214f9be91c61c328bcb7871dbcceec",
+    "baseline_commit": "4a8226c076c23190f7fa7696f9543efab96db316",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
-    "new_posting_run": false,
-    "next_regular_slot_jst": "2026-10-23 23:00",
-    "classification": "not_observed_no_run_created",
+    "new_posting_run": true,
+    "next_regular_slot_jst": "2026-10-24 08:00",
+    "classification": "skipped_repeated_content",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
@@ -377,5 +368,49 @@
     "reason": "Template11 unchanged; successful prior10-card CI artifact retained."
   },
   "ci_preview_generated": true,
-  "vote_context_policy_live_verified": true
+  "vote_context_policy_live_verified": true,
+  "day_verification": {
+    "date_jst": "2026-10-23",
+    "all_seven_runs_observed": true,
+    "all_workflow_conclusions": "success",
+    "new_publications": 0,
+    "pending_posts": 0,
+    "slots": [
+      {
+        "time": "08:00",
+        "run_id": 39870978690,
+        "result": "skipped_repeated_content"
+      },
+      {
+        "time": "10:30",
+        "run_id": 39887263634,
+        "result": "skipped_no_verified_content"
+      },
+      {
+        "time": "12:30",
+        "run_id": 39897966856,
+        "result": "skipped_repeated_content"
+      },
+      {
+        "time": "15:30",
+        "run_id": 39916705557,
+        "result": "skipped_no_verified_content"
+      },
+      {
+        "time": "18:00",
+        "run_id": 39931259477,
+        "result": "skipped_repeated_content"
+      },
+      {
+        "time": "21:00",
+        "run_id": 39953297423,
+        "result": "skipped_repeated_content"
+      },
+      {
+        "time": "23:00",
+        "run_id": 39969789197,
+        "result": "skipped_repeated_content"
+      }
+    ]
+  }
 }
