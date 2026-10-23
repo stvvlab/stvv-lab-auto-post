@@ -118,7 +118,8 @@
     "editorial_image_pilot_lommel_20261019_v1",
     "approved_stadium_review_lommel_20261019_v1",
     "daily_2026-10-21_data",
-    "daily_2026-10-22_vote"
+    "daily_2026-10-22_vote",
+    "approved_imagegen_midtjylland_20261023_v1"
   ],
   "publication_log": [
     {
@@ -847,16 +848,18 @@
       "submitted_at": "2026-10-22T21:38:40.351962+09:00",
       "text": "🗳️ スコアと試合内容。\n\nSTVVの評価で重く見るのはどちら？ その理由も聞いてみたい。\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/3d50af3161aa8469fb6637fea2d2fa46019f07be/generated/content_2026-10-22_vote.jpg"
-    }
-  ],
-  "pending_posts": {
-    "approved_imagegen_midtjylland_20261023_v1": {
+    },
+    {
+      "key": "approved_imagegen_midtjylland_20261023_v1",
       "slot": "recap",
       "source": "https://stvv.jp/news/uefa-news/20261023_1/",
+      "buffer_id": "6adbeb4e8b3d437ddc8df023",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-24T08:18:41.033017+09:00",
       "text": "⚽ STVV、敵地で1–0勝利！\nミッティランを下し、欧州大会2連勝。\n\n公式：https://stvv.jp/news/uefa-news/20261023_1/\n#STVV #シントトロイデン",
-      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/4181d3c9076aad215919f18d705051930c954a2c/generated/approved_midtjylland_20261023.png",
-      "created_at": "2026-10-24T08:18:36.964187+09:00"
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/4181d3c9076aad215919f18d705051930c954a2c/generated/approved_midtjylland_20261023.png"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
