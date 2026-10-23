@@ -2,9 +2,26 @@
 # A stalled Ubuntu mirror must not consume the entire posting job.
 set -euo pipefail
 
+cache_dir="${STVV_FONT_CACHE_DIR:-${GITHUB_WORKSPACE:-$PWD}/.cache/stvv-fonts}"
+cached_font="$cache_dir/NotoSansCJK-Bold.ttc"
+
 font_ready() {
-  [[ -s /usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc ]] ||
-    [[ -s /usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc ]]
+  for candidate in "$cached_font" \
+    /usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc \
+    /usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc; do
+    if [[ -s "$candidate" ]]; then
+      mkdir -p "$cache_dir"
+      if [[ "$candidate" != "$cached_font" ]]; then
+        cp "$candidate" "$cached_font"
+      fi
+      if [[ -n "${GITHUB_ENV:-}" ]]; then
+        echo "STVV_CARD_FONT=$cached_font" >> "$GITHUB_ENV"
+      fi
+      echo "FONT_READY: $cached_font"
+      return 0
+    fi
+  done
+  return 1
 }
 
 if font_ready; then

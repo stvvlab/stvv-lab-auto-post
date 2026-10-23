@@ -226,3 +226,11 @@ segments share one measured baseline and fitted type size, including two-digit
 scores. The audit records exact segments, colours and baseline. No score is
 created without an explicit caption score; vote and alternate layouts retain
 their compositions. This is a colour/readability change, not a new fact or post.
+
+The preview CI later exhausted both bounded font downloads, while the regular
+October 23 08:00 job succeeded and passed104 tests before a duplicate-content
+skip. Posting and preview CI now share `.cache/stvv-fonts` through Actions
+cache. The installer copies an available system font into this directory and
+exports `STVV_CARD_FONT`; a restored font skips apt entirely. Cache misses
+retain bounded installation and fail-closed behavior. Cache storage/restoration
+must still be verified in Actions; local cache reuse alone is not that proof.

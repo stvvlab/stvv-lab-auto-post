@@ -48,6 +48,11 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Restore Japanese font cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/stvv-fonts
+          key: ${{ runner.os }}-noto-cjk-bold-v1-${{ hashFiles('scripts/install-card-font.sh') }}
       - name: Install Japanese font for previews
         timeout-minutes: 5
         run: bash scripts/install-card-font.sh

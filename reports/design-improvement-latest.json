@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-10-22T23:08:10.041492+00:00",
+  "updated_at": "2026-10-23T00:04:06.623736+00:00",
   "template_version": 10,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
   "changes": [
-    "Stadium score: STVV yellow, separator/opponent white on shared baseline",
-    "Record exact score segments/colors/baseline in audit",
-    "Test rendered colors and one/two-digit score fit"
+    "Share cached Japanese font between posting and preview CI",
+    "Export cached font path and skip apt on cache hit",
+    "Add cache reuse/env export coverage"
   ],
   "preview_path": "generated/scorer_alignment_preview.jpg",
   "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
@@ -21,46 +21,50 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "in_progress",
+  "ci_status": "pending",
   "publication_status": "Template10 score contrast deployed; no actual post verification yet",
   "remaining": [
     "Template v10 composition rotation awaits eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown",
-    "Font setup fix passed CI; awaits next scheduled execution. Cancelled recap was not replayed"
+    "New font cache save/restore awaits Actions; initial cache miss still needs network"
   ],
-  "next_priority": "Verify final104-test CI and observe delayed08:00 player run; if eligible, inspect actual image/Buffer/X. Do not replay or weaken repetition/source gates.",
+  "next_priority": "Verify cache seeding and subsequent cache hit in CI/regular10:30 compare slot. Keep duplicate/source/image gates; verify X only for a genuinely submitted eligible post.",
   "ci_tests_passed": null,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39869783805",
+  "ci_run_url": null,
   "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
   "visual_review": "Compared approved review and before/after scorer card at full resolution. STVV4 remains yellow; separator and opponent1 white, same size/baseline/position. Scorer rows, source, title and saved background unchanged. No new facts, faces or paid generation. User approval and engagement unverified.",
   "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
-    "slot": "2026-10-22 23:00 JST recap",
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39795634307",
-    "job_id": 119882153376,
-    "classification": "cancelled_during_font_setup",
-    "workflow_conclusion": "cancelled",
-    "font_setup_started_at": "2026-10-22T23:26:13+09:00",
-    "cancellation_recorded_at": "2026-10-22T23:41:22+09:00",
-    "posting_step_started": false,
-    "production_tests_run": false,
+    "slot": "2026-10-23 08:00 JST player",
+    "schedule_cron": "0 23 * * *",
+    "workflow_run_created": true,
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39870978690",
+    "job_id": 120145043156,
+    "workflow_created_at": "2026-10-23T08:19:07+09:00",
+    "posting_step_started_at": "2026-10-23T08:19:48+09:00",
+    "result_recorded_at": "2026-10-23T08:19:50.113091+09:00",
+    "classification": "skipped_repeated_content",
+    "workflow_conclusion": "success",
+    "production_tests_passed": 104,
+    "production_test_duration_seconds": 21.634,
+    "font_setup_success": true,
     "image_generation_reached": false,
     "buffer_submission_reached": false,
     "x_post_url": null,
-    "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
+    "reason": "Official player article repeats already published source/match; no new eligible article remained"
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Implemented measurable score hierarchy alignment with approved design. Rendered eight previews/contact sheet and inspected changed scorer image.103 suite tests passed before adding color/multidigit test; final22 card tests and focused test passed. No publication.08:00 player workflow not yet created at check, so no skip/error inferred.",
+  "latest_run_review": "08:00 regular job succeeded through font setup and104 tests, then skipped repeated content before media/Buffer. Preview CI failed both bounded apt downloads, not renderer tests. Implemented shared Actions font cache and STVV_CARD_FONT export; offline4 tests passed. Rendered with locally cached Noto font and inspected scorer card; visual unchanged. No additional public post or replay.",
   "checks_this_pass": {
-    "type": "approved_score_colour_hierarchy",
+    "type": "font_cache_reliability",
     "new_local_tests_run": true,
     "new_image_rendered": true,
     "production_tests_run": false,
-    "new_scheduled_post_run_since_previous_pass": false,
-    "latest_scheduled_run_id": 39795634307,
+    "new_scheduled_post_run_since_previous_pass": true,
+    "latest_scheduled_run_id": 39870978690,
     "paid_api_used": false,
     "new_public_post": false,
     "extra_test_post": false,
@@ -126,36 +130,19 @@
     "23:00": "recap"
   },
   "previous_scheduled_run_observation": {
-    "slot": "2026-10-22 21:00 JST vote",
-    "schedule_cron": "0 12 * * *",
-    "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39779085761",
-    "job_id": 119825408044,
-    "workflow_created_at": "2026-10-22T21:31:46+09:00",
-    "posting_step_started_at": "2026-10-22T21:38:33+09:00",
-    "result_recorded_at": "2026-10-22T21:38:41.509243+09:00",
-    "schedule_creation_delay_seconds": 1906,
-    "classification": "submitted_to_buffer_and_verified_on_x",
-    "run_result_status": "submitted_to_buffer",
-    "workflow_conclusion": "success",
-    "production_tests_passed": 93,
-    "production_test_duration_seconds": 20.967,
-    "template_version": 7,
-    "vote_repeated_match_replaced": true,
-    "image_generation_reached": true,
-    "public_byte_match": true,
-    "public_image_sha256": "a4d53790ee71ac15c6ecbd7beac66ecc10ac346ee2a8011c000a68517c828f29",
-    "public_image_bytes": 830108,
-    "image_commit": "3d50af3161aa8469fb6637fea2d2fa46019f07be",
-    "pending_saved_before_buffer": true,
-    "pending_commit": "b1f4c2f",
-    "buffer_submission_reached": true,
-    "buffer_id": "6ada03cee8cca8cdcc503081",
-    "buffer_status": "sent",
-    "submitted_at": "2026-10-22T21:38:40.351962+09:00",
-    "x_post_url": "https://x.com/stvvlabo/status/2113248668279083353",
-    "x_text_verified": true,
-    "x_image_visually_verified": true
+    "slot": "2026-10-22 23:00 JST recap",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39795634307",
+    "job_id": 119882153376,
+    "classification": "cancelled_during_font_setup",
+    "workflow_conclusion": "cancelled",
+    "font_setup_started_at": "2026-10-22T23:26:13+09:00",
+    "cancellation_recorded_at": "2026-10-22T23:41:22+09:00",
+    "posting_step_started": false,
+    "production_tests_run": false,
+    "image_generation_reached": false,
+    "buffer_submission_reached": false,
+    "x_post_url": null,
+    "reason": "61.2 MB Ubuntu font download stalled and retried near the 15-minute job limit. Cancellation observed; explicit cancellation initiator unknown. No content skip or Buffer error occurred."
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
   "reflection_commit": "This report-only commit; renderer and font setup implementation hashes remain separate",
@@ -248,14 +235,7 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": {
-    "slot": "2026-10-23 08:00 JST player",
-    "schedule_cron": "0 23 * * *",
-    "observed_at": "2026-10-22T23:08:10.041505+00:00",
-    "workflow_run_created": false,
-    "classification": "not_observed_no_run_created",
-    "reason": "No08:00 Auto Post run visible yet; not a content skip or Buffer error"
-  },
+  "unobserved_schedule_check": null,
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -306,9 +286,10 @@
     "implementation_commit": "566b0e8eb21255dd8165527efe4a5e01c222fa2d",
     "ci_status": "success",
     "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
-    "production_verified": false,
+    "production_verified": true,
     "ci_tests_passed": 103,
-    "ci_preview_generated": true
+    "ci_preview_generated": true,
+    "production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39870978690"
   },
   "ci_test_duration_seconds": 21.448,
   "font_setup_ci_evidence": {
@@ -324,9 +305,9 @@
     "buffer_called": false
   },
   "changes_this_pass": [
-    "Stadium score: STVV yellow, separator/opponent white on shared baseline",
-    "Record exact score segments/colors/baseline in audit",
-    "Test rendered colors and one/two-digit score fit"
+    "Share cached Japanese font between posting and preview CI",
+    "Export cached font path and skip apt on cache hit",
+    "Add cache reuse/env export coverage"
   ],
   "previous_local_tests": {
     "passed": 3,
@@ -338,14 +319,12 @@
   },
   "local_tests_this_pass": {
     "performed": true,
-    "full_suite_passed": 103,
-    "duration_seconds": 20.333,
-    "final_card_suite_passed": 22,
-    "final_card_duration_seconds": 19.215,
-    "final_focused_test_passed": 1,
-    "focused_seconds": 0.01,
-    "final_ci_expected_tests": 104,
-    "diff_check": "passed"
+    "passed": 4,
+    "duration_seconds": 0.049,
+    "command": "python3 -m unittest discover -s tests -p test_font_setup.py -v",
+    "shell_syntax": "passed",
+    "diff_check": "passed",
+    "local_cached_font_render": "passed; eight images and contact sheet"
   },
   "no_change_observation": {
     "baseline_commit": "9dd66d4dbdd144e178a732c344eded202cafb331",
@@ -365,5 +344,22 @@
     "test_duration_seconds": 21.448,
     "publication_behavior_changed": false
   },
-  "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603/artifacts/12451366565"
+  "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603/artifacts/12451366565",
+  "font_cache_fix": {
+    "implementation_commit": "This report commit",
+    "ci_status": "pending",
+    "cache_hit_verified_on_actions": false,
+    "cache_save_verified_on_actions": false,
+    "local_offline_cache_reuse_verified": true,
+    "production_verified": false
+  },
+  "score_contrast_validation": {
+    "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
+    "production_suite_tests_passed": 104,
+    "preview_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39869783805",
+    "preview_ci_conclusion": "failure",
+    "failed_stage": "font_setup",
+    "preview_ci_tests_run": false,
+    "public_image_verified": false
+  }
 }
