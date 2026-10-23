@@ -21,7 +21,7 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "pending",
+  "ci_status": "in_progress",
   "publication_status": "Template10 score contrast deployed; no actual post verification yet",
   "remaining": [
     "Template v10 composition rotation awaits eligible regular publication and X verification",
@@ -32,7 +32,7 @@
   ],
   "next_priority": "Verify cache seeding and subsequent cache hit in CI/regular10:30 compare slot. Keep duplicate/source/image gates; verify X only for a genuinely submitted eligible post.",
   "ci_tests_passed": null,
-  "ci_run_url": null,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
   "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
   "visual_review": "Compared approved review and before/after scorer card at full resolution. STVV4 remains yellow; separator and opponent1 white, same size/baseline/position. Scorer rows, source, title and saved background unchanged. No new facts, faces or paid generation. User approval and engagement unverified.",
   "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
@@ -346,12 +346,13 @@
   },
   "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603/artifacts/12451366565",
   "font_cache_fix": {
-    "implementation_commit": "This report commit",
-    "ci_status": "pending",
+    "implementation_commit": "5e7813bfdcb3463f68d2027df564136b26801f9d",
+    "ci_status": "in_progress",
     "cache_hit_verified_on_actions": false,
     "cache_save_verified_on_actions": false,
     "local_offline_cache_reuse_verified": true,
-    "production_verified": false
+    "production_verified": false,
+    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023"
   },
   "score_contrast_validation": {
     "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
