@@ -1,21 +1,21 @@
 {
-  "key": "approved_stadium_review_lommel_20261019_v1",
-  "source_url": "https://stvv.jp/news/game/20261019_1/",
-  "verified_at": "2026-10-21T03:38:01.011218+09:00",
+  "key": "approved_imagegen_midtjylland_20261023_v1",
+  "source_url": "https://stvv.jp/news/uefa-news/20261023_1/",
+  "verified_at": "2026-10-24T08:15:00+09:00",
   "home": "STVV",
-  "away": "ロンメル",
-  "home_score": 4,
-  "away_score": 1,
-  "headline": "４発逆転、カップ戦突破。",
+  "away": "ミッティラン",
+  "home_score": 1,
+  "away_score": 0,
+  "headline": "欧州大会2連勝",
   "details": [
-    "松澤海斗、同点ゴール。",
-    "新川志音、加入後初ゴール。"
+    "敵地で1–0の勝利。",
+    "カンファレンスリーグ開幕2連勝。"
   ],
-  "text": "⚽ STVV、4–1でカップ戦初戦を突破！\n松澤海斗の同点弾、新川志音の加入後初ゴールも生まれ、ロンメルに逆転勝利。\nあなたが注目したプレーは？\n\n公式：https://stvv.jp/news/game/20261019_1/\n#STVV #シントトロイデン",
-  "asset_path": "generated/approved_review_lommel_20261019.jpg",
-  "asset_sha256": "0025d45e4107cdde64aaa2111e3b11f1a8383fbf227be355494b478d3a419b68",
+  "text": "⚽ STVV、敵地で1–0勝利！\nミッティランを下し、欧州大会2連勝。\n\n公式：https://stvv.jp/news/uefa-news/20261023_1/\n#STVV #シントトロイデン",
+  "asset_path": "generated/approved_midtjylland_20261023.png",
+  "asset_sha256": "6d2dd4792fdc79b7cf83afce9e860d050c2d974a700f9e40610137a87c985744",
   "asset_dimensions": [
-    1374,
-    1145
+    1448,
+    1086
   ]
 }
