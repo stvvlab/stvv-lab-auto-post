@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T06:08:49.360777+00:00",
+  "updated_at": "2026-10-23T07:05:55.607459+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -19,7 +19,7 @@
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe15:30 regular analysis slot; template11 CI125 tests and10 preview cards passed. Verify actual public image/Buffer/X only after eligible regular publication. Existing-post supplemental reply transport remains unimplemented.",
+  "next_priority": "Check whether15:30 analysis workflow is later created and inspect its actual result. Do not equate absent run with safe skip/error; do not manually replay. Template11 public image/Buffer/X still unverified. Supplemental reply transport remains unimplemented.",
   "ci_tests_passed": 125,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
@@ -49,9 +49,9 @@
     "reason": "Live official scoring_data returned previously published scorer caption; exact normalized-caption gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Main874a678f3cc78a2af0cf47025f101365699b9ad9 retains template11; CI39904350400 remains successful. No new regular posting run after12:30 data.15:30 analysis is not due at this check, not a skip/error. Posted history remains77 publications105 used0 pending. No demonstrably beneficial additional renderer change identified; no render/test/publication repeated.",
+  "latest_run_review": "Latest main1e53c6ba46f91627717f6e489d89db590f58013a retains template11. At this check after15:30 JST, Actions list shows no new Auto Post run after12:30 data39897966856. Classify as run_not_observed, not a content skip or posting error. Seven crons still present, including30 6 * * *. History77 publications105 used0 pending unchanged. No publication stage reached or renderer improvement newly demonstrated.",
   "checks_this_pass": {
-    "type": "no_new_posting_evidence",
+    "type": "regular_analysis_run_not_yet_observed",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -233,7 +233,18 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": null,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-23 15:30 JST analysis",
+    "schedule_cron": "30 6 * * *",
+    "observed_at": "2026-10-23T07:05:55.607459+00:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_run_url": null,
+    "image_generation_reached": null,
+    "buffer_submission_reached": null,
+    "x_post_url": null,
+    "reason": "No matching run visible in latest Actions list; actual execution/result remains unverified. No manual replay."
+  },
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -316,13 +327,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "874a678f3cc78a2af0cf47025f101365699b9ad9",
+    "baseline_commit": "1e53c6ba46f91627717f6e489d89db590f58013a",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
     "new_posting_run": false,
-    "next_regular_slot_jst": "2026-10-23 15:30",
-    "classification": "next_slot_not_due",
+    "next_regular_slot_jst": "2026-10-23 18:00",
+    "classification": "not_observed_no_run_created",
     "action": "Preserve latest validated renderer and safety gates; no extra test post."
   },
   "report_accuracy_fix": {
