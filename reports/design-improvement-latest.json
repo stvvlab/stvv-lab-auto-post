@@ -67,6 +67,7 @@
     "note": "This proves one reviewed image can reach X through Buffer, but it does not prove unattended built-in generation and regular-slot delivery."
   },
   "implementation_status": "Built-in image generation capability and reviewed-asset delivery are implemented and separately verified; unattended generation, manifest registration and publication through a regular scheduled slot remain unverified end to end.",
+  "capability_evidence_commit": "9b89808fd4dde930fa81c9308ab7547e8265c14c",
   "uncompleted": [
     "Wait for genuinely new official information, generate at most one reviewed card, register it as ready and observe one regular slot consume it without manual replay.",
     "Confirm Buffer acceptance and actual X rendering for that regular-slot post before calling image automation operational.",
