@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T07:06:55.088452+09:00",
+  "updated_at": "2026-10-24T08:03:03.473113+09:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -19,12 +19,12 @@
     "Schedule trigger delay root cause unknown",
     "Supplemental analysis reply transport to existing own posts is unimplemented; standalone fallback blocked"
   ],
-  "next_priority": "Recheck fresh official content and next08:00 player run. Continue only demonstrated visual improvements; do not force publication for template11 proof. Existing-post supplemental reply transport remains unimplemented.",
+  "next_priority": "Verify October24 08:00 player workflow once created; distinguish late trigger, safe skip, error and actual delivery. Preserve source/duplicate/pending/public-byte gates. Template11 X display and existing-post supplemental reply transport remain unverified/unimplemented.",
   "ci_tests_passed": 125,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
   "visual_review": "Compared before/after poster scorer cards at full resolution and inspected revised split scorer card. Times now align at panel right in yellow at52px; white names retain complete text at48px when fitting. Additional row spacing makes four goal times easier to scan; no name/time/source/score added or removed. User approval and X display unverified.",
-  "baseline_commit": "bc50957edbc4364e478faf14069078ed370deef5",
+  "baseline_commit": "64532b1842ed2ddea00fcf7f88294926e0955ee7",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-23 23:00 JST recap",
@@ -48,9 +48,9 @@
     "reason": "Recap repeats same source/match without new comparison data; final duplicate gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Latest main, template, status, design report, posted history and Actions reviewed. Rendering/posting code unchanged since template11; no new regular Auto Post since October23 recap and next08:00 slot not due. History77 publications105 used0 pending unchanged. Previous read-only official-source check06:01 JST retained as historical evidence, not repeated this pass or classified as scheduled skip. No new visual defect evidence; no code change, image render, tests, Buffer or X inspection. Supplemental analysis replies remain unimplemented.",
+  "latest_run_review": "Read latest main, template, status, design report, posted history and Actions. October24 08:00 player workflow not yet observed shortly after boundary; not classified as skipped or error. No manual dispatch/replay. Template11 code unchanged;77 publications105 used0 pending unchanged. Discovery brief07:58 succeeded but changed timestamp only: no new verified facts, supplementary replies or publication. No new render/test/Buffer/X verification performed; previous visual/CI evidence retained.",
   "checks_this_pass": {
-    "type": "unchanged_main_history_and_actions_review",
+    "type": "main_history_actions_and_slot_boundary_review",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -173,9 +173,9 @@
     "supplemental_reply_sent": false
   },
   "discovery_observation": {
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39868838229",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40036893380",
     "workflow_conclusion": "success",
-    "saved_commit": "e24512aabb95e3add619596429cafdc520969888",
+    "saved_commit": "64532b1842ed2ddea00fcf7f88294926e0955ee7",
     "report_only": true,
     "new_verified_facts": false
   },
@@ -233,7 +233,18 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": null,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-24 08:00 JST player",
+    "schedule_cron": "0 23 * * *",
+    "observed_at": "2026-10-24T08:03:03.473113+09:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_run_url": null,
+    "image_generation_reached": null,
+    "buffer_submission_reached": null,
+    "x_post_url": null,
+    "reason": "No Auto Post run yet in latest Actions listing; no manual replay or test publication."
+  },
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -316,13 +327,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "bc50957edbc4364e478faf14069078ed370deef5",
+    "baseline_commit": "64532b1842ed2ddea00fcf7f88294926e0955ee7",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
     "new_posting_run": false,
     "next_regular_slot_jst": "2026-10-24 08:00",
-    "classification": "next_slot_not_due",
+    "classification": "scheduled_run_not_yet_observed",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
