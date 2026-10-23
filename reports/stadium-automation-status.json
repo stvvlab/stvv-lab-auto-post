@@ -21,11 +21,11 @@
   "latest_renderer_implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
   "news_candidate_repetition_filter_commit": "2c0908414212cc4873df04846a6bde1727304594",
   "news_candidate_repetition_filter_live_verified": true,
-  "latest_production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39870978690",
-  "latest_production_tests_passed": 104,
-  "latest_production_result": "skipped_repeated_content",
-  "latest_production_slot": "2026-10-23 08:00 JST player",
-  "latest_production_started_at": "2026-10-23T08:19:07+09:00",
+  "latest_production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39887263634",
+  "latest_production_tests_passed": 105,
+  "latest_production_result": "skipped_no_verified_content",
+  "latest_production_slot": "2026-10-23 10:30 JST compare",
+  "latest_production_started_at": "2026-10-23T11:01:18+09:00",
   "news_heading_extraction_commit": "d644af9fade1e21c5e91322549ff6a071c186692",
   "news_heading_extraction_live_verified": true,
   "content_repetition_guard_verified_stage": "news_candidate_selection_and_final_pre_media",
@@ -51,7 +51,8 @@
   "font_setup_fix_ci_status": "success",
   "score_contrast_ci_status": "success_with_font_cache_fix",
   "score_contrast_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
-  "font_cache_actions_verified": false,
+  "font_cache_actions_verified": true,
   "font_cache_saved_on_actions": true,
-  "font_cache_restored_on_actions": false
+  "font_cache_restored_on_actions": true,
+  "font_cache_production_verified": true
 }

@@ -232,5 +232,7 @@ October 23 08:00 job succeeded and passed104 tests before a duplicate-content
 skip. Posting and preview CI now share `.cache/stvv-fonts` through Actions
 cache. The installer copies an available system font into this directory and
 exports `STVV_CARD_FONT`; a restored font skips apt entirely. Cache misses
-retain bounded installation and fail-closed behavior. Cache storage/restoration
-must still be verified in Actions; local cache reuse alone is not that proof.
+retain bounded installation and fail-closed behavior. Cache save was verified in CI39875820023. Cache restore and no apt download
+were verified in regular10:30 compare run39887263634 (executed11:01 JST),
+which passed105 tests and skipped because verified comparison content was
+unavailable. No public image or Buffer delivery occurred in that run.
