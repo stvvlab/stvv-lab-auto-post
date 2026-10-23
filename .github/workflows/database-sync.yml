@@ -3,9 +3,9 @@ name: STVV Database Sync
 on:
   push:
     branches: [main]
-    paths: ['stvv_database/**', 'tests/test_database.py', 'config/database-requirements.txt', '.github/workflows/database-sync.yml']
+    paths: ['stvv_database/**', 'tests/test_database*.py', 'config/database-requirements.txt', '.github/workflows/database-sync.yml']
   pull_request:
-    paths: ['stvv_database/**', 'tests/test_database.py', 'config/database-requirements.txt', '.github/workflows/database-sync.yml']
+    paths: ['stvv_database/**', 'tests/test_database*.py', 'config/database-requirements.txt', '.github/workflows/database-sync.yml']
   workflow_dispatch:
     inputs:
       mode:
@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r config/database-requirements.txt
-      - run: python -m unittest discover -s tests -p 'test_database.py' -v
+      - run: python -m unittest discover -s tests -p 'test_database*.py' -v
 
   sync:
     needs: test

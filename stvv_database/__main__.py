@@ -9,6 +9,8 @@ from zoneinfo import ZoneInfo
 
 from .engine import Snapshot, plan, verify
 from .source import fetch, parse_schedule
+from .reports import collect_reports
+from .backfill import enrich, inventory
 
 
 def dump(path, obj):
@@ -27,7 +29,8 @@ def summary(report):
         f"公式照合：{report.get('checked_matches', 0)}試合",
         f"再読み込み検証：{report.get('verification', '未実施')}",
         f"今回の照合保留：{len(report.get('pending', []))}件。",
-        '未完了：詳細統計・個人記録・得点イベントの自動補完、新規試合のID発番。',
+        f"公式戦評照合：{report.get('report_matches', 0)}試合 / 保留{len(report.get('report_pending', []))}件",
+        '未完了：新規行・新規試合の登録、試合別詳細統計、背番号・出場分・警告の補完。',
         f"エラー：{'; '.join(report.get('errors', [])) or 'なし'}", '',
         '※ 完了とは再読検証済みの変更のみ。データ全件補完の完了を意味しません。', ''])
 
@@ -44,7 +47,7 @@ def main(argv=None):
     report = {'started_at': datetime.now(ZoneInfo('Asia/Tokyo')).isoformat(),
               'status': 'failed', 'added_rows': 0, 'modified_rows': 0, 'modified_cells': 0,
               'note_cells': 0, 'sorted': False, 'verification': '未実施', 'errors': [],
-              'pending': [], 'coverage': 'existing_match_results_only', 'sources': []}
+              'pending': [], 'coverage': 'existing_results_scorers_and_appearances', 'sources': []}
     try:
         matches = []
         for season, slug in [('2025/26', '2025-2026'), ('2026/27', '2026-2027')]:
@@ -63,6 +66,20 @@ def main(argv=None):
             before = client.read()
         changes, info = plan(before, matches, heartbeat=args.write_test)
         report.update(info)
+        report['missing_data'] = inventory(before)
+        if args.html_dir:
+            # Offline fixtures never silently fall back to live network requests.
+            from hashlib import sha256
+            def read_report(url):
+                return Path(args.html_dir, sha256(url.encode()).hexdigest() + '.html').read_text(encoding='utf-8')
+        else:
+            read_report = fetch
+        official_reports, collection_pending = collect_reports(before, matches, read=read_report)
+        detail_changes, detail_info = enrich(before, official_reports)
+        changes.extend(detail_changes)
+        report.update(detail_info)
+        report['report_pending'].extend(collection_pending)
+        report['sources'].extend({'url': r.url, 'sha256': r.digest, 'kind': 'club_match_report'} for r in official_reports)
         requests = [c.request(before) for c in changes]
         if args.snapshot:
             # Plans may contain workbook text. Keep them local; never upload them as CI artifacts.
@@ -87,7 +104,8 @@ def main(argv=None):
                         raise RuntimeError('Write failed or result uncertain; no automatic retry') from None
                     report['warnings'] = ['Write response failed, but every intended change was confirmed by a separate read']
                 else:
-                    verify(before, client.read(), changes)
+                    after = client.read()
+                    verify(before, after, changes)
                 report['modified_cells'] = sum(c.field == 'userEnteredValue' for c in changes)
                 report['modified_rows'] = len({(c.tab, c.row) for c in changes if c.field == 'userEnteredValue'})
                 report['note_cells'] = sum(c.field == 'note' for c in changes)
@@ -95,6 +113,7 @@ def main(argv=None):
                 verify(before, fresh, [])
             report['verification'] = '成功'
             report['status'] = 'verified' if requests else 'verified_no_change'
+            report['missing_data_after'] = inventory(after if requests else fresh)
         else:
             report['status'] = 'planned_only'
         returncode = 0
