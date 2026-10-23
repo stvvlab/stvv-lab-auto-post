@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T00:04:06.623736+00:00",
+  "updated_at": "2026-10-23T10:02:00+09:00",
   "template_version": 10,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -21,17 +21,17 @@
     "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
     "diff_check": "passed"
   },
-  "ci_status": "in_progress",
+  "ci_status": "success",
   "publication_status": "Template10 score contrast deployed; no actual post verification yet",
   "remaining": [
     "Template v10 composition rotation awaits eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown",
-    "New font cache save/restore awaits Actions; initial cache miss still needs network"
+    "Font cache saved successfully; subsequent restore/hit awaits next regular execution"
   ],
-  "next_priority": "Verify cache seeding and subsequent cache hit in CI/regular10:30 compare slot. Keep duplicate/source/image gates; verify X only for a genuinely submitted eligible post.",
-  "ci_tests_passed": null,
+  "next_priority": "Observe10:30 JST compare run: confirm cache hit and no apt download, classify source skip/error correctly; inspect Buffer/X only if eligible new content is sent.",
+  "ci_tests_passed": 105,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
   "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
   "visual_review": "Compared approved review and before/after scorer card at full resolution. STVV4 remains yellow; separator and opponent1 white, same size/baseline/position. Scorer rows, source, title and saved background unchanged. No new facts, faces or paid generation. User approval and engagement unverified.",
@@ -57,13 +57,13 @@
     "reason": "Official player article repeats already published source/match; no new eligible article remained"
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "08:00 regular job succeeded through font setup and104 tests, then skipped repeated content before media/Buffer. Preview CI failed both bounded apt downloads, not renderer tests. Implemented shared Actions font cache and STVV_CARD_FONT export; offline4 tests passed. Rendered with locally cached Noto font and inspected scorer card; visual unchanged. No additional public post or replay.",
+  "latest_run_review": "Verified full105-test CI, preview rendering and cache save. Cache miss on first run was expected; subsequent restore not yet observed. No new scheduled Auto Post run since08:00 duplicate skip; publication_log77,used105,pending0 unchanged. No renderer edits. Local execution environment became unavailable, so no local render/test or visual inspection performed this pass; GitHub evidence verified via connector.",
   "checks_this_pass": {
-    "type": "font_cache_reliability",
-    "new_local_tests_run": true,
-    "new_image_rendered": true,
+    "type": "font_cache_ci_and_seed_verification",
+    "new_local_tests_run": false,
+    "new_image_rendered": false,
     "production_tests_run": false,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39870978690,
     "paid_api_used": false,
     "new_public_post": false,
@@ -87,7 +87,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
-  "code_changes_this_pass": true,
+  "code_changes_this_pass": false,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -158,7 +158,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": true,
+  "visual_review_performed_this_pass": false,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802590",
     "workflow_conclusion": "success",
@@ -291,7 +291,7 @@
     "ci_preview_generated": true,
     "production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39870978690"
   },
-  "ci_test_duration_seconds": 21.448,
+  "ci_test_duration_seconds": 21.478,
   "font_setup_ci_evidence": {
     "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
     "conclusion": "success",
@@ -304,11 +304,7 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [
-    "Share cached Japanese font between posting and preview CI",
-    "Export cached font path and skip apt on cache hit",
-    "Add cache reuse/env export coverage"
-  ],
+  "changes_this_pass": [],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -318,13 +314,8 @@
     "full_suite_rerun": false
   },
   "local_tests_this_pass": {
-    "performed": true,
-    "passed": 4,
-    "duration_seconds": 0.049,
-    "command": "python3 -m unittest discover -s tests -p test_font_setup.py -v",
-    "shell_syntax": "passed",
-    "diff_check": "passed",
-    "local_cached_font_render": "passed; eight images and contact sheet"
+    "performed": false,
+    "reason": "No code changes; verified105-test CI. Local execution environment unavailable"
   },
   "no_change_observation": {
     "baseline_commit": "9dd66d4dbdd144e178a732c344eded202cafb331",
@@ -347,12 +338,14 @@
   "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603/artifacts/12451366565",
   "font_cache_fix": {
     "implementation_commit": "5e7813bfdcb3463f68d2027df564136b26801f9d",
-    "ci_status": "in_progress",
+    "ci_status": "success",
     "cache_hit_verified_on_actions": false,
-    "cache_save_verified_on_actions": false,
+    "cache_save_verified_on_actions": true,
     "local_offline_cache_reuse_verified": true,
     "production_verified": false,
-    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023"
+    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
+    "ci_tests_passed": 105,
+    "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023/artifacts/12468158026"
   },
   "score_contrast_validation": {
     "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",

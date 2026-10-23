@@ -16,8 +16,8 @@
   "latest_renderer_verified_on_x": false,
   "content_repetition_guard_live_verified": true,
   "content_repetition_guard_commit": "8db4cc9a348896d0ab4e28fdb4fb20700381d8e0",
-  "latest_ci_tests_passed": 103,
-  "latest_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603",
+  "latest_ci_tests_passed": 105,
+  "latest_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
   "latest_renderer_implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
   "news_candidate_repetition_filter_commit": "2c0908414212cc4873df04846a6bde1727304594",
   "news_candidate_repetition_filter_live_verified": true,
@@ -49,7 +49,9 @@
   "font_setup_fix_production_verified": true,
   "font_setup_fix_implementation_commit": "566b0e8eb21255dd8165527efe4a5e01c222fa2d",
   "font_setup_fix_ci_status": "success",
-  "score_contrast_ci_status": "failed_font_setup_before_tests",
-  "score_contrast_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39869783805",
-  "font_cache_actions_verified": false
+  "score_contrast_ci_status": "success_with_font_cache_fix",
+  "score_contrast_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
+  "font_cache_actions_verified": false,
+  "font_cache_saved_on_actions": true,
+  "font_cache_restored_on_actions": false
 }
