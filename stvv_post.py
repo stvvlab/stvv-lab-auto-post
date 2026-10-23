@@ -774,6 +774,11 @@ def next_card_variant(history):
 def content_card_media(slot, day, message, source=None, variant='stadium'):
     """Create a post-specific, faceless card and publish it before Buffer."""
     try:
+        from prepared_media import prepared_media
+        enabled, prepared_url = prepared_media(SESSION, slot, message, source)
+        if enabled:
+            log('確認済みAI画像を使用' if prepared_url else '対応する確認済みAI画像がないため見送り')
+            return prepared_url
         from content_card import render_content_card
         path = Path("generated") / f"content_{day}_{slot}.jpg"
         render_content_card(slot, message, path, source=source, variant=variant)
@@ -808,7 +813,7 @@ def content_card_media(slot, day, message, source=None, variant='stadium'):
             if attempt < 4:
                 time.sleep(3)
         log("投稿内容入り画像の公開を確認できず、投稿を見送ります")
-    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError,
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError, subprocess.SubprocessError,
             requests.RequestException) as error:
         log(f"投稿内容入り画像生成不可: {error}")
     return None
@@ -1057,7 +1062,17 @@ def main():
     source = None
     news_url = None
 
-    if slot in {"news", "player"}:
+    from prepared_media import prepared_candidates
+    try:
+        for candidate, candidate_source in prepared_candidates(slot, now):
+            if (x_length(candidate + HASHTAGS) <= 270
+                    and not duplicate_reason(history, candidate, candidate_source, now)):
+                message, source, news_url = candidate, candidate_source, candidate_source
+                break
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        log(f'確認済みAI画像の候補取得不可: {error}')
+
+    if not message and slot in {"news", "player"}:
         repeated_news = False
         try:
             for url, (_, title) in articles(now):

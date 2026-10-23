@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "cards": [
+    {
+      "source_url": "https://stvv.jp/news/uefa-news/20261023_1/",
+      "text": "⚽ STVV、敵地で1–0勝利！\nミッティランを下し、欧州大会2連勝。\n\n公式：https://stvv.jp/news/uefa-news/20261023_1/",
+      "slots": [
+        "news",
+        "recap"
+      ],
+      "reviewed": true,
+      "asset_path": "generated/approved_midtjylland_20261023.png",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "sha256": "6d2dd4792fdc79b7cf83afce9e860d050c2d974a700f9e40610137a87c985744",
+      "review_note": "User approved generated artwork and actual X display verified 2026-10-24. Already posted; duplicate gate must continue to skip this source.",
+      "date_jst": "2026-10-23",
+      "status": "published"
+    }
+  ]
+}
