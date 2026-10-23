@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T10:03:10.000882+00:00",
+  "updated_at": "2026-10-23T11:04:36.606857+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -48,13 +48,13 @@
     "reason": "Official October19 news candidate excluded for existing source/match coverage; no distinct unpublished eligible candidate remained. Not a Buffer error."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Verified actual18:00 news run created18:21:24 JST. Font cache restored and125 tests passed in21.568s. Candidate repetition filter excluded October19 official match article; actual posting step emitted skipped_repeated_content. No media or Buffer reached, history77 publications105 used0 pending unchanged. No further renderer improvement demonstrated or code changed.",
+  "latest_run_review": "Mainca88aa97cc7cc8a578339d1cb3181d9dc1341202 retains template11 and successful CI. No new Auto Post after18:00 news39931259477. Next21:00 vote slot is not due. Publication77/used105/pending0 unchanged. No new visual-quality defect or unverified source justifies a code change or publication; previous validated previews retained. No tests/rendering/Buffer/X repeated.",
   "checks_this_pass": {
-    "type": "regular_news_duplicate_skip_verified",
+    "type": "no_new_posting_evidence",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39931259477,
     "paid_api_used": false,
     "new_public_post": false,
@@ -299,9 +299,7 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [
-    "Record actual18:00 news duplicate-content skip and125 passing production tests."
-  ],
+  "changes_this_pass": [],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -315,13 +313,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "9b4bd267f4f943cb553104dac5ac42cbcf7db267",
+    "baseline_commit": "ca88aa97cc7cc8a578339d1cb3181d9dc1341202",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
-    "new_posting_run": true,
+    "new_posting_run": false,
     "next_regular_slot_jst": "2026-10-23 21:00",
-    "classification": "skipped_repeated_content",
+    "classification": "next_slot_not_due",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
