@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T13:05:02.756276+00:00",
+  "updated_at": "2026-10-23T23:00:43.655688+09:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -49,13 +49,13 @@
     "reason": "Vote candidate refers to already covered match; context repetition gate skipped before media/Buffer, without a generic standalone question fallback."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Verified21:00 vote actually ran21:26 JST;125 tests passed in15.072s and cached font restored. Repeated match context emitted skipped_repeated_content before media/Buffer; no generic fan-question replacement. This is first regular verification of v8 vote context policy, not template11 public image verification.77 publications105 used0 pending unchanged.",
+  "latest_run_review": "Latest main678b74d561214f9be91c61c328bcb7871dbcceec retains tested template11 and verified21:00 vote suppression. No new regular Auto Post after39953297423 at this check.23:00 recap actual execution is not yet observed; this is not a content skip or send error. History77 publications105 used0 pending unchanged. No new demonstrable visual improvement; renderer/tests/previews retained without repeat work.",
   "checks_this_pass": {
-    "type": "vote_repeated_context_policy_live_verified",
+    "type": "recap_schedule_boundary_no_new_evidence",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39953297423,
     "paid_api_used": false,
     "new_public_post": false,
@@ -231,7 +231,18 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": null,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-23 23:00 JST recap",
+    "schedule_cron": "0 14 * * *",
+    "observed_at": "2026-10-23T23:00:43.655688+09:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_run_url": null,
+    "image_generation_reached": null,
+    "buffer_submission_reached": null,
+    "x_post_url": null,
+    "reason": "No recap run yet at boundary check. No manual replay or test publication."
+  },
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -300,9 +311,7 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [
-    "Record first regular verification of repeated-context vote suppression with generic fallback disabled. No renderer or posting code changed."
-  ],
+  "changes_this_pass": [],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -316,13 +325,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "cf0e3d1b984f1d76547e8d30162b617167b2946a",
+    "baseline_commit": "678b74d561214f9be91c61c328bcb7871dbcceec",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
-    "new_posting_run": true,
+    "new_posting_run": false,
     "next_regular_slot_jst": "2026-10-23 23:00",
-    "classification": "skipped_repeated_content",
+    "classification": "not_observed_no_run_created",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
