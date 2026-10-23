@@ -34,6 +34,9 @@ def main():
     for variant in VARIANTS:
         render_content_card('vote', vote, f'generated/variant_{variant}_preview.jpg',
                             source=facts['source_url'], variant=variant)
+    for variant in ('split', 'poster'):
+        render_content_card('data', scorer_message, f'generated/scorer_{variant}_preview.jpg',
+                            source=facts['source_url'], variant=variant)
     sheet = Image.new('RGB', (1374, 432), '#061b36')
     draw = ImageDraw.Draw(sheet)
     for index, variant in enumerate(VARIANTS):

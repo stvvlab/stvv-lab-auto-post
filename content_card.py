@@ -381,7 +381,18 @@ def alternate_layout(im, draw, variant, slot, headline, match, groups, metadata)
     for value, (left, top, width, height) in panel_boxes(groups):
         draw.rectangle((left, top, left + width - 1, top + height - 1), fill=navy)
         draw.rectangle((left, top, left + width - 1, top + 6), fill=YELLOW if variant == 'split' else navy)
-        layout = fitted(draw, value, (left + 26, top + 42, width - 52, height - 65),
+        rows_box = (left + 26, top + 42, width - 52, height - 65)
+        try:
+            rows = scorer_rows(draw, value, rows_box, dry_run=True)
+        except ValueError:
+            rows = None
+        if rows and slot != 'vote':
+            scorer_rows(draw, value, rows_box)
+            panels.append({'text': value, 'hierarchy': 'scorer-times',
+                           'font_size': min(row['name_layout']['font_size'] for row in rows),
+                           'rows': rows})
+            continue
+        layout = fitted(draw, value, rows_box,
                         70 if slot == 'vote' else 48, 22,
                         center_vertical=True, balance=slot != 'vote')
         panels.append({'text': value, 'hierarchy': 'choice' if slot == 'vote' else 'body', **layout})
@@ -402,7 +413,7 @@ def render_content_card(slot, message, destination, source=None, variant='stadiu
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
-    audit = {'schema_version': 1, 'template_version': 10, 'slot': slot, 'variant': variant,
+    audit = {'schema_version': 1, 'template_version': 11, 'slot': slot, 'variant': variant,
              'dimensions': [W, H], 'source': source,
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}

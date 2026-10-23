@@ -71,8 +71,26 @@ class ContentCardSmokeTests(unittest.TestCase):
                     self.assertEqual(''.join(audit['headline_layout']['lines']), expected_headline)
                     self.assertEqual(audit['score_from_caption'], list(expected_match) if expected_match else None)
                     self.assertEqual([p['text'] for p in audit['panels']], [g for g in expected_groups if g])
+                    if slot == 'data':
+                        self.assertEqual([p['hierarchy'] for p in audit['panels']],
+                                         ['scorer-times', 'scorer-times'])
                     for panel in audit['panels']:
-                        self.assertEqual(''.join(panel['lines']).replace('\n', ''), panel['text'].replace('\n', ''))
+                        if panel['hierarchy'] == 'scorer-times':
+                            self.assertEqual('\n'.join(r['name'] + r['delimiter'] + r['time']
+                                                      for r in panel['rows']), panel['text'])
+                            for row in panel['rows']:
+                                self.assertEqual(len(row['name_layout']['lines']), 1)
+                                self.assertEqual(len(row['time_layout']['lines']), 1)
+                                with Image.open(output) as rendered:
+                                    x, y, w, h = row['time_layout']['box']
+                                    colours = rendered.crop((x, y, x + w, y + h)).getcolors(w * h)
+                                    self.assertTrue(any(r > 210 and g > 180 and b < 80
+                                                        for _, (r, g, b) in colours))
+                                self.assertLessEqual(row['name_layout']['box'][0] +
+                                                     row['name_layout']['box'][2] + 24,
+                                                     row['time_layout']['box'][0])
+                        else:
+                            self.assertEqual(''.join(panel['lines']).replace('\n', ''), panel['text'].replace('\n', ''))
 
     def test_unknown_slot(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -126,7 +144,7 @@ class ContentCardSmokeTests(unittest.TestCase):
             output = Path(tmp) / 'audit.jpg'
             render_content_card('recap', '試合結果\nSTVV 4–1 ロンメル\n松澤海斗、同点ゴール。', output)
             audit = json.loads(output.with_suffix('.layout.json').read_text())
-            self.assertEqual(audit['template_version'], 10)
+            self.assertEqual(audit['template_version'], 11)
             self.assertEqual(audit['score_from_caption'], ['4', '1', 'ロンメル'])
             score = audit['score_layout']
             self.assertEqual(score['lines'], ['4–1'])

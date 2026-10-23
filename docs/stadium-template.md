@@ -236,3 +236,14 @@ retain bounded installation and fail-closed behavior. Cache save was verified in
 were verified in regular10:30 compare run39887263634 (executed11:01 JST),
 which passed105 tests and skipped because verified comparison content was
 unavailable. No public image or Buffer delivery occurred in that run.
+
+## Quality pass 11: scorer hierarchy in alternate compositions
+
+Split-photo and yellow-poster cards now reuse the stadium scorer-row fitter:
+white intact names and larger yellow scoring times aligned at the right edge.
+This applies only to explicitly supplied scorer rows; other body copy and
+participation choices keep their layout. Long rows still fall back to the
+existing full-panel fitter. The layout audit retains original delimiters and
+records each name/time box. CI includes scorer previews for both compositions.
+Saved official facts are offline design evidence and cannot bypass repetition
+or live-source verification to produce another post.

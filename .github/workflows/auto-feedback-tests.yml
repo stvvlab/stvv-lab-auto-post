@@ -66,6 +66,8 @@ jobs:
             generated/auto_stadium_preview.layout.json
             generated/scorer_alignment_preview.jpg
             generated/scorer_alignment_preview.layout.json
+            generated/scorer_split_preview.*
+            generated/scorer_poster_preview.*
             generated/news_heading_preview.jpg
             generated/news_heading_preview.layout.json
             generated/vote_candidate_preview.jpg
