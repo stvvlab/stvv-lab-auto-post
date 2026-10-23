@@ -3,6 +3,9 @@
   "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/4181d3c9076aad215919f18d705051930c954a2c/generated/approved_midtjylland_20261023.png",
   "buffer_id": "6adbeb4e8b3d437ddc8df023",
   "buffer_status": "sent",
-  "x_display_verified": false,
-  "x_url": null
+  "x_display_verified": true,
+  "x_url": "https://x.com/stvvlabo/status/2113772119062372376",
+  "verification_method": "Public X post and screenshot inspected: matching caption, approved navy/yellow stadium image, STVV 1–0 Midtjylland and European second win visibly present.",
+  "image_sha256": "6d2dd4792fdc79b7cf83afce9e860d050c2d974a700f9e40610137a87c985744",
+  "scope": "Exactly one user-approved imagegen raster published. Recurring imagegen integration and supplemental replies remain unimplemented."
 }
