@@ -73,6 +73,8 @@ class Snapshot:
 
 
 def minute(v):
+    if type(v) in (int, float) and v == int(v):
+        v = int(v)
     m = re.fullmatch(r'(\d+)(?:\+(\d+))?', str(v).replace(' ', ''))
     return int(m[1]) * 100 + int(m[2] or 0) if m else None
 

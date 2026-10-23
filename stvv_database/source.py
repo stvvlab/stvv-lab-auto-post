@@ -4,7 +4,7 @@ from datetime import date, datetime
 from hashlib import sha256
 import re
 import unicodedata
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urljoin
 from zoneinfo import ZoneInfo
 
 import requests
@@ -41,7 +41,8 @@ def clean(text):
     return re.sub(r'\s+', '', unicodedata.normalize('NFKC', text))
 
 
-ALIASES = {'OHルーヴェン': 'OHルーベン', 'ヘンク': 'ゲンク'}
+ALIASES = {'OHルーヴェン': 'OHルーベン', 'ヘンク': 'ゲンク',
+           'FCイベリア1999': 'イベリア1999トビリシ', 'ウェステルロ―': 'ウェステルロー'}
 
 
 def opponent(text):
@@ -59,6 +60,7 @@ class Match:
     goals_against: int | None
     url: str
     digest: str
+    report_urls: tuple[str, ...] = ()
 
     @property
     def key(self):
@@ -138,8 +140,10 @@ def parse_schedule(html, season, url, today=None):
                 raise ValueError('Partial score')
             if scores[0] is not None and day > today:
                 raise ValueError('Future match has a result')
+            links = tuple(dict.fromkeys(urljoin(url, a['href']) for a in block.select('a[href]')
+                if re.fullmatch(r'https://stvv\.jp/news/(?:game|uefa-news)/[^?#]+/', urljoin(url, a['href']))))
             output.append(Match(season, day.isoformat(), kind, other[1], venue,
-                                scores[i], scores[1-i], url, digest))
+                                scores[i], scores[1-i], url, digest, links))
     if not output:
         raise ValueError('No official matches parsed; refusing empty-source success')
     if len({m.key for m in output}) != len(output):
