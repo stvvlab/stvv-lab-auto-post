@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T11:04:36.606857+00:00",
+  "updated_at": "2026-10-23T12:01:05.112609+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -48,9 +48,9 @@
     "reason": "Official October19 news candidate excluded for existing source/match coverage; no distinct unpublished eligible candidate remained. Not a Buffer error."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Mainca88aa97cc7cc8a578339d1cb3181d9dc1341202 retains template11 and successful CI. No new Auto Post after18:00 news39931259477. Next21:00 vote slot is not due. Publication77/used105/pending0 unchanged. No new visual-quality defect or unverified source justifies a code change or publication; previous validated previews retained. No tests/rendering/Buffer/X repeated.",
+  "latest_run_review": "Main9b150f597377f81d53e66b653fd8c3b22e3e06bf retains template11 and successful125-test CI. No new Auto Post after18:00 news39931259477 visible at21:00 boundary check.21:00 vote actual execution not yet observed, not a skip/error. History77 publications105 used0 pending unchanged. No new code, tests, images, Buffer send or X inspection.",
   "checks_this_pass": {
-    "type": "no_new_posting_evidence",
+    "type": "vote_schedule_boundary_no_new_evidence",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -230,7 +230,18 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": null,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-23 21:00 JST vote",
+    "schedule_cron": "0 12 * * *",
+    "observed_at": "2026-10-23T12:01:05.112609+00:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_run_url": null,
+    "image_generation_reached": null,
+    "buffer_submission_reached": null,
+    "x_post_url": null,
+    "reason": "Boundary check shows no21:00 run yet; do not infer skip or send error."
+  },
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -313,13 +324,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "ca88aa97cc7cc8a578339d1cb3181d9dc1341202",
+    "baseline_commit": "9b150f597377f81d53e66b653fd8c3b22e3e06bf",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
     "new_posting_run": false,
     "next_regular_slot_jst": "2026-10-23 21:00",
-    "classification": "next_slot_not_due",
+    "classification": "not_observed_no_run_created",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
