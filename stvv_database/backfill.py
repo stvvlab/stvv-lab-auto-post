@@ -81,7 +81,10 @@ def enrich(snapshot, reports):
                 continue
             change(TABS[1], row, 5, 'userEnteredValue', scorer, 'official_scorer')
             urls = list(filter(None, str(r[13] or '').splitlines()))
-            if report.url not in urls:
+            # Sheets removes a single-URL cell's link formatting when another
+            # URL is appended. Keep that original cell; evidence goes in the note.
+            linked = snapshot.cell(TABS[1], row, 13).get('userEnteredFormat', {}).get('textFormat', {}).get('link')
+            if report.url not in urls and not linked:
                 change(TABS[1], row, 13, 'userEnteredValue', '\n'.join(urls+[report.url]), 'source_url')
             evidence(TABS[1], row, 5, report)
         personal = [(row, r) for row, r in snapshot.rows(TABS[3]) if r[0] == match_id]
@@ -95,7 +98,8 @@ def enrich(snapshot, reports):
             if marker not in str(r[6] or ''):
                 change(TABS[3], row, 6, 'userEnteredValue', '\n'.join(filter(None, [r[6], marker])), 'official_appearance')
                 urls = list(filter(None, str(r[5] or '').splitlines()))
-                if report.url not in urls:
+                linked = snapshot.cell(TABS[3], row, 5).get('userEnteredFormat', {}).get('textFormat', {}).get('link')
+                if report.url not in urls and not linked:
                     change(TABS[3], row, 5, 'userEnteredValue', '\n'.join(urls+[report.url]), 'source_url')
                 evidence(TABS[3], row, 6, report)
     return list(planned.values()), {'report_matches': matched, 'report_pending': pending}
