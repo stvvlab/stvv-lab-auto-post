@@ -1,427 +1,76 @@
 {
-  "updated_at": "2026-10-24T08:03:03.473113+09:00",
-  "template_version": 11,
-  "hourly_automation_enabled": true,
-  "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/scorer_poster_preview.jpg",
-  "preview_layout_path": "generated/scorer_poster_preview.layout.json",
-  "ci_artifact_name": "automatic-stadium-preview",
-  "local_tests": {
-    "performed_this_pass": false,
-    "reason": "No code change; previous template11 full suite125 passed locally and on CI."
+  "updated_at": "2026-10-24T08:52:36+09:00",
+  "policy": "Use ChatGPT built-in imagegen to design each card from the verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
+  "quality_baseline": {
+    "path": "generated/approved_midtjylland_20261023.png",
+    "x_url": "https://x.com/stvvlabo/status/2113772119062372376",
+    "x_display_verified": true,
+    "same_match_must_not_be_reposted": true
   },
-  "ci_status": "success",
-  "publication_status": "Template11 scorer hierarchy in split/poster deployed; actual publication/X unverified",
-  "remaining": [
-    "Template11 alternate scorer hierarchy and composition rotation await eligible regular publication and X verification",
-    "No claim of user design approval or improved engagement",
-    "Schedule trigger delay root cause unknown",
-    "Supplemental analysis reply transport to existing own posts is unimplemented; standalone fallback blocked"
+  "changes_this_pass": [
+    "Read the current main branch, imagegen delivery specification, reviewed-card manifest, posting history and recent Actions results.",
+    "Verified the official Japanese source for the 2026-10-23 Conference League match and confirmed STVV's 1-0 away win over FC Midtjylland.",
+    "Executed ChatGPT built-in imagegen successfully and saved a non-public capability preview with a new composition.",
+    "Visually checked Japanese text, score-to-team mapping, crop, hierarchy, negative space, phone legibility and the absence of people, faces and logos.",
+    "Kept the capability preview out of editorial/imagegen_cards.json because this match/source is already published."
   ],
-  "next_priority": "Verify October24 08:00 player workflow once created; distinguish late trigger, safe skip, error and actual delivery. Preserve source/duplicate/pending/public-byte gates. Template11 X display and existing-post supplemental reply transport remain unverified/unimplemented.",
-  "ci_tests_passed": 125,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
-  "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
-  "visual_review": "Compared before/after poster scorer cards at full resolution and inspected revised split scorer card. Times now align at panel right in yellow at52px; white names retain complete text at48px when fitting. Additional row spacing makes four goal times easier to scan; no name/time/source/score added or removed. User approval and X display unverified.",
-  "baseline_commit": "64532b1842ed2ddea00fcf7f88294926e0955ee7",
-  "pending_posts_observed": 0,
-  "scheduled_run_observation": {
-    "slot": "2026-10-23 23:00 JST recap",
-    "schedule_cron": "0 14 * * *",
-    "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39969789197",
-    "job_id": 120469108436,
-    "workflow_created_at": "2026-10-23T23:27:30+09:00",
-    "posting_step_started_at": "2026-10-23T23:27:59+09:00",
-    "result_recorded_at": "2026-10-23T23:27:59.617318+09:00",
-    "schedule_creation_delay_seconds": 1650,
-    "classification": "skipped_repeated_content",
-    "workflow_conclusion": "success",
-    "production_tests_passed": 125,
-    "production_test_duration_seconds": 18.671,
-    "font_cache_hit": true,
-    "font_download_required": false,
-    "image_generation_reached": false,
-    "buffer_submission_reached": false,
-    "x_post_url": null,
-    "reason": "Recap repeats same source/match without new comparison data; final duplicate gate stopped before media/Buffer."
+  "imagegen_capability": {
+    "status": "available_and_verified",
+    "report": "reports/imagegen-capability.json",
+    "preview_path": "generated/imagegen_capability_preview.jpg",
+    "sha256": "948486f725595b8ff5d5d9cba1105628b70cfdee2cfe88606417ca58bfbe6a05",
+    "dimensions": [1448, 1086],
+    "paid_api_or_cli_used": false,
+    "public_post_created": false
   },
-  "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Read latest main, template, status, design report, posted history and Actions. October24 08:00 player workflow not yet observed shortly after boundary; not classified as skipped or error. No manual dispatch/replay. Template11 code unchanged;77 publications105 used0 pending unchanged. Discovery brief07:58 succeeded but changed timestamp only: no new verified facts, supplementary replies or publication. No new render/test/Buffer/X verification performed; previous visual/CI evidence retained.",
-  "checks_this_pass": {
-    "type": "main_history_actions_and_slot_boundary_review",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
-    "production_tests_run": false,
-    "new_scheduled_post_run_since_previous_pass": false,
-    "latest_scheduled_run_id": 39969789197,
-    "paid_api_used": false,
-    "new_public_post": false,
-    "extra_test_post": false,
-    "x_checked_this_pass": false,
-    "diff_check": "passed"
+  "prepared_asset_delivery": {
+    "implementation_commit": "2e705c8bc4500c2e15511b8ad1d0bb162604ac8f",
+    "official_uefa_discovery_commit": "4c21cbf",
+    "ready_cards": 0,
+    "published_cards": 1,
+    "manifest_enabled": true,
+    "fail_closed_without_reviewed_asset": true,
+    "caption_exact_match_required": true,
+    "official_source_required": true,
+    "freshness_days": 7,
+    "pending_before_send_preserved": true,
+    "public_byte_sha256_check_preserved": true,
+    "duplicate_guard_preserved": true
   },
-  "actual_new_renderer_post_verified_on_x": false,
-  "source_availability": {
-    "detailed_stats_missing": true,
-    "official_scorer_times_available": true,
-    "source_url": "https://stvv.jp/news/game/20261019_1/",
-    "player_live_source_route_implemented": true,
-    "eligible_new_player_article_observed": false
+  "tests": {
+    "latest_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40041616574",
+    "latest_ci_conclusion": "success",
+    "latest_ci_scope": "full unittest discovery plus stadium preview render",
+    "latest_ci_tests": 134,
+    "local_focused_tests": 11,
+    "local_focused_tests_conclusion": "passed",
+    "local_focused_test_scope": "prepared reviewed media delivery and official UEFA article discovery",
+    "regular_0800_run_tests": 126,
+    "regular_0800_tests_conclusion": "passed"
   },
-  "used_posts_observed": 105,
-  "content_overlap_review": {
-    "user_report_confirmed": true,
-    "actual_history_replay": "skipped_repeated_content",
-    "previous_transport_success_preserved": true,
-    "deleted_existing_posts": false
-  },
-  "previous_implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
-  "code_changes_this_pass": false,
-  "previous_verified_scheduled_run": {
-    "slot": "2026-10-22 21:00 JST vote",
-    "schedule_cron": "0 12 * * *",
-    "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39779085761",
-    "job_id": 119825408044,
-    "workflow_created_at": "2026-10-22T21:31:46+09:00",
-    "posting_step_started_at": "2026-10-22T21:38:33+09:00",
-    "result_recorded_at": "2026-10-22T21:38:41.509243+09:00",
-    "schedule_creation_delay_seconds": 1906,
-    "classification": "submitted_to_buffer_and_verified_on_x",
-    "run_result_status": "submitted_to_buffer",
-    "workflow_conclusion": "success",
-    "production_tests_passed": 93,
-    "production_test_duration_seconds": 20.967,
-    "template_version": 7,
-    "vote_repeated_match_replaced": true,
-    "image_generation_reached": true,
-    "public_byte_match": true,
-    "public_image_sha256": "a4d53790ee71ac15c6ecbd7beac66ecc10ac346ee2a8011c000a68517c828f29",
-    "public_image_bytes": 830108,
-    "image_commit": "3d50af3161aa8469fb6637fea2d2fa46019f07be",
-    "pending_saved_before_buffer": true,
-    "pending_commit": "b1f4c2f",
-    "buffer_submission_reached": true,
-    "buffer_id": "6ada03cee8cca8cdcc503081",
-    "buffer_status": "sent",
-    "submitted_at": "2026-10-22T21:38:40.351962+09:00",
-    "x_post_url": "https://x.com/stvvlabo/status/2113248668279083353",
-    "x_text_verified": true,
-    "x_image_visually_verified": true
-  },
-  "slot_schedule_jst": {
-    "08:00": "player",
-    "10:30": "compare",
-    "12:30": "data",
-    "15:30": "analysis",
-    "18:00": "news",
-    "21:00": "vote",
-    "23:00": "recap"
-  },
-  "previous_scheduled_run_observation": {
-    "slot": "2026-10-23 21:00 JST vote",
-    "schedule_cron": "0 12 * * *",
-    "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39953297423",
-    "job_id": 120412832262,
-    "workflow_created_at": "2026-10-23T21:26:17+09:00",
-    "posting_step_started_at": "2026-10-23T21:26:44+09:00",
-    "result_recorded_at": "2026-10-23T21:26:45.041101+09:00",
-    "schedule_creation_delay_seconds": 1577,
-    "classification": "skipped_repeated_content",
-    "workflow_conclusion": "success",
-    "production_tests_passed": 125,
-    "production_test_duration_seconds": 15.072,
-    "font_cache_hit": true,
-    "font_download_required": false,
-    "vote_repeated_context_gate_verified": true,
-    "generic_vote_fallback_used": false,
-    "image_generation_reached": false,
-    "buffer_submission_reached": false,
-    "x_post_url": null,
-    "reason": "Vote candidate refers to already covered match; context repetition gate skipped before media/Buffer, without a generic standalone question fallback."
-  },
-  "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
-  "reflection_commit": "This report-only commit; renderer implementation remains33c662b0e066b16abf1017aa63d1881216165c22.",
-  "previous_unobserved_schedule_check": {
-    "slot": "2026-10-23 23:00 JST recap",
-    "schedule_cron": "0 14 * * *",
-    "observed_at": "2026-10-23T23:00:43.655688+09:00",
-    "workflow_run_created": false,
-    "classification": "not_observed_no_run_created",
-    "workflow_run_url": null,
-    "image_generation_reached": null,
-    "buffer_submission_reached": null,
-    "x_post_url": null,
-    "reason": "No recap run yet at boundary check. No manual replay or test publication."
-  },
-  "visual_review_performed_this_pass": false,
-  "feedback_observation": {
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40003568900",
-    "workflow_conclusion": "success",
-    "saved_commit": "787e647ac8ada0e890bc0e9d9a8d9c2c38380009",
-    "checked_at": "2026-10-24T03:28:39.526546+09:00",
-    "eligible": 30,
-    "checked": 30,
-    "status": "ok",
-    "error_class": null,
-    "posts_with_metrics": 76,
-    "comparative_automatic_ratings": 0,
-    "latest_renderer_effectiveness_verified": false,
-    "supplemental_reply_sent": false
-  },
-  "discovery_observation": {
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40036893380",
-    "workflow_conclusion": "success",
-    "saved_commit": "64532b1842ed2ddea00fcf7f88294926e0955ee7",
-    "report_only": true,
-    "new_verified_facts": false
-  },
-  "live_source_check": {
-    "checked_at": "2026-10-24T06:01:12.094344+09:00",
-    "status": "ok",
-    "check_only": true,
-    "buffer_called": false,
-    "articles": [
-      {
-        "url": "https://stvv.jp/news/game/20261019_1/",
-        "day": "2026-10-19",
-        "title": "Croky Cup初戦は日本人選手が躍動！松澤の同点弾＆新川の加入後初ゴールでSTVVが4-1の逆転勝利！",
-        "repeat_reason": "同じ出典／試合の内容で、新しい比較データがないため見送り",
-        "length_ok": true
-      }
-    ],
-    "eligible_new_articles": [],
-    "official_articles": 1
-  },
-  "player_source_route_live_verified": false,
-  "scorer_duplicate_result_live_verified": true,
-  "local_render_environment": {
-    "initial_attempt": "failed: local font env not set",
-    "corrected_attempt": "passed: configured existing free Noto font and dependency path",
-    "preview_count": 5,
-    "performed_this_pass": false
-  },
-  "previous_verified_scheduled_run_before_v7": {
-    "slot": "2026-10-21 12:30 JST data",
-    "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39541618920",
-    "classification": "submitted_to_buffer_and_verified_on_x",
-    "workflow_conclusion": "success",
-    "production_tests_passed": 54,
-    "image_generation_reached": true,
-    "public_byte_match": true,
-    "public_image_sha256": "9d1272dfd6115ec5440c0775afa0eea5b9a853f32a43fee65a81e34dc6fc99d1",
-    "public_image_bytes": 849627,
-    "image_commit": "12af3d5f82ac3b4430c9dc5dfc83d03237c9df89",
-    "pending_saved_before_buffer": true,
-    "pending_commit": "d303882",
-    "buffer_id": "6ad838f1a9967de049732ff2",
-    "buffer_status": "sent",
-    "submitted_at": "2026-10-21T13:00:52.217513+09:00",
-    "x_post_url": "https://x.com/stvvlabo/status/2112755968006099372",
-    "x_text_verified": true,
-    "x_image_visually_verified": true
-  },
-  "vote_replacement_live_verified": false,
-  "user_editorial_review": {
-    "v7_transport_success": true,
-    "v7_editorial_approved": false,
-    "feedback": "English dominated, vague generic question, small Japanese copy and duplicated caption/image",
-    "v8_user_approved": false
-  },
-  "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": {
+  "regular_slot_observation": {
     "slot": "2026-10-24 08:00 JST player",
-    "schedule_cron": "0 23 * * *",
-    "observed_at": "2026-10-24T08:03:03.473113+09:00",
-    "workflow_run_created": false,
-    "classification": "not_observed_no_run_created",
-    "workflow_run_url": null,
-    "image_generation_reached": null,
-    "buffer_submission_reached": null,
-    "x_post_url": null,
-    "reason": "No Auto Post run yet in latest Actions listing; no manual replay or test publication."
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40038632627",
+    "workflow_conclusion": "success",
+    "posting_result": "skipped_repeated_content",
+    "detail": "The candidate source/match had already been covered; the production posting step stopped before image preparation and Buffer.",
+    "buffer_submission_reached": false,
+    "x_post_created": false
   },
-  "variant_preview_paths": [
-    "generated/variant_stadium_preview.jpg",
-    "generated/variant_split_preview.jpg",
-    "generated/variant_poster_preview.jpg"
+  "single_pilot_observation": {
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40038701044",
+    "classification": "manual_single_verified_image_pilot_not_regular_slot",
+    "buffer_id": "6adbeb4e8b3d437ddc8df023",
+    "buffer_status": "sent",
+    "x_url": "https://x.com/stvvlabo/status/2113772119062372376",
+    "x_display_verified_after_workflow": true,
+    "note": "This proves one reviewed image can reach X through Buffer, but it does not prove unattended built-in generation and regular-slot delivery."
+  },
+  "implementation_status": "Built-in image generation capability and reviewed-asset delivery are implemented and separately verified; unattended generation, manifest registration and publication through a regular scheduled slot remain unverified end to end.",
+  "uncompleted": [
+    "Wait for genuinely new official information, generate at most one reviewed card, register it as ready and observe one regular slot consume it without manual replay.",
+    "Confirm Buffer acceptance and actual X rendering for that regular-slot post before calling image automation operational.",
+    "Supplemental analysis replies to an existing post remain a separate unimplemented feature."
   ],
-  "composition_rotation": {
-    "variants": [
-      "stadium",
-      "split",
-      "poster"
-    ],
-    "accepted_publications_observed": 77,
-    "next_variant": "poster",
-    "advance_on": "successful_publication_only",
-    "retry_deterministic": true
-  },
-  "supplemental_replies": {
-    "requested_behavior": "Supplement and analysis replies to an existing own X post, not analytics reports or standalone posts",
-    "implemented": false,
-    "delivery_status": "blocked_unsupported_reply",
-    "reason": "Current Buffer API has no reply-to-existing-post input; new thread includes a new root and is not a substitute.",
-    "source": "https://support.buffer.com/articles/using-buffers-api-GtIYIQilz5",
-    "guard_implemented": true,
-    "focused_tests_passed": 2,
-    "actual_reply_published": false,
-    "next_priority": "Establish a no-extra-cost authenticated reply-capable route, then parent URL mapping, verified novel evidence, duplicate and pending protection.",
-    "documentation": "docs/supplemental-replies.md",
-    "implementation_commit": "a26f400d2b3b8f441a5a82833648670a37062ce1",
-    "local_full_suite": {
-      "passed": 100,
-      "duration_seconds": 87.821,
-      "command": "python3 -m unittest discover -s tests"
-    }
-  },
-  "changes_this_interactive_pass": [
-    "Explicit reply_to safety guard in send/publish",
-    "Two reply delivery regression tests",
-    "Documented actual API limitation and remaining implementation"
-  ],
-  "previous_main_ci": {
-    "commit": "a26f400d2b3b8f441a5a82833648670a37062ce1",
-    "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39796540775",
-    "passed": 100,
-    "duration_seconds": 18.453,
-    "preview_artifact": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39796540775/artifacts/12433108525"
-  },
-  "font_setup_fix": {
-    "implementation_commit": "566b0e8eb21255dd8165527efe4a5e01c222fa2d",
-    "ci_status": "success",
-    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
-    "production_verified": true,
-    "ci_tests_passed": 103,
-    "ci_preview_generated": true,
-    "production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39870978690"
-  },
-  "ci_test_duration_seconds": 21.962,
-  "font_setup_ci_evidence": {
-    "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
-    "conclusion": "success",
-    "job_id": 119902026959,
-    "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426/artifacts/12435707276",
-    "font_download_seconds": 1,
-    "font_package_bytes_approx": 61200000,
-    "tests_passed": 103,
-    "test_duration_seconds": 23.69,
-    "image_generation": true,
-    "buffer_called": false
-  },
-  "changes_this_pass": [],
-  "previous_local_tests": {
-    "passed": 3,
-    "duration_seconds": 0.155,
-    "command": "python3 -m unittest discover -s tests -p test_font_setup.py -v",
-    "shell_syntax": "passed",
-    "preview_generation": "passed; eight cards plus contact sheet",
-    "full_suite_rerun": false
-  },
-  "local_tests_this_pass": {
-    "performed": false,
-    "reason": "No code change or unresolved test failure."
-  },
-  "no_change_observation": {
-    "baseline_commit": "64532b1842ed2ddea00fcf7f88294926e0955ee7",
-    "publication_log_count": 77,
-    "used_posts_count": 105,
-    "pending_posts_count": 0,
-    "new_posting_run": false,
-    "next_regular_slot_jst": "2026-10-24 08:00",
-    "classification": "scheduled_run_not_yet_observed",
-    "action": "Preserve verified-content gate; no speculative tactics or test publication."
-  },
-  "report_accuracy_fix": {
-    "implementation_commit": "48c9cf47bb6b0fecd830e9f9fe7ca3ec726ee01e",
-    "ci_status": "success",
-    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603",
-    "tests_passed": 103,
-    "test_duration_seconds": 21.448,
-    "publication_behavior_changed": false
-  },
-  "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400/artifacts/12480162520",
-  "font_cache_fix": {
-    "implementation_commit": "5e7813bfdcb3463f68d2027df564136b26801f9d",
-    "ci_status": "success",
-    "cache_hit_verified_on_actions": true,
-    "cache_save_verified_on_actions": true,
-    "local_offline_cache_reuse_verified": true,
-    "production_verified": true,
-    "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
-    "ci_tests_passed": 105,
-    "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023/artifacts/12468158026",
-    "production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39887263634"
-  },
-  "score_contrast_validation": {
-    "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
-    "production_suite_tests_passed": 104,
-    "preview_ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39869783805",
-    "preview_ci_conclusion": "failure",
-    "failed_stage": "font_setup",
-    "preview_ci_tests_run": false,
-    "public_image_verified": false
-  },
-  "previous_local_test_evidence": {
-    "performed": true,
-    "performed_this_pass": true,
-    "passed": 125,
-    "duration_seconds": 27.264,
-    "command": "python -m unittest discover -s tests",
-    "diff_check": "passed"
-  },
-  "preview_render_this_pass": {
-    "status": "not_performed",
-    "reason": "Template11 unchanged; successful prior10-card CI artifact retained."
-  },
-  "ci_preview_generated": true,
-  "vote_context_policy_live_verified": true,
-  "day_verification": {
-    "date_jst": "2026-10-23",
-    "all_seven_runs_observed": true,
-    "all_workflow_conclusions": "success",
-    "new_publications": 0,
-    "pending_posts": 0,
-    "slots": [
-      {
-        "time": "08:00",
-        "run_id": 39870978690,
-        "result": "skipped_repeated_content"
-      },
-      {
-        "time": "10:30",
-        "run_id": 39887263634,
-        "result": "skipped_no_verified_content"
-      },
-      {
-        "time": "12:30",
-        "run_id": 39897966856,
-        "result": "skipped_repeated_content"
-      },
-      {
-        "time": "15:30",
-        "run_id": 39916705557,
-        "result": "skipped_no_verified_content"
-      },
-      {
-        "time": "18:00",
-        "run_id": 39931259477,
-        "result": "skipped_repeated_content"
-      },
-      {
-        "time": "21:00",
-        "run_id": 39953297423,
-        "result": "skipped_repeated_content"
-      },
-      {
-        "time": "23:00",
-        "run_id": 39969789197,
-        "result": "skipped_repeated_content"
-      }
-    ]
-  }
+  "next_priority": "On the next verified new official item, generate one content-specific image, visually approve it, commit image bytes and manifest together, and observe the next matching regular slot without launching a pilot or duplicate post."
 }

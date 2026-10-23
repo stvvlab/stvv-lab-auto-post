@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-10-24T08:52:36+09:00",
+  "status": "available_and_verified",
+  "mode": "ChatGPT built-in imagegen",
+  "tool_success": true,
+  "paid_api_or_cli_used": false,
+  "source": {
+    "url": "https://stvv.jp/news/uefa-news/20261023_1/",
+    "published_date": "2026-10-23",
+    "competition": "UEFA Conference League league phase round 2",
+    "verified_result_stvv_first": "STVV 1-0 FC Midtjylland",
+    "note": "The official article writes the away result as 0-1; the capability card deliberately keeps STVV first and therefore shows 1-0."
+  },
+  "reference_asset": "generated/approved_midtjylland_20261023.png",
+  "preview": {
+    "path": "generated/imagegen_capability_preview.jpg",
+    "sha256": "948486f725595b8ff5d5d9cba1105628b70cfdee2cfe88606417ca58bfbe6a05",
+    "dimensions": [1448, 1086],
+    "bytes": 370233,
+    "public_post": false,
+    "queued_in_manifest": false,
+    "reason_not_queued": "The same match and source were already published; this image is capability evidence only."
+  },
+  "visual_review": {
+    "passed": true,
+    "exact_japanese_checked": true,
+    "score_team_mapping_checked": true,
+    "crop_and_mobile_legibility_checked": true,
+    "no_people_or_faces": true,
+    "no_club_logos_or_official_seals": true,
+    "no_invented_facts": true,
+    "review_note": "A fresh horizontal-score composition with strong navy/yellow hierarchy and generous central negative space. STVV is first with 1 and Midtjylland second with 0."
+  },
+  "prompt": "Use case: infographic-diagram. Create a fresh editorial result card about the verified UEFA Conference League match, using the approved reference only for quality level, navy/yellow identity, strong hierarchy and generous spacing. Landscape 4:3, empty European stadium at night, no people, no logos or crests. Exact text: 欧州大会 2連勝 / STVV 1–0 ミッティラン / 敵地で勝利 / 2026.10.23 / 出典：STVV日本公式 / STVV LAB / 非公式ファンメディア. No extra facts, player names, sponsor marks or official-looking seal.",
+  "automation_state": {
+    "built_in_generation_confirmed_in_scheduled_environment": true,
+    "ready_cards": 0,
+    "unattended_generation_to_regular_slot_verified": false,
+    "regular_slot_publication_verified": false,
+    "classification": "Image generation capability is verified; unattended generation, manifest registration and publication through a regular slot are not yet verified end to end."
+  }
+}
