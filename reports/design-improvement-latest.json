@@ -1,30 +1,38 @@
 {
-  "updated_at": "2026-10-23T04:05:01.787188+00:00",
-  "template_version": 10,
+  "updated_at": "2026-10-23T05:11:28.011752+00:00",
+  "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [],
-  "preview_path": "generated/scorer_alignment_preview.jpg",
-  "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
+  "changes": [
+    "Reuse measured scorer rows in split and poster compositions: white names, larger yellow right-aligned times.",
+    "Add preservation, box separation and rendered yellow-pixel assertions for both alternate scorer cards.",
+    "Generate/upload split and poster scorer previews in CI."
+  ],
+  "preview_path": "generated/scorer_poster_preview.jpg",
+  "preview_layout_path": "generated/scorer_poster_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "performed_this_pass": false,
-    "reason": "Renderer unchanged; preview generation rerun only. Latest production suite remains 105 passing tests in run39887263634."
+    "performed": true,
+    "performed_this_pass": true,
+    "passed": 125,
+    "duration_seconds": 27.264,
+    "command": "python -m unittest discover -s tests",
+    "diff_check": "passed"
   },
   "ci_status": "success",
-  "publication_status": "Template10 score contrast deployed; no actual post verification yet",
+  "publication_status": "Template11 scorer hierarchy in split/poster deployed; actual publication/X unverified",
   "remaining": [
-    "Template v10 composition rotation awaits eligible regular publication and X verification",
+    "Template11 alternate scorer hierarchy and composition rotation await eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe15:30 analysis slot once executed. Require verified new facts before image generation/Buffer; then verify actual X display. Supplemental analysis replies still require a supported authenticated reply route and remain unimplemented.",
-  "ci_tests_passed": 105,
-  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
-  "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
-  "visual_review": "Reviewed approved reference and template10 scorer card, plus freshly rendered three-composition contact sheet. Scorer contrast/readability and Japanese question hierarchy remain legible. No additional renderer change demonstrated to improve quality this pass. Actual X appearance and user approval remain unverified.",
-  "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
+  "next_priority": "Observe15:30 regular analysis slot; template11 CI125 tests and10 preview cards passed. Verify actual public image/Buffer/X only after eligible regular publication. Existing-post supplemental reply transport remains unimplemented.",
+  "ci_tests_passed": 125,
+  "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
+  "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
+  "visual_review": "Compared before/after poster scorer cards at full resolution and inspected revised split scorer card. Times now align at panel right in yellow at52px; white names retain complete text at48px when fitting. Additional row spacing makes four goal times easier to scan; no name/time/source/score added or removed. User approval and X display unverified.",
+  "baseline_commit": "57b59b6c0609c74a76d1eebc195ca1f999f946a3",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-23 12:30 JST data",
@@ -48,14 +56,14 @@
     "x_post_url": null,
     "reason": "Live official scoring_data returned previously published scorer caption; exact normalized-caption gate stopped before media/Buffer."
   },
-  "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Verified regular12:30 data slot actually ran13:00 JST:105 tests passed, cached font restored, official scorer duplicate reported skipped_repeated_content (not missing-data skip/error). Publication history77/used105/pending0 unchanged. No new image or Buffer submission; X check unnecessary. No code/visual change made without new improvement evidence.",
+  "additional_local_preview_path": "generated/scorer_split_preview.jpg",
+  "latest_run_review": "No newer regular posting run observed after12:30 data; publication77/used105/pending0 unchanged. Previous scheduled duplicate skip remains valid. This pass changes renderer only; no Buffer send or X check.",
   "checks_this_pass": {
-    "type": "official_scorer_duplicate_classification_live_verified",
-    "new_local_tests_run": false,
-    "new_image_rendered": false,
-    "production_tests_run": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "type": "alternate_scorer_readability_implementation",
+    "new_local_tests_run": true,
+    "new_image_rendered": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39897966856,
     "paid_api_used": false,
     "new_public_post": false,
@@ -79,7 +87,7 @@
     "deleted_existing_posts": false
   },
   "previous_implementation_commit": "1937f7180be1f51d0b29ffcd980006a33b2f5002",
-  "code_changes_this_pass": false,
+  "code_changes_this_pass": true,
   "previous_verified_scheduled_run": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -143,7 +151,7 @@
     "reason": "No verified new comparison data; quality gate stopped before image/Buffer"
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
-  "reflection_commit": "Report-only commit containing this record; inspect this file history for exact commit. Renderer implementation remains7833dff2783ec0ccce847893b1a18ceb2ab8c2ef.",
+  "reflection_commit": "Renderer implementation33c662b0e066b16abf1017aa63d1881216165c22; this following report-only commit records validation.",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -156,7 +164,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": false,
+  "visual_review_performed_this_pass": true,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802590",
     "workflow_conclusion": "success",
@@ -289,7 +297,7 @@
     "ci_preview_generated": true,
     "production_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39870978690"
   },
-  "ci_test_duration_seconds": 21.478,
+  "ci_test_duration_seconds": 21.962,
   "font_setup_ci_evidence": {
     "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39801196426",
     "conclusion": "success",
@@ -303,7 +311,9 @@
     "buffer_called": false
   },
   "changes_this_pass": [
-    "Record first live verification of the official scorer exact-duplicate result classification. No renderer or posting code changed."
+    "Reuse measured scorer rows in split and poster compositions: white names, larger yellow right-aligned times.",
+    "Add preservation, box separation and rendered yellow-pixel assertions for both alternate scorer cards.",
+    "Generate/upload split and poster scorer previews in CI."
   ],
   "previous_local_tests": {
     "passed": 3,
@@ -314,8 +324,12 @@
     "full_suite_rerun": false
   },
   "local_tests_this_pass": {
-    "performed": false,
-    "reason": "No code change; verified actual production suite105 tests in18.578s."
+    "performed": true,
+    "performed_this_pass": true,
+    "passed": 125,
+    "duration_seconds": 27.264,
+    "command": "python -m unittest discover -s tests",
+    "diff_check": "passed"
   },
   "no_change_observation": {
     "baseline_commit": "52c3b0ca0a1e0227b9fd6885d07795d96b105144",
@@ -335,7 +349,7 @@
     "test_duration_seconds": 21.448,
     "publication_behavior_changed": false
   },
-  "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802603/artifacts/12451366565",
+  "preview_ci_artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400/artifacts/12480162520",
   "font_cache_fix": {
     "implementation_commit": "5e7813bfdcb3463f68d2027df564136b26801f9d",
     "ci_status": "success",
@@ -368,7 +382,20 @@
     "diff_check": "passed"
   },
   "preview_render_this_pass": {
-    "status": "not_performed",
-    "reason": "Renderer unchanged; previous eight-card preview and CI artifact retained."
-  }
+    "status": "passed",
+    "cards": 10,
+    "contact_sheet": "generated/composition_variants_preview.jpg",
+    "comparison_before_paths": [
+      "generated/scorer_split_before.jpg",
+      "generated/scorer_poster_before.jpg"
+    ],
+    "comparison_after_paths": [
+      "generated/scorer_split_after.jpg",
+      "generated/scorer_poster_after.jpg"
+    ],
+    "local_directory": "/workspace/scratch/23f59373d1c0/stvv-1400/generated",
+    "buffer_called": false,
+    "facts": "Saved verified manifest for offline design only; not a publication candidate."
+  },
+  "ci_preview_generated": true
 }
