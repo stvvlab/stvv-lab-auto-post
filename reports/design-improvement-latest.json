@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T06:01:35.519234+09:00",
+  "updated_at": "2026-10-24T07:06:55.088452+09:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -24,7 +24,7 @@
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
   "visual_review": "Compared before/after poster scorer cards at full resolution and inspected revised split scorer card. Times now align at panel right in yellow at52px; white names retain complete text at48px when fitting. Additional row spacing makes four goal times easier to scan; no name/time/source/score added or removed. User approval and X display unverified.",
-  "baseline_commit": "b2f134d91f946076eb01b41f4838c7f6fe49fda7",
+  "baseline_commit": "bc50957edbc4364e478faf14069078ed370deef5",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
     "slot": "2026-10-23 23:00 JST recap",
@@ -48,9 +48,9 @@
     "reason": "Recap repeats same source/match without new comparison data; final duplicate gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Latest main/template/status/history and Actions reviewed. Template11 and publication history unchanged:77 publications105 used0 pending. No new regular posting run after October23 recap; next08:00 not due. Fresh read-only official list check October24 06:01 JST returned only already-covered October19 match; no eligible new article. POST calls prohibited during source check. This was not a scheduled skip or Buffer test. No demonstrated new visual defect, code change, render, test rerun or X inspection; previous preview/CI evidence retained.",
+  "latest_run_review": "Latest main, template, status, design report, posted history and Actions reviewed. Rendering/posting code unchanged since template11; no new regular Auto Post since October23 recap and next08:00 slot not due. History77 publications105 used0 pending unchanged. Previous read-only official-source check06:01 JST retained as historical evidence, not repeated this pass or classified as scheduled skip. No new visual defect evidence; no code change, image render, tests, Buffer or X inspection. Supplemental analysis replies remain unimplemented.",
   "checks_this_pass": {
-    "type": "read_only_official_source_recheck",
+    "type": "unchanged_main_history_and_actions_review",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -316,7 +316,7 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "b2f134d91f946076eb01b41f4838c7f6fe49fda7",
+    "baseline_commit": "bc50957edbc4364e478faf14069078ed370deef5",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
