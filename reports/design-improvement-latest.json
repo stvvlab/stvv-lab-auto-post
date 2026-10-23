@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T08:08:10.802004+00:00",
+  "updated_at": "2026-10-23T09:06:49.404894+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -19,7 +19,7 @@
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe18:00 official-news slot; require fresh distinct verified facts before media/Buffer, then inspect X. Template11 live publication and supplemental existing-post reply transport remain incomplete.",
+  "next_priority": "Inspect18:00 news workflow when created; do not infer skip from this read-only source check. Require distinct verified content before media/Buffer/X. Supplemental reply transport still unimplemented.",
   "ci_tests_passed": 125,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
@@ -48,13 +48,13 @@
     "reason": "No verified new analysis material; quality gate stopped before media or Buffer. Former run-not-observed state resolved by delayed schedule creation."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Analysis15:30 run created16:16:41 and executed16:17:15 JST. Actual production125 tests passed in21.988s and font cache restored. Posting reported skipped_no_verified_content; not a send error. No image/Buffer/X stage reached. History77 publications105 used0 pending unchanged. Template11 tests now passed in a regular workflow, but actual publication remains unverified.",
+  "latest_run_review": "Main1133263b5848d18c720066dad6c628fbc1c85d1c retains tested template11. No new regular Auto Post after15:30 analysis observed at18:04 check. Live official article list checked18:06 JST using read-only GET with POST blocked: one eligible-date article, already covered source/match; no new publishable article.77 publications105 used0 pending unchanged. No code change, test rerun, image generation, Buffer or X check.",
   "checks_this_pass": {
-    "type": "delayed_analysis_run_verified",
+    "type": "read_only_official_source_recheck",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39916705557,
     "paid_api_used": false,
     "new_public_post": false,
@@ -178,23 +178,21 @@
     "new_verified_facts": false
   },
   "live_source_check": {
-    "checked_at": "2026-10-23T06:05:12.010210+09:00",
+    "checked_at": "2026-10-23T18:06:05.973861+09:00",
+    "status": "ok",
     "check_only": true,
     "buffer_called": false,
-    "eligible_player": [],
     "articles": [
       {
         "url": "https://stvv.jp/news/game/20261019_1/",
+        "day": "2026-10-19",
         "title": "Croky Cup初戦は日本人選手が躍動！松澤の同点弾＆新川の加入後初ゴールでSTVVが4-1の逆転勝利！",
-        "used": false,
         "repeat_reason": "同じ出典／試合の内容で、新しい比較データがないため見送り",
-        "length_ok": true,
-        "player_headline": true
+        "length_ok": true
       }
     ],
-    "status": "ok",
-    "official_articles": 1,
-    "eligible_new_player_article_observed": false
+    "eligible_new_articles": [],
+    "official_articles": 1
   },
   "player_source_route_live_verified": false,
   "scorer_duplicate_result_live_verified": true,
@@ -233,7 +231,18 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": null,
+  "unobserved_schedule_check": {
+    "slot": "2026-10-23 18:00 JST news",
+    "schedule_cron": "0 9 * * *",
+    "observed_at": "2026-10-23T09:06:49.404894+00:00",
+    "workflow_run_created": false,
+    "classification": "not_observed_no_run_created",
+    "workflow_run_url": null,
+    "image_generation_reached": null,
+    "buffer_submission_reached": null,
+    "x_post_url": null,
+    "reason": "18:00 run not yet visible at check; source check is not an actual scheduled result."
+  },
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -302,9 +311,7 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [
-    "Resolve prior unobserved15:30 schedule as delayed successful execution with missing-verified-content skip. No renderer/posting code change."
-  ],
+  "changes_this_pass": [],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -318,13 +325,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "a63789ee1c855ca30b8acbfa545ca89c2e043fb2",
+    "baseline_commit": "1133263b5848d18c720066dad6c628fbc1c85d1c",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
-    "new_posting_run": true,
-    "next_regular_slot_jst": "2026-10-23 18:00",
-    "classification": "skipped_no_verified_content",
+    "new_posting_run": false,
+    "next_regular_slot_jst": "2026-10-23 21:00",
+    "classification": "no_new_posting_evidence",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
