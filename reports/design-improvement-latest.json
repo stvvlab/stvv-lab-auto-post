@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T17:07:32.611651+00:00",
+  "updated_at": "2026-10-23T18:02:01.618181+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -48,9 +48,9 @@
     "reason": "Recap repeats same source/match without new comparison data; final duplicate gate stopped before media/Buffer."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Main13f8a9097c96677a05571e7d584b0327e44669ba retains template11. No regular posting execution after October23 recap39969789197; next08:00 player slot not due. Publication77 used105 pending0 unchanged. No renderer/publication code change, new image, test rerun, Buffer call or X browser check. Prior full-size visual review and125-test CI artifact retained as historical evidence; no new design improvement demonstrated.",
+  "latest_run_review": "Main0b1dcd5004976c9a142d7abc1ca8b459e6b5e937 retains template11. No new regular Auto Post after October23 recap; next08:00 not due. Live official list checked October24 03:01 JST with POST blocked: one recent-date article, same already-covered October19 match, no distinct new eligible article. History77 publications105 used0 pending unchanged. No renderer change, new image, test rerun, Buffer or X check; historical previews/CI retained.",
   "checks_this_pass": {
-    "type": "no_new_posting_evidence",
+    "type": "read_only_official_source_recheck",
     "new_local_tests_run": false,
     "new_image_rendered": false,
     "production_tests_run": false,
@@ -179,7 +179,7 @@
     "new_verified_facts": false
   },
   "live_source_check": {
-    "checked_at": "2026-10-23T18:06:05.973861+09:00",
+    "checked_at": "2026-10-24T03:01:26.787491+09:00",
     "status": "ok",
     "check_only": true,
     "buffer_called": false,
@@ -315,7 +315,7 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "13f8a9097c96677a05571e7d584b0327e44669ba",
+    "baseline_commit": "0b1dcd5004976c9a142d7abc1ca8b459e6b5e937",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
