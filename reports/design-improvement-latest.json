@@ -1,25 +1,15 @@
 {
-  "updated_at": "2026-10-23T02:10:51.669593+00:00",
+  "updated_at": "2026-10-23T03:06:25.304839+00:00",
   "template_version": 10,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
-  "changes": [
-    "Share cached Japanese font between posting and preview CI",
-    "Export cached font path and skip apt on cache hit",
-    "Add cache reuse/env export coverage"
-  ],
+  "changes": [],
   "preview_path": "generated/scorer_alignment_preview.jpg",
   "preview_layout_path": "generated/scorer_alignment_preview.layout.json",
   "ci_artifact_name": "automatic-stadium-preview",
   "local_tests": {
-    "passed": 97,
-    "performed_this_pass": true,
-    "command": "python3 -m unittest discover -s tests",
-    "duration_seconds": 125.52,
-    "focused_final_cases_passed": 2,
-    "focused_duration_seconds": 4.039,
-    "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
-    "diff_check": "passed"
+    "performed_this_pass": false,
+    "reason": "Renderer unchanged; preview generation rerun only. Latest production suite remains 105 passing tests in run39887263634."
   },
   "ci_status": "success",
   "publication_status": "Template10 score contrast deployed; no actual post verification yet",
@@ -29,11 +19,11 @@
     "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe12:30 data slot with duplicate classification/source gate preserved. Actual template10 image generation/public byte/Buffer/X still requires eligible new content; do not force test publication.",
+  "next_priority": "Observe12:30 data slot once it executes; distinguish repeated official scorer content from absent verified facts. Verify image/public bytes/Buffer/X only if an eligible scheduled post reaches those stages. Supplemental analysis reply delivery remains unimplemented.",
   "ci_tests_passed": 105,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39875820023",
   "implementation_commit": "7833dff2783ec0ccce847893b1a18ceb2ab8c2ef",
-  "visual_review": "Compared approved review and before/after scorer card at full resolution. STVV4 remains yellow; separator and opponent1 white, same size/baseline/position. Scorer rows, source, title and saved background unchanged. No new facts, faces or paid generation. User approval and engagement unverified.",
+  "visual_review": "Reviewed approved reference and template10 scorer card, plus freshly rendered three-composition contact sheet. Scorer contrast/readability and Japanese question hierarchy remain legible. No additional renderer change demonstrated to improve quality this pass. Actual X appearance and user approval remain unverified.",
   "baseline_commit": "4f5fee76600dc686ccbcf2ffe9455ede125e7195",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
@@ -58,13 +48,13 @@
     "reason": "No verified new comparison data; quality gate stopped before image/Buffer"
   },
   "additional_local_preview_path": "generated/variant_poster_preview.jpg",
-  "latest_run_review": "Verified actual10:30 compare run created11:01:18JST. Cache hit/restored and cached path exported; apt was not needed.105 production tests passed in21.562s; actual posting step reported skipped_no_verified_content before media/Buffer. No new X post, history77 publications105 used0 pending unchanged. No code/render changes made without new evidence.",
+  "latest_run_review": "At this check main remains b9d11cb2c2b83903cae989de2f7cf5c35c8718de. No new Auto Post run after10:30 compare; latest result remains skipped_no_verified_content.12:30 data is not due yet, not a skip or error. History unchanged:77 publications,105 used,0 pending. No Buffer request or X browser check.",
   "checks_this_pass": {
-    "type": "regular_font_cache_restore_verified",
+    "type": "unchanged_renderer_visual_review_and_report_provenance_fix",
     "new_local_tests_run": false,
-    "new_image_rendered": false,
-    "production_tests_run": true,
-    "new_scheduled_post_run_since_previous_pass": true,
+    "new_image_rendered": true,
+    "production_tests_run": false,
+    "new_scheduled_post_run_since_previous_pass": false,
     "latest_scheduled_run_id": 39887263634,
     "paid_api_used": false,
     "new_public_post": false,
@@ -150,7 +140,7 @@
     "reason": "Official player article repeats already published source/match; no new eligible article remained"
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
-  "reflection_commit": "This report-only commit; renderer and font setup implementation hashes remain separate",
+  "reflection_commit": "Report-only commit containing this record; inspect this file history for exact commit. Renderer implementation remains7833dff2783ec0ccce847893b1a18ceb2ab8c2ef.",
   "previous_unobserved_schedule_check": {
     "slot": "2026-10-22 21:00 JST vote",
     "schedule_cron": "0 12 * * *",
@@ -163,7 +153,7 @@
     "x_post_url": null,
     "reason": "21:00 vote workflow not visible at initial check; no skip or send error inferred."
   },
-  "visual_review_performed_this_pass": false,
+  "visual_review_performed_this_pass": true,
   "feedback_observation": {
     "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39836802590",
     "workflow_conclusion": "success",
@@ -309,7 +299,9 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [],
+  "changes_this_pass": [
+    "Correct report provenance: prior local tests and implementation changes are historical, not work performed this pass."
+  ],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -320,17 +312,17 @@
   },
   "local_tests_this_pass": {
     "performed": false,
-    "reason": "No code change; verified105 actual production tests"
+    "reason": "No code changes. Successful offline preview render and JSON evidence verification; no repeat suite needed."
   },
   "no_change_observation": {
-    "baseline_commit": "9dd66d4dbdd144e178a732c344eded202cafb331",
+    "baseline_commit": "b9d11cb2c2b83903cae989de2f7cf5c35c8718de",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
     "new_posting_run": false,
-    "next_regular_slot_jst": "2026-10-23 08:00",
-    "classification": "no_new_posting_evidence",
-    "action": "Preserve renderer and publication gates; do not manufacture code changes or replay cancelled slot"
+    "next_regular_slot_jst": "2026-10-23 12:30",
+    "classification": "next_slot_not_due",
+    "action": "Preserve renderer and guards; do not force new publication for verification"
   },
   "report_accuracy_fix": {
     "implementation_commit": "48c9cf47bb6b0fecd830e9f9fe7ca3ec726ee01e",
@@ -361,5 +353,25 @@
     "failed_stage": "font_setup",
     "preview_ci_tests_run": false,
     "public_image_verified": false
+  },
+  "previous_local_test_evidence": {
+    "passed": 97,
+    "performed_this_pass": true,
+    "command": "python3 -m unittest discover -s tests",
+    "duration_seconds": 125.52,
+    "focused_final_cases_passed": 2,
+    "focused_duration_seconds": 4.039,
+    "focused_command": "python3 -m unittest test_content_card.ContentCardSmokeTests.test_alternate_layouts_retain_scorer_names_times_and_news_copy test_content_card.ContentCardSmokeTests.test_alternate_compositions_preserve_question_match_and_choices",
+    "diff_check": "passed"
+  },
+  "preview_render_this_pass": {
+    "status": "passed",
+    "command": "python render_stadium_preview.py",
+    "cards": 8,
+    "contact_sheet": "generated/composition_variants_preview.jpg",
+    "source": "Saved previously verified manifests; design previews only, not fresh live publication evidence.",
+    "buffer_called": false,
+    "local_path": "/workspace/scratch/23f59373d1c0/stvv-1200/generated/composition_variants_preview.jpg",
+    "scorer_sha256": "ffbda5b1e174ab329e08369a1a15be86674fe67785073bca95a28d36b0c56735"
   }
 }
