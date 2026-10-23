@@ -1,17 +1,8 @@
 {
-  "key": "approved_stadium_review_lommel_20261019_v1",
-  "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/12a96e0d797ab1a48b1dd2f1b5f2af05c29838a3/generated/approved_review_lommel_20261019.jpg",
-  "buffer_id": "6ad7b75025c4beedd139fd70",
+  "key": "approved_imagegen_midtjylland_20261023_v1",
+  "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/4181d3c9076aad215919f18d705051930c954a2c/generated/approved_midtjylland_20261023.png",
+  "buffer_id": "6adbeb4e8b3d437ddc8df023",
   "buffer_status": "sent",
-  "x_display_verified": true,
-  "x_url": "https://x.com/stvvlabo/status/2112616782808711355",
-  "verification_method": "Visual inspection of public X post confirmed approved stadium/flag/brush-lettering graphic, full image and matching caption.",
-  "image_sha256": "0025d45e4107cdde64aaa2111e3b11f1a8383fbf227be355494b478d3a419b68",
-  "tests": {
-    "local": 33,
-    "github_actions": 33,
-    "result": "passed",
-    "run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39477784219"
-  },
-  "scope": "One approved raster asset published through Buffer. Existing seven daily slots unchanged; automated generation of new cards in this style is not yet implemented."
+  "x_display_verified": false,
+  "x_url": null
 }
