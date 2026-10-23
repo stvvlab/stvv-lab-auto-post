@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23T12:01:05.112609+00:00",
+  "updated_at": "2026-10-23T13:05:02.756276+00:00",
   "template_version": 11,
   "hourly_automation_enabled": true,
   "hourly_schedule": "FREQ=HOURLY;INTERVAL=1",
@@ -16,10 +16,9 @@
   "remaining": [
     "Template11 alternate scorer hierarchy and composition rotation await eligible regular publication and X verification",
     "No claim of user design approval or improved engagement",
-    "Missing/repeated-context vote policy awaits regular run",
     "Schedule trigger delay root cause unknown"
   ],
-  "next_priority": "Observe21:00 vote context policy on regular execution; no generic fallback or repeated match coverage. Actual template11 publication/X display and existing-post supplemental reply transport remain unverified/unimplemented.",
+  "next_priority": "Observe23:00 recap regular run with font cache and repeated-content gate preserved. Actual template11 public image/Buffer/X awaits distinct verified content; existing-post supplemental reply transport remains unimplemented.",
   "ci_tests_passed": 125,
   "ci_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39904350400",
   "implementation_commit": "33c662b0e066b16abf1017aa63d1881216165c22",
@@ -27,35 +26,37 @@
   "baseline_commit": "57b59b6c0609c74a76d1eebc195ca1f999f946a3",
   "pending_posts_observed": 0,
   "scheduled_run_observation": {
-    "slot": "2026-10-23 18:00 JST news",
-    "schedule_cron": "0 9 * * *",
+    "slot": "2026-10-23 21:00 JST vote",
+    "schedule_cron": "0 12 * * *",
     "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39931259477",
-    "job_id": 120339818768,
-    "workflow_created_at": "2026-10-23T18:21:24+09:00",
-    "posting_step_started_at": "2026-10-23T18:21:54+09:00",
-    "result_recorded_at": "2026-10-23T18:21:56.208270+09:00",
-    "schedule_creation_delay_seconds": 1284,
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39953297423",
+    "job_id": 120412832262,
+    "workflow_created_at": "2026-10-23T21:26:17+09:00",
+    "posting_step_started_at": "2026-10-23T21:26:44+09:00",
+    "result_recorded_at": "2026-10-23T21:26:45.041101+09:00",
+    "schedule_creation_delay_seconds": 1577,
     "classification": "skipped_repeated_content",
     "workflow_conclusion": "success",
     "production_tests_passed": 125,
-    "production_test_duration_seconds": 21.568,
+    "production_test_duration_seconds": 15.072,
     "font_cache_hit": true,
     "font_download_required": false,
+    "vote_repeated_context_gate_verified": true,
+    "generic_vote_fallback_used": false,
     "image_generation_reached": false,
     "buffer_submission_reached": false,
     "x_post_url": null,
-    "reason": "Official October19 news candidate excluded for existing source/match coverage; no distinct unpublished eligible candidate remained. Not a Buffer error."
+    "reason": "Vote candidate refers to already covered match; context repetition gate skipped before media/Buffer, without a generic standalone question fallback."
   },
   "additional_local_preview_path": "generated/scorer_split_preview.jpg",
-  "latest_run_review": "Main9b150f597377f81d53e66b653fd8c3b22e3e06bf retains template11 and successful125-test CI. No new Auto Post after18:00 news39931259477 visible at21:00 boundary check.21:00 vote actual execution not yet observed, not a skip/error. History77 publications105 used0 pending unchanged. No new code, tests, images, Buffer send or X inspection.",
+  "latest_run_review": "Verified21:00 vote actually ran21:26 JST;125 tests passed in15.072s and cached font restored. Repeated match context emitted skipped_repeated_content before media/Buffer; no generic fan-question replacement. This is first regular verification of v8 vote context policy, not template11 public image verification.77 publications105 used0 pending unchanged.",
   "checks_this_pass": {
-    "type": "vote_schedule_boundary_no_new_evidence",
+    "type": "vote_repeated_context_policy_live_verified",
     "new_local_tests_run": false,
     "new_image_rendered": false,
-    "production_tests_run": false,
-    "new_scheduled_post_run_since_previous_pass": false,
-    "latest_scheduled_run_id": 39931259477,
+    "production_tests_run": true,
+    "new_scheduled_post_run_since_previous_pass": true,
+    "latest_scheduled_run_id": 39953297423,
     "paid_api_used": false,
     "new_public_post": false,
     "extra_test_post": false,
@@ -121,39 +122,39 @@
     "23:00": "recap"
   },
   "previous_scheduled_run_observation": {
-    "slot": "2026-10-23 15:30 JST analysis",
-    "schedule_cron": "30 6 * * *",
+    "slot": "2026-10-23 18:00 JST news",
+    "schedule_cron": "0 9 * * *",
     "workflow_run_created": true,
-    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39916705557",
-    "job_id": 120291721755,
-    "workflow_created_at": "2026-10-23T16:16:41+09:00",
-    "posting_step_started_at": "2026-10-23T16:17:15+09:00",
-    "result_recorded_at": "2026-10-23T16:17:15.820467+09:00",
-    "schedule_creation_delay_seconds": 2801,
-    "classification": "skipped_no_verified_content",
+    "workflow_run_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/39931259477",
+    "job_id": 120339818768,
+    "workflow_created_at": "2026-10-23T18:21:24+09:00",
+    "posting_step_started_at": "2026-10-23T18:21:54+09:00",
+    "result_recorded_at": "2026-10-23T18:21:56.208270+09:00",
+    "schedule_creation_delay_seconds": 1284,
+    "classification": "skipped_repeated_content",
     "workflow_conclusion": "success",
     "production_tests_passed": 125,
-    "production_test_duration_seconds": 21.988,
+    "production_test_duration_seconds": 21.568,
     "font_cache_hit": true,
     "font_download_required": false,
     "image_generation_reached": false,
     "buffer_submission_reached": false,
     "x_post_url": null,
-    "reason": "No verified new analysis material; quality gate stopped before media or Buffer. Former run-not-observed state resolved by delayed schedule creation."
+    "reason": "Official October19 news candidate excluded for existing source/match coverage; no distinct unpublished eligible candidate remained. Not a Buffer error."
   },
   "preview_caption": "ロンメル戦をどこから振り返る？\nSTVV 4–1 ロンメル\n① 攻撃\n② 守備\n③ 選手",
   "reflection_commit": "This report-only commit; renderer implementation remains33c662b0e066b16abf1017aa63d1881216165c22.",
   "previous_unobserved_schedule_check": {
-    "slot": "2026-10-23 18:00 JST news",
-    "schedule_cron": "0 9 * * *",
-    "observed_at": "2026-10-23T09:06:49.404894+00:00",
+    "slot": "2026-10-23 21:00 JST vote",
+    "schedule_cron": "0 12 * * *",
+    "observed_at": "2026-10-23T12:01:05.112609+00:00",
     "workflow_run_created": false,
     "classification": "not_observed_no_run_created",
     "workflow_run_url": null,
     "image_generation_reached": null,
     "buffer_submission_reached": null,
     "x_post_url": null,
-    "reason": "18:00 run not yet visible at check; source check is not an actual scheduled result."
+    "reason": "Boundary check shows no21:00 run yet; do not infer skip or send error."
   },
   "visual_review_performed_this_pass": false,
   "feedback_observation": {
@@ -230,18 +231,7 @@
     "v8_user_approved": false
   },
   "generic_vote_fallback_disabled": true,
-  "unobserved_schedule_check": {
-    "slot": "2026-10-23 21:00 JST vote",
-    "schedule_cron": "0 12 * * *",
-    "observed_at": "2026-10-23T12:01:05.112609+00:00",
-    "workflow_run_created": false,
-    "classification": "not_observed_no_run_created",
-    "workflow_run_url": null,
-    "image_generation_reached": null,
-    "buffer_submission_reached": null,
-    "x_post_url": null,
-    "reason": "Boundary check shows no21:00 run yet; do not infer skip or send error."
-  },
+  "unobserved_schedule_check": null,
   "variant_preview_paths": [
     "generated/variant_stadium_preview.jpg",
     "generated/variant_split_preview.jpg",
@@ -310,7 +300,9 @@
     "image_generation": true,
     "buffer_called": false
   },
-  "changes_this_pass": [],
+  "changes_this_pass": [
+    "Record first regular verification of repeated-context vote suppression with generic fallback disabled. No renderer or posting code changed."
+  ],
   "previous_local_tests": {
     "passed": 3,
     "duration_seconds": 0.155,
@@ -324,13 +316,13 @@
     "reason": "No code change or unresolved test failure."
   },
   "no_change_observation": {
-    "baseline_commit": "9b150f597377f81d53e66b653fd8c3b22e3e06bf",
+    "baseline_commit": "cf0e3d1b984f1d76547e8d30162b617167b2946a",
     "publication_log_count": 77,
     "used_posts_count": 105,
     "pending_posts_count": 0,
-    "new_posting_run": false,
-    "next_regular_slot_jst": "2026-10-23 21:00",
-    "classification": "not_observed_no_run_created",
+    "new_posting_run": true,
+    "next_regular_slot_jst": "2026-10-23 23:00",
+    "classification": "skipped_repeated_content",
     "action": "Preserve verified-content gate; no speculative tactics or test publication."
   },
   "report_accuracy_fix": {
@@ -375,5 +367,6 @@
     "status": "not_performed",
     "reason": "Template11 unchanged; successful prior10-card CI artifact retained."
   },
-  "ci_preview_generated": true
+  "ci_preview_generated": true,
+  "vote_context_policy_live_verified": true
 }
