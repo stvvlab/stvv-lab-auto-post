@@ -860,6 +860,14 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/4181d3c9076aad215919f18d705051930c954a2c/generated/approved_midtjylland_20261023.png"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-24_news": {
+      "slot": "news",
+      "source": "https://stvv.jp/news/game/20261023_3/",
+      "text": "📢 UEFAカンファレンスリーグ第4節、HNKハイドゥク・スプリト戦は無観客で開催されます。\n\nSTVVは渡航手配済みのサポーター対応などを検討中です。\n\n公式：https://stvv.jp/news/game/20261023_3/\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/77a76ee2791f8c1e28fc82040d069e96d560b247/generated/imagegen_hajduk_closed_doors_20261024.jpg",
+      "created_at": "2026-10-24T18:15:15.941290+09:00"
+    }
+  },
   "tracked_topics": {}
 }
