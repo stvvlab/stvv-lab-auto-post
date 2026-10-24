@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T16:08:00+09:00",
+  "updated_at": "2026-10-24T17:03:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -64,11 +64,14 @@
     "failure_reason": "Three content-guard tests read the live ready queue instead of their mocked news candidates; test isolation was fixed without changing production selection."
   },
   "regular_slot_observation": {
-    "latest_auto_post_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40060496710",
-    "latest_result": "skipped_repeated_content",
-    "new_ready_card_submitted_to_buffer": false,
-    "x_post_created": false,
-    "note": "The 15:30 JST regular run had not started at preparation time; no manual replay was launched."
+    "slot": "2026-10-24 15:30 JST analysis",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40073136895",
+    "workflow_conclusion": "success",
+    "posting_result": "skipped_no_verified_content",
+    "detail": "The analysis slot found no verified fresh analysis content and stopped before image preparation and Buffer.",
+    "ready_news_card_consumed": false,
+    "buffer_submission_reached": false,
+    "x_post_created": false
   },
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
@@ -79,11 +82,11 @@
   },
   "implementation_status": "Scheduled preparation has now generated, reviewed and registered one fresh official item. Regular-slot Buffer acceptance and X rendering of this prepared card remain unverified.",
   "uncompleted": [
-    "Observe the next existing news slot consume the ready card without manual replay.",
+    "Observe the 2026-10-24 18:00 JST news slot consume the ready Hajduk closed-doors card without manual replay.",
     "Confirm Buffer acceptance and actual X rendering, then mark the card published only after verified delivery.",
     "Supplemental analysis reply sending remains blocked; no reply was posted."
   ],
-  "next_priority": "Wait for the next existing news slot, then classify skip, error, Buffer acceptance, sent status and X rendering without resending on an unknown result.",
+  "next_priority": "Observe the existing 18:00 JST news slot, then classify Buffer acceptance, send status and X rendering without resending on an unknown result.",
   "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
   "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49"
 }
