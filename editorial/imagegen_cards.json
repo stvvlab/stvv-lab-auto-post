@@ -27,14 +27,22 @@
         "news"
       ],
       "reviewed": true,
-      "status": "ready",
+      "status": "published",
       "asset_path": "generated/imagegen_hajduk_closed_doors_20261024.jpg",
       "sha256": "2ebdb1d2def83a701b39b07f39900bb867675e8e152eacea670c0562bcba7ba2",
       "dimensions": [
         1448,
         1086
       ],
-      "review_note": "Japanese official article verified 2026-10-24. Visual review passed: exact Japanese text, opponent and round match the source; closed gate and empty stands communicate behind-closed-doors status; safe crop, mobile legibility, navy/yellow hierarchy, no people, faces, crests, official seals, scores, dates, venue or invented facts."
+      "review_note": "Japanese official article verified 2026-10-24. Visual review passed: exact Japanese text, opponent and round match the source; closed gate and empty stands communicate behind-closed-doors status; safe crop, mobile legibility, navy/yellow hierarchy, no people, faces, crests, official seals, scores, dates, venue or invented facts. Existing news slot published it at 18:15 JST; X text, source link and image rendering verified.",
+      "publication": {
+        "buffer_id": "6adc77250b5343d07074efd5",
+        "buffer_status": "sent",
+        "submitted_at": "2026-10-24T18:15:19.752698+09:00",
+        "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399",
+        "x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+        "x_display_verified_at": "2026-10-24T18:59:00+09:00"
+      }
     }
   ]
 }

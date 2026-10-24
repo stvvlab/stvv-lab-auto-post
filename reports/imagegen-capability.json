@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-24T16:08:00+09:00",
+  "checked_at": "2026-10-24T18:59:00+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -21,12 +21,24 @@
     ],
     "bytes": 712576,
     "queued_in_manifest": true,
-    "status": "ready",
-    "public_post_created": false,
+    "status": "published",
+    "public_post_created": true,
     "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
     "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49",
     "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40072960175",
-    "github_actions_conclusion": "success"
+    "github_actions_conclusion": "success",
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399",
+      "workflow_conclusion": "success",
+      "posting_result": "submitted_to_buffer",
+      "buffer_id": "6adc77250b5343d07074efd5",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-24T18:15:19.752698+09:00",
+      "x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_verified_at": "2026-10-24T18:59:00+09:00"
+    }
   },
   "visual_review": {
     "passed": true,
@@ -40,10 +52,10 @@
   },
   "automation_state": {
     "built_in_generation_confirmed_in_scheduled_environment": true,
-    "ready_cards": 1,
-    "published_cards": 1,
+    "ready_cards": 0,
+    "published_cards": 2,
     "unattended_generation_and_manifest_registration_verified": true,
-    "regular_slot_publication_verified": false,
-    "classification": "Scheduled preparation generated, reviewed and registered one fresh official item. The next matching regular news slot must still prove Buffer delivery and X rendering."
+    "regular_slot_publication_verified": true,
+    "classification": "Built-in generation, visual review, manifest registration, existing scheduled news-slot Buffer delivery and actual X text/image rendering were verified end-to-end for the fresh Hajduk closed-doors notice."
   }
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T17:03:00+09:00",
+  "updated_at": "2026-10-24T18:59:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,11 +8,11 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Read current main, imagegen delivery specification, manifest, posting history, capability and supplemental-reply reports, and recent Actions.",
-    "Verified the 2026-10-23 Japanese official notice that Conference League round 4 against HNK Hajduk Split will be played behind closed doors; the source was absent from published and pending history.",
-    "Generated one content-specific 4:3 image with ChatGPT built-in imagegen and no paid CLI or API.",
-    "Visually approved exact Japanese, opponent, round, crop, mobile legibility, navy/yellow hierarchy, and the absence of people, faces, logos, scores, dates, venue and invented facts.",
-    "Registered the reviewed image as ready for the existing news slot; no pilot, Buffer submission, X post or supplemental reply was triggered."
+    "Observed the existing 2026-10-24 18:00 JST news slot run without manual replay.",
+    "Confirmed the reviewed Hajduk closed-doors card passed public-byte verification and was accepted by Buffer at 18:15 JST.",
+    "Confirmed posted.json moved the item from pending to publication_log with Buffer status sent.",
+    "Verified the actual @stvvlabo X post displays the exact caption, official source link and generated image.",
+    "Marked the manifest card published and recorded the verified end-to-end result."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261023_3/",
@@ -23,12 +23,22 @@
       1448,
       1086
     ],
-    "status": "ready",
+    "status": "published",
     "slot": [
       "news"
     ],
     "caption_x_length_with_fixed_tags": 207,
-    "visual_review_passed": true
+    "visual_review_passed": true,
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399",
+      "buffer_id": "6adc77250b5343d07074efd5",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-24T18:15:19.752698+09:00",
+      "x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_verified_at": "2026-10-24T18:59:00+09:00"
+    }
   },
   "imagegen_capability": {
     "status": "available_and_verified",
@@ -36,8 +46,8 @@
     "paid_api_or_cli_used": false
   },
   "prepared_asset_delivery": {
-    "ready_cards": 1,
-    "published_cards": 1,
+    "ready_cards": 0,
+    "published_cards": 2,
     "manifest_enabled": true,
     "fail_closed_without_reviewed_asset": true,
     "caption_exact_match_required": true,
@@ -64,14 +74,20 @@
     "failure_reason": "Three content-guard tests read the live ready queue instead of their mocked news candidates; test isolation was fixed without changing production selection."
   },
   "regular_slot_observation": {
-    "slot": "2026-10-24 15:30 JST analysis",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40073136895",
+    "slot": "2026-10-24 18:00 JST news",
+    "actual_execution_at": "2026-10-24T18:15:00+09:00",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399",
     "workflow_conclusion": "success",
-    "posting_result": "skipped_no_verified_content",
-    "detail": "The analysis slot found no verified fresh analysis content and stopped before image preparation and Buffer.",
-    "ready_news_card_consumed": false,
-    "buffer_submission_reached": false,
-    "x_post_created": false
+    "posting_result": "submitted_to_buffer",
+    "detail": "The reviewed Hajduk closed-doors card passed the image/public-byte gate. Buffer accepted it and posted.json recorded sent with no pending item.",
+    "ready_news_card_consumed": true,
+    "buffer_submission_reached": true,
+    "buffer_id": "6adc77250b5343d07074efd5",
+    "buffer_status": "sent",
+    "x_post_created": true,
+    "x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+    "x_text_verified": true,
+    "x_image_rendering_verified": true
   },
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
@@ -80,13 +96,12 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "Scheduled preparation has now generated, reviewed and registered one fresh official item. Regular-slot Buffer acceptance and X rendering of this prepared card remain unverified.",
+  "implementation_status": "End-to-end unattended delivery is verified for one fresh official item: built-in image generation, visual review, manifest registration, existing scheduled news-slot Buffer acceptance, sent-state persistence and actual X text/image rendering.",
   "uncompleted": [
-    "Observe the 2026-10-24 18:00 JST news slot consume the ready Hajduk closed-doors card without manual replay.",
-    "Confirm Buffer acceptance and actual X rendering, then mark the card published only after verified delivery.",
-    "Supplemental analysis reply sending remains blocked; no reply was posted."
+    "Supplemental analysis reply sending remains blocked because no free authenticated supported transport for replying to an existing published X post is available; no reply was posted.",
+    "Future fresh items still require the same source, duplicate, visual and delivery checks."
   ],
-  "next_priority": "Observe the existing 18:00 JST news slot, then classify Buffer acceptance, send status and X rendering without resending on an unknown result.",
+  "next_priority": "Keep the published Hajduk source blocked from reuse and apply the verified imagegen delivery path only when a new official, unposted item appears.",
   "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
   "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49"
 }
