@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T08:52:36+09:00",
+  "updated_at": "2026-10-24T09:05:44+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from the verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -68,10 +68,22 @@
   },
   "implementation_status": "Built-in image generation capability and reviewed-asset delivery are implemented and separately verified; unattended generation, manifest registration and publication through a regular scheduled slot remain unverified end to end.",
   "capability_evidence_commit": "9b89808fd4dde930fa81c9308ab7547e8265c14c",
+  "supplemental_replies": {
+    "status": "partial_safety_implementation_transport_blocked",
+    "status_report": "reports/supplemental-replies-status.json",
+    "parent_mapping_path": "editorial/supplemental_replies.json",
+    "mapped_parents": 1,
+    "ready_replies": 0,
+    "actual_reply_published": false,
+    "focused_tests_passed": 17,
+    "full_local_tests_passed": 141,
+    "sender_implemented": false,
+    "reason": "Buffer cannot append to an existing X post, connected Metricool tools expose no reply operation and the Metricool brand has no social network connected. X's official reply endpoint is pay per use and was not authorized."
+  },
   "uncompleted": [
     "Wait for genuinely new official information, generate at most one reviewed card, register it as ready and observe one regular slot consume it without manual replay.",
     "Confirm Buffer acceptance and actual X rendering for that regular-slot post before calling image automation operational.",
-    "Supplemental analysis replies to an existing post remain a separate unimplemented feature."
+    "Supplemental analysis reply safety and parent mapping are implemented, but no free authenticated sender is available; no reply was posted."
   ],
   "next_priority": "On the next verified new official item, generate one content-specific image, visually approve it, commit image bytes and manifest together, and observe the next matching regular slot without launching a pilot or duplicate post."
 }

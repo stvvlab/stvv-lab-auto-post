@@ -1,0 +1,15 @@
+{
+  "enabled": false,
+  "transport": null,
+  "parents": [
+    {
+      "parent_key": "approved_imagegen_midtjylland_20261023_v1",
+      "parent_x_url": "https://x.com/stvvlabo/status/2113772119062372376",
+      "parent_post_id": "2113772119062372376",
+      "owner": "stvvlabo",
+      "verified": true,
+      "source_url": "https://stvv.jp/news/uefa-news/20261023_1/"
+    }
+  ],
+  "replies": []
+}

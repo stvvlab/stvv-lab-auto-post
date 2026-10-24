@@ -1,0 +1,79 @@
+{
+  "checked_at": "2026-10-24T09:05:44+09:00",
+  "status": "partial_safety_implementation_transport_blocked",
+  "requested_behavior": "Append verified supplemental analysis as a reply to an already-published @stvvlabo post.",
+  "actual_reply_published": false,
+  "standalone_fallback_allowed": false,
+  "routes": {
+    "buffer_graphql": {
+      "available_for_existing_post_reply": false,
+      "reason": "The published schema exposes new threads whose first element is the new root; it has no existing-parent reply field.",
+      "sources": [
+        "https://developers.buffer.com/types/TwitterPostMetadataInput.html",
+        "https://developers.buffer.com/examples/create-threaded-post.html"
+      ]
+    },
+    "metricool_mcp": {
+      "available_for_existing_post_reply": false,
+      "tool_spec_checked": true,
+      "exposed_write_tools": [
+        "createScheduledPost",
+        "updateScheduledPost",
+        "createScheduledPostForReview",
+        "sendScheduledPostForReview"
+      ],
+      "reply_tool_exposed": false,
+      "brand_id": "7113222",
+      "brand_network_connection_check": "no_social_network_connected",
+      "official_x_inbox_scope": "direct_messages_only; public X comments are unavailable",
+      "paid_addon_current_price": "USD/EUR 10 per month or 120 per year per X account",
+      "paid_addon_purchased_this_run": false
+    },
+    "x_official_api": {
+      "technically_supports_reply": true,
+      "endpoint": "POST /2/tweets",
+      "requires_user_oauth": true,
+      "pricing_model": "pay_per_use_prepaid_credits",
+      "official_price_checked_2026_10_24": {
+        "post_create_usd_per_request": 0.015,
+        "post_create_with_url_usd_per_request": 0.2
+      },
+      "authorized_or_used": false,
+      "reason": "No approval to purchase credits, create an app or configure credentials."
+    },
+    "x_official_ui": {
+      "manual_reply_possible": true,
+      "automation_verified": false,
+      "reason": "Previous browser state was unauthenticated; no credential or session bypass was attempted."
+    }
+  },
+  "implemented": {
+    "module": "supplemental_replies.py",
+    "queue": "editorial/supplemental_replies.json",
+    "own_account_parent_validation": true,
+    "publication_history_parent_validation": true,
+    "official_source_and_visible_citation_gate": true,
+    "parent_text_source_unique_key": true,
+    "pending_before_send": true,
+    "unknown_result_blocks_resend": true,
+    "x_parent_child_verification_before_published": true,
+    "no_transport_blocks_without_mutation": true,
+    "sender_implemented": false
+  },
+  "mapped_parents": 1,
+  "ready_replies": 0,
+  "pending_replies": 0,
+  "tests": {
+    "focused_passed": 17,
+    "focused_failed": 0,
+    "scope": "new reply safety module, existing no-fallback guard and prepared image delivery",
+    "full_suite_passed": 141,
+    "full_suite_failed": 0,
+    "full_suite_note": "Ran with the repository's required Japanese editorial font configured."
+  },
+  "user_action_required": [
+    "Choose manual X reply handoff for a free workflow, or explicitly approve paid X API setup and charges.",
+    "Connecting X inside Metricool alone is not sufficient because neither the connected MCP tools nor Metricool X Inbox expose public-post replies."
+  ],
+  "completion_classification": "Preparation and safety gates implemented; reply delivery remains unavailable and unverified."
+}
