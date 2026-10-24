@@ -18,6 +18,23 @@
       "review_note": "User approved generated artwork and actual X display verified 2026-10-24. Already posted; duplicate gate must continue to skip this source.",
       "date_jst": "2026-10-23",
       "status": "published"
+    },
+    {
+      "source_url": "https://stvv.jp/news/game/20261023_3/",
+      "date_jst": "2026-10-23",
+      "text": "📢 UEFAカンファレンスリーグ第4節、HNKハイドゥク・スプリト戦は無観客で開催されます。\n\nSTVVは渡航手配済みのサポーター対応などを検討中です。\n\n公式：https://stvv.jp/news/game/20261023_3/",
+      "slots": [
+        "news"
+      ],
+      "reviewed": true,
+      "status": "ready",
+      "asset_path": "generated/imagegen_hajduk_closed_doors_20261024.jpg",
+      "sha256": "2ebdb1d2def83a701b39b07f39900bb867675e8e152eacea670c0562bcba7ba2",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "review_note": "Japanese official article verified 2026-10-24. Visual review passed: exact Japanese text, opponent and round match the source; closed gate and empty stands communicate behind-closed-doors status; safe crop, mobile legibility, navy/yellow hierarchy, no people, faces, crests, official seals, scores, dates, venue or invented facts."
     }
   ]
 }

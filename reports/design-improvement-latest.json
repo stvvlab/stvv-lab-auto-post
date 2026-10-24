@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-24T09:05:44+09:00",
-  "policy": "Use ChatGPT built-in imagegen to design each card from the verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
+  "updated_at": "2026-10-24T16:08:00+09:00",
+  "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
     "x_url": "https://x.com/stvvlabo/status/2113772119062372376",
@@ -8,25 +8,35 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Read the current main branch, imagegen delivery specification, reviewed-card manifest, posting history and recent Actions results.",
-    "Verified the official Japanese source for the 2026-10-23 Conference League match and confirmed STVV's 1-0 away win over FC Midtjylland.",
-    "Executed ChatGPT built-in imagegen successfully and saved a non-public capability preview with a new composition.",
-    "Visually checked Japanese text, score-to-team mapping, crop, hierarchy, negative space, phone legibility and the absence of people, faces and logos.",
-    "Kept the capability preview out of editorial/imagegen_cards.json because this match/source is already published."
+    "Read current main, imagegen delivery specification, manifest, posting history, capability and supplemental-reply reports, and recent Actions.",
+    "Verified the 2026-10-23 Japanese official notice that Conference League round 4 against HNK Hajduk Split will be played behind closed doors; the source was absent from published and pending history.",
+    "Generated one content-specific 4:3 image with ChatGPT built-in imagegen and no paid CLI or API.",
+    "Visually approved exact Japanese, opponent, round, crop, mobile legibility, navy/yellow hierarchy, and the absence of people, faces, logos, scores, dates, venue and invented facts.",
+    "Registered the reviewed image as ready for the existing news slot; no pilot, Buffer submission, X post or supplemental reply was triggered."
   ],
+  "latest_prepared_card": {
+    "source_url": "https://stvv.jp/news/game/20261023_3/",
+    "date_jst": "2026-10-23",
+    "asset_path": "generated/imagegen_hajduk_closed_doors_20261024.jpg",
+    "sha256": "2ebdb1d2def83a701b39b07f39900bb867675e8e152eacea670c0562bcba7ba2",
+    "dimensions": [
+      1448,
+      1086
+    ],
+    "status": "ready",
+    "slot": [
+      "news"
+    ],
+    "caption_x_length_with_fixed_tags": 207,
+    "visual_review_passed": true
+  },
   "imagegen_capability": {
     "status": "available_and_verified",
     "report": "reports/imagegen-capability.json",
-    "preview_path": "generated/imagegen_capability_preview.jpg",
-    "sha256": "948486f725595b8ff5d5d9cba1105628b70cfdee2cfe88606417ca58bfbe6a05",
-    "dimensions": [1448, 1086],
-    "paid_api_or_cli_used": false,
-    "public_post_created": false
+    "paid_api_or_cli_used": false
   },
   "prepared_asset_delivery": {
-    "implementation_commit": "2e705c8bc4500c2e15511b8ad1d0bb162604ac8f",
-    "official_uefa_discovery_commit": "4c21cbf",
-    "ready_cards": 0,
+    "ready_cards": 1,
     "published_cards": 1,
     "manifest_enabled": true,
     "fail_closed_without_reviewed_asset": true,
@@ -38,55 +48,35 @@
     "duplicate_guard_preserved": true
   },
   "tests": {
-    "latest_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40041616574",
-    "latest_ci_conclusion": "success",
-    "latest_ci_scope": "full unittest discovery plus stadium preview render",
-    "latest_ci_tests": 134,
-    "local_focused_tests": 11,
-    "local_focused_tests_conclusion": "passed",
-    "local_focused_test_scope": "prepared reviewed media delivery and official UEFA article discovery",
-    "regular_0800_run_tests": 126,
-    "regular_0800_tests_conclusion": "passed"
+    "manifest_json_valid": true,
+    "image_decode_and_dimensions": "JPEG 1448x1086 passed",
+    "asset_sha256_verified": true,
+    "caption_x_length_with_fixed_tags": 207,
+    "x_length_limit": 270,
+    "code_changed": false,
+    "full_suite_rerun": "not_run_no_code_change",
+    "latest_code_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
+    "latest_code_ci_conclusion": "success"
   },
   "regular_slot_observation": {
-    "slot": "2026-10-24 08:00 JST player",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40038632627",
-    "workflow_conclusion": "success",
-    "posting_result": "skipped_repeated_content",
-    "detail": "The candidate source/match had already been covered; the production posting step stopped before image preparation and Buffer.",
-    "buffer_submission_reached": false,
-    "x_post_created": false
+    "latest_auto_post_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40060496710",
+    "latest_result": "skipped_repeated_content",
+    "new_ready_card_submitted_to_buffer": false,
+    "x_post_created": false,
+    "note": "The 15:30 JST regular run had not started at preparation time; no manual replay was launched."
   },
-  "single_pilot_observation": {
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40038701044",
-    "classification": "manual_single_verified_image_pilot_not_regular_slot",
-    "buffer_id": "6adbeb4e8b3d437ddc8df023",
-    "buffer_status": "sent",
-    "x_url": "https://x.com/stvvlabo/status/2113772119062372376",
-    "x_display_verified_after_workflow": true,
-    "note": "This proves one reviewed image can reach X through Buffer, but it does not prove unattended built-in generation and regular-slot delivery."
-  },
-  "implementation_status": "Built-in image generation capability and reviewed-asset delivery are implemented and separately verified; unattended generation, manifest registration and publication through a regular scheduled slot remain unverified end to end.",
-  "capability_evidence_commit": "9b89808fd4dde930fa81c9308ab7547e8265c14c",
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
-    "status_report": "reports/supplemental-replies-status.json",
-    "parent_mapping_path": "editorial/supplemental_replies.json",
-    "mapped_parents": 1,
-    "ready_replies": 0,
-    "actual_reply_published": false,
-    "focused_tests_passed": 17,
-    "full_local_tests_passed": 141,
     "implementation_commit": "338dafe243edeacafcef922b93f993f1e09a5beb",
-    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
-    "github_actions_conclusion": "success",
+    "actual_reply_published": false,
     "sender_implemented": false,
-    "reason": "Buffer cannot append to an existing X post, connected Metricool tools expose no reply operation and the Metricool brand has no social network connected. X's official reply endpoint is pay per use and was not authorized."
+    "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
+  "implementation_status": "Scheduled preparation has now generated, reviewed and registered one fresh official item. Regular-slot Buffer acceptance and X rendering of this prepared card remain unverified.",
   "uncompleted": [
-    "Wait for genuinely new official information, generate at most one reviewed card, register it as ready and observe one regular slot consume it without manual replay.",
-    "Confirm Buffer acceptance and actual X rendering for that regular-slot post before calling image automation operational.",
-    "Supplemental analysis reply safety and parent mapping are implemented, but no free authenticated sender is available; no reply was posted."
+    "Observe the next existing news slot consume the ready card without manual replay.",
+    "Confirm Buffer acceptance and actual X rendering, then mark the card published only after verified delivery.",
+    "Supplemental analysis reply sending remains blocked; no reply was posted."
   ],
-  "next_priority": "On the next verified new official item, generate one content-specific image, visually approve it, commit image bytes and manifest together, and observe the next matching regular slot without launching a pilot or duplicate post."
+  "next_priority": "Wait for the next existing news slot, then classify skip, error, Buffer acceptance, sent status and X rendering without resending on an unknown result."
 }
