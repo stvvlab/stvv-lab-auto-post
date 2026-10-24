@@ -22,7 +22,11 @@
     "bytes": 712576,
     "queued_in_manifest": true,
     "status": "ready",
-    "public_post_created": false
+    "public_post_created": false,
+    "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
+    "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49",
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40072960175",
+    "github_actions_conclusion": "success"
   },
   "visual_review": {
     "passed": true,

@@ -56,7 +56,12 @@
     "code_changed": false,
     "full_suite_rerun": "not_run_no_code_change",
     "latest_code_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
-    "latest_code_ci_conclusion": "success"
+    "latest_code_ci_conclusion": "success",
+    "latest_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40072960175",
+    "latest_ci_conclusion": "success",
+    "latest_ci_tests": 141,
+    "initial_manifest_ci_failure": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40072845860",
+    "failure_reason": "Three content-guard tests read the live ready queue instead of their mocked news candidates; test isolation was fixed without changing production selection."
   },
   "regular_slot_observation": {
     "latest_auto_post_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40060496710",
@@ -78,5 +83,7 @@
     "Confirm Buffer acceptance and actual X rendering, then mark the card published only after verified delivery.",
     "Supplemental analysis reply sending remains blocked; no reply was posted."
   ],
-  "next_priority": "Wait for the next existing news slot, then classify skip, error, Buffer acceptance, sent status and X rendering without resending on an unknown result."
+  "next_priority": "Wait for the next existing news slot, then classify skip, error, Buffer acceptance, sent status and X rendering without resending on an unknown result.",
+  "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
+  "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49"
 }
