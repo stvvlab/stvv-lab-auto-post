@@ -71,6 +71,9 @@ class ContentGuardTests(unittest.TestCase):
                                 ('slot_for_run', (slot, '2026-10-21')),
                                 ('articles', candidates)]:
                 stack.enter_context(patch.object(posting, name, return_value=value))
+            # This unit tests HTML-news selection in isolation. A production-ready
+            # imagegen queue item must not override the mocked article list.
+            stack.enter_context(patch('prepared_media.prepared_candidates', return_value=[]))
             image = stack.enter_context(patch.object(posting, 'content_card_media', return_value='https://example.test/card.jpg'))
             publish = stack.enter_context(patch.object(posting, 'publish', return_value=True))
             result = posting.main()
