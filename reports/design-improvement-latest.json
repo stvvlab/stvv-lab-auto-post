@@ -77,6 +77,9 @@
     "actual_reply_published": false,
     "focused_tests_passed": 17,
     "full_local_tests_passed": 141,
+    "implementation_commit": "338dafe243edeacafcef922b93f993f1e09a5beb",
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
+    "github_actions_conclusion": "success",
     "sender_implemented": false,
     "reason": "Buffer cannot append to an existing X post, connected Metricool tools expose no reply operation and the Metricool brand has no social network connected. X's official reply endpoint is pay per use and was not authorized."
   },

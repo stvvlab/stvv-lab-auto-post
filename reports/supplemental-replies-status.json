@@ -63,13 +63,16 @@
   "mapped_parents": 1,
   "ready_replies": 0,
   "pending_replies": 0,
+  "implementation_commit": "338dafe243edeacafcef922b93f993f1e09a5beb",
   "tests": {
     "focused_passed": 17,
     "focused_failed": 0,
     "scope": "new reply safety module, existing no-fallback guard and prepared image delivery",
     "full_suite_passed": 141,
     "full_suite_failed": 0,
-    "full_suite_note": "Ran with the repository's required Japanese editorial font configured."
+    "full_suite_note": "Ran with the repository's required Japanese editorial font configured.",
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
+    "github_actions_conclusion": "success"
   },
   "user_action_required": [
     "Choose manual X reply handoff for a free workflow, or explicitly approve paid X API setup and charges.",
