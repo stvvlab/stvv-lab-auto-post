@@ -63,8 +63,8 @@
       "slot": "recap",
       "buffer_id": "6aca4677f91f772d45969b45",
       "submitted_at": "2026-10-10T23:06:48.545929+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -80,8 +80,8 @@
       "slot": "vote",
       "buffer_id": "6aca2c40c4de2d2b1227bdd0",
       "submitted_at": "2026-10-10T21:14:57.169013+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -97,8 +97,8 @@
       "slot": "analysis",
       "buffer_id": "6acb3182ed92ed8fa5f409da",
       "submitted_at": "2026-10-11T15:49:39.577579+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -114,8 +114,8 @@
       "slot": "compare",
       "buffer_id": "6acae96fed92ed8fa5e9f52d",
       "submitted_at": "2026-10-11T10:42:08.800965+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -131,8 +131,8 @@
       "slot": "data",
       "buffer_id": "6acb05def91f772d45b55814",
       "submitted_at": "2026-10-11T12:43:27.318317+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -148,8 +148,8 @@
       "slot": "news",
       "buffer_id": "6acb5111bba9419ccb2dcfc1",
       "submitted_at": "2026-10-11T18:04:18.545730+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -165,8 +165,8 @@
       "slot": "player",
       "buffer_id": "6acac49eb07d37ac978b5884",
       "submitted_at": "2026-10-11T08:05:03.449172+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.624Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.661Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -386,8 +386,8 @@
       "slot": "news",
       "buffer_id": "6acdf4afca68ebbd369c79d7",
       "submitted_at": "2026-10-13T18:06:56.253187+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -420,8 +420,8 @@
       "slot": "recap",
       "buffer_id": "6ace3ca2844852c82c78f10d",
       "submitted_at": "2026-10-13T23:13:55.645911+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -437,8 +437,8 @@
       "slot": "vote",
       "buffer_id": "6ace21e9247734bd91369408",
       "submitted_at": "2026-10-13T21:19:55.066528+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -454,8 +454,8 @@
       "slot": "analysis",
       "buffer_id": "6acf2bab0ab87a16c8e8aca4",
       "submitted_at": "2026-10-14T16:13:49.094104+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -471,8 +471,8 @@
       "slot": "compare",
       "buffer_id": "6acee0f7f847f2ad9ebb567c",
       "submitted_at": "2026-10-14T10:55:05.143829+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -488,8 +488,8 @@
       "slot": "data",
       "buffer_id": "6acefe01848c31c8095b118c",
       "submitted_at": "2026-10-14T12:58:59.105420+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -505,8 +505,8 @@
       "slot": "news",
       "buffer_id": "6acf49579ce69926b854e051",
       "submitted_at": "2026-10-14T18:20:24.222998+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -522,8 +522,8 @@
       "slot": "player",
       "buffer_id": "6acebb561f3f10bcb7a39e6c",
       "submitted_at": "2026-10-14T08:14:31.218487+09:00",
-      "checked_at": "2026-10-23T04:04:18.926450+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.660Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -760,15 +760,15 @@
       "slot": "player",
       "buffer_id": "6ad15ded9597cd166258575a",
       "submitted_at": "2026-10-16T08:12:46.578799+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.659Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 6.0,
+        "impressions": 7.0,
         "clicks": 0.0
       }
     },
@@ -811,15 +811,15 @@
       "slot": "analysis",
       "buffer_id": "6ad31edf5461d2b5e498afdc",
       "submitted_at": "2026-10-17T16:08:17.542347+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.622Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.659Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 6.0,
+        "impressions": 7.0,
         "clicks": 0.0
       }
     },
@@ -828,7 +828,7 @@
       "slot": "compare",
       "buffer_id": "6ad2d58e52adf2bfae6ebdaa",
       "submitted_at": "2026-10-17T10:55:28.800519+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-17T01:55:36.897Z",
       "status": "sent",
       "values": {
@@ -845,15 +845,15 @@
       "slot": "data",
       "buffer_id": "6ad2f1fc1694d771d51b1c34",
       "submitted_at": "2026-10-17T12:56:45.875371+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.623Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.659Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 4.0,
+        "impressions": 5.0,
         "clicks": 0.0
       }
     },
@@ -862,7 +862,7 @@
       "slot": "news",
       "buffer_id": "6ad33c28938409f1d07afeaf",
       "submitted_at": "2026-10-17T18:13:14.448785+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.677Z",
       "status": "sent",
       "values": {
@@ -896,15 +896,15 @@
       "slot": "recap",
       "buffer_id": "6ad382fc0b0d72757ade2341",
       "submitted_at": "2026-10-17T23:15:27.096146+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.622Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.659Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
-        "engagementRate": 0.0,
+        "engagementRate": 5.56,
         "reposts": 0.0,
-        "impressions": 16.0,
+        "impressions": 18.0,
         "clicks": 0.0
       }
     },
@@ -913,15 +913,15 @@
       "slot": "vote",
       "buffer_id": "6ad368800a208cb3231cf2cc",
       "submitted_at": "2026-10-17T21:22:26.673033+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
-      "metrics_updated_at": "2026-10-22T09:29:48.622Z",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.659Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 26.0,
+        "impressions": 30.0,
         "clicks": 0.0
       }
     },
@@ -1168,7 +1168,7 @@
       "slot": "analysis",
       "buffer_id": "6ad714f12fcafd0f1855efd6",
       "submitted_at": "2026-10-20T16:14:59.598206+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.675Z",
       "status": "sent",
       "values": {
@@ -1185,7 +1185,7 @@
       "slot": "compare",
       "buffer_id": "6ad6caf3b81183413da9b0c3",
       "submitted_at": "2026-10-20T10:59:17.515092+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.675Z",
       "status": "sent",
       "values": {
@@ -1202,7 +1202,7 @@
       "slot": "data",
       "buffer_id": "6ad6e7302d48e20f64c791db",
       "submitted_at": "2026-10-20T12:59:46.307715+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.675Z",
       "status": "sent",
       "values": {
@@ -1219,7 +1219,7 @@
       "slot": "news",
       "buffer_id": "6ad73267fc46f49b92850a05",
       "submitted_at": "2026-10-20T18:20:41.143859+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.674Z",
       "status": "sent",
       "values": {
@@ -1236,7 +1236,7 @@
       "slot": "player",
       "buffer_id": "6ad6a5522fcafd0f183f1610",
       "submitted_at": "2026-10-20T08:18:44.813565+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.675Z",
       "status": "sent",
       "values": {
@@ -1253,7 +1253,7 @@
       "slot": "recap",
       "buffer_id": "6ad779a6009aee6864429b60",
       "submitted_at": "2026-10-20T23:24:40.829326+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T14:24:48.914Z",
       "status": "sent",
       "values": {
@@ -1270,7 +1270,7 @@
       "slot": "vote",
       "buffer_id": "6ad75ec19792ed6550a84673",
       "submitted_at": "2026-10-20T21:29:55.801348+09:00",
-      "checked_at": "2026-10-23T03:28:50.503755+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
       "metrics_updated_at": "2026-10-20T12:30:03.754Z",
       "status": "sent",
       "values": {
@@ -1296,6 +1296,23 @@
         "engagementRate": 0.0,
         "reposts": 0.0,
         "impressions": 17.0,
+        "clicks": 0.0
+      }
+    },
+    {
+      "post_key": "daily_2026-10-22_vote",
+      "slot": "vote",
+      "buffer_id": "6ada03cee8cca8cdcc503081",
+      "submitted_at": "2026-10-22T21:38:40.351962+09:00",
+      "checked_at": "2026-10-25T03:23:43.233991+09:00",
+      "metrics_updated_at": "2026-10-24T07:30:06.659Z",
+      "status": "sent",
+      "values": {
+        "reactions": 0.0,
+        "comments": 0.0,
+        "engagementRate": 0.0,
+        "reposts": 0.0,
+        "impressions": 14.0,
         "clicks": 0.0
       }
     },
@@ -1332,7 +1349,7 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-10-24T03:28:39.526546+09:00",
+    "checked_at": "2026-10-25T03:23:43.233991+09:00",
     "eligible": 30,
     "checked": 30,
     "status": "ok",
