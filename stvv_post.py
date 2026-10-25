@@ -14,6 +14,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 from style_posts import STYLE_POSTS
+from visual_rotation import choose_variant
 
 
 JST = timezone(timedelta(hours=9))
@@ -768,7 +769,7 @@ def generic_topic_media(slot):
 def next_card_variant(history):
     # Only accepted publications advance the cycle. Skips and failed image
     # checks must not consume a style; retries reproduce the same graphic.
-    return ('stadium', 'split', 'poster')[len(history['publication_log']) % 3]
+    return choose_variant(history)
 
 
 def content_card_media(slot, day, message, source=None, variant='stadium'):
@@ -948,6 +949,7 @@ def publish(
     news_url=None,
     image_url=None,
     *,
+    visual_variant=None,
     reply_to=None,
 ):
     # Check before saving pending: an unsupported delivery was never attempted.
@@ -968,6 +970,7 @@ def publish(
         "source": source,
         "text": message,
         "image_url": image_url,
+        "visual_variant": visual_variant,
         "created_at": datetime.now(JST).isoformat(),
     }
 
@@ -990,6 +993,7 @@ def publish(
         "submitted_at": datetime.now(JST).isoformat(),
         "text": message,
         "image_url": image_url,
+        "visual_variant": visual_variant,
     })
 
     if news_url and news_url not in history["news"]:
@@ -1179,9 +1183,10 @@ def main():
 
     # Build the detailed visual first. A teaser is only appropriate when
     # an image was actually prepared; otherwise publish the full explanation.
+    selected_variant = next_card_variant(history)
     image_url = (
         content_card_media(slot, day, message, source=source,
-                           variant=next_card_variant(history))
+                           variant=selected_variant)
     )
     if not image_url:
         log("採用デザイン画像を公開確認できないため、安全に投稿見送り")
@@ -1202,6 +1207,7 @@ def main():
         source,
         news_url,
         image_url,
+        visual_variant=selected_variant,
     )
     if submitted:
         return run_result("submitted_to_buffer", f"{day} {slot}: Buffer受付成功")
