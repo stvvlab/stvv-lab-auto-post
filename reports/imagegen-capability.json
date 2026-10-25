@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T03:14:38.786223+09:00",
+  "checked_at": "2026-10-25 18:18:32 UTC",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -42,7 +42,12 @@
     "public_asset_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/b1b89c37a92f719d0b6388a93c823c5a1f8bb318/generated/imagegen_brugge_result_20261026.jpg",
     "caption_x_length_with_fixed_tags": 145,
     "buffer_submission_reached": false,
-    "x_display_verified": false
+    "x_display_verified": false,
+    "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
+    "github_actions_conclusion": "success",
+    "full_tests_passed": 187,
+    "next_eligible_slot": "2026-10-26 08:00 JST player"
   },
   "visual_review": {
     "passed": true,
