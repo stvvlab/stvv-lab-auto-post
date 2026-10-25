@@ -782,7 +782,21 @@ def content_card_media(slot, day, message, source=None, variant='stadium'):
             return prepared_url
         from content_card import render_content_card
         path = Path("generated") / f"content_{day}_{slot}.jpg"
-        render_content_card(slot, message, path, source=source, variant=variant)
+        art_background = None
+        if os.getenv("STVV_AI_ART_ENABLED", "false").lower() == "true":
+            # No API key means no charged generation. API errors block the post
+            # instead of silently replacing requested artwork with stale art.
+            from ai_art import build_art_background
+            art_background = build_art_background(
+                slot, day, variant,
+                Path("generated") / f"art_{day}_{slot}.png",
+                ordinal=datetime.strptime(day, "%Y-%m-%d").date().toordinal() +
+                list(TOPICS).index(slot),
+            )
+            if art_background is None:
+                raise RuntimeError("AI art enabled but OPENAI_API_KEY is missing")
+        render_content_card(slot, message, path, source=source,
+                            variant=variant, art_background=art_background)
         git("config", "user.name", "github-actions[bot]")
         git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
         git("add", "--", str(path))
