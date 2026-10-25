@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T07:05:51+09:00",
+  "updated_at": "2026-10-26T08:07:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -224,9 +224,9 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40237886109",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40242487301",
       "conclusion": "success",
-      "checked_at": "2026-10-26T06:57:38.196216+09:00",
+      "checked_at": "2026-10-26T07:56:51.287723+09:00",
       "new_candidates": 0,
       "ready_cards": 1,
       "pending_posts": 0
@@ -250,10 +250,10 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T07:05:51+09:00",
-    "main_observed": "1931b9b49962ce5717a69c0dd4ad24cf33d5bec0",
-    "source_inventory_checked_at": "2026-10-26T06:57:38.196216+09:00",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40237886109",
+    "checked_at": "2026-10-26T08:07:00+09:00",
+    "main_observed": "eddfaecac6314878e49dfcacd86bb32c6912961b",
+    "source_inventory_checked_at": "2026-10-26T07:56:51.287723+09:00",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40242487301",
     "source_inventory_workflow_conclusion": "success",
     "source_checks": [
       {
@@ -275,15 +275,18 @@
     "unprepared_candidates": 0,
     "ready_cards": 1,
     "pending_posts": 0,
-    "official_result_rechecked": "Belgian league round 9, 26 October JST, Club Brugge 3–2 STVV; セヴァウイ and 谷口 scorers",
+    "official_result_rechecked": "Belgian league round 9, Club Brugge 3–2 STVV, scorers セヴァウイ and 谷口",
     "public_asset_bytes_sha256_verified": true,
-    "public_asset_verified_revision": "1931b9b49962ce5717a69c0dd4ad24cf33d5bec0",
+    "public_asset_verified_revision": "eddfaecac6314878e49dfcacd86bb32c6912961b",
     "new_image_generated": false,
     "new_publication": false,
-    "next_eligible_slot": "2026-10-26 08:00 JST player",
-    "previous_passing_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
+    "regular_slot": "2026-10-26 08:00 JST player",
+    "regular_slot_status": "not_started_in_observed_actions_list",
+    "buffer_submission_reached": false,
+    "x_display_verified": false,
+    "retry_or_manual_dispatch_performed": false,
     "tests_repeated": false,
-    "reason": "No code or reviewed content changes. Fresh inventory has no unprepared candidate; existing reviewed card remains ready, no regular slot occurred since prior observation.",
-    "supplemental_reply_transport": "unchanged_blocked; no existing-post reply tool in current Metricool catalogue; no paid or authentication actions"
+    "reason": "Await regular workflow start; no skip, failure or delivery result observed. Do not infer publication from ready state.",
+    "supplemental_reply_transport": "unchanged_blocked; no reply/comment tool exposed in current catalogue"
   }
 }
