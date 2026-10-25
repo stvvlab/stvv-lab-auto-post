@@ -400,7 +400,7 @@ def alternate_layout(im, draw, variant, slot, headline, match, groups, metadata)
             'context_layout': context, 'panels': panels}
 
 
-def render_content_card(slot, message, destination, source=None, variant='stadium'):
+def render_content_card(slot, message, destination, source=None, variant='stadium', art_background=None):
     if slot not in LABELS:
         raise ValueError('Unknown slot')
     if variant not in VARIANTS:
@@ -408,13 +408,15 @@ def render_content_card(slot, message, destination, source=None, variant='stadiu
     if len(clean(message)) > 600:
         raise ValueError('Caption exceeds supported card length')
     headline, match, groups, metadata = story(message, include_metadata=True)
-    with Image.open(BACKGROUND) as background:
+    background_file = Path(art_background) if art_background else BACKGROUND
+    with Image.open(background_file) as background:
         if background.size != (W, H):
             raise ValueError('Approved stadium template dimensions changed')
         im = background.convert('RGB')
     d = ImageDraw.Draw(im)
     audit = {'schema_version': 1, 'template_version': 11, 'slot': slot, 'variant': variant,
              'dimensions': [W, H], 'source': source,
+             'ai_art_background': bool(art_background),
              'headline': headline, 'score_from_caption': list(match) if match else None,
              'match_metadata': metadata, 'panels': []}
     if variant != 'stadium':
