@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T22:06:40+09:00",
+  "updated_at": "2026-10-25T23:07:27+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -123,18 +123,20 @@
     "comic_regular_publication_verified": false
   },
   "latest_followup": {
-    "checked_main_commit": "3f1512ee5ab3304ff938bd4a26d0bfaeb8e45ca7",
-    "source_checked_at": "2026-10-25T22:06:40.785394+09:00",
+    "checked_main_commit": "d199c98958044d3c3e0d1bdb2092e2b3bc4e8b86",
+    "source_checked_at": "2026-10-25T23:00:24.297519+09:00",
     "source_checks_ok": 3,
     "distinct_eligible_sources": 3,
     "all_found_sources_already_published": true,
+    "local_club_news_checked": "https://stvv.com/nl/nieuws",
+    "local_club_latest_article": "2026-10-22 Hajduk statement; same published topic",
     "ready_cards": 0,
     "pending_posts": 0,
     "new_image_generated": false,
     "new_public_post": false,
     "manual_dispatch": false,
-    "supplemental_reply_note": "Latest docs/status and stvv_post unsupported-reply guard read; no exposed Metricool reply tool. Blocker unchanged; no paid API use or standalone fallback.",
-    "next": "Observe next existing 23:00 regular slot. Prepare imagegen only if verified fresh unposted information is available."
+    "supplemental_reply_note": "Read current docs/status and unsupported-reply guard. No Metricool reply tool newly exposed; prior blocker unchanged. No paid API or standalone fallback.",
+    "next": "Observe the existing 23:00 slot once available; generate only from verified fresh eligible unposted information."
   },
   "candidate_preparation": {
     "module": "preparation_inventory.py",
@@ -160,13 +162,19 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40191140926",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40200171938",
       "conclusion": "success",
-      "checked_at": "2026-10-25T20:59:28.114223+09:00",
+      "checked_at": "2026-10-25T23:00:24.297519+09:00",
       "source_checks_ok": 3,
       "new_candidates": 0,
       "ready_cards": 0,
       "pending_posts": 0
     }
+  },
+  "pending_regular_slot_observation": {
+    "slot": "2026-10-25 23:00 JST recap",
+    "checked_at": "2026-10-25T23:07:27+09:00",
+    "status": "run_not_yet_observed",
+    "note": "No 23:00 posting run in current Actions list; not a skip/error/publication. No manual dispatch or resend."
   }
 }
