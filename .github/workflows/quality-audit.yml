@@ -6,6 +6,9 @@ on:
     paths:
       - 'posts.json'
       - 'quality_gate.py'
+      - 'preflight_post.py'
+      - 'test_quality_gate.py'
+      - 'test_preflight_post.py'
       - '.github/workflows/quality-audit.yml'
 
 permissions:
@@ -20,6 +23,6 @@ jobs:
         with:
           python-version: '3.11'
       - name: Test quality audit rules
-        run: python -m unittest -v test_quality_gate.py
+        run: python -m unittest -v test_quality_gate.py test_preflight_post.py
       - name: Check candidate post quality (report only)
         run: python quality_gate.py --posts posts.json
