@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T15:06:00+09:00",
+  "updated_at": "2026-10-25T19:04:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,9 +8,11 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Verified post-fix CI at 570663c58eca9a9e7db604553450027675786300: all 145 tests and preview rendering passed without Buffer delivery.",
-    "Confirmed ready cards remain zero and pending_posts is empty; no new image or publication this pass.",
-    "Corrected obsolete imagegen delivery documentation against recorded 2026-10-24 scheduled Hajduk delivery evidence."
+    "Unified candidate and pre-send conservative X weighted length accounting; outgoing captions including fixed tags must be <=270.",
+    "Fixed false acceptance of Japanese overflow and false blocking caused by long source URLs; invalid hosts/credential-bearing URLs and non-object inputs fail closed.",
+    "Included standalone quality/preflight rules in normal CI and expanded mocked delivery tests for unchanged history, pending-before-send, exact boundary and unknown-send retry protection.",
+    "Added built-in imagegen design briefs with five varied directions and confirmed-publication-based rotation; exact reviewed ready-card art_direction is persisted before send and after acceptance.",
+    "No paid image API calls, manual pilot or extra X post."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261023_3/",
@@ -56,33 +58,28 @@
     "duplicate_guard_preserved": true
   },
   "tests": {
-    "policy_guard_tests_passed": 2,
-    "policy_guard_tests_failed": 0,
-    "network_forbidden_during_enabled_guard_test": true,
-    "full_suite_rerun": "not_run_this_pass",
-    "prior_visual_pipeline_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40162715990",
-    "prior_visual_pipeline_ci_conclusion": "success",
-    "post_fix_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40163949454",
-    "post_fix_ci_conclusion": "success",
-    "post_fix_full_suite_passed": 145,
-    "post_fix_full_suite_failed": 0,
-    "preview_renderer_ci": "success"
+    "local_suite_passed": 179,
+    "local_suite_failed": 0,
+    "initial_local_failure": "Required requests dependency and Japanese font missing; installed dependencies/font, then full suite passed.",
+    "quality_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40183101979",
+    "quality_ci_conclusion": "success",
+    "full_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40183101976",
+    "full_ci_conclusion": "success",
+    "full_ci_passed": 179,
+    "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40183101966",
+    "visual_ci_conclusion": "success",
+    "buffer_and_save_mocked": true,
+    "no_test_publication": true
   },
   "regular_slot_observation": {
-    "slot": "2026-10-24 18:00 JST news",
-    "actual_execution_at": "2026-10-24T18:15:00+09:00",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399",
+    "slot": "2026-10-25 18:00 JST news",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40179857636",
     "workflow_conclusion": "success",
-    "posting_result": "submitted_to_buffer",
-    "detail": "The reviewed Hajduk closed-doors card passed the image/public-byte gate. Buffer accepted it and posted.json recorded sent with no pending item.",
-    "ready_news_card_consumed": true,
-    "buffer_submission_reached": true,
-    "buffer_id": "6adc77250b5343d07074efd5",
-    "buffer_status": "sent",
-    "x_post_created": true,
-    "x_url": "https://x.com/stvvlabo/status/2113922269583917472",
-    "x_text_verified": true,
-    "x_image_rendering_verified": true
+    "actual_execution_at": "2026-10-25T18:15:35+09:00",
+    "posting_result": "skipped_repeated_content",
+    "buffer_submission_reached": false,
+    "x_post_created": false,
+    "note": "Ran before PR26 changes; not evidence of revised production publication."
   },
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
@@ -93,10 +90,12 @@
   },
   "implementation_status": "End-to-end unattended delivery is verified for one fresh official item: built-in image generation, visual review, manifest registration, existing scheduled news-slot Buffer acceptance, sent-state persistence and actual X text/image rendering.",
   "uncompleted": [
-    "Comic art diversity has no reviewed ready card or verified regular-slot publication yet.",
-    "Supplemental reply transport remains blocked; no reply sent."
+    "New code's successful public delivery has not been observed; latest scheduled slot was a pre-change duplicate skip.",
+    "Comic artwork generation, visual review and ready registration still require verified fresh unposted official information; brief output never counts as ready.",
+    "Automated code checks cannot certify Japanese typography, team-score meaning or visual quality; built-in imagegen output still requires agent visual review.",
+    "Supplemental reply transport remains unavailable; no reply sent."
   ],
-  "next_priority": "Prepare content-specific diverse built-in imagegen artwork only for verified fresh unposted official information; observe next existing regular slot.",
+  "next_priority": "Use design_brief for the next verified fresh unposted official item, generate and visually inspect complete artwork with built-in imagegen, register reviewed asset and observe existing scheduled delivery.",
   "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
   "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49",
   "policy_fix_commits": [
@@ -105,5 +104,16 @@
   ],
   "new_generation_this_pass": null,
   "preview_this_pass": null,
-  "new_publication_this_pass": false
+  "new_publication_this_pass": false,
+  "implementation_commit": "43e63d10d6636502d8aec9c7fde81b418d81195c",
+  "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/26",
+  "image_design_diversity": {
+    "module": "design_brief.py",
+    "directions": 5,
+    "status": "brief planning and reviewed metadata delivery implemented",
+    "paid_api_used": false,
+    "generated_new_image": false,
+    "reviewed_new_asset": false,
+    "comic_regular_publication_verified": false
+  }
 }
