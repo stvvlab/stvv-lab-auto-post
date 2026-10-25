@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25 18:18:32 UTC",
+  "updated_at": "2026-10-26T04:01:15.180012+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -248,5 +248,38 @@
     "error": null,
     "recovered_after": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40208356463",
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
+  },
+  "latest_monitoring_check": {
+    "checked_at": "2026-10-26T04:01:15.180012+09:00",
+    "main_observed": "13ad69da41c855b5fef49fa6bce7eb29554dbea7",
+    "source_checks": [
+      {
+        "url": "https://stvv.jp/news/2026/",
+        "status": "ok",
+        "eligible_items": 4
+      },
+      {
+        "url": "https://stvv.jp/news/game/2026/",
+        "status": "ok",
+        "eligible_items": 3
+      },
+      {
+        "url": "https://stvv.jp/news/uefa-news/2026/",
+        "status": "ok",
+        "eligible_items": 1
+      }
+    ],
+    "unprepared_candidates": 0,
+    "ready_cards": 1,
+    "pending_posts": 0,
+    "official_result_rechecked": "Club Brugge 3–2 STVV; STVV-first 2–3",
+    "public_asset_bytes_sha256_verified": true,
+    "new_image_generated": false,
+    "new_publication": false,
+    "next_eligible_slot": "2026-10-26 08:00 JST player",
+    "previous_passing_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
+    "tests_repeated": false,
+    "reason": "No code or asset changes; reviewed card remains ready. No scheduled publishing slot since prior check.",
+    "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue still has no reply method"
   }
 }
