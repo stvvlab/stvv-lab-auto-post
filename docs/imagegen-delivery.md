@@ -56,3 +56,18 @@ Comic diversity still requires a fresh reviewed ready card and regular-slot
 publication verification. Paid image API generation is blocked in `ai_art.py`
 and disabled in the scheduled posting workflow. Supplemental reply safety
 is implemented separately, but its sending transport remains unavailable.
+
+## Varied built-in design preparation
+
+Use `design_brief.build_brief(source_url, reviewed_text, history)` after verifying
+the source and ruling out published/pending duplicates. This produces `brief_only`
+planning data for ChatGPT built-in imagegen; it never generates, reviews or publishes
+an asset. Five directions balance confirmed publication history and avoid repeating
+the last recorded direction. Pending and skipped attempts do not consume a style.
+
+After generating the complete artwork and visually checking facts, Japanese, digits,
+team-score pairing, safe crop and caption agreement, add the returned `art_direction`
+to the ready manifest card with its usual digest and dimensions. Only exact matching
+reviewed ready-card metadata enters pending and publication history. Do not register
+a brief as ready or count offline/CI mocks as a public delivery. Source freshness,
+270 weighted characters including tags, public bytes and all existing guards remain.
