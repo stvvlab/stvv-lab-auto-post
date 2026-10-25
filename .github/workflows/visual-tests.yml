@@ -7,6 +7,11 @@ on:
       - 'ai_art.py'
       - 'content_card.py'
       - 'stvv_post.py'
+      - 'text_metrics.py'
+      - 'design_brief.py'
+      - 'quality_gate.py'
+      - 'test_quality_gate.py'
+      - 'test_preflight_post.py'
       - 'tests/**'
       - '.github/workflows/**'
 
