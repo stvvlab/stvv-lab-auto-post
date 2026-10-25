@@ -1,0 +1,28 @@
+name: Visual pipeline checks
+
+on:
+  pull_request:
+    paths:
+      - 'visual_rotation.py'
+      - 'ai_art.py'
+      - 'content_card.py'
+      - 'stvv_post.py'
+      - 'tests/**'
+      - '.github/workflows/**'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 pillow
+      - run: bash scripts/install-card-font.sh
+      - run: python -m compileall -q ai_art.py visual_rotation.py content_card.py stvv_post.py
+      - run: python -m unittest discover -s tests -v
