@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-24T18:59:00+09:00",
+  "checked_at": "2026-10-26T03:14:38.786223+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -10,6 +10,60 @@
     "evidence_commit": "9b89808fd4dde930fa81c9308ab7547e8265c14c"
   },
   "latest_generation": {
+    "source_url": "https://stvv.jp/news/game/20261026_1/",
+    "date_jst": "2026-10-26",
+    "text": "⚽ 試合終了\nSTVV 2–3 クラブ・ブルージュ\nセヴァウイのPKと谷口彰悟のゴールも、敵地で惜敗。\n\n公式：https://stvv.jp/news/game/20261026_1/",
+    "slots": [
+      "player",
+      "news",
+      "recap"
+    ],
+    "reviewed": true,
+    "status": "ready",
+    "asset_path": "generated/imagegen_brugge_result_20261026.jpg",
+    "sha256": "63a6a2ccb49bd29d047a80db8657353bd2696a04311473464d1b59939fe66621",
+    "dimensions": [
+      1448,
+      1086
+    ],
+    "art_direction": "ink-poster",
+    "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation.",
+    "mode": "ChatGPT built-in imagegen",
+    "tool": "image_gen.imagegen",
+    "tool_success": true,
+    "generated_at": "2026-10-26T03:10:45.659433+09:00",
+    "raw_png_sha256": "e34b993a3b9abc1925444b82df15dc4bf99aed14d3a5d084442a1fd5a79dd780",
+    "generation_prompt": "Use case: ads-marketing. Create ONE complete high-quality independent football media result poster for STVV LAB, landscape 4:3. Original hand-inked graphic novel / premium European football magazine style. Navy and rich yellow with restrained off-white and tiny muted pink accent. No people, no faces, no humanoid characters, no official crests, no unlicensed photos, no speech bubbles, no watermark. A striking original illustration of a rain-soaked football resting near a goal net with angular stadium architecture suggested abstractly; do not claim a real venue likeness. Diagonal cinematic ink lines, subtle halftone, rich tactile print texture, calm deliberate negative space. Serious, resilient post-defeat editorial mood, no trophy, no celebration. Design around this match's narrow loss rather than fixed title boxes. Large readable typographic hierarchy. Exact text only: small masthead 'STVV LAB'; medium 'FULL TIME'; dominant score with two unmistakably paired columns, left team 'STVV' directly over '2', right team 'CLUB BRUGGE' directly over '3', an en dash between the numbers. Short Japanese headline verbatim '敵地で惜敗' in large clear crisp type, not distorted brush scribbles. Small footer '26 OCT 2026'. The STVV score is TWO, Club Brugge score THREE. Do not reverse teams or scores. Keep all text safely inside 7 percent outer margins, high contrast, legible on a mobile X feed. No other text, no invented statistics, scorers, minutes, rankings, league logos or visual numbers. Render the finished artwork including all typography.",
+    "bytes": 1299266,
+    "queued_in_manifest": true,
+    "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
+    "public_post_created": false,
+    "public_asset_bytes_verified": true,
+    "public_asset_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/b1b89c37a92f719d0b6388a93c823c5a1f8bb318/generated/imagegen_brugge_result_20261026.jpg",
+    "caption_x_length_with_fixed_tags": 145,
+    "buffer_submission_reached": false,
+    "x_display_verified": false
+  },
+  "visual_review": {
+    "passed": true,
+    "exact_japanese_checked": true,
+    "opponent_and_score_pairing_checked": true,
+    "crop_and_mobile_legibility_checked": true,
+    "no_people_or_faces": true,
+    "no_club_logos_or_official_seals": true,
+    "no_invented_dates_scores_venue_or_statistics": true,
+    "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation."
+  },
+  "automation_state": {
+    "built_in_generation_confirmed_in_scheduled_environment": true,
+    "ready_cards": 1,
+    "published_cards": 2,
+    "unattended_generation_and_manifest_registration_verified": true,
+    "regular_slot_publication_verified": true,
+    "classification": "Historical end-to-end delivery remains verified for Hajduk. Latest Club Brugge result: built-in generation, agent visual review, immutable public bytes and ready registration verified; regular-slot Buffer/X delivery remains unverified.",
+    "latest_card_regular_slot_publication_verified": false
+  },
+  "previous_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261023_3/",
     "published_date": "2026-10-23",
     "verified_fact": "UEFA Conference League league phase round 4, HNK Hajduk Split v STVV, behind closed doors",
@@ -39,23 +93,5 @@
       "x_image_rendering_verified": true,
       "x_verified_at": "2026-10-24T18:59:00+09:00"
     }
-  },
-  "visual_review": {
-    "passed": true,
-    "exact_japanese_checked": true,
-    "opponent_and_round_checked": true,
-    "crop_and_mobile_legibility_checked": true,
-    "no_people_or_faces": true,
-    "no_club_logos_or_official_seals": true,
-    "no_invented_dates_scores_venue_or_statistics": true,
-    "review_note": "Closed entrance gate and empty stands match the official behind-closed-doors notice. Large yellow brush headline, clear opponent line and safe 4:3 margins."
-  },
-  "automation_state": {
-    "built_in_generation_confirmed_in_scheduled_environment": true,
-    "ready_cards": 0,
-    "published_cards": 2,
-    "unattended_generation_and_manifest_registration_verified": true,
-    "regular_slot_publication_verified": true,
-    "classification": "Built-in generation, visual review, manifest registration, existing scheduled news-slot Buffer delivery and actual X text/image rendering were verified end-to-end for the fresh Hajduk closed-doors notice."
   }
 }
