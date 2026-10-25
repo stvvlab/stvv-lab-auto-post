@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T10:34:27.957Z",
+  "updated_at": "2026-10-25T20:04:06+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -69,10 +69,9 @@
     "visual_ci_conclusion": "success",
     "buffer_and_save_mocked": true,
     "no_test_publication": true,
-    "main_push_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40183196857",
+    "main_push_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185317827",
     "main_push_ci_conclusion": "success",
-    "main_push_ci_passed": 179,
-    "main_push_ci_completed_at": "2026-10-25T19:04:12+09:00",
+    "main_push_ci_passed": 187,
     "preparation_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185233576",
     "preparation_ci_conclusion": "success"
   },
@@ -95,7 +94,6 @@
   },
   "implementation_status": "End-to-end unattended delivery is verified for one fresh official item: built-in image generation, visual review, manifest registration, existing scheduled news-slot Buffer acceptance, sent-state persistence and actual X text/image rendering.",
   "uncompleted": [
-    "First scheduled preparation inventory execution after merge is not yet observed; live local scan and GitHub inventory tests passed.",
     "Fresh unposted official candidate unavailable in inspected archives; no new image or ready card was created.",
     "Comic generation-to-visual-review-to-regular-publication has not been observed. Inventory preparation does not perform imagegen or certify output.",
     "Revised production successful Buffer/X delivery remains unverified. Supplemental reply transport remains unavailable."
@@ -122,24 +120,15 @@
     "comic_regular_publication_verified": false
   },
   "latest_followup": {
-    "checked_main_commit": "0ac07fd8e28c6dd942ce6812b21ad019fc9e3d05",
-    "source_scan": {
-      "japanese_archive": "https://stvv.jp/news/2026/",
-      "uefa_archive": "https://stvv.jp/news/uefa-news/2026/",
-      "local_club_news": "https://stvv.com/nl/nieuws",
-      "latest_japanese_article_date": "2026-10-23",
-      "latest_local_club_article_date": "2026-10-22",
-      "fresh_unposted_eligible_article_confirmed": false,
-      "note": "Japanese general archive's latest eligible items are the already published Hajduk notice and Midtjylland result; newer listed items are sponsors. UEFA category archive returned older August entries, so it was cross-checked against general archive and direct October article. No absence beyond inspected sources is asserted."
-    },
+    "checked_main_commit": "54a5248dbcc5ccd7add92b1d7adb9835d84a6be0",
+    "preparation_schedule_observed": true,
     "ready_cards": 0,
     "pending_posts": 0,
     "new_image_generated": false,
     "new_public_post": false,
     "manual_dispatch": false,
-    "source_quality_note": "The already-published Midtjylland article lists scoring minute 42 in its score summary and 44 in narrative. Do not derive new minute-specific content from this inconsistent source without corroboration.",
-    "supplemental_reply_note": "Read latest docs/status and stvv_post reply guard; exposed Metricool tools still provide no existing-parent reply transport. Previously verified blocker unchanged; no paid API use or standalone fallback.",
-    "next": "Wait for verified fresh eligible information and prepare at most one reviewed built-in artwork for an existing scheduled slot. Revised main production send and comic variant delivery remain unverified."
+    "supplemental_reply_note": "Latest docs/status and no-standalone reply guard read; no reply tool exposed. Existing blocker unchanged; no new paid API use or re-investigation.",
+    "next": "Observe next existing regular publication slot; do not generate a post image without new verified eligible content."
   },
   "candidate_preparation": {
     "module": "preparation_inventory.py",
@@ -150,6 +139,19 @@
     "ready_cards": 0,
     "source_evidence_automatically_approved": false,
     "paid_api_used": false,
-    "first_scheduled_inventory_after_merge_observed": false
+    "first_scheduled_inventory_after_merge_observed": true,
+    "scheduled_evidence": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40187023151",
+      "conclusion": "success",
+      "checked_at": "2026-10-25T20:00:12.727300+09:00",
+      "report_saved_to_main_at": "2026-10-25T20:00:18+09:00",
+      "report_commit": "54a5248dbcc5ccd7add92b1d7adb9835d84a6be0",
+      "source_checks_ok": 3,
+      "distinct_eligible_sources": 3,
+      "new_candidates": 0,
+      "ready_cards": 0,
+      "pending_posts": 0,
+      "no_posting_or_generation_performed": true
+    }
   }
 }
