@@ -55,6 +55,7 @@ WORDS = (
     "加入", "退団", "負傷", "復帰",
     "出場", "得点", "代表", "招集",
     "契約", "順位", "勝利", "敗戦", "日程",
+    "UEFA", "カンファレンスリーグ", "無観客", "キックオフ",
 )
 
 TOPICS = {
@@ -619,10 +620,42 @@ def match_post(event, slot):
 
 
 def articles(now):
-    response = SESSION.get(NEWS, timeout=25)
-    response.raise_for_status()
+    found, checks = scan_articles(now)
+    if all(check['status'] == 'error' for check in checks):
+        raise ValueError('All official news listings failed; no-news cannot be confirmed')
+    return found
 
-    soup = BeautifulSoup(response.text, "html.parser")
+
+def scan_articles(now, session=None):
+    """Inspect independent official lists; retain failures instead of hiding them."""
+    session = session if session is not None else SESSION
+    year = now.year
+    sources = [f'https://stvv.jp/news/{year}/',
+               f'https://stvv.jp/news/game/{year}/',
+               f'https://stvv.jp/news/uefa-news/{year}/']
+    found, checks = {}, []
+    for url in sources:
+        try:
+            response = session.get(url, timeout=20)
+            response.raise_for_status()
+            final_url = getattr(response, 'url', url)
+            final = urlparse(final_url if isinstance(final_url, str) else url)
+            if final.scheme != 'https' or final.netloc != 'stvv.jp':
+                raise ValueError('Official listing redirected outside the approved host')
+            if not BeautifulSoup(response.text, 'html.parser').find('a', href=True):
+                raise ValueError('Unreadable official listing; no links found')
+            parsed = parse_articles(response.text, now)
+            found.update(dict(parsed))
+            checks.append({'url': url, 'status': 'ok', 'eligible_items': len(parsed)})
+        except (requests.RequestException, ValueError) as error:
+            checks.append({'url': url, 'status': 'error', 'error': str(error)[:300]})
+    return sorted(found.items(), key=lambda item: item[1][0], reverse=True), checks
+
+
+def parse_articles(markup, now):
+    """Parse one official listing with the same source/date/promotional filters."""
+
+    soup = BeautifulSoup(markup, "html.parser")
     found = {}
 
     for anchor in soup.find_all("a", href=True):
