@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T01:06:16+09:00",
+  "updated_at": "2026-10-26T02:01:35+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -122,7 +122,7 @@
     "comic_regular_publication_verified": false
   },
   "latest_followup": {
-    "source_checked_at": "2026-10-26T01:00:11.373982+09:00",
+    "source_checked_at": "2026-10-26T02:01:30.400199+09:00",
     "source_checks_ok": 3,
     "distinct_eligible_sources": 3,
     "all_found_sources_already_published": true,
@@ -131,8 +131,8 @@
     "new_image_generated": false,
     "new_public_post": false,
     "manual_dispatch": false,
-    "supplemental_reply_note": "Current docs/status and unsupported-reply guard read. No newly exposed Metricool reply tool; existing free-transport blocker unchanged. No paid API or standalone fallback.",
-    "next": "Await fresh eligible official information; observe next scheduled database attempt after concurrent-change stop without bypassing its guard."
+    "supplemental_reply_note": "Current docs/status and reply guard checked; no exposed Metricool existing-post reply tool. Constraint unchanged; no paid API or standalone fallback.",
+    "next": "Await verified fresh unposted information and retain existing preparation/review/publication gates."
   },
   "candidate_preparation": {
     "module": "preparation_inventory.py",
@@ -158,9 +158,9 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40209552434",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40214435379",
       "conclusion": "success",
-      "checked_at": "2026-10-26T01:00:11.373982+09:00",
+      "checked_at": "2026-10-26T02:01:30.400199+09:00",
       "source_checks_ok": 3,
       "new_candidates": 0,
       "ready_cards": 0,
@@ -169,14 +169,18 @@
   },
   "related_workflow_observation": {
     "workflow": "STVV Database Sync",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40208356463",
-    "result": "failure",
-    "actual_execution_at": "2026-10-26T00:45:02+09:00",
-    "error": "Workbook changed during collection; no write sent",
-    "tests": "passed",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40213157923",
+    "result": "success",
+    "actual_execution_at": "2026-10-26T01:45:33+09:00",
+    "status": "verified_no_change",
+    "official_matches_checked": 68,
+    "match_reports_checked": 53,
+    "held_match_report_fields": 674,
     "rows_added": 0,
     "cells_updated": 0,
-    "write_sent": false,
-    "classification": "Concurrent workbook-change guard; no evidence of posting transport failure. No manual rerun performed."
+    "reread_verified": true,
+    "error": null,
+    "recovered_after": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40208356463",
+    "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   }
 }
