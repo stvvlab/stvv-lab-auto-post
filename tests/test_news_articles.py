@@ -6,6 +6,14 @@ import stvv_post as posting
 
 
 class NewsArticleTests(unittest.TestCase):
+    def test_competition_notice_without_match_keyword_is_not_lost(self):
+        title = '【お知らせ】UEFAカンファレンスリーグ 第4節 HNKハイドゥク・スプリト戦について'
+        markup = f'<a href="/news/game/20261023_3/"><h3>{title}</h3></a>'
+        markup += '<a href="/news/game/20261023_4/"><h3>UEFAスポンサー募集</h3></a>'
+        now = datetime(2026, 10, 25, 19, tzinfo=posting.JST)
+        self.assertEqual(self.articles_from(markup, now),
+                         [('https://stvv.jp/news/game/20261023_3/', (now.date().replace(day=23), title))])
+
     def articles_from(self, markup, now=None):
         response = Mock(text=markup)
         now = now or datetime(2026, 10, 21, 18, tzinfo=posting.JST)
