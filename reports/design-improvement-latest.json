@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T03:14:38.786223+09:00",
+  "updated_at": "2026-10-25 18:18:32 UTC",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -11,7 +11,8 @@
     "Verified new Japanese official Club Brugge match report body and ruled out pending/published source or match duplicates.",
     "Generated one original no-person ink poster using ChatGPT built-in imagegen; reviewed Japanese, date, team-score pairing and safe crop.",
     "Committed image bytes and reviewed ready manifest atomically; verified immutable public bytes against SHA256.",
-    "No public post, pilot/manual dispatch or paid API. Next eligible existing slot is 08:00 JST player."
+    "No public post, pilot/manual dispatch or paid API. Next eligible existing slot is 08:00 JST player.",
+    "Fixed ready-card-dependent offline test isolation without weakening production quality or duplicate gates; 187 local tests passed with the real ready card present."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -83,7 +84,7 @@
     "visual_ci_conclusion": "success",
     "buffer_and_save_mocked": true,
     "no_test_publication": true,
-    "main_push_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185317827",
+    "main_push_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
     "main_push_ci_conclusion": "success",
     "main_push_ci_passed": 187,
     "preparation_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185233576",
@@ -91,10 +92,20 @@
     "current_pass": {
       "focused_passed": 18,
       "focused_failed": 0,
-      "scope": "prepared media/design and outgoing quality integration",
-      "buffer_and_save_mocked": true,
-      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220272103",
-      "github_actions_conclusion": "in_progress_at_report"
+      "full_local_passed": 187,
+      "full_local_failed": 0,
+      "local_font_path": "Existing NotoSansCJKjp-Bold.otf supplied via STVV_CARD_FONT; local sudo font installer unavailable.",
+      "ready_manifest_present_during_full_suite": true,
+      "initial_github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220272103",
+      "initial_github_actions_conclusion": "failure",
+      "root_cause": "Scheduled fallback test read the real prepared queue and attempted ledger persistence. Read-only CI rejected persistence before transport.",
+      "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
+      "fix": "Isolate prepared_candidates in fallback scenarios, fail immediately on save/send, assert no publication for empty-source case.",
+      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
+      "github_actions_conclusion": "success",
+      "no_actual_test_publication": true,
+      "github_actions_passed": 187,
+      "preview_render_and_upload": "success"
     }
   },
   "regular_slot_observation": {
@@ -116,7 +127,7 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "End-to-end unattended delivery is verified for one fresh official item: built-in image generation, visual review, manifest registration, existing scheduled news-slot Buffer acceptance, sent-state persistence and actual X text/image rendering.",
+  "implementation_status": "Historical Hajduk generation-to-X delivery verified. Latest Club Brugge ink artwork is prepared and reviewed; its regular-slot publication is unverified.",
   "uncompleted": [
     "Latest Club Brugge artwork's existing scheduled-slot Buffer delivery and X display have not been observed.",
     "Comic/ink variants are prepared with agent visual review; future quality and publication still require verification.",
@@ -124,7 +135,7 @@
   ],
   "next_priority": "Observe regular 08:00 player slot consuming exact reviewed Club Brugge card; verify Buffer sent status and X rendering without resending on uncertain results.",
   "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
-  "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49",
+  "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
   "policy_fix_commits": [
     "8aee061128fd2c70c5de4da687cc0f8add7b24c7",
     "570663c58eca9a9e7db604553450027675786300"
@@ -193,9 +204,9 @@
     "module": "preparation_inventory.py",
     "report": "reports/preparation-latest.json",
     "schedule": "existing Discovery Brief workflow, hourly at :40 UTC",
-    "live_scan": "all three archives retrieved successfully; three distinct eligible articles, all already published",
+    "live_scan": "New official Club Brugge result detected; body verified and one reviewed card prepared.",
     "new_candidates": 0,
-    "ready_cards": 0,
+    "ready_cards": 1,
     "source_evidence_automatically_approved": false,
     "paid_api_used": false,
     "first_scheduled_inventory_after_merge_observed": true,
@@ -213,14 +224,14 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40214435379",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40218929194",
       "conclusion": "success",
-      "checked_at": "2026-10-26T02:01:30.400199+09:00",
-      "source_checks_ok": 3,
-      "new_candidates": 0,
+      "checked_at": "2026-10-26T02:57:44+09:00",
+      "new_candidates": 1,
       "ready_cards": 0,
-      "pending_posts": 0
-    }
+      "note": "Inventory before this run prepared the Brugge card; current ready count is 1."
+    },
+    "note": "One new official source was converted into the current ready card; zero remaining unprepared sources from this scan."
   },
   "related_workflow_observation": {
     "workflow": "STVV Database Sync",
