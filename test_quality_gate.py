@@ -1,6 +1,6 @@
 """Tests for the non-blocking STVV LAB quality audit."""
 import unittest
-from quality_gate import audit
+from quality_gate import audit, can_publish
 
 
 class QualityGateTests(unittest.TestCase):
@@ -23,6 +23,19 @@ class QualityGateTests(unittest.TestCase):
         post = {"type": "news", "text": "STVV 1-0 相手チーム",
                 "source_url": "https://example.com/match/123"}
         self.assertEqual([], audit(post))
+
+    def test_generic_warning_does_not_block(self):
+        self.assertTrue(can_publish({"type": "vote", "text": "ここが重要"}))
+
+    def test_excluded_promotion_blocks(self):
+        self.assertFalse(can_publish({"type": "vote", "text": "スポンサー発表"}))
+
+    def test_news_without_source_blocks(self):
+        self.assertFalse(can_publish({"type": "news", "text": "試合速報"}))
+
+    def test_sourced_news_allowed(self):
+        self.assertTrue(can_publish({"type": "news", "text": "試合速報",
+                                    "source_url": "https://example.com/news"}))
 
     def test_bad_url(self):
         post = {"type": "news", "text": "試合速報", "source_url": "not-a-url"}
