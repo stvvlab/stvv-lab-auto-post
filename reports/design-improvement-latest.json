@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-24T18:59:00+09:00",
+  "updated_at": "2026-10-25T14:00:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,11 +8,10 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Observed the existing 2026-10-24 18:00 JST news slot run without manual replay.",
-    "Confirmed the reviewed Hajduk closed-doors card passed public-byte verification and was accepted by Buffer at 18:15 JST.",
-    "Confirmed posted.json moved the item from pending to publication_log with Buffer status sent.",
-    "Verified the actual @stvvlabo X post displays the exact caption, official source link and generated image.",
-    "Marked the manifest card published and recorded the verified end-to-end result."
+    "Reviewed merged visual rotation foundation 0ded7348cd165ad67be8aa8d1d09adb4590aa09d.",
+    "Blocked the newly introduced paid image API transport in ai_art.py even if environment flags or keys are set.",
+    "Removed OPENAI_API_KEY exposure and forced paid art generation off in scheduled posting workflow.",
+    "Preserved reviewed manifest ingestion, seven existing slots, duplicate checks, pending persistence and public-byte checks."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261023_3/",
@@ -58,20 +57,13 @@
     "duplicate_guard_preserved": true
   },
   "tests": {
-    "manifest_json_valid": true,
-    "image_decode_and_dimensions": "JPEG 1448x1086 passed",
-    "asset_sha256_verified": true,
-    "caption_x_length_with_fixed_tags": 207,
-    "x_length_limit": 270,
-    "code_changed": false,
-    "full_suite_rerun": "not_run_no_code_change",
-    "latest_code_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
-    "latest_code_ci_conclusion": "success",
-    "latest_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40072960175",
-    "latest_ci_conclusion": "success",
-    "latest_ci_tests": 141,
-    "initial_manifest_ci_failure": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40072845860",
-    "failure_reason": "Three content-guard tests read the live ready queue instead of their mocked news candidates; test isolation was fixed without changing production selection."
+    "policy_guard_tests_passed": 2,
+    "policy_guard_tests_failed": 0,
+    "network_forbidden_during_enabled_guard_test": true,
+    "full_suite_rerun": "not_run_this_pass",
+    "prior_visual_pipeline_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40162715990",
+    "prior_visual_pipeline_ci_conclusion": "success",
+    "post_fix_ci": "not_yet_verified"
   },
   "regular_slot_observation": {
     "slot": "2026-10-24 18:00 JST news",
@@ -98,10 +90,18 @@
   },
   "implementation_status": "End-to-end unattended delivery is verified for one fresh official item: built-in image generation, visual review, manifest registration, existing scheduled news-slot Buffer acceptance, sent-state persistence and actual X text/image rendering.",
   "uncompleted": [
-    "Supplemental analysis reply sending remains blocked because no free authenticated supported transport for replying to an existing published X post is available; no reply was posted.",
-    "Future fresh items still require the same source, duplicate, visual and delivery checks."
+    "Comic art diversity has no reviewed ready card or verified regular-slot publication yet.",
+    "Post-fix full CI not yet verified.",
+    "Supplemental reply transport remains blocked; no reply sent."
   ],
-  "next_priority": "Keep the published Hajduk source blocked from reuse and apply the verified imagegen delivery path only when a new official, unposted item appears.",
+  "next_priority": "Verify full CI for the paid API block; prepare diverse built-in imagegen artwork only for a verified fresh unposted official item.",
   "preparation_commit": "5d31e2d4a10dede0a3ee2668aa3a5ff419379ceb",
-  "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49"
+  "test_isolation_fix_commit": "52573c2aeba222104bba245fe19f9f8d0bc96c49",
+  "policy_fix_commits": [
+    "8aee061128fd2c70c5de4da687cc0f8add7b24c7",
+    "570663c58eca9a9e7db604553450027675786300"
+  ],
+  "new_generation_this_pass": null,
+  "preview_this_pass": null,
+  "new_publication_this_pass": false
 }
