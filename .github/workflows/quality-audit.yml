@@ -1,0 +1,23 @@
+name: STVV LAB Quality Audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'posts.json'
+      - 'quality_gate.py'
+      - '.github/workflows/quality-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check candidate post quality (report only)
+        run: python quality_gate.py --posts posts.json
