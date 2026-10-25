@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T20:04:06+09:00",
+  "updated_at": "2026-10-25T21:06:03+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -152,6 +152,21 @@
       "ready_cards": 0,
       "pending_posts": 0,
       "no_posting_or_generation_performed": true
+    },
+    "latest_scheduled_check": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40191140926",
+      "conclusion": "success",
+      "checked_at": "2026-10-25T20:59:28.114223+09:00",
+      "source_checks_ok": 3,
+      "new_candidates": 0,
+      "ready_cards": 0,
+      "pending_posts": 0
     }
+  },
+  "pending_regular_slot_observation": {
+    "slot": "2026-10-25 21:00 JST vote",
+    "checked_at": "2026-10-25T21:06:03+09:00",
+    "status": "run_not_yet_observed",
+    "note": "Actions list has no 21:00 slot run yet; not classified as skip, error, Buffer acceptance or X publication. No manual retry dispatched."
   }
 }
