@@ -14,6 +14,7 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 from style_posts import STYLE_POSTS
+from visual_rotation import choose_variant
 
 
 JST = timezone(timedelta(hours=9))
@@ -768,7 +769,7 @@ def generic_topic_media(slot):
 def next_card_variant(history):
     # Only accepted publications advance the cycle. Skips and failed image
     # checks must not consume a style; retries reproduce the same graphic.
-    return ('stadium', 'split', 'poster')[len(history['publication_log']) % 3]
+    return choose_variant(history)
 
 
 def content_card_media(slot, day, message, source=None, variant='stadium'):
@@ -781,7 +782,21 @@ def content_card_media(slot, day, message, source=None, variant='stadium'):
             return prepared_url
         from content_card import render_content_card
         path = Path("generated") / f"content_{day}_{slot}.jpg"
-        render_content_card(slot, message, path, source=source, variant=variant)
+        art_background = None
+        if os.getenv("STVV_AI_ART_ENABLED", "false").lower() == "true":
+            # No API key means no charged generation. API errors block the post
+            # instead of silently replacing requested artwork with stale art.
+            from ai_art import build_art_background
+            art_background = build_art_background(
+                slot, day, variant,
+                Path("generated") / f"art_{day}_{slot}.png",
+                ordinal=datetime.strptime(day, "%Y-%m-%d").date().toordinal() +
+                list(TOPICS).index(slot),
+            )
+            if art_background is None:
+                raise RuntimeError("AI art enabled but OPENAI_API_KEY is missing")
+        render_content_card(slot, message, path, source=source,
+                            variant=variant, art_background=art_background)
         git("config", "user.name", "github-actions[bot]")
         git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
         git("add", "--", str(path))
@@ -948,6 +963,7 @@ def publish(
     news_url=None,
     image_url=None,
     *,
+    visual_variant=None,
     reply_to=None,
 ):
     # Check before saving pending: an unsupported delivery was never attempted.
@@ -968,6 +984,7 @@ def publish(
         "source": source,
         "text": message,
         "image_url": image_url,
+        "visual_variant": visual_variant,
         "created_at": datetime.now(JST).isoformat(),
     }
 
@@ -990,6 +1007,7 @@ def publish(
         "submitted_at": datetime.now(JST).isoformat(),
         "text": message,
         "image_url": image_url,
+        "visual_variant": visual_variant,
     })
 
     if news_url and news_url not in history["news"]:
@@ -1179,9 +1197,10 @@ def main():
 
     # Build the detailed visual first. A teaser is only appropriate when
     # an image was actually prepared; otherwise publish the full explanation.
+    selected_variant = next_card_variant(history)
     image_url = (
         content_card_media(slot, day, message, source=source,
-                           variant=next_card_variant(history))
+                           variant=selected_variant)
     )
     if not image_url:
         log("採用デザイン画像を公開確認できないため、安全に投稿見送り")
@@ -1202,6 +1221,7 @@ def main():
         source,
         news_url,
         image_url,
+        visual_variant=selected_variant,
     )
     if submitted:
         return run_result("submitted_to_buffer", f"{day} {slot}: Buffer受付成功")
