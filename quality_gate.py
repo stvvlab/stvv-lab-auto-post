@@ -40,22 +40,39 @@ def audit(post):
     return problems
 
 
+CRITICAL = {"missing_text", "over_280_characters", "excluded_promotion",
+            "missing_source_reference", "malformed_source_url", "not_an_object"}
+
+
+def can_publish(post):
+    """Fail closed on critical issues; stylistic warnings remain nonblocking."""
+    return not any(problem in CRITICAL for problem in audit(post))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--posts", default="posts.json")
     parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--enforce-critical", action="store_true",
+                        help="Exit with error only for publish-blocking findings")
     args = parser.parse_args()
     data = json.loads(Path(args.posts).read_text(encoding="utf-8"))
     posts = data.get("posts", []) if isinstance(data, dict) else data
     if not isinstance(posts, list):
         raise SystemExit("posts must be a list")
     flagged = 0
+    critical_count = 0
     for idx, post in enumerate(posts):
         problems = audit(post) if isinstance(post, dict) else ["not_an_object"]
         if problems:
             flagged += 1
+            if any(p in CRITICAL for p in problems):
+                critical_count += 1
             print(f"POST {idx}: {', '.join(problems)}")
-    print(f"Audited {len(posts)} posts; flagged {flagged}.")
+    print(f"Audited {len(posts)} posts; flagged {flagged}; "
+          f"publish-blocking {critical_count}.")
+    if args.enforce_critical and critical_count:
+        raise SystemExit(1)
     if args.strict and flagged:
         raise SystemExit(1)
 
