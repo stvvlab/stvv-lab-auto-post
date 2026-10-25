@@ -15,6 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 from style_posts import STYLE_POSTS
 from visual_rotation import choose_variant
+from text_metrics import x_length
 
 
 JST = timezone(timedelta(hours=9))
@@ -684,23 +685,6 @@ def articles(now):
     )
 
 
-def x_length(message):
-    count = 0
-    previous = 0
-
-    for match in re.finditer(r"https?://\S+", message):
-        count += sum(
-            1 if ord(c) < 128 else 2
-            for c in message[previous:match.start()]
-        ) + 23
-        previous = match.end()
-
-    return count + sum(
-        1 if ord(c) < 128 else 2
-        for c in message[previous:]
-    )
-
-
 def faceless_player_media(slot, source):
     """Only attach an original, no-face graphic to generic player commentary."""
     if slot != "player" or source is not None:
@@ -964,6 +948,7 @@ def publish(
     image_url=None,
     *,
     visual_variant=None,
+    art_direction=None,
     reply_to=None,
 ):
     # Check before saving pending: an unsupported delivery was never attempted.
@@ -987,7 +972,7 @@ def publish(
         candidate["source_url"] = source
     elif isinstance(source, str) and re.fullmatch(r"thesportsdb:[0-9]+", source):
         candidate["event_id"] = source.partition(":")[2]
-    problems = audit(candidate)
+    problems = audit(candidate, max_length=270)
     blocking = [problem for problem in problems if problem in CRITICAL]
     if blocking:
         log(f"投稿前品質ゲートで中止: {key} / {', '.join(blocking)}")
@@ -1001,6 +986,7 @@ def publish(
         "text": message,
         "image_url": image_url,
         "visual_variant": visual_variant,
+        "art_direction": art_direction,
         "created_at": datetime.now(JST).isoformat(),
     }
 
@@ -1024,6 +1010,7 @@ def publish(
         "text": message,
         "image_url": image_url,
         "visual_variant": visual_variant,
+        "art_direction": art_direction,
     })
 
     if news_url and news_url not in history["news"]:
@@ -1227,6 +1214,8 @@ def main():
     # Restore useful, specific captions. Generic image-tap teasers hid
     # the actual topic and repeated identical hooks across days.
     # Keep the original fact-checked text alongside the visual.
+    from prepared_media import prepared_art_direction
+    art_direction = prepared_art_direction(slot, message, source)
     message += HASHTAGS
 
     submitted = publish(
@@ -1238,6 +1227,7 @@ def main():
         news_url,
         image_url,
         visual_variant=selected_variant,
+        art_direction=art_direction,
     )
     if submitted:
         return run_result("submitted_to_buffer", f"{day} {slot}: Buffer受付成功")

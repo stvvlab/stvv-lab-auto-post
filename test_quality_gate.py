@@ -4,6 +4,16 @@ from quality_gate import audit, can_publish
 
 
 class QualityGateTests(unittest.TestCase):
+    def test_non_object_fails_closed(self):
+        for value in [None, [], "text"]:
+            self.assertFalse(can_publish(value))
+
+    def test_japanese_uses_weighted_length(self):
+        self.assertIn("over_280_characters", audit({"text": "あ" * 141}))
+
+    def test_long_url_does_not_false_block(self):
+        self.assertTrue(can_publish({"text": "公式：https://stvv.jp/news/" + "a" * 300}))
+
     def test_missing_text(self):
         self.assertIn("missing_text", audit({"text": ""}))
 
@@ -40,6 +50,10 @@ class QualityGateTests(unittest.TestCase):
     def test_bad_url(self):
         post = {"type": "news", "text": "試合速報", "source_url": "not-a-url"}
         self.assertIn("malformed_source_url", audit(post))
+
+    def test_url_requires_host_and_no_embedded_credentials(self):
+        for source in ["https:///news", "https://user:password@stvv.jp/news/a", "https://[bad"]:
+            self.assertFalse(can_publish({"type": "news", "text": "公式発表", "source_url": source}))
 
 
 if __name__ == "__main__":

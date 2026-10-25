@@ -12,6 +12,23 @@ ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / 'editorial/imagegen_cards.json'
 
 
+def prepared_art_direction(slot, message, source):
+    """Read design metadata only from the exact reviewed ready card."""
+    from design_brief import ART_DIRECTIONS
+    if not MANIFEST.exists():
+        return None
+    data = json.loads(MANIFEST.read_text(encoding='utf-8'))
+    if data.get('enabled') is not True:
+        return None
+    cards = [c for c in data.get('cards', []) if c.get('source_url') == source
+             and c.get('text') == message and slot in c.get('slots', [])
+             and c.get('reviewed') is True and c.get('status') == 'ready']
+    if len(cards) != 1:
+        return None
+    direction = cards[0].get('art_direction')
+    return direction if direction in ART_DIRECTIONS else None
+
+
 def prepared_candidates(slot, now):
     """Yield fresh reviewed editorial copy, never a headline rewritten on the runner."""
     if not MANIFEST.exists():
