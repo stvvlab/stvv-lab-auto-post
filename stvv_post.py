@@ -979,6 +979,22 @@ def publish(
         )
         return False
 
+    # Validate the exact outgoing message before recording a pending post.
+    # Unknown source identities are not treated as verified evidence.
+    from quality_gate import audit, CRITICAL
+    candidate = {"type": slot, "text": message}
+    if isinstance(source, str) and source.startswith(("https://", "http://")):
+        candidate["source_url"] = source
+    elif isinstance(source, str) and re.fullmatch(r"thesportsdb:[0-9]+", source):
+        candidate["event_id"] = source.partition(":")[2]
+    problems = audit(candidate)
+    blocking = [problem for problem in problems if problem in CRITICAL]
+    if blocking:
+        log(f"投稿前品質ゲートで中止: {key} / {', '.join(blocking)}")
+        return False
+    if problems:
+        log(f"投稿前品質の改善推奨: {key} / {', '.join(problems)}")
+
     history["pending_posts"][key] = {
         "slot": slot,
         "source": source,
