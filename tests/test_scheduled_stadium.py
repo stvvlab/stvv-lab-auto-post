@@ -8,6 +8,17 @@ import stvv_post as posting
 
 
 class ScheduledStadiumTests(unittest.TestCase):
+    def setUp(self):
+        # These scenarios exercise the scheduled fallback, not the live ready queue.
+        for target, kwargs in [
+            ('prepared_media.prepared_candidates', {'return_value': []}),
+            ('stvv_post.save', {'side_effect': AssertionError('Offline test attempted ledger write')}),
+            ('stvv_post.send', {'side_effect': AssertionError('Offline test attempted transport')}),
+        ]:
+            mock = patch(target, **kwargs)
+            mock.start()
+            self.addCleanup(mock.stop)
+
     def test_composition_cycle_advances_only_with_publication_history(self):
         history = {'publication_log': [], 'pending_posts': {}}
         observed = []
@@ -71,8 +82,10 @@ class ScheduledStadiumTests(unittest.TestCase):
              patch.object(posting, 'feedback_scores', return_value={}), \
              patch.object(posting, 'auto_feedback_scores', return_value={}), \
              patch.object(posting, 'articles', return_value=[]), \
-             patch.object(posting, 'slot_for_run', return_value=('player', '2026-10-21')):
+             patch.object(posting, 'slot_for_run', return_value=('player', '2026-10-21')), \
+             patch.object(posting, 'publish') as publish:
             self.assertEqual(posting.main(), 'skipped_no_verified_content')
+            publish.assert_not_called()
 
     def test_vote_without_verified_context_never_uses_generic_fallback(self):
         history = {'used_posts': [], 'pending_posts': {}, 'publication_log': []}
