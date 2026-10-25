@@ -43,6 +43,26 @@
         "x_url": "https://x.com/stvvlabo/status/2113922269583917472",
         "x_display_verified_at": "2026-10-24T18:59:00+09:00"
       }
+    },
+    {
+      "source_url": "https://stvv.jp/news/game/20261026_1/",
+      "date_jst": "2026-10-26",
+      "text": "⚽ 試合終了\nSTVV 2–3 クラブ・ブルージュ\nセヴァウイのPKと谷口彰悟のゴールも、敵地で惜敗。\n\n公式：https://stvv.jp/news/game/20261026_1/",
+      "slots": [
+        "player",
+        "news",
+        "recap"
+      ],
+      "reviewed": true,
+      "status": "ready",
+      "asset_path": "generated/imagegen_brugge_result_20261026.jpg",
+      "sha256": "63a6a2ccb49bd29d047a80db8657353bd2696a04311473464d1b59939fe66621",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "art_direction": "ink-poster",
+      "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation."
     }
   ]
 }
