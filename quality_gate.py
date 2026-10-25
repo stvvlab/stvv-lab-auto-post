@@ -12,6 +12,8 @@ import argparse
 import json
 import re
 from pathlib import Path
+from urllib.parse import urlparse
+from text_metrics import x_length
 
 BLOCKED = ("スポンサー", "協賛", "パートナー契約", "グッズ販売", "販売開始")
 GENERIC = ("見ると", "見えてきます", "重要", "追っていきます", "どう評価", "面白いところ")
@@ -19,28 +21,42 @@ EVIDENCE = ("source_url", "source", "match_id", "event_id", "official_url")
 URL = re.compile(r"^https?://[^\s]+$", re.I)
 
 
-def audit(post):
+def valid_source_url(value):
+    if not isinstance(value, str) or not URL.fullmatch(value):
+        return False
+    try:
+        parsed = urlparse(value)
+        return bool(parsed.hostname) and not parsed.username and not parsed.password
+    except ValueError:
+        return False
+
+
+def audit(post, *, max_length=280):
+    if not isinstance(post, dict):
+        return ["not_an_object"]
     problems = []
     body = post.get("text", "")
     if not isinstance(body, str) or not body.strip():
         return ["missing_text"]
-    if len(body) > 280:
+    if x_length(body) > 280:
         problems.append("over_280_characters")
     if any(word in body for word in BLOCKED):
         problems.append("excluded_promotion")
     if any(word in body for word in GENERIC):
         problems.append("generic_language_review")
+    if max_length < 280 and x_length(body) > max_length:
+        problems.append("over_safe_x_length")
     if post.get("type") in {"news", "match", "matchlab", "result", "player"}:
         refs = [post.get(k) for k in EVIDENCE if post.get(k)]
         if not refs:
             problems.append("missing_source_reference")
-        if any(k.endswith("url") and post.get(k) and not URL.match(str(post[k]))
+        if any(k.endswith("url") and post.get(k) and not valid_source_url(post[k])
                for k in EVIDENCE):
             problems.append("malformed_source_url")
     return problems
 
 
-CRITICAL = {"missing_text", "over_280_characters", "excluded_promotion",
+CRITICAL = {"missing_text", "over_280_characters", "over_safe_x_length", "excluded_promotion",
             "missing_source_reference", "malformed_source_url", "not_an_object"}
 
 
