@@ -12,7 +12,8 @@
     "https://stvv.jp/news/game/20260920_1/",
     "https://stvv.jp/news/2025/",
     "https://stvv.jp/news/team/20260917_1/",
-    "https://stvv.jp/news/game/20261023_3/"
+    "https://stvv.jp/news/game/20261023_3/",
+    "https://stvv.jp/news/game/20261026_1/"
   ],
   "used_posts": [
     "lab_2",
@@ -121,7 +122,8 @@
     "daily_2026-10-21_data",
     "daily_2026-10-22_vote",
     "approved_imagegen_midtjylland_20261023_v1",
-    "daily_2026-10-24_news"
+    "daily_2026-10-24_news",
+    "daily_2026-10-26_player"
   ],
   "publication_log": [
     {
@@ -870,18 +872,20 @@
       "submitted_at": "2026-10-24T18:15:19.752698+09:00",
       "text": "📢 UEFAカンファレンスリーグ第4節、HNKハイドゥク・スプリト戦は無観客で開催されます。\n\nSTVVは渡航手配済みのサポーター対応などを検討中です。\n\n公式：https://stvv.jp/news/game/20261023_3/\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/77a76ee2791f8c1e28fc82040d069e96d560b247/generated/imagegen_hajduk_closed_doors_20261024.jpg"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-26_player": {
+    },
+    {
+      "key": "daily_2026-10-26_player",
       "slot": "player",
       "source": "https://stvv.jp/news/game/20261026_1/",
+      "buffer_id": "6ade8cf66887a2efc12c271d",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T08:12:56.682729+09:00",
       "text": "⚽ 試合終了\nSTVV 2–3 クラブ・ブルージュ\nセヴァウイのPKと谷口彰悟のゴールも、敵地で惜敗。\n\n公式：https://stvv.jp/news/game/20261026_1/\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a78cdfcc623f013cf915ca63095402cef4d08c42/generated/imagegen_brugge_result_20261026.jpg",
       "visual_variant": "split",
-      "art_direction": "ink-poster",
-      "created_at": "2026-10-26T08:12:52.949803+09:00"
+      "art_direction": "ink-poster"
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
