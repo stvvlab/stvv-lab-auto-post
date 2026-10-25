@@ -9,8 +9,10 @@ The earlier fixed headline layout is not the quality target.
 ChatGPT's scheduled preparation task researches fresh official information,
 edits concise Japanese copy, invokes the built-in imagegen tool when available,
 and visually checks the resulting image. GitHub Actions does not call a paid
-image-generation API. A scheduled imagegen run has not yet been demonstrated;
-saving a task prompt does not prove imagegen is available to that run.
+image-generation API. Built-in generation and reviewed queue preparation were
+verified for the Hajduk closed-doors card on 2026-10-24. Its existing scheduled
+news-slot delivery and actual X image display were also verified; see
+`reports/imagegen-capability.json` for asset hashes and evidence.
 
 The preparer commits reviewed image bytes and `editorial/imagegen_cards.json`
 together. The existing seven scheduled posting slots consume ready entries.
@@ -44,7 +46,13 @@ uncertain-send retry protection remain intact.
 
 ## Status
 
-One manually initiated imagegen-to-X publication succeeded on 2026-10-24.
-Prepared-asset ingestion is covered by offline tests. Successful unattended
-image generation, queue registration and scheduled delivery still require a
-real scheduled run. Supplemental reply transport is separate and unimplemented.
+The Hajduk card completed built-in generation, visual review, queue registration,
+and existing 18:00 JST news-slot delivery on 2026-10-24. Actions run
+https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399
+recorded Buffer acceptance; X text and image display were verified at
+https://x.com/stvvlabo/status/2113922269583917472.
+This evidence applies to that card, not to future comic-style variants.
+Comic diversity still requires a fresh reviewed ready card and regular-slot
+publication verification. Paid image API generation is blocked in `ai_art.py`
+and disabled in the scheduled posting workflow. Supplemental reply safety
+is implemented separately, but its sending transport remains unavailable.
