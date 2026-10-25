@@ -19,5 +19,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Test quality audit rules
+        run: python -m unittest -v test_quality_gate.py
       - name: Check candidate post quality (report only)
         run: python quality_gate.py --posts posts.json
