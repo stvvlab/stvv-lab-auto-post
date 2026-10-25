@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T06:10:59+09:00",
+  "updated_at": "2026-10-26T07:05:51+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -224,9 +224,9 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40233320265",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40237886109",
       "conclusion": "success",
-      "checked_at": "2026-10-26T05:59:38.933229+09:00",
+      "checked_at": "2026-10-26T06:57:38.196216+09:00",
       "new_candidates": 0,
       "ready_cards": 1,
       "pending_posts": 0
@@ -250,10 +250,10 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T06:10:59+09:00",
-    "main_observed": "7b81be2577462bb3e8b8b524171e8d699b792051",
-    "source_inventory_checked_at": "2026-10-26T05:59:38.933229+09:00",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40233320265",
+    "checked_at": "2026-10-26T07:05:51+09:00",
+    "main_observed": "1931b9b49962ce5717a69c0dd4ad24cf33d5bec0",
+    "source_inventory_checked_at": "2026-10-26T06:57:38.196216+09:00",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40237886109",
     "source_inventory_workflow_conclusion": "success",
     "source_checks": [
       {
@@ -277,12 +277,13 @@
     "pending_posts": 0,
     "official_result_rechecked": "Belgian league round 9, 26 October JST, Club Brugge 3–2 STVV; セヴァウイ and 谷口 scorers",
     "public_asset_bytes_sha256_verified": true,
+    "public_asset_verified_revision": "1931b9b49962ce5717a69c0dd4ad24cf33d5bec0",
     "new_image_generated": false,
     "new_publication": false,
     "next_eligible_slot": "2026-10-26 08:00 JST player",
     "previous_passing_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
     "tests_repeated": false,
-    "reason": "Source body and immutable asset checked; no code, caption or asset changes and no regular publishing slot since previous observation.",
-    "supplemental_reply_transport": "unchanged_blocked; current Metricool catalogue exposes no existing-post reply tool. No paid or authentication actions."
+    "reason": "No code or reviewed content changes. Fresh inventory has no unprepared candidate; existing reviewed card remains ready, no regular slot occurred since prior observation.",
+    "supplemental_reply_transport": "unchanged_blocked; no existing-post reply tool in current Metricool catalogue; no paid or authentication actions"
   }
 }
