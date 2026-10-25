@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T21:06:03+09:00",
+  "updated_at": "2026-10-25T22:06:40+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -76,14 +76,17 @@
     "preparation_ci_conclusion": "success"
   },
   "regular_slot_observation": {
-    "slot": "2026-10-25 18:00 JST news",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40179857636",
+    "slot": "2026-10-25 21:00 JST vote",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40192946092",
     "workflow_conclusion": "success",
-    "actual_execution_at": "2026-10-25T18:15:35+09:00",
+    "actual_execution_at": "2026-10-25T21:24:44.857685+09:00",
     "posting_result": "skipped_repeated_content",
+    "detail": "既報の試合内容",
     "buffer_submission_reached": false,
     "x_post_created": false,
-    "note": "Ran before PR26 changes; not evidence of revised production publication."
+    "production_image_processing_reached": false,
+    "tests_in_same_job_passed": 187,
+    "note": "Final production RUN_RESULT after the Run python stvv_post.py step. Earlier Buffer-success and preview entries belong to mocked unit tests, not public deliveries."
   },
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
@@ -120,15 +123,18 @@
     "comic_regular_publication_verified": false
   },
   "latest_followup": {
-    "checked_main_commit": "54a5248dbcc5ccd7add92b1d7adb9835d84a6be0",
-    "preparation_schedule_observed": true,
+    "checked_main_commit": "3f1512ee5ab3304ff938bd4a26d0bfaeb8e45ca7",
+    "source_checked_at": "2026-10-25T22:06:40.785394+09:00",
+    "source_checks_ok": 3,
+    "distinct_eligible_sources": 3,
+    "all_found_sources_already_published": true,
     "ready_cards": 0,
     "pending_posts": 0,
     "new_image_generated": false,
     "new_public_post": false,
     "manual_dispatch": false,
-    "supplemental_reply_note": "Latest docs/status and no-standalone reply guard read; no reply tool exposed. Existing blocker unchanged; no new paid API use or re-investigation.",
-    "next": "Observe next existing regular publication slot; do not generate a post image without new verified eligible content."
+    "supplemental_reply_note": "Latest docs/status and stvv_post unsupported-reply guard read; no exposed Metricool reply tool. Blocker unchanged; no paid API use or standalone fallback.",
+    "next": "Observe next existing 23:00 regular slot. Prepare imagegen only if verified fresh unposted information is available."
   },
   "candidate_preparation": {
     "module": "preparation_inventory.py",
@@ -162,11 +168,5 @@
       "ready_cards": 0,
       "pending_posts": 0
     }
-  },
-  "pending_regular_slot_observation": {
-    "slot": "2026-10-25 21:00 JST vote",
-    "checked_at": "2026-10-25T21:06:03+09:00",
-    "status": "run_not_yet_observed",
-    "note": "Actions list has no 21:00 slot run yet; not classified as skip, error, Buffer acceptance or X publication. No manual retry dispatched."
   }
 }
