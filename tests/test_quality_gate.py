@@ -1,4 +1,4 @@
-"""Tests for the non-blocking STVV LAB quality audit."""
+"""Quality rules: critical findings block publication; warnings remain advisory."""
 import unittest
 from quality_gate import audit, can_publish
 
