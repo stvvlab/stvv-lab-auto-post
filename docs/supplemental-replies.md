@@ -77,3 +77,16 @@
 選択がない間は準備・重複防止だけを維持し、送信成功や自動化完成とは呼ばない。
 
 2026-10-27 00:10 JSTに、新川志音のリーグ初先発投稿のX本文・画像表示を確認し、親key `daily_2026-10-26_vote` と投稿ID `2114727647368331366` の対応を追加した。元本文・Buffer ID・公式出典は保存済み投稿履歴と一致する。親登録は4件、返信候補は0件、送信手段は未接続のまま。実リプは送信していない。
+
+## 2026-10-27の仕様再確認
+
+Buffer公開リファレンスにはexperimentalなengagement/comment/replyの設定型があるが、
+これは公開済み親投稿への送信権限やreply mutationの提供を示すものではない。
+公式ヘルプ「What is Buffer’s API?」は、コメントの読み取り・返信はAPI対象外と
+明記している。新規threadを代用しない方針を維持する。
+接続済みMetricoolの9ツールも再確認し、既存X投稿を返信先に指定するツールはない。
+新しい契約やAPI課金、認証回避は実施しておらず、返信送信は引き続き未実装。
+
+再確認資料：
+- https://developers.buffer.com/reference.html
+- https://support.buffer.com/articles/using-buffers-api-GtIYIQilz5

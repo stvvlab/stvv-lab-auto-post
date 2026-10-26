@@ -77,6 +77,7 @@ class AdvanceReservationTests(unittest.TestCase):
         self.assertFalse(self.history['news'])
         self.assertFalse(self.history['pending_posts'])
         self.assertFalse(record['x_display_verified'])
+        self.assertEqual(record['buffer_asset_ids'], ['asset'])
         self.client.schedule.assert_called_once()
         self.assertEqual(len(self.saved), 2)
 
@@ -138,6 +139,26 @@ class AdvanceReservationTests(unittest.TestCase):
                 self.client.get_post.return_value = {**original, **change}
                 with self.assertRaises(RuntimeError):
                     self.run_one()
+        self.client.schedule.assert_called_once()
+
+    def test_replaced_buffer_image_id_blocks_without_false_publication_or_resend(self):
+        record = self.accepted()
+        self.client.get_post.return_value = {'id': 'buffer-fixture', 'text': record['text'],
+            'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'sent',
+            'assets': [{'id': 'replaced-image'}]}
+        later = datetime.fromisoformat('2026-10-27T10:30:00+09:00')
+        with self.assertRaisesRegex(RuntimeError, 'identity changed'):
+            a.run(self.history, later, self.client, self.save, Mock())
+        self.assertFalse(self.history['publication_log'])
+        self.assertEqual(self.durable['reserved_posts'][KEY]['buffer_status'], 'scheduled')
+        self.client.schedule.assert_called_once()
+
+    def test_missing_durable_image_id_does_not_get_implicitly_trusted(self):
+        self.accepted()
+        del self.history['reserved_posts'][KEY]['buffer_asset_ids']
+        with self.assertRaisesRegex(ValueError, 'ledger is incomplete'):
+            self.run_one()
+        self.client.get_post.assert_not_called()
         self.client.schedule.assert_called_once()
 
     def test_buffer_error_blocks_new_sends(self):
