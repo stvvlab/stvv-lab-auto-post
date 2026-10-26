@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-26T22:00:00+09:00",
+  "status": "implementation_improved_live_stability_not_verified",
+  "implementation_commit": "9297a4a387c36d65e87e347cfc25719edd1665ba",
+  "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/33",
+  "actual_fix": "Bounded git-only recovery for a concurrent report-only main update during pending/acceptance ledger persistence. Non-report changes and divergent history stop recovery; Buffer is never retried.",
+  "tests": {
+    "local_passed": 213,
+    "github_actions_passed": 213,
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40326660868",
+    "all_four_pr_checks_passed": true,
+    "real_local_git_race_cases": 4
+  },
+  "scheduled_delivery_observation": {
+    "slot": "2026-10-26 21:00 JST vote",
+    "state": "not_started_in_actions",
+    "pending_posts": 0,
+    "last_verified_x_publication": "https://x.com/stvvlabo/status/2114495450866712925",
+    "root_cause": "not_identified",
+    "workflow_enabled_state": "not_verified; connector does not expose workflow settings and public UI is signed out",
+    "buffer_send_attempted_this_work": false,
+    "manual_dispatch_performed": false
+  },
+  "recurring_improvement_priority_updated": true,
+  "remaining": [
+    "Determine scheduled-run non-start cause; do not label it proven congestion",
+    "Verify new persistence and outcome evidence in normal scheduled operation",
+    "Verify ready Shinkawa milestone Buffer delivery and actual X text/image display",
+    "Continue distinct official-source content and visual preparation without filling slots with repeats"
+  ]
+}
