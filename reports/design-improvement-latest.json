@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T22:29:39+09:00",
+  "updated_at": "2026-10-26T23:17:45+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -212,7 +212,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T22:18:08.805978+09:00",
+    "checked_at": "2026-10-26T23:14:31.913099+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -230,33 +230,46 @@
         "eligible_items": 1
       }
     ],
-    "candidate_count": 0,
-    "candidates": [],
+    "unprepared_candidates": 0,
+    "research_drafts": 2,
+    "research_angles": [
+      "analysis",
+      "vote"
+    ],
     "ready_cards": 1,
     "pending_posts": 0,
-    "publication_performed": false,
-    "image_generation_performed": false,
-    "preflight": [
+    "prepared_claim_in_body": true,
+    "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+    "public_image_bytes_verified": true,
+    "caption_length": 169,
+    "duplicate_reason": null,
+    "image_generated": false,
+    "buffer_called": false,
+    "main_observed": "a51deb3394c8ded40e4d31839eb4a244a28baf82",
+    "observed_at": "2026-10-26T23:17:45+09:00",
+    "observed_slots": [
       {
-        "source_url": "https://stvv.jp/news/game/20261026_1/",
-        "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
-        "weighted_length": 169,
-        "quality_findings": [],
-        "duplicate_reason": null,
-        "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
-        "claim_in_body": true,
-        "public_image_verified": true,
-        "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323"
+        "slot": "2026-10-26 21:00 JST vote",
+        "state": "not_started_in_actions"
+      },
+      {
+        "slot": "2026-10-26 23:00 JST recap",
+        "state": "not_started_in_actions"
       }
     ],
-    "main_observed": "0b5029f5362ea839b6139abd45ba8c679ec46cfb",
-    "observed_slot": "2026-10-26 21:00 JST vote",
-    "observed_slot_status": "not_started_at_check",
-    "manual_dispatch_performed": false,
+    "last_observed_posting_run": {
+      "id": 40299786771,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-26T09:28:15Z"
+    },
     "new_publication": false,
     "new_image_generated": false,
-    "supplemental_reply_transport": "unchanged_unavailable",
-    "note": "Fresh official archives and ready milestone preflight passed; no newly eligible unregistered source and no send performed. A not-started workflow has no delivery artifact."
+    "manual_dispatch_performed": false,
+    "supplemental_reply_transport": "unchanged_unavailable; current nine Metricool tools still expose no existing-post reply method",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40335044090",
+    "source_inventory_workflow_conclusion": "success",
+    "reason": "No new source candidate, one ready milestone, no pending send. Existing result must not be repeated. Scheduler non-start cause remains unidentified."
   },
   "last_verified_publication": {
     "slot": "2026-10-26 08:00 JST player",
@@ -283,7 +296,7 @@
     "module": "editorial_research.py",
     "report": "reports/editorial-research-latest.json",
     "behavior": "Revisit fresh published official sources and extract unused exact evidence into separate player, analysis-question and participation research drafts.",
-    "live_drafts": 3,
+    "live_drafts": 2,
     "ready_cards_created": 0,
     "publications_created": 0,
     "image_generation_performed": false,
@@ -295,13 +308,15 @@
     "github_actions_conclusion": "success",
     "inventory_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40315093079",
     "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40315093083",
-    "first_scheduled_research_execution_verified": false,
+    "first_scheduled_research_execution_verified": true,
     "remaining": [
       "Editorial consistency/novelty review of three drafts; each currently fails existing same-source duplicate gate.",
       "Support genuinely distinct verified content under a carefully scoped policy; do not simply loosen repetition checks.",
       "Built-in image generation and visual approval only for a publishable nonduplicate candidate.",
       "Verify the next scheduled research report generation separately from public posting."
-    ]
+    ],
+    "first_verified_scheduled_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40335044090",
+    "post_fix_scheduled_execution_verified": false
   },
   "reviewed_fact_delivery": {
     "implementation_commit": "6657597c8128797a54ea770bd9b69447a62019d0",
@@ -500,5 +515,35 @@
     "image_generated_this_run": false,
     "ready_cards": 1,
     "public_post_sent_this_run": false
+  },
+  "reviewed_claim_research_fix": {
+    "checked_at": "2026-10-26T23:17:45+09:00",
+    "implementation_commit": "f028604f5c70eeddb2cadb5f08baf84c36273087",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/35",
+    "problem": "A club-name prefix in the source sentence caused an already reviewed first-start claim to be repeatedly proposed as unused research.",
+    "fix": "Suppress exact supported reviewed ready/published facts only for the same source and current body digest; invalid/unreviewed/different-source/changed-body cases remain research-only.",
+    "live_result": {
+      "previous_drafts": 3,
+      "current_drafts": 2,
+      "angles": [
+        "analysis",
+        "vote"
+      ],
+      "ready_cards": 1,
+      "ready_milestone_unchanged": true
+    },
+    "tests": {
+      "local_passed": 218,
+      "github_actions_passed": 218,
+      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40338062037",
+      "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40338062252",
+      "preparation_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40338062235",
+      "all_passed": true
+    },
+    "posting_gates_changed": false,
+    "manual_dispatch_performed": false,
+    "image_generated": false,
+    "buffer_called": false,
+    "post_fix_scheduled_execution_verified": false
   }
 }
