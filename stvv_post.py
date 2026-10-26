@@ -1013,6 +1013,17 @@ def publish(
     if problems:
         log(f"投稿前品質の改善推奨: {key} / {', '.join(problems)}")
 
+    from prepared_media import exact_card, prepared_fact_metadata, prepared_duplicate_reason
+    reviewed_card = exact_card(slot, message, source)
+    editorial_fact = prepared_fact_metadata(slot, message, source, datetime.now(JST))
+    if reviewed_card and 'editorial_fact' in reviewed_card and not editorial_fact:
+        log('新しい事実の審査情報が不正のため送信しません')
+        return False
+    if editorial_fact and (not image_url or prepared_duplicate_reason(
+            history, message, source, slot, datetime.now(JST))):
+        log('新しい事実の画像／重複確認が不合格のため送信しません')
+        return False
+
     history["pending_posts"][key] = {
         "slot": slot,
         "source": source,
@@ -1022,6 +1033,8 @@ def publish(
         "art_direction": art_direction,
         "created_at": datetime.now(JST).isoformat(),
     }
+    if editorial_fact:
+        history["pending_posts"][key]['editorial_fact'] = editorial_fact
 
     # Bufferへ送る前に、確認待ちをGitHubへ保存する。
     save(history)
@@ -1045,6 +1058,8 @@ def publish(
         "visual_variant": visual_variant,
         "art_direction": art_direction,
     })
+    if editorial_fact:
+        history['publication_log'][-1]['editorial_fact'] = editorial_fact
 
     if news_url and news_url not in history["news"]:
         history["news"].append(news_url)
@@ -1111,7 +1126,9 @@ def main():
 
     log(f"定期投稿: {day} {slot}")
 
-    from content_guard import duplicate_reason
+    from prepared_media import prepared_duplicate_reason
+    def duplicate_reason(history, message, source, now):
+        return prepared_duplicate_reason(history, message, source, slot, now)
     message = None
     source = None
     news_url = None

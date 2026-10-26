@@ -76,6 +76,32 @@
         "x_display_verified_at": "2026-10-26T09:07:36+09:00",
         "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
       }
+    },
+    {
+      "source_url": "https://stvv.jp/news/game/20261026_1/",
+      "date_jst": "2026-10-26",
+      "text": "🌟 新川志音がリーグ初先発。\nクラブ・ブルージュ戦で先発メンバーに名を連ねました。\n今後どんなプレーに期待しますか？\n\n公式：https://stvv.jp/news/game/20261026_1/",
+      "slots": [
+        "vote",
+        "player",
+        "news"
+      ],
+      "reviewed": true,
+      "status": "ready",
+      "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+      "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "art_direction": "print-collage",
+      "editorial_fact": {
+        "kind": "league_first_start",
+        "subject": "新川志音",
+        "claim": "新川志音がリーグ初先発。",
+        "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0"
+      },
+      "review_note": "Built-in imagegen complete; visually verified name 新川志音 and リーグ初先発, English, crop, legibility and caption agreement. Exact official body milestone verified; no invented evaluation, people, faces, scores, crests or photographs. Boots/touchline are symbolic artwork. This is an unused player milestone, not a repeat of the published result. Existing seven slots only; pending, fact ID, source body digest and public image-byte gates remain mandatory."
     }
   ]
 }
