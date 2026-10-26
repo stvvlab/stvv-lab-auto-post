@@ -39,6 +39,15 @@
 - #25-27 画像の種類、品質、公式情報収集
 - PR本文は作業報告であり、マージ状態・CI成功・公開結果を証明するものではない。
 
+## 2026-10-27 JST 実測追記
+
+- 10/27 01:04頃: mainに事前Buffer予約の実装 (#37) が存在。Feedback Safety Tests / Buffer Reservation Read-Only Capability は success。ただし予約mutation→定刻X公開の本番成功は未確認。
+- 10/26 21:00枠: GitHub Actions開始は23:34:59、Buffer受理は23:35:36。主遅延はGitHubの開始前。X本文・画像表示を別途確認済み。参照: docs/publication-timing.md。
+- 10/26 23:00枠: 実行開始10/27 00:28:38、status=skipped_no_verified_content。ready_cards=0で新規送信なし。参照: reports/delivery-latest.json。
+- 投稿停止と見える要因は少なくとも二つ: (1) 予定時刻よりActions開始が大幅に遅延、(2) 審査済み未投稿素材が0件。予約方式は(1)の影響軽減策だが(2)を解消しない。
+- 直近対応: 公式出典付き候補から画像/本文のレビューを経てreadyを補充する（出典のない内容を自動で量産しない）。次回の予約可否・Buffer予約ID・予定時刻・sent・実際のX本文/画像を順に検証する。補足リプは別の本番未確認課題。
+- Action successは掲載成功ではない。7枠の定時実現・安定運用もまだ宣言しない。
+
 ## 次回確認ログ記録欄
 | 日時(JST) | 対象 | 確認したrun/投稿URL | 判定 | 次の作業 |
 |---|---|---|---|---|
