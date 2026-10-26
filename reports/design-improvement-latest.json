@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T18:32:06+09:00",
+  "updated_at": "2026-10-26T19:05:47+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,8 +8,8 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Confirmed the existing 18:00 news slot executed at 18:28 and skipped repeated content before image processing or Buffer submission.",
-    "All 187 scheduled prerequisite tests passed; successful latest three-list inventory has zero new candidates, ready cards and pending sends."
+    "Read current main and rechecked all three official lists with current publication ledger: zero new unposted candidates, ready cards or pending sends.",
+    "No code change, new image, new publication or later posting-slot result this pass. Supplemental reply transport remains unchanged and unavailable."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -238,10 +238,10 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T18:32:06+09:00",
-    "main_observed": "84c73e2e2abb1b376c6ca22039524405cd96edf8",
-    "source_inventory_checked_at": "2026-10-26T18:19:40.960621+09:00",
-    "source_inventory_method": "Successful scheduled three-list inventory, checked against current main ledger and manifest; latest official match article body read again this run",
+    "checked_at": "2026-10-26T19:05:47+09:00",
+    "main_observed": "ca90de668158f1ca8c6c037a70dc792905bae210",
+    "source_inventory_checked_at": "2026-10-26T19:05:26.396545+09:00",
+    "source_inventory_method": "Read-only live scan against current main ledger and manifest; latest official match article body rechecked",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -273,10 +273,11 @@
     "tests_repeated_locally": false,
     "scheduled_prerequisite_tests_passed": 187,
     "manual_dispatch_performed": false,
-    "reason": "All three official lists fetched successfully; zero new candidates. Existing scheduled news slot skipped repeated content before image processing or Buffer submission. No generation or manual dispatch.",
+    "reason": "All three official lists fetched successfully; zero new unposted candidates, ready cards or pending sends. No posting run newer than the previously verified 18:00 news duplicate skip; no generation or manual dispatch.",
     "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions.",
     "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40298634752",
-    "source_inventory_workflow_conclusion": "success"
+    "source_inventory_workflow_conclusion": "success",
+    "local_scan_note": "First local import needed a fresh Python process after dependency installation; completed scan succeeded. This is not a production failure."
   },
   "last_verified_publication": {
     "slot": "2026-10-26 08:00 JST player",
