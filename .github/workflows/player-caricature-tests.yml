@@ -1,0 +1,20 @@
+name: Player caricature safety tests
+on:
+  pull_request:
+    paths:
+      - 'player_artwork.py'
+      - 'tests/test_player_artwork.py'
+      - '.github/workflows/player-caricature-tests.yml'
+  workflow_dispatch:
+jobs:
+  player-artwork:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate player artwork guards
+        run: python -m unittest tests.test_player_artwork -v
