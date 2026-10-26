@@ -14,7 +14,7 @@ from editorial_novelty import fact_metadata, distinct_fact_reason
 
 NOW = datetime.now(posting.JST)
 URL = 'https://stvv.jp/news/game/' + NOW.strftime('%Y%m%d') + '_1/'
-CLAIM = '新川志音がリーグ初先発。'
+CLAIM = '架空太郎がリーグ初先発。'
 BODY = '公式本文。' * 20 + CLAIM
 TEXT = '🌟 ' + CLAIM + '\n今後どんなプレーに期待しますか？\n\n公式：' + URL
 
@@ -31,7 +31,7 @@ class NoveltyTests(unittest.TestCase):
         self.card = dict(source_url=URL, text=TEXT, slots=['vote'], date_jst=NOW.date().isoformat(),
                          reviewed=True, status='ready', asset_path='generated/card.png',
                          dimensions=[40, 30], sha256=hashlib.sha256(self.raw).hexdigest(),
-                         editorial_fact=dict(kind='league_first_start', subject='新川志音', claim=CLAIM,
+                         editorial_fact=dict(kind='league_first_start', subject='架空太郎', claim=CLAIM,
                                              source_body_sha256=hashlib.sha256(BODY.encode()).hexdigest()))
         self.manifest = self.root / 'cards.json'
         self.write()
@@ -44,6 +44,16 @@ class NoveltyTests(unittest.TestCase):
 
     def write(self):
         self.manifest.write_text(json.dumps({'enabled': True, 'cards': [self.card]}))
+
+    def test_historical_conflict_blocks_ambiguous_first_ever_claim(self):
+        # Official May 22 match report already lists Shinkawa as a starter.
+        self.card['editorial_fact']['subject'] = '新川志音'
+        self.card['editorial_fact']['claim'] = '新川志音がリーグ初先発。'
+        self.card['text'] = self.card['text'].replace('架空太郎', '新川志音')
+        self.write()
+        self.assertIsNone(fact_metadata(self.card, NOW))
+        self.assertTrue(distinct_fact_reason(self.history, self.card, NOW))
+        self.assertTrue(media.prepared_duplicate_reason(self.history, self.card['text'], URL, 'vote', NOW))
 
     def test_distinct_reviewed_milestone_passes_but_recap_and_generic_question_do_not(self):
         self.assertIsNone(media.prepared_duplicate_reason(self.history, TEXT, URL, 'vote', NOW))
@@ -67,7 +77,7 @@ class NoveltyTests(unittest.TestCase):
         self.assertEqual(self.history, before)
 
     def test_paraphrase_or_fact_id_cannot_republish_milestone(self):
-        for previous in [{'source': URL, 'text': '新川志音が初スタメン'},
+        for previous in [{'source': URL, 'text': '架空太郎が初スタメン'},
                          {'source': URL, 'text': '別の表現', 'editorial_fact': fact_metadata(self.card, NOW)}]:
             self.history['publication_log'].append(previous)
             self.assertTrue(distinct_fact_reason(self.history, self.card, NOW))
