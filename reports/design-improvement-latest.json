@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T06:11:53.760214+09:00",
+  "updated_at": "2026-10-27T07:04:16.026416+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T06:11:53.760214+09:00",
+    "checked_at": "2026-10-27T07:04:16.026416+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -216,6 +216,11 @@
         "url": "https://stvv.jp/news/game/2026/",
         "status": "ok",
         "eligible_items": 2
+      },
+      {
+        "url": "https://stvv.jp/news/team/2026/",
+        "status": "ok",
+        "eligible_items": 0
       },
       {
         "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -242,7 +247,7 @@
     ],
     "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40349598794",
     "last_regular_result": "skipped_no_verified_content",
-    "actual_posting_step_checked": true,
+    "actual_posting_step_checked": false,
     "last_regular_start_delay_seconds": 5318,
     "reservation_mode_regular_run_observed": false,
     "next_existing_slot_jst": "2026-10-27T08:00:00+09:00",
@@ -254,14 +259,16 @@
     "supplemental_reply_sender_available": false,
     "supplemental_reply_drafts": 1,
     "supplemental_reply_sent": false,
-    "local_focused_tests_passed": 44,
+    "local_focused_tests_passed": 8,
     "code_changed_this_check": false,
     "historical_claim_conflict_confirmed": true,
     "club_news_check": {
       "url": "https://stvv.com/nl/nieuws",
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
-    }
+    },
+    "tests_scope": "Preparation inventory regressions only; no Buffer calls",
+    "latest_regular_result_evidence": "Unchanged durable delivery report for run 40349598794; no later STVV Auto Post run in fresh Actions listing."
   },
   "last_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -673,5 +680,24 @@
       40401174495,
       40401174330
     ]
+  },
+  "team_source_coverage_verification": {
+    "checked_at": "2026-10-27T07:04:16.026416+09:00",
+    "implementation_commit": "2a9904a6c39f362f18aee1beacc97f8828d52fa1",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/43",
+    "live_team_listing_read": true,
+    "team_eligible_items": 0,
+    "four_official_listing_reads_successful": true,
+    "new_candidates": 0,
+    "local_focused_tests_passed": 8,
+    "ci_success_runs": [
+      40408711223,
+      40408711170,
+      40408711165,
+      40408711153
+    ],
+    "new_image_generated": false,
+    "new_reservation_sent": false,
+    "advance_reservation_delivery_verified": false
   }
 }

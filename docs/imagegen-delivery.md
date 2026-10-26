@@ -110,7 +110,7 @@ a brief as ready or count offline/CI mocks as a public delivery. Source freshnes
 
 ## Candidate preparation and shortage diagnosis
 
-`preparation_inventory.py` checks the Japanese general, match and UEFA yearly
+`preparation_inventory.py` checks the Japanese general, match, team and UEFA yearly
 listings independently. A failed listing does not hide another listing's results;
 all failures, partial coverage and zero eligible candidates have separate statuses.
 The existing Discovery Brief workflow collects this inventory hourly and retains
@@ -248,3 +248,5 @@ the published claim. Generation, visual legibility and X delivery evidence remai
 historical evidence; none establishes editorial accuracy. A correction is drafted
 but unsent because no authenticated free reply transport is confirmed. Do not
 replace the original ledger, resend the image, or issue a standalone correction.
+
+The independent team listing was added in PR #43. On 2026-10-27 at 07:03 JST, all four listings were read successfully; the team listing contained zero eligible items within the freshness window and total new candidates remained zero. Eight focused inventory regressions passed. This verifies acquisition coverage, not image generation or reservation/publication.
