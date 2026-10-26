@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-27T03:14:29.707379+09:00",
+  "checked_at": "2026-10-27T04:07:28.523871+09:00",
   "status": "partial_safety_implementation_transport_blocked",
   "requested_behavior": "Append verified supplemental analysis as a reply to an already-published @stvvlabo post.",
   "actual_reply_published": false,
@@ -104,7 +104,7 @@
     }
   },
   "route_catalog_check": {
-    "checked_at": "2026-10-27T03:14:29.707379+09:00",
+    "checked_at": "2026-10-27T04:05:45.882032+09:00",
     "metricool_tools_exposed": 9,
     "existing_post_reply_tool_exposed": false,
     "paid_api_used": false,
@@ -116,5 +116,22 @@
       "https://developers.buffer.com/reference.html",
       "https://support.buffer.com/articles/using-buffers-api-GtIYIQilz5"
     ]
+  },
+  "draft_replies": 1,
+  "latest_draft": {
+    "key": "supplement_859a6271f8d5a78f0f33a849fef10522a2ef0620e022877bfb3c6fcca19b6c0e",
+    "parent_key": "daily_2026-10-24_news",
+    "parent_post_id": "2113922269583917472",
+    "parent_x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+    "source_url": "https://stvv.jp/news/game/20261023_3/",
+    "status": "draft",
+    "reviewed": false,
+    "source_body_sha256": "c2f902bca346ede093b7b31868ec32baee70126b9d5f781f6d161ea9c09a3bb3",
+    "x_weighted_length": 158,
+    "can_send": false,
+    "new_information": "Possibility of local public viewing, explicitly under consideration in the official article; not a confirmed event.",
+    "draft_gate_verified_blocked": true,
+    "parent_caption_buffer_id_source_binding_verified": true,
+    "pending_saved": false
   }
 }

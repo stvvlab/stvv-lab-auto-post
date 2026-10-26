@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T03:14:29.707379+09:00",
+  "updated_at": "2026-10-27T04:05:45.882032+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T03:14:29.707379+09:00",
+    "checked_at": "2026-10-27T04:05:45.882032+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -250,7 +250,24 @@
     "image_generated": false,
     "send_performed": false,
     "new_publication": false,
-    "supplemental_reply_sender_available": false
+    "supplemental_reply_sender_available": false,
+    "tests_run_this_check": false,
+    "code_changed_this_check": false,
+    "club_news_check": {
+      "url": "https://stvv.com/nl/nieuws",
+      "latest_listing_date": "2026-10-26",
+      "latest_written_statement_date": "2026-10-22",
+      "statement_url": "https://stvv.com/nl/nieuws/artikel/statement-hajduk-split-stvv",
+      "result": "Already covered matches and closed-doors statement; no new verified posting candidate."
+    },
+    "offline_empty_queue_check": {
+      "status": "skipped_no_verified_content",
+      "buffer_requests": 0,
+      "ledger_unchanged": true,
+      "regular_execution": false
+    },
+    "supplemental_reply_drafts": 1,
+    "supplemental_reply_sent": false
   },
   "last_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",

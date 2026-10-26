@@ -58,5 +58,24 @@
       }
     }
   ],
-  "replies": []
+  "replies": [
+    {
+      "key": "supplement_859a6271f8d5a78f0f33a849fef10522a2ef0620e022877bfb3c6fcca19b6c0e",
+      "parent_key": "daily_2026-10-24_news",
+      "parent_post_id": "2113922269583917472",
+      "parent_x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+      "source_url": "https://stvv.jp/news/game/20261023_3/",
+      "source_date_jst": "2026-10-23",
+      "text": "補足📌 クラブはシント＝トロイデン市内でのパブリックビューイング開催も検討中です。今後の情報はSTVV現地公式サイトで案内されます。\n\n公式：https://stvv.jp/news/game/20261023_3/",
+      "status": "draft",
+      "reviewed": false,
+      "created_at": "2026-10-27T04:07:28.523871+09:00",
+      "source_body_sha256": "c2f902bca346ede093b7b31868ec32baee70126b9d5f781f6d161ea9c09a3bb3",
+      "evidence_excerpt": "現在STVVでは、すでに渡航を手配されていたサポーターへの対応や、シント＝トロイデン市内でのパブリックビューイング開催の可能性について検討を進めています。",
+      "novelty_note": "The verified parent describes supporter arrangements but does not mention the possible local public viewing. This is a supplement to that parent, not another result or standalone post.",
+      "review_note": "Draft only. Preserve the tentative 検討中 wording. Re-fetch official source and check for a subsequent update before review or any future send. No free authenticated reply transport is configured.",
+      "x_weighted_length": 158,
+      "can_send": false
+    }
+  ]
 }

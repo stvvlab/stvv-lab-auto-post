@@ -58,7 +58,7 @@
 7. X上の返信URLと親投稿IDの関係を確認できた場合だけpublishedへ移す。
 8. transport未設定時は`blocked_no_reply_transport`で停止し、単独投稿へ変更しない。
 
-現在登録している親対応は、X表示確認済みの4件（ミッティラン、ハイドゥク無観客、ブルージュ結果、新川志音のリーグ初先発）。返信候補は0件で、queueは無効。公式一次情報から未掲載の補足が確認できるまで本文を捏造しない。
+現在登録している親対応は、X表示確認済みの4件（ミッティラン、ハイドゥク無観客、ブルージュ結果、新川志音のリーグ初先発）。未送信下書き1件（readyは0件）で、queueは無効。公式一次情報から未掲載の補足が確認できるまで本文を捏造しない。
 
 ## 2026-10-26の対応付け検証強化
 
@@ -90,3 +90,7 @@ Buffer公開リファレンスにはexperimentalなengagement/comment/replyの�
 再確認資料：
 - https://developers.buffer.com/reference.html
 - https://support.buffer.com/articles/using-buffers-api-GtIYIQilz5
+
+## 2026-10-27：未送信下書きの準備
+
+無観客開催の既存親投稿2113922269583917472に対し、日本公式2026-10-23本文にある市内パブリックビューイング開催の検討を補足する下書きを1件登録した。親本文・Buffer ID・公式出典の対応と既存履歴との重複を照合済み。本文は開催決定とせず「検討中」と明記する。status:draft、reviewed:false、can_send:falseであり、queueは無効、transportは未設定。送信ゲートで拒否されることを確認し、pendingや実リプは作っていない。将来の審査・送信前には公式本文と後続の発表を再確認する。
