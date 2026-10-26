@@ -70,7 +70,8 @@ def duplicate_reason(history, message, source, now):
     keys = context_keys(message, source)
     matched = []
     publications = history.get('publication_log', [])
-    pending = list(history.get('pending_posts', {}).values())
+    pending = (list(history.get('pending_posts', {}).values())
+               + list(history.get('reserved_posts', {}).values()))
     for previous in publications + pending:
         stamp = previous.get('submitted_at') or previous.get('created_at')
         if stamp:

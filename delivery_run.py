@@ -51,11 +51,11 @@ def queue_snapshot(root, history, now, slot):
                     'are checked by the publisher before sending.'}
 
 
-def delivery_evidence(before, after, day, slot):
+def delivery_evidence(before, after, day, slot, *, advance=False):
     key = f'daily_{day}_{slot}'
     old_keys = {p.get('key') for p in before.get('publication_log', [])}
     accepted = [p for p in after.get('publication_log', [])
-                if p.get('key') == key and p.get('key') not in old_keys]
+                if (advance or p.get('key') == key) and p.get('key') not in old_keys]
     pending = after.get('pending_posts', {})
     result = {'new_publications': accepted, 'pending_key': key if key in pending else None,
               'x_display_verified': False}
@@ -69,6 +69,27 @@ def delivery_evidence(before, after, day, slot):
         result['delivery_state'] = 'previous_pending_requires_review'
     else:
         result['delivery_state'] = 'no_new_buffer_acceptance_recorded'
+    if advance:
+        old_reserved = before.get('reserved_posts', {})
+        reserved = after.get('reserved_posts', {})
+        result['new_reservations'] = [dict(r, key=k) for k, r in reserved.items()
+                                      if k not in old_reserved]
+        result['reservation_states'] = [
+            {'key': k, 'buffer_status': r.get('buffer_status'), 'due_at': r.get('due_at'),
+             'x_display_verified': False} for k, r in reserved.items()]
+        result['pending_reservation_keys'] = list(pending)
+        if pending:
+            result['delivery_state'] = ('buffer_rejected_not_published'
+                if all(p.get('send_state') == 'rejected_no_retry' for p in pending.values())
+                else 'send_outcome_unknown_do_not_retry')
+        elif any(r.get('buffer_status') == 'error' for r in reserved.values()):
+            result['delivery_state'] = 'buffer_reservation_error_do_not_retry'
+        elif accepted:
+            result['delivery_state'] = 'buffer_reports_sent_x_unverified'
+        elif reserved:
+            result['delivery_state'] = ('buffer_scheduled_not_published'
+                if any(r.get('buffer_status') != 'sent' for r in reserved.values())
+                else 'no_new_buffer_acceptance_recorded')
     return result
 
 
@@ -79,6 +100,7 @@ def main():
     if (os.getenv('STVV_DELIVERY_RECORD') != 'true' or not re.fullmatch(r'\d+', run_id)
             or os.getenv('GITHUB_EVENT_NAME') != 'schedule'):
         raise RuntimeError('Delivery recording requires the scheduled posting step')
+    advance = os.getenv('STVV_ADVANCE_RESERVATIONS') == 'true'
     now = datetime.now(publisher.JST)
     slot, day = publisher.slot_for_run(now)
     _, hour, minute = publisher.SLOTS[os.environ['GITHUB_SCHEDULE']]
@@ -92,7 +114,8 @@ def main():
               'run_id': run_id,
               'workflow_url': f'https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/{run_id}',
               'commit': os.getenv('GITHUB_SHA'), 'manual_dispatch_performed': False,
-              'status': 'started', 'x_display_verified': False}
+              'status': 'started', 'x_display_verified': False,
+              'delivery_mode': 'advance_reservations' if advance else 'shareNow'}
     directory = ROOT / 'reports/delivery-runs'
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / f'{run_id}.json'
@@ -103,7 +126,11 @@ def main():
             report['queue_before'] = queue_snapshot(ROOT, before, now, slot)
         except (OSError, ValueError, KeyError, TypeError) as error:
             report['queue_diagnosis_error'] = type(error).__name__
-        report['status'] = publisher.main()
+        if advance:
+            from advance_reservations import main as reserve
+            report['status'] = reserve()
+        else:
+            report['status'] = publisher.main()
     except Exception as error:
         # Exception messages may contain transport payloads; record only class.
         report.update(status='execution_failed', error_type=type(error).__name__)
@@ -111,7 +138,7 @@ def main():
     finally:
         report['finished_at'] = datetime.now(publisher.JST).isoformat()
         try:
-            report.update(delivery_evidence(before, read_ledger(ledger), day, slot))
+            report.update(delivery_evidence(before, read_ledger(ledger), day, slot, advance=advance))
         except (OSError, ValueError, TypeError) as error:
             report.update(delivery_state='ledger_unreadable_do_not_retry',
                           ledger_error_type=type(error).__name__)

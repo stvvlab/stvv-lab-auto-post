@@ -1,6 +1,6 @@
 """Offline proposal for advance Buffer reservations. This module never sends.
 
-The active publisher remains shareNow on the existing seven scheduled runs.
+The live advance-reservation runner separately rechecks every proposal.
 A proposal is not publication approval: network evidence must be rechecked
 and a persistent reservation lifecycle implemented before enabling delivery.
 """
@@ -47,12 +47,12 @@ def plan(history, now):
               'mode': 'offline_preview_only', 'can_publish': False,
               'live_transport_changed': False, 'proposals': [], 'blocked': [],
               'remaining_before_activation': [
-                  'Approval to replace GitHub-time shareNow with advance Buffer scheduling',
                   'Recheck official body, reviewed asset metadata and immutable public image bytes',
                   'Reconcile Buffer capacity and remote duplicates without paid API use',
                   'Persist pending before one send; reconcile unknown outcomes without resending',
                   'Keep scheduled acceptance separate from sent and X display verification']}
-    occupied = set(history['used_posts']) | set(history['pending_posts'])
+    occupied = (set(history['used_posts']) | set(history['pending_posts'])
+                | set(history.get('reserved_posts', {})))
     occupied.update(p.get('key') for p in history['publication_log'])
     for due, slot in slots:
         key = f'daily_{due.date()}_{slot}'

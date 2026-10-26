@@ -10,7 +10,11 @@ from urllib.parse import urlparse
 
 import stvv_post as publisher
 
-POST_FIELDS = 'id text channelId status dueAt'
+POST_FIELDS = 'id text channelId status dueAt assets { id }'
+
+
+class ReservationRejected(RuntimeError):
+    """Provider explicitly rejected creation; do not retry automatically."""
 
 
 class BufferReservations:
@@ -110,7 +114,7 @@ class BufferReservations:
             raise ValueError('A valid exact caption and reviewed image are required')
         data = self.query('''mutation ReservePost($input: CreatePostInput!) {
           createPost(input: $input) {
-            ... on PostActionSuccess { post { id text channelId status dueAt } }
+            ... on PostActionSuccess { post { id text channelId status dueAt assets { id } } }
             ... on MutationError { message }
           }
         }''', {'input': {'text': text, 'channelId': publisher.CHANNEL,
@@ -118,6 +122,8 @@ class BufferReservations:
             'assets': [{'image': {'url': image_url}}]}})
         post = (data.get('createPost') or {}).get('post')
         if not isinstance(post, dict) or not post.get('id'):
+            if (data.get('createPost') or {}).get('message'):
+                raise ReservationRejected('Buffer rejected reservation; no automatic retry')
             raise RuntimeError('Buffer reservation outcome unknown; do not resend')
         return post
 

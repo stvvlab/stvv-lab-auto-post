@@ -84,6 +84,35 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(result['delivery_state'], 'no_new_buffer_acceptance_recorded')
             self.assertEqual(result['queue_diagnosis_error'], 'ValueError')
 
+    def test_advance_wrapper_tracks_future_reservation_and_never_calls_share_now(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            ledger = root / 'posted.json'
+            ledger.write_text(json.dumps(history()))
+            def reserve():
+                changed = history()
+                changed['reserved_posts'] = {'daily_2026-10-28_player': {
+                    'buffer_id': 'offline-fixture', 'buffer_status': 'scheduled',
+                    'due_at': '2026-10-27T23:00:00Z'}}
+                ledger.write_text(json.dumps(changed))
+                return 'reserved_in_buffer'
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '789',
+                   'GITHUB_SCHEDULE': '0 12 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d.publisher, 'slot_for_run', return_value=('vote', '2026-10-27')), \
+                    patch.object(d, 'queue_snapshot', return_value={}), \
+                    patch.object(d.publisher, 'main') as legacy, \
+                    patch('advance_reservations.main', side_effect=reserve) as advance:
+                d.main()
+                legacy.assert_not_called()
+                advance.assert_called_once()
+            result = json.loads((root / 'reports/delivery-latest.json').read_text())
+            self.assertEqual(result['delivery_mode'], 'advance_reservations')
+            self.assertEqual(result['delivery_state'], 'buffer_scheduled_not_published')
+            self.assertEqual(result['new_reservations'][0]['key'], 'daily_2026-10-28_player')
+            self.assertEqual(result['new_publications'], [])
+
     def test_unreadable_history_is_not_zero_pending(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'posted.json'

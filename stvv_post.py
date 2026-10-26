@@ -161,12 +161,14 @@ def load():
         or not isinstance(history.get("used_posts"), list)
         or not isinstance(history.get("publication_log", []), list)
         or not isinstance(history.get("pending_posts", {}), dict)
+        or not isinstance(history.get("reserved_posts", {}), dict)
     ):
         raise RuntimeError("posted.json の形式が不正です")
 
     history.setdefault("publication_log", [])
     history.setdefault("pending_posts", {})
     history.setdefault("tracked_topics", {})
+    history.setdefault("reserved_posts", {})
     return history
 
 
@@ -886,7 +888,7 @@ def publish(
 ):
     # Check before saving pending: an unsupported delivery was never attempted.
     require_supported_delivery(reply_to)
-    if key in history["used_posts"]:
+    if key in history["used_posts"] or key in history.get("reserved_posts", {}):
         log(f"投稿済み: {key}")
         return False
 
@@ -995,6 +997,8 @@ def image_teaser(slot, detail, source=None):
 
 
 def main():
+    if os.getenv("STVV_ADVANCE_RESERVATIONS") == "true":
+        return run_result("blocked_legacy_share_now", "事前予約モードはdelivery_run.py経由のみ")
     now = datetime.now(JST)
     history = load()
     reviews = load_feedback()

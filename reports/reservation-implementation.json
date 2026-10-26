@@ -1,0 +1,45 @@
+{
+  "updated_at": "2026-10-27T00:56:16.860618+09:00",
+  "status": "implemented_configured_live_reservation_not_yet_verified",
+  "delivery_mode": "advance_reservations",
+  "publication_slots_jst": [
+    "08:00",
+    "10:30",
+    "12:30",
+    "15:30",
+    "18:00",
+    "21:00",
+    "23:00"
+  ],
+  "ready_cards": 0,
+  "new_images_this_pass": 0,
+  "new_publications_this_pass": 0,
+  "one_mutation_per_run": true,
+  "pending_durably_saved_before_send": true,
+  "unknown_send_never_retried": true,
+  "scheduled_is_not_published": true,
+  "legacy_share_now_blocked_in_reservation_mode": true,
+  "read_only_capability": {
+    "checked_at": "2026-10-27T00:50:24.149319+09:00",
+    "status": "read_permission_capacity_and_status_query_verified",
+    "mutations_attempted": 0,
+    "paid_api_or_contract_change": false,
+    "channel_id": "6ab8fce4ea19ca0bde027d80",
+    "scheduled_limit": 10,
+    "active_count": 0,
+    "remaining_capacity": 10,
+    "known_post_status_query_verified": true,
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40353229659",
+    "probe_commit": "f9aed97457ccd3098555243a096378f8e4ab6af9"
+  },
+  "final_targeted_suite_passed": 37,
+  "github_actions_validation": "pending",
+  "remaining": [
+    "CI and main reflection",
+    "First eligible new reviewed image",
+    "Actual reservation acceptance on an existing regular run",
+    "Buffer sent and public X caption/image confirmation across multiple slots",
+    "Supplemental reply transport remains unavailable"
+  ],
+  "local_full_suite_passed_before_explicit_rejection_tests": 247
+}
