@@ -119,7 +119,21 @@ def main():
     parser.add_argument('--metadata', default='reports/fixture-draft-preview.json')
     args = parser.parse_args()
     report = json.loads(Path(args.input).read_text(encoding='utf-8'))
-    result = prepare(report, args.output, args.metadata, datetime.now(timezone.utc).date())
+    try:
+        result = prepare(report, args.output, args.metadata, datetime.now(timezone.utc).date())
+    except ValueError as exc:
+        # This fixture-specific pilot should stop creating art after the match,
+        # rather than fail daily or fall back to unverified information.
+        target = Path(args.metadata)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps({
+            'status': 'skipped_unverified_or_expired',
+            'reviewed': False, 'can_publish': False,
+            'reason': str(exc), 'buffer_called': False,
+            'x_publication_performed': False,
+        }, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+        print('Fixture artwork skipped:', exc)
+        return
     print('Fixture artwork generated for review only:', result['image_path'])
 
 
