@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-10-27T00:33:53.606626+09:00",
+  "mode": "offline_preview_only",
+  "can_publish": false,
+  "live_transport_changed": false,
+  "proposals": [],
+  "blocked": [],
+  "remaining_before_activation": [
+    "Approval to replace GitHub-time shareNow with advance Buffer scheduling",
+    "Recheck official body, reviewed asset metadata and immutable public image bytes",
+    "Reconcile Buffer capacity and remote duplicates without paid API use",
+    "Persist pending before one send; reconcile unknown outcomes without resending",
+    "Keep scheduled acceptance separate from sent and X display verification"
+  ],
+  "evidence": {
+    "delayed_delivery_run": "40340928129",
+    "scheduled_jst": "2026-10-26T21:00:00+09:00",
+    "github_run_created_jst": "2026-10-26T23:34:59+09:00",
+    "buffer_accepted_jst": "2026-10-26T23:35:36.622617+09:00",
+    "pre_run_creation_delay_seconds": 9299,
+    "latest_regular_run": "40349598794",
+    "latest_result": "skipped_no_verified_content",
+    "latest_posting_step_delay_seconds": 5318,
+    "no_new_send": true
+  }
+}
