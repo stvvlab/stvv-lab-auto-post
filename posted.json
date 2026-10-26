@@ -886,6 +886,23 @@
       "art_direction": "ink-poster"
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-26_vote": {
+      "slot": "vote",
+      "source": "https://stvv.jp/news/game/20261026_1/",
+      "text": "🌟 新川志音がリーグ初先発。\nクラブ・ブルージュ戦で先発メンバーに名を連ねました。\n今後どんなプレーに期待しますか？\n\n公式：https://stvv.jp/news/game/20261026_1/\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a6f8d26c737f48a985f39f7240fc9604a5eb53e4/generated/imagegen_shinkawa_first_start_20261026.jpg",
+      "visual_variant": "stadium",
+      "art_direction": "print-collage",
+      "created_at": "2026-10-26T23:35:32.780381+09:00",
+      "editorial_fact": {
+        "kind": "league_first_start",
+        "subject": "新川志音",
+        "claim": "新川志音がリーグ初先発。",
+        "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+        "fact_id": "cf1423218edf88bf40924cf22ebfec23e69e1d8b70c2999857f22befaf07b799"
+      }
+    }
+  },
   "tracked_topics": {}
 }
