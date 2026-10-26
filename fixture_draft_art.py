@@ -131,7 +131,7 @@ def main():
             'reviewed': False, 'can_publish': False,
             'reason': str(exc), 'buffer_called': False,
             'x_publication_performed': False,
-        }, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+        }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         print('Fixture artwork skipped:', exc)
         return
     print('Fixture artwork generated for review only:', result['image_path'])
