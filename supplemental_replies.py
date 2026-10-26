@@ -1,8 +1,10 @@
 """Prepare safe supplemental replies without pretending a transport exists."""
 import hashlib
 import re
+import json
 from copy import deepcopy
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 JST_OFFSET = "+09:00"
@@ -11,10 +13,21 @@ X_HOSTS = {"x.com", "www.x.com", "twitter.com", "www.twitter.com"}
 OFFICIAL_HOSTS = {"stvv.jp", "www.stvv.com", "stvv.com", "www.uefa.com", "uefa.com"}
 TRACKING_PREFIXES = ("utm_",)
 TRACKING_KEYS = {"fbclid", "gclid", "xclid"}
+PARENT_REGISTRY = Path(__file__).resolve().parent / 'editorial/supplemental_replies.json'
 
 
 class ReplyValidationError(ValueError):
     pass
+
+
+def read_parent_registry():
+    try:
+        data = json.loads(PARENT_REGISTRY.read_text(encoding='utf-8'))
+        if not isinstance(data.get('parents'), list):
+            raise ValueError('invalid parent registry')
+        return data['parents']
+    except (OSError, ValueError, TypeError, AttributeError) as error:
+        raise ReplyValidationError('verified parent registry unavailable') from error
 
 
 def _now_iso():
@@ -58,6 +71,22 @@ def validate_candidate(candidate, history):
                if item.get("key") == parent_key]
     if len(parents) != 1:
         raise ReplyValidationError("parent is not uniquely present in publication history")
+    # An arbitrary own-account status must not be paired with an unrelated
+    # historical key. Bind the observed X ID to exact durable parent evidence.
+    matches = [p for p in read_parent_registry()
+               if isinstance(p, dict) and p.get('parent_key') == parent_key]
+    if len(matches) != 1:
+        raise ReplyValidationError('parent mapping is missing or ambiguous')
+    mapping, published = matches[0], parents[0]
+    if (mapping.get('verified') is not True or mapping.get('owner') != OWN_HANDLE
+            or mapping.get('parent_post_id') != parent_id
+            or mapping.get('parent_x_url') != candidate.get('parent_x_url')
+            or parent_post_id(mapping.get('parent_x_url', '')) != parent_id
+            or not published.get('text') or not published.get('buffer_id')
+            or mapping.get('parent_text') != published.get('text')
+            or mapping.get('buffer_id') != published.get('buffer_id')
+            or canonical_source(mapping.get('source_url', '')) != canonical_source(published.get('source', ''))):
+        raise ReplyValidationError('parent mapping does not match the verified publication')
     text = candidate.get("text")
     if not isinstance(text, str) or not text.strip():
         raise ReplyValidationError("reply text is empty")
