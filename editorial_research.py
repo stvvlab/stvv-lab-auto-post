@@ -57,6 +57,20 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
         if fact:
             known_claims.append((canonical_source(card['source_url']),
                                  fact['source_body_sha256'], plain(fact['claim'])))
+        elif (card.get('reviewed') is True and card.get('status') in {'ready', 'published'}
+              and isinstance(card.get('editorial_fact'), dict)):
+            # A previously reviewed/published claim may later be disqualified
+            # by historical evidence. Still suppress re-suggesting that exact
+            # claim in research; this does NOT make it publishable.
+            old = card['editorial_fact']
+            if (old.get('kind') == 'league_first_start'
+                    and isinstance(old.get('subject'), str)
+                    and re.fullmatch(r'[一-龥ぁ-んァ-ヶー]{3,20}', old['subject'])
+                    and old.get('claim') == old['subject'] + 'がリーグ初先発。'
+                    and old['claim'] in card.get('text', '')
+                    and re.fullmatch(r'[a-f0-9]{64}', old.get('source_body_sha256', ''))):
+                known_claims.append((canonical_source(card['source_url']),
+                                     old['source_body_sha256'], plain(old['claim'])))
     sources = []
     for post in reversed(history.get('publication_log', [])):
         source = post.get('source')
