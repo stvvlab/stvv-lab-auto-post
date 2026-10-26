@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T13:02:16+09:00",
+  "checked_at": "2026-10-26T14:09:40+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -114,11 +114,10 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T13:02:16+09:00",
-    "main_observed": "1403a6cda4a6f253c763ab73c4bebcf1f4c07220",
-    "source_inventory_checked_at": "2026-10-26T12:10:03.525411+09:00",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40262678223",
-    "source_inventory_workflow_conclusion": "success",
+    "checked_at": "2026-10-26T14:09:40+09:00",
+    "main_observed": "d219db656ac397ef3eaeadab629e7f1d8b5c17d6",
+    "source_inventory_checked_at": "2026-10-26T14:09:11.947932+09:00",
+    "source_inventory_method": "Read-only live scan with current main ledger and manifest",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -142,14 +141,15 @@
     "new_image_generated": false,
     "new_publication": false,
     "observed_slot": "2026-10-26 12:30 JST data",
-    "observed_slot_status": "not_started_in_observed_actions_list",
-    "last_completed_slot": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40257377252",
-    "last_completed_slot_result": "skipped_no_verified_content",
+    "observed_slot_status": "skipped_repeated_content",
+    "last_completed_slot": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40267095573",
+    "last_completed_slot_result": "skipped_repeated_content",
     "last_verified_publication": "https://x.com/stvvlabo/status/2114495450866712925",
-    "official_result_rechecked": "Belgian league round 9, 26 October JST, Club Brugge 3–2 STVV; セヴァウイ and 谷口 scorers",
-    "tests_repeated": false,
+    "official_result_rechecked": "Japanese official article body re-read: league round 9, 26 October JST, Club Brugge 3–2 STVV; セヴァウイ PK and 谷口 scorers. Inconsistent minutes/substitutions not used.",
+    "tests_repeated_locally": false,
+    "scheduled_prerequisite_tests_passed": 187,
     "manual_dispatch_performed": false,
-    "reason": "No new candidate. 12:30 slot not observed; no skip/error/delivery outcome inferred, and no retry initiated.",
-    "supplemental_reply_transport": "unchanged_blocked; current tool catalogue exposes no existing-post reply method; no paid or authentication actions."
+    "reason": "All three official lists fetched successfully; no new unposted candidates. Existing scheduled data slot skipped duplicate content before media or Buffer send. No new image needed.",
+    "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions."
   }
 }
