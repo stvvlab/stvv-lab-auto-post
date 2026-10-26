@@ -66,6 +66,46 @@ jobs:
       - name: Collect unused evidence for editorial review without publishing
         if: always()
         run: python editorial_research.py
+      - name: Surface publishing supply blockers
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          inventory = Path("reports/preparation-latest.json")
+          research = Path("reports/editorial-research-latest.json")
+          manifest = Path("editorial/imagegen_cards.json")
+          lines = ["## STVV LAB publishing supply", ""]
+          if not inventory.exists():
+              lines.append("- Official source inventory unavailable; review preparation job failure.")
+          else:
+              try:
+                  report = json.loads(inventory.read_text(encoding="utf-8"))
+                  cards = json.loads(manifest.read_text(encoding="utf-8")).get("cards", [])
+                  ready = sum(c.get("status") == "ready" and c.get("reviewed") is True for c in cards)
+                  candidates = report.get("candidates", [])
+                  lines += [
+                      f"- Source scan: {report.get('status', 'unknown')}",
+                      f"- Reviewed ready images: **{ready}**",
+                      f"- Source candidates awaiting processing: **{len(candidates)}**",
+                  ]
+                  if ready == 0:
+                      lines.append("- **BLOCKER:** No reviewed image is ready for future scheduled publishing.")
+                      lines.append("- Required: verify official body, draft accurate text, create image, visually review, then register immutable approved media.")
+                  if candidates:
+                      lines.append("- Candidate sources (review required; not publish approval):")
+                      for item in candidates[:5]:
+                          lines.append(f"  - {item.get('source_url', 'unknown')} ({item.get('status', 'unknown')})")
+                  elif report.get("status") == "no_unposted_candidate_in_scanned_lists":
+                      lines.append("- No unpublished source in the scanned official lists; don't generate fabricated posts to fill slots.")
+              except (ValueError, OSError, TypeError) as error:
+                  lines.append(f"- Evidence unreadable ({type(error).__name__}); check artifacts.")
+          lines.append(f"- Editorial research report: {'available' if research.exists() else 'missing'}")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
+              out.write("\n".join(lines) + "\n")
+          print("\n".join(lines))
+          PY
       - name: Keep evidence even when source retrieval fails
         if: always()
         uses: actions/upload-artifact@v4
