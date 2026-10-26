@@ -3,7 +3,7 @@ name: STVV LAB Discovery Brief
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'tests/test_editorial_research.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', '.github/workflows/discovery-brief.yml']
+    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', '.github/workflows/discovery-brief.yml']
   schedule:
     - cron: "30 22 * * *" # JST 07:30
     - cron: "40 * * * *" # Read-only candidate preparation, hourly; never publishes

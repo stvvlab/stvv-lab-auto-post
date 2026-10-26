@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T22:56:56.026460+09:00",
+  "checked_at": "2026-10-26T23:14:31.913099+09:00",
   "status": "research_drafts_available",
   "source_checks": [
     {
@@ -12,26 +12,6 @@
     }
   ],
   "drafts": [
-    {
-      "candidate_id": "5b01fdb57443ea04cc9e48d7d93a63fb77387189750c5eddce4bf76f3393a406",
-      "angle": "player",
-      "source_url": "https://stvv.jp/news/game/20261026_1/",
-      "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
-      "evidence_excerpt": "シント＝トロイデンVVは新川志音がリーグ初先発。",
-      "draft_text": "選手の新しい材料\n公式本文：「シント＝トロイデンVVは新川志音がリーグ初先発。」\n次戦も注目したい選手は？\n\n公式：https://stvv.jp/news/game/20261026_1/",
-      "x_length_with_tags": 158,
-      "reviewed": false,
-      "status": "research_only",
-      "current_duplicate_gate": "同じ出典／試合の内容で、新しい比較データがないため見送り",
-      "can_publish": false,
-      "remaining": [
-        "check source consistency and whether evidence is genuinely new",
-        "edit specific natural Japanese copy and distinguish opinion from fact",
-        "resolve duplicate gate with genuinely new verified information",
-        "built-in imagegen and visual review",
-        "register reviewed ready card"
-      ]
-    },
     {
       "candidate_id": "700b9d229d63db5b079a4827873b17863997e703d6962ead2525b6651f5eaa77",
       "angle": "analysis",

@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import unittest
 from datetime import datetime
 from unittest.mock import Mock, patch
@@ -61,6 +62,44 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(result['source_checks'][0]['status'], 'source_unavailable')
         self.assertEqual(result['status'], 'source_scan_failed')
         self.assertEqual(result['drafts'], [])
+
+    def reviewed_claim_card(self, body):
+        return {'source_url': URL, 'date_jst': '2026-10-26',
+                'text': '🌟 新川志音がリーグ初先発。\n公式：' + URL,
+                'reviewed': True, 'status': 'ready',
+                'editorial_fact': {'kind': 'league_first_start', 'subject': '新川志音',
+                    'claim': '新川志音がリーグ初先発。',
+                    'source_body_sha256': hashlib.sha256(body.encode()).hexdigest()}}
+
+    def test_prefixed_article_sentence_does_not_recreate_reviewed_claim(self):
+        body = 'シント＝トロイデンVVは' + BODY
+        state = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}
+        for status in ['ready', 'published']:
+            card = dict(self.reviewed_claim_card(body), status=status)
+            manifest = {'cards': [card]}
+            before = copy.deepcopy(manifest)
+            with patch.object(research, 'read_body', return_value=body):
+                result = research.build_research(state, manifest, NOW, Mock())
+            self.assertNotIn('player', [d['angle'] for d in result['drafts']])
+            self.assertEqual({d['angle'] for d in result['drafts']}, {'analysis', 'vote'})
+            self.assertEqual(manifest, before)
+            self.assertFalse(result['publication_performed'])
+
+    def test_unreviewed_or_changed_body_requires_research_again(self):
+        body = 'シント＝トロイデンVVは' + BODY
+        state = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}
+        card = self.reviewed_claim_card(body)
+        for change in [{'reviewed': False}, {'status': 'draft'},
+                       {'editorial_fact': {**card['editorial_fact'], 'source_body_sha256': 'a' * 64}},
+                       {'editorial_fact': {**card['editorial_fact'], 'subject': None}},
+                       {'source_url': URL.replace('20261026_1', '20261026_2')}]:
+            changed = {**card, **change}
+            if 'source_url' in change:
+                changed['text'] = changed['text'].replace(URL, change['source_url'])
+            manifest = {'cards': [changed]}
+            with patch.object(research, 'read_body', return_value=body):
+                result = research.build_research(state, manifest, NOW, Mock())
+            self.assertIn('player', [d['angle'] for d in result['drafts']])
 
 
 if __name__ == '__main__':
