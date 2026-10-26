@@ -12,6 +12,38 @@ ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / 'editorial/imagegen_cards.json'
 
 
+def exact_card(slot, message, source):
+    from stvv_post import HASHTAGS
+    if message.endswith(HASHTAGS):
+        message = message[:-len(HASHTAGS)]
+    if not MANIFEST.exists():
+        return None
+    data = json.loads(MANIFEST.read_text(encoding='utf-8'))
+    if data.get('enabled') is not True:
+        return None
+    cards = [c for c in data.get('cards', []) if c.get('source_url') == source
+             and c.get('text') == message and slot in c.get('slots', [])
+             and c.get('status') == 'ready' and c.get('reviewed') is True]
+    return cards[0] if len(cards) == 1 else None
+
+
+def prepared_duplicate_reason(history, message, source, slot, now):
+    from content_guard import duplicate_reason
+    from editorial_novelty import distinct_fact_reason
+    base = duplicate_reason(history, message, source, now)
+    card = exact_card(slot, message, source)
+    if card is None or 'editorial_fact' not in card:
+        return base
+    # Only an exact reviewed claim of a supported kind may differ from a recap.
+    return distinct_fact_reason(history, card, now)
+
+
+def prepared_fact_metadata(slot, message, source, now):
+    from editorial_novelty import fact_metadata
+    card = exact_card(slot, message, source)
+    return fact_metadata(card, now) if card else None
+
+
 def prepared_art_direction(slot, message, source):
     """Read design metadata only from the exact reviewed ready card."""
     from design_brief import ART_DIRECTIONS
@@ -66,6 +98,18 @@ def prepared_media(session, slot, message, source):
     if len(cards) != 1:
         return True, None
     card = cards[0]
+    if 'editorial_fact' in card:
+        from datetime import datetime
+        from stvv_post import JST
+        from editorial_novelty import fact_metadata
+        from preparation_inventory import read_body
+        fact = fact_metadata(card, datetime.now(JST))
+        if not fact:
+            raise ValueError('Reviewed fact metadata is invalid')
+        body = read_body(session, source)
+        if (fact['claim'] not in body
+                or hashlib.sha256(body.encode()).hexdigest() != fact['source_body_sha256']):
+            raise ValueError('Official body or reviewed fact changed; re-review required')
     path = Path(card['asset_path'])
     if path.is_absolute() or path.parent != Path('generated') or path.suffix not in {'.png', '.jpg'}:
         raise ValueError('Prepared asset must be directly under generated/')

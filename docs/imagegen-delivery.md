@@ -121,3 +121,27 @@ image is generated merely to fill a slot. An editor must verify source consisten
 novelty and copy, then perform built-in imagegen/visual review and register a ready
 card under all existing delivery gates. This expands research, not daily output by
 itself; it does not guarantee four or seven public posts.
+
+## Reviewed new facts from an already used match source
+
+A result recap remains protected by the original duplicate gate. A different
+headline, question, scorer or goal minute does not establish a new fact.
+`editorial_novelty.py` currently supports one narrowly defined case only:
+`league_first_start`, with the exact official claim `<subject>がリーグ初先発。`.
+It requires an exact reviewed ready card, visible source citation, matching fresh
+article date, no score recap, a reviewed official body SHA-256 and the exact claim
+in both caption and source body. The runner re-fetches the official body before
+using the image; a changed digest or missing claim requires a new review.
+
+The subject/kind fact ID is persisted with pending **before** Buffer, and with
+publication history after acceptance. Previous fact IDs, first-start paraphrases,
+identical captions and any same-source pending send block another submission.
+At most one such additional fact is allowed per source. Ambiguous/unreviewed
+cards and unsupported fact kinds retain the original rejection. This does not
+authorize arbitrary analysis or repeated questions from the same result.
+
+The prepared image's exact caption, slots, digest, dimensions and immutable public
+bytes are still required. No paid API, text-only fallback, extra schedule or manual
+pilot is introduced. The first ready case is 新川志音's league first start, separate
+from the already published Club Brugge score recap. Its source body and artwork
+were reviewed; actual scheduled delivery must be confirmed separately.

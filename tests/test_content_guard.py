@@ -130,6 +130,9 @@ class ContentGuardTests(unittest.TestCase):
         if fallback_already_posted:
             history['publication_log'].append({'text': fallback, 'source': None})
         with ExitStack() as stack:
+            # Test the repeated stats-provider path, independent of a live
+            # reviewed editorial queue that may legitimately cover another fact.
+            stack.enter_context(patch('prepared_media.prepared_candidates', return_value=[]))
             for name, value in [('load', history), ('load_feedback', []),
                                 ('feedback_scores', {}), ('auto_feedback_scores', {}),
                                 ('slot_for_run', ('vote', '2026-10-21')),
