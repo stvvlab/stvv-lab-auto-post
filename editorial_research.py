@@ -67,8 +67,10 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
                     and isinstance(old.get('subject'), str)
                     and re.fullmatch(r'[一-龥ぁ-んァ-ヶー]{3,20}', old['subject'])
                     and old.get('claim') == old['subject'] + 'がリーグ初先発。'
-                    and old['claim'] in card.get('text', '')
-                    and re.fullmatch(r'[a-f0-9]{64}', old.get('source_body_sha256', ''))):
+                    and isinstance(card.get('text'), str)
+                    and old['claim'] in card['text']
+                    and isinstance(old.get('source_body_sha256'), str)
+                    and re.fullmatch(r'[a-f0-9]{64}', old['source_body_sha256'])):
                 known_claims.append((canonical_source(card['source_url']),
                                      old['source_body_sha256'], plain(old['claim'])))
     sources = []
