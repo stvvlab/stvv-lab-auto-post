@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T21:11:18.729583+09:00",
+  "checked_at": "2026-10-26T22:29:39+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -95,7 +95,7 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T21:11:18.729583+09:00",
+    "checked_at": "2026-10-26T22:18:08.805978+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -113,29 +113,33 @@
         "eligible_items": 1
       }
     ],
-    "unprepared_candidates": 0,
+    "candidate_count": 0,
+    "candidates": [],
     "ready_cards": 1,
     "pending_posts": 0,
-    "weighted_length": 169,
-    "quality_findings": [],
-    "duplicate_reason": null,
-    "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
-    "exact_claim_in_source": true,
-    "public_image_bytes_verified": true,
-    "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9ca2fd97373954cabdf7fe9d766f4aab6921c0ee/generated/imagegen_shinkawa_first_start_20261026.jpg",
-    "asset_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
-    "public_send_performed": false,
-    "main_observed": "9ca2fd97373954cabdf7fe9d766f4aab6921c0ee",
+    "publication_performed": false,
+    "image_generation_performed": false,
+    "preflight": [
+      {
+        "source_url": "https://stvv.jp/news/game/20261026_1/",
+        "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+        "weighted_length": 169,
+        "quality_findings": [],
+        "duplicate_reason": null,
+        "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+        "claim_in_body": true,
+        "public_image_verified": true,
+        "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323"
+      }
+    ],
+    "main_observed": "0b5029f5362ea839b6139abd45ba8c679ec46cfb",
     "observed_slot": "2026-10-26 21:00 JST vote",
     "observed_slot_status": "not_started_at_check",
-    "new_image_generated": false,
-    "new_publication": false,
     "manual_dispatch_performed": false,
-    "scheduled_prerequisite_tests_passed": null,
-    "main_ci_tests_passed": 203,
-    "main_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318626571",
-    "reason": "21:00 scheduled posting run has not appeared in Actions. Reviewed player milestone remains ready and passes current official-body, novelty, caption and public-image checks. No send or dispatch performed.",
-    "supplemental_reply_transport": "unchanged_blocked; nine current Metricool tools still expose no existing-post reply method"
+    "new_publication": false,
+    "new_image_generated": false,
+    "supplemental_reply_transport": "unchanged_unavailable",
+    "note": "Fresh official archives and ready milestone preflight passed; no newly eligible unregistered source and no send performed. A not-started workflow has no delivery artifact."
   },
   "editorial_breadth_expansion": {
     "implemented_at": "2026-10-26T20:28:00+09:00",
@@ -388,5 +392,32 @@
       "Verify ready Shinkawa milestone Buffer delivery and actual X text/image display",
       "Continue distinct official-source content and visual preparation without filling slots with repeats"
     ]
+  },
+  "latest_maintenance": {
+    "checked_at": "2026-10-26T22:29:39+09:00",
+    "implementation_commit": "6accaedcf77ef63bb18e94983d057d377feacbed",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/34",
+    "reply_parent_binding": "Require a unique verified registry entry whose X ID/URL, caption, Buffer ID and official source match the actual publication key.",
+    "mapped_parents": 3,
+    "reply_sender_available": false,
+    "new_reply_sent": false,
+    "tests": {
+      "local_full_passed": 216,
+      "github_full_passed": 216,
+      "github_full_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40330725165",
+      "visual_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40330725229"
+    },
+    "visual_ci_font_reliability": {
+      "initial_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40329990771",
+      "failure": "Two bounded Ubuntu font-install attempts failed; required Japanese font missing",
+      "fix": "Restore same shared Noto CJK cache as production before bounded installation fallback",
+      "verified_cache_hit": true,
+      "verified_font_ready": true,
+      "final_visual_ci_success": true,
+      "production_posting_failure_not_inferred": true
+    },
+    "image_generated_this_run": false,
+    "ready_cards": 1,
+    "public_post_sent_this_run": false
   }
 }

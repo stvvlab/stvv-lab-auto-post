@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-24T09:05:44+09:00",
+  "checked_at": "2026-10-26T22:29:39+09:00",
   "status": "partial_safety_implementation_transport_blocked",
   "requested_behavior": "Append verified supplemental analysis as a reply to an already-published @stvvlabo post.",
   "actual_reply_published": false,
@@ -58,25 +58,51 @@
     "unknown_result_blocks_resend": true,
     "x_parent_child_verification_before_published": true,
     "no_transport_blocks_without_mutation": true,
-    "sender_implemented": false
+    "sender_implemented": false,
+    "parent_registry_evidence_binding": true,
+    "unrelated_own_post_cannot_borrow_history_key": true
   },
-  "mapped_parents": 1,
+  "mapped_parents": 3,
   "ready_replies": 0,
   "pending_replies": 0,
   "implementation_commit": "338dafe243edeacafcef922b93f993f1e09a5beb",
   "tests": {
-    "focused_passed": 17,
+    "focused_passed": 10,
     "focused_failed": 0,
-    "scope": "new reply safety module, existing no-fallback guard and prepared image delivery",
-    "full_suite_passed": 141,
+    "scope": "Supplemental reply parent binding and existing safety tests; no transport calls",
+    "full_suite_passed": 216,
     "full_suite_failed": 0,
-    "full_suite_note": "Ran with the repository's required Japanese editorial font configured.",
-    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40061226351",
-    "github_actions_conclusion": "success"
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40330725165",
+    "github_actions_conclusion": "success",
+    "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40330725229",
+    "visual_ci_conclusion": "success"
   },
   "user_action_required": [
     "Choose manual X reply handoff for a free workflow, or explicitly approve paid X API setup and charges.",
     "Connecting X inside Metricool alone is not sufficient because neither the connected MCP tools nor Metricool X Inbox expose public-post replies."
   ],
-  "completion_classification": "Preparation and safety gates implemented; reply delivery remains unavailable and unverified."
+  "completion_classification": "Preparation and safety gates implemented; reply delivery remains unavailable and unverified.",
+  "parent_mapping_verification": {
+    "checked_at": "2026-10-26T22:21:00+09:00",
+    "mapped_parents": 3,
+    "method": "Prior X-display-verified published manifest plus exact current posted.json key, caption, Buffer ID and official source; registry validator run without staging/sending",
+    "new_x_verification_performed": false,
+    "actual_reply_published": false,
+    "queue_enabled": false,
+    "ready_replies": 0,
+    "local_full_tests_passed": 216,
+    "github_actions_tests_passed": 216,
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40330725165",
+    "remaining": "Reply transport remains unavailable and unimplemented.",
+    "implementation_commit": "6accaedcf77ef63bb18e94983d057d377feacbed",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/34",
+    "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40330725229"
+  },
+  "route_catalog_check": {
+    "checked_at": "2026-10-26T22:18:00+09:00",
+    "metricool_tools_exposed": 9,
+    "existing_post_reply_tool_exposed": false,
+    "paid_api_used": false,
+    "official_pricing_rechecked_this_run": false
+  }
 }
