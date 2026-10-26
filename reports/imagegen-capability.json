@@ -322,5 +322,40 @@
       "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
     },
     "publication_confirmation_commit": "471f7c3c9acc2c3cea612280bf0a8dfea3cb91e8"
+  },
+  "delivery_operability_improvement": {
+    "implemented_at": "2026-10-26T21:39:01+09:00",
+    "implementation_commit": "62d739fb24e1029ffd518ef22e733911f16ef5f2",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/32",
+    "scope": [
+      "Single-call scheduled publisher wrapper with per-run queue and delivery evidence",
+      "Preserve unknown send outcomes without retry and distinguish Buffer sent from X verification",
+      "Correct pre-send block mislabeled as duplicate",
+      "Isolate test report output to avoid overwriting operational reports"
+    ],
+    "tests": {
+      "local_passed": 209,
+      "github_actions_passed": 209,
+      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40323875684",
+      "github_actions_conclusion": "success",
+      "all_four_pr_checks_passed": true
+    },
+    "regular_execution_verified": false,
+    "latest_slot_observation": {
+      "slot": "2026-10-26 21:00 JST vote",
+      "checked_at": "2026-10-26T21:39:01+09:00",
+      "state": "not_started_in_actions",
+      "new_buffer_acceptance": false,
+      "ready_cards": 1,
+      "pending_posts": 0
+    },
+    "schedules_changed": false,
+    "manual_dispatch_performed": false,
+    "remaining": [
+      "Verify wrapper and evidence persistence in an actual scheduled publication",
+      "GitHub cron start-time delay remains unresolved; do not promise an exact posting time",
+      "Continue evidence-based distinct content preparation and visual quality review",
+      "Supplemental reply transport remains unavailable"
+    ]
   }
 }
