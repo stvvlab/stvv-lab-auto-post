@@ -1,0 +1,34 @@
+{
+  "checked_at": "2026-10-26T23:05:51.481917+00:00",
+  "fixture_date_local": "2026-11-01",
+  "fixture": "STVV - OH Leuven",
+  "source_times_local": {
+    "stvv": "15:00",
+    "ohl": "16:00",
+    "stvv_jp": "16:00"
+  },
+  "source_checks": [
+    {
+      "source": "stvv",
+      "url": "https://stvv.com/nl/wedstrijden?timeframe=upcoming",
+      "status": "ok"
+    },
+    {
+      "source": "ohl",
+      "url": "https://ohleuven.com/teams/a-ploeg/kalender/",
+      "status": "ok"
+    },
+    {
+      "source": "stvv_jp",
+      "url": "https://stvv.jp/news/event/20261002_2/",
+      "status": "ok"
+    }
+  ],
+  "can_publish_kickoff_time": false,
+  "can_publish_fixture_card": false,
+  "publication_performed": false,
+  "image_generation_performed": false,
+  "buffer_called": false,
+  "status": "official_sources_disagree_block_kickoff",
+  "note": "Official fixture listings are evidence, not publishing instructions. Even agreement does not authorize a caption or image. Do not guess or silently select a kick-off time."
+}

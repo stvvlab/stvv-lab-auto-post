@@ -115,7 +115,7 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T07:04:16.026416+09:00",
+    "checked_at": "2026-10-27T08:05:18.607683+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -160,7 +160,7 @@
     "actual_posting_step_checked": false,
     "last_regular_start_delay_seconds": 5318,
     "reservation_mode_regular_run_observed": false,
-    "next_existing_slot_jst": "2026-10-27T08:00:00+09:00",
+    "next_existing_slot_jst": "2026-10-27T10:30:00+09:00",
     "next_slot_start_not_guaranteed": true,
     "imagegen_retest_performed": false,
     "image_generated": false,
@@ -169,7 +169,6 @@
     "supplemental_reply_sender_available": false,
     "supplemental_reply_drafts": 1,
     "supplemental_reply_sent": false,
-    "local_focused_tests_passed": 8,
     "code_changed_this_check": false,
     "historical_claim_conflict_confirmed": true,
     "club_news_check": {
@@ -177,8 +176,18 @@
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
     },
-    "tests_scope": "Preparation inventory regressions only; no Buffer calls",
-    "latest_regular_result_evidence": "Unchanged durable delivery report for run 40349598794; no later STVV Auto Post run in fresh Actions listing."
+    "latest_regular_result_evidence": "Unchanged durable delivery report for run 40349598794; no later STVV Auto Post run in fresh Actions listing.",
+    "tests_run_this_check": false,
+    "regular_slot_observation": {
+      "scheduled_at": "2026-10-27T08:00:00+09:00",
+      "checked_at": "2026-10-27T08:05:18.607683+09:00",
+      "status": "run_not_observed_in_actions",
+      "posting_step_outcome": null,
+      "cause": "not_identified",
+      "new_buffer_acceptance_observed": false,
+      "manual_dispatch_performed": false,
+      "note": "No new production delivery record exists for this slot. Absence is not a skip, quality rejection, or proof of eventual execution."
+    }
   },
   "editorial_breadth_expansion": {
     "implemented_at": "2026-10-26T20:28:00+09:00",
@@ -655,5 +664,43 @@
     "new_image_generated": false,
     "new_reservation_sent": false,
     "advance_reservation_delivery_verified": false
+  },
+  "fixture_time_crosscheck": {
+    "checked_at": "2026-10-26T23:05:51.481917+00:00",
+    "fixture_date_local": "2026-11-01",
+    "fixture": "STVV - OH Leuven",
+    "source_times_local": {
+      "stvv": "15:00",
+      "ohl": "16:00",
+      "stvv_jp": "16:00"
+    },
+    "source_checks": [
+      {
+        "source": "stvv",
+        "url": "https://stvv.com/nl/wedstrijden?timeframe=upcoming",
+        "status": "ok"
+      },
+      {
+        "source": "ohl",
+        "url": "https://ohleuven.com/teams/a-ploeg/kalender/",
+        "status": "ok"
+      },
+      {
+        "source": "stvv_jp",
+        "url": "https://stvv.jp/news/event/20261002_2/",
+        "status": "ok"
+      }
+    ],
+    "can_publish_kickoff_time": false,
+    "can_publish_fixture_card": false,
+    "publication_performed": false,
+    "image_generation_performed": false,
+    "buffer_called": false,
+    "status": "official_sources_disagree_block_kickoff",
+    "note": "Official fixture listings are evidence, not publishing instructions. Even agreement does not authorize a caption or image. Do not guess or silently select a kick-off time.",
+    "implementation_commit": "7d7fa09",
+    "implementation_scope": "Read-only advisory report; does not itself approve or publish a card and is not a universal publisher gate.",
+    "manual_workflow_dispatch_performed": false,
+    "local_tests_run_this_check": false
   }
 }
