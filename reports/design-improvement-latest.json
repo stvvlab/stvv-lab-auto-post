@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T05:11:05.617104+09:00",
+  "updated_at": "2026-10-27T06:11:53.760214+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -124,7 +124,7 @@
   ],
   "new_generation_this_pass": false,
   "preview_this_pass": null,
-  "new_publication_this_pass": true,
+  "new_publication_this_pass": false,
   "implementation_commit": "bf8188ac8a3059bcb282bffd1d8038dd5f740258",
   "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/40",
   "image_design_diversity": {
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T05:11:05.617104+09:00",
+    "checked_at": "2026-10-27T06:11:53.760214+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -242,6 +242,7 @@
     ],
     "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40349598794",
     "last_regular_result": "skipped_no_verified_content",
+    "actual_posting_step_checked": true,
     "last_regular_start_delay_seconds": 5318,
     "reservation_mode_regular_run_observed": false,
     "next_existing_slot_jst": "2026-10-27T08:00:00+09:00",
@@ -251,24 +252,16 @@
     "send_performed": false,
     "new_publication": false,
     "supplemental_reply_sender_available": false,
-    "tests_run_this_check": true,
+    "supplemental_reply_drafts": 1,
+    "supplemental_reply_sent": false,
+    "local_focused_tests_passed": 44,
     "code_changed_this_check": false,
+    "historical_claim_conflict_confirmed": true,
     "club_news_check": {
       "url": "https://stvv.com/nl/nieuws",
       "latest_listing_date": "2026-10-26",
-      "latest_written_statement_date": "2026-10-22",
-      "statement_url": "https://stvv.com/nl/nieuws/artikel/statement-hajduk-split-stvv",
-      "result": "Already covered matches and closed-doors statement; no new verified posting candidate."
-    },
-    "offline_empty_queue_check": {
-      "status": "skipped_no_verified_content",
-      "buffer_requests": 0,
-      "ledger_unchanged": true,
-      "regular_execution": false
-    },
-    "supplemental_reply_drafts": 1,
-    "supplemental_reply_sent": false,
-    "supplemental_reply_draft_source_body_unchanged": true
+      "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
+    }
   },
   "last_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -656,5 +649,29 @@
     "live_reservation_acceptance_verified": false,
     "x_display_verified": false,
     "ready_cards": 0
+  },
+  "editorial_accuracy_alert": {
+    "checked_at": "2026-10-27T06:11:53.760214+09:00",
+    "status": "historical_official_source_conflict_confirmed",
+    "subject": "新川志音",
+    "affected_x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+    "historical_source_url": "https://stvv.jp/news/game/20260522_1/",
+    "later_source_url": "https://stvv.jp/news/game/20261026_1/",
+    "finding": "May 22 official report already records Shinkawa starting and describes his first start after moving to Belgium; October 26 calls it a league first start. Do not interpret the later wording as a career-first milestone. Season-first is not explicitly established by the October article.",
+    "content_accuracy_verified": false,
+    "delivery_evidence_remains_valid": true,
+    "republication_blocked": true,
+    "implementation_commit": "86bbbdbc613284509263ee8c248219dfc744f0a1",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/42",
+    "correction_draft_path": "docs/first-start-source-conflict-20261027.md",
+    "correction_sent": false,
+    "reply_transport_available": false,
+    "local_focused_tests_passed": 44,
+    "tests_scope": "Mocked novelty, research and reservation regressions only; no actual Buffer request",
+    "ci_runs_success": [
+      40401174538,
+      40401174495,
+      40401174330
+    ]
   }
 }

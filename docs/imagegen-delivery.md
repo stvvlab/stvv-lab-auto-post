@@ -184,7 +184,7 @@ pilot is introduced. The first ready case is 新川志音's league first start, 
 from the already published Club Brugge score recap. Its source body and artwork
 were reviewed; scheduled delivery and X display were subsequently verified below.
 
-## Verified first-start delivery
+## Historical first-start delivery (content accuracy disputed)
 
 The reviewed 新川志音 league-first-start print collage completed the existing
 2026-10-26 21:00 JST vote slot at 23:35 JST. Production run
@@ -236,3 +236,15 @@ Run 40383673544 was a pull_request check: its tests passed and its reserve job
 was skipped. It does not prove a real manifest-push reservation, Buffer acceptance,
 or X display. Queue ready=0 and the last regular posting outcome is still the
 2026-10-26 recap skip; retain the implemented/configured, live-unverified status.
+
+## 2026-10-27: historical source conflict confirmed
+
+The Shinkawa image was generated and delivered, but its unqualified league-first-start
+claim is contradicted by the official May 22 starting lineup and first-start wording.
+The October 26 article does not explicitly establish a season-first interpretation.
+See docs/first-start-source-conflict-20261027.md and PR #42. The known historical
+conflict now blocks reuse in editorial_novelty, and research suppresses recycling
+the published claim. Generation, visual legibility and X delivery evidence remain
+historical evidence; none establishes editorial accuracy. A correction is drafted
+but unsent because no authenticated free reply transport is confirmed. Do not
+replace the original ledger, resend the image, or issue a standalone correction.
