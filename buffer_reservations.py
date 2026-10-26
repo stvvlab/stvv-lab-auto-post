@@ -135,6 +135,11 @@ def probe():
     result = {'checked_at': datetime.now(publisher.JST).isoformat(),
               'status': 'not_verified', 'mutations_attempted': 0,
               'paid_api_or_contract_change': False}
+    run_id, revision = os.getenv('GITHUB_RUN_ID', ''), os.getenv('GITHUB_SHA', '')
+    if re.fullmatch(r'\d+', run_id):
+        result['workflow_run'] = ('https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/' + run_id)
+    if re.fullmatch(r'[a-f0-9]{40}', revision):
+        result['probe_commit'] = revision
     try:
         client = BufferReservations()
         snapshot = client.preflight()
