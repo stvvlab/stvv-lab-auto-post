@@ -1,0 +1,76 @@
+name: STVV Approved Card Early Reservation
+
+on:
+  pull_request:
+    paths:
+      - 'reserve_on_approval.py'
+      - 'tests/test_reserve_on_approval.py'
+      - '.github/workflows/reserve-on-approved-card.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'editorial/imagegen_cards.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stvv-auto-post
+  cancel-in-progress: false
+
+jobs:
+  tests:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 pillow
+      - name: Validate trigger and existing reservation safety
+        run: python -m unittest tests.test_reserve_on_approval tests.test_advance_reservations -v
+
+  reserve:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 pillow
+      - name: Test before one safe reservation attempt
+        run: python -m unittest tests.test_reserve_on_approval tests.test_advance_reservations -v
+      - name: Reserve at most one verified card for an existing future slot
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          STVV_APPROVED_CARD_TRIGGER: 'true'
+          STVV_ADVANCE_RESERVATIONS: 'true'
+        run: python reserve_on_approval.py
+      - name: Preserve actual reservation result (not publication proof)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-card-reservation-${{ github.run_id }}
+          path: reports/reservation-trigger-latest.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Save non-sensitive reservation result
+        if: always()
+        run: |
+          if [ -f reports/reservation-trigger-latest.json ]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add reports/reservation-trigger-latest.json
+            if ! git diff --cached --quiet; then
+              git commit -m 'Record reviewed-card reservation trigger result'
+              git pull --rebase origin main
+              git push origin HEAD:main
+            fi
+          fi
