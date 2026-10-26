@@ -98,3 +98,26 @@ and a reviewed manifest card together. `design_brief` remains a planning helper.
 This improves acquisition and diagnosis, but does not establish unattended comic
 generation or guarantee a post in every slot. If no fresh verified content exists,
 retain the skip. Existing publication checks remain the final authority.
+
+## Editorial breadth and unused evidence
+
+`editorial_research.py` separately revisits up to two recent published Japanese
+official sources. A used URL is not proof that every fact has been covered. It
+extracts exact unused source excerpts for player milestones, match-review questions
+and next-match discussion into `reports/editorial-research-latest.json`. The
+existing hourly Discovery Brief workflow retains this alongside the new-URL inventory.
+
+Each stable candidate ID binds source, angle and excerpt; body SHA-256 and weighted
+caption length accompany the draft. Published, pending and ready-card text are
+checked for already used evidence. A source with a pending send is not revisited.
+Sponsor, external, stale and future URLs are excluded. Retrieval failure is explicit.
+
+These are `research_only`, `reviewed: false`, `can_publish: false` drafts. An exact
+quote is evidence, not a verified interpretation, player rating or finished analysis.
+The present duplicate gate result is attached to each draft; a different angle does
+not bypass it. Same-match material may still be blocked until genuinely new verified
+information supports it. The posting runner never consumes this report, and no
+image is generated merely to fill a slot. An editor must verify source consistency,
+novelty and copy, then perform built-in imagegen/visual review and register a ready
+card under all existing delivery gates. This expands research, not daily output by
+itself; it does not guarantee four or seven public posts.
