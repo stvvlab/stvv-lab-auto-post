@@ -17,6 +17,17 @@ has not started cannot emit an outcome: absence of a new report is not success,
 not a quality rejection, and not proof a scheduled event will eventually start.
 The seven schedules, all prerequisite tests and image gates are unchanged.
 
+### Concurrent report writers
+
+`save()` still commits and pushes pending before contacting Buffer. If a report
+writer advances main first, `state_sync.py` may rebase the one new posted.json
+commit over report-only changes and retry the git push (at most three pushes).
+This never retries Buffer. Competing ledger, manifest, asset, code or configuration
+changes stop recovery, as do diverged history or tracked local modifications.
+No force push or automatic conflict resolution is used. This protects both pending
+persistence before sending and acceptance persistence afterward. It does not fix
+GitHub's cron startup delays or establish public X delivery by itself.
+
 The approved baseline is `generated/approved_midtjylland_20261023.png`,
 visually verified on X at https://x.com/stvvlabo/status/2113772119062372376.
 The earlier fixed headline layout is not the quality target.

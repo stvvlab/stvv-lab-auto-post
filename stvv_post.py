@@ -145,7 +145,8 @@ def save(history):
         raise RuntimeError("git diff failed")
 
     git("commit", "-m", "Update STVV LAB posting state")
-    git("push")
+    from state_sync import push_posting_state
+    push_posting_state(FILE.resolve().parent)
 
 
 def load():
