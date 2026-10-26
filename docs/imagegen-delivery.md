@@ -52,8 +52,14 @@ https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40081188399
 recorded Buffer acceptance; X text and image display were verified at
 https://x.com/stvvlabo/status/2113922269583917472.
 This evidence applies to that card, not to future comic-style variants.
-Comic diversity still requires a fresh reviewed ready card and regular-slot
-publication verification. Paid image API generation is blocked in `ai_art.py`
+The Club Brugge ink-poster also completed this path in the existing 08:00 JST
+player slot on 2026-10-26 (actual submission 08:12). Production Actions run
+https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458
+passed 187 prerequisite tests and submitted the reviewed image. Buffer sent state
+and actual X caption, official source and image rendering were verified at
+https://x.com/stvvlabo/status/2114495450866712925 on 2026-10-26 09:07 JST.
+The manifest is now published; the same result must not be posted again.
+This confirms one ink-poster delivery, not the quality or delivery of future variants. Paid image API generation is blocked in `ai_art.py`
 and disabled in the scheduled posting workflow. Supplemental reply safety
 is implemented separately, but its sending transport remains unavailable.
 
