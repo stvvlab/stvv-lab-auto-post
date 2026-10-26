@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T20:14:16.529869+09:00",
+  "checked_at": "2026-10-26T22:56:52.849260+09:00",
   "status": "no_unposted_candidate_in_scanned_lists",
   "source_checks": [
     {
@@ -37,7 +37,7 @@
       "reason": "Source already published, pending or registered"
     }
   ],
-  "ready_cards": 0,
+  "ready_cards": 1,
   "pending_posts": 0,
   "publication_performed": false,
   "image_generation_performed": false,
