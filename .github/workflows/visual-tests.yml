@@ -3,6 +3,7 @@ name: Visual pipeline checks
 on:
   pull_request:
     paths:
+      - 'reservation_preview.py'
       - 'visual_rotation.py'
       - 'ai_art.py'
       - 'content_card.py'
