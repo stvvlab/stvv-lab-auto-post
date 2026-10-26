@@ -123,7 +123,8 @@
     "daily_2026-10-22_vote",
     "approved_imagegen_midtjylland_20261023_v1",
     "daily_2026-10-24_news",
-    "daily_2026-10-26_player"
+    "daily_2026-10-26_player",
+    "daily_2026-10-26_vote"
   ],
   "publication_log": [
     {
@@ -884,17 +885,18 @@
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a78cdfcc623f013cf915ca63095402cef4d08c42/generated/imagegen_brugge_result_20261026.jpg",
       "visual_variant": "split",
       "art_direction": "ink-poster"
-    }
-  ],
-  "pending_posts": {
-    "daily_2026-10-26_vote": {
+    },
+    {
+      "key": "daily_2026-10-26_vote",
       "slot": "vote",
       "source": "https://stvv.jp/news/game/20261026_1/",
+      "buffer_id": "6adf65368e6c1ef513f120ff",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T23:35:36.622617+09:00",
       "text": "🌟 新川志音がリーグ初先発。\nクラブ・ブルージュ戦で先発メンバーに名を連ねました。\n今後どんなプレーに期待しますか？\n\n公式：https://stvv.jp/news/game/20261026_1/\n\n#STVV #シントトロイデン",
       "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a6f8d26c737f48a985f39f7240fc9604a5eb53e4/generated/imagegen_shinkawa_first_start_20261026.jpg",
       "visual_variant": "stadium",
       "art_direction": "print-collage",
-      "created_at": "2026-10-26T23:35:32.780381+09:00",
       "editorial_fact": {
         "kind": "league_first_start",
         "subject": "新川志音",
@@ -903,6 +905,7 @@
         "fact_id": "cf1423218edf88bf40924cf22ebfec23e69e1d8b70c2999857f22befaf07b799"
       }
     }
-  },
+  ],
+  "pending_posts": {},
   "tracked_topics": {}
 }
