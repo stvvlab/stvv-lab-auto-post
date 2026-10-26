@@ -72,3 +72,11 @@ reservation-capability.ymlはコード更新時の読み取り検証のみで、
 - https://developers.buffer.com/types/Channel.html
 - https://developers.buffer.com/types/ChannelAction.html
 - https://developers.buffer.com/types/OrganizationLimits.html
+
+## 予約後の画像同一性（2026-10-27）
+
+予約受付で返された画像asset IDをreserved_posts.buffer_asset_idsへ保存し、
+後続の状態確認でも同じIDであることを必須にする。画像1件が存在するだけでは
+同一画像とは扱わない。本文・日時が一致しても画像IDが違えば、sentを公開履歴へ
+追加せず停止し、自動再送しない。ID未保存の既存レコードも暗黙に承認しない。
+この照合はX表示や画像バイトの目視確認の代用ではない。

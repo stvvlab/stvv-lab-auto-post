@@ -216,3 +216,9 @@ sent adds a publication_log entry. Neither operation asserts X display verificat
 An unknown outcome, changed identity, provider error or failed state save never
 causes another createPost. Reserved facts and sources also block the legacy and
 research duplicate paths. No reply transport or paid API has been added.
+
+Reservation acceptance also persists Buffer's returned image asset ID. Subsequent
+status reconciliation requires the same image ID, caption, channel and due time.
+A replacement image or missing saved image identity stops before a publication
+entry is added; it never causes a resend. Public X image verification remains
+a separate required observation.

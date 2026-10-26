@@ -32,7 +32,11 @@ def verify_echo(post, record):
             or post.get('channelId') != publisher.CHANNEL
             or stamp(post.get('dueAt', '')) != stamp(record['due_at'])
             or not isinstance(post.get('assets'), list) or len(post['assets']) != 1
-            or not post['assets'][0].get('id')):
+            or not isinstance(post['assets'][0], dict)
+            or not isinstance(post['assets'][0].get('id'), str)
+            or not post['assets'][0]['id']
+            or ('buffer_asset_ids' in record
+                and [asset['id'] for asset in post['assets']] != record['buffer_asset_ids'])):
         raise RuntimeError('Buffer reservation identity changed; do not resend')
 
 
@@ -86,7 +90,11 @@ def run(history, now, client, save, session):
     for key, record in reservations.items():
         if (not isinstance(record, dict) or not all(record.get(k) for k in
                 ('buffer_id', 'due_at', 'text', 'source', 'slot', 'image_url', 'buffer_status'))
-                or key not in history['used_posts']):
+                or key not in history['used_posts']
+                or not isinstance(record.get('buffer_asset_ids'), list)
+                or len(record['buffer_asset_ids']) != 1
+                or not isinstance(record['buffer_asset_ids'][0], str)
+                or not record['buffer_asset_ids'][0]):
             raise ValueError('Reservation ledger is incomplete; do not resend')
     updates = reconcile(history, client, now, save)
     if history['pending_posts']:
@@ -150,6 +158,7 @@ def run(history, now, client, save, session):
     if post.get('status') != 'scheduled':
         raise RuntimeError('Reservation was not confirmed scheduled; do not resend')
     record.update(buffer_id=str(post['id']), buffer_status='scheduled',
+                  buffer_asset_ids=[asset['id'] for asset in post['assets']],
                   submitted_at=datetime.now(publisher.JST).isoformat())
     reservations[key] = record
     history['used_posts'].append(key)  # Occupied, not proof of publication.
