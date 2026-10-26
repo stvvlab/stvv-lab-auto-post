@@ -50,9 +50,37 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Run STVV auto post
+        if: github.event_name == 'schedule'
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           STVV_AI_ART_ENABLED: "false"  # Built-in imagegen preparation only; no paid API
           GITHUB_SCHEDULE: ${{ github.event.schedule }}
-        run: python stvv_post.py
+          STVV_DELIVERY_RECORD: "true"
+        run: python delivery_run.py
+
+      - name: Preserve actual delivery evidence even after a send error
+        if: always() && github.event_name == 'schedule'
+        uses: actions/upload-artifact@v4
+        with:
+          name: delivery-${{ github.run_id }}
+          path: reports/delivery-runs/${{ github.run_id }}.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Save actual run outcome without modifying publication history
+        if: always() && github.event_name == 'schedule'
+        env:
+          DELIVERY_RUN_ID: ${{ github.run_id }}
+        run: |
+          report="reports/delivery-runs/${DELIVERY_RUN_ID}.json"
+          if [ -f "$report" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$report" reports/delivery-latest.json
+            if ! git diff --cached --quiet; then
+              git commit -m "Record actual scheduled delivery outcome"
+              git pull --rebase origin main
+              git push origin HEAD:main
+            fi
+          fi

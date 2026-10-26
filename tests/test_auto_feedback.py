@@ -86,7 +86,8 @@ class FeedbackTests(unittest.TestCase):
             hist = root / "posted.json"
             fb.write_text(json.dumps({"settings": {"feedback_enabled": True, "auto_metrics_enabled": False, "auto_improvement_enabled": False, "weekly_report_enabled": False}, "feedback": [{"post_key": "k-1", "rating": 2}]}))
             hist.write_text(json.dumps({"publication_log": []}))
-            with patch.object(a, "FEEDBACK", fb), patch.object(a, "HISTORY", hist):
+            with patch.object(a, "FEEDBACK", fb), patch.object(a, "HISTORY", hist), \
+                    patch.object(a, "REPORTS", root / 'reports'):
                 a.run(now=NOW)
             updated = json.loads(fb.read_text())
             self.assertEqual(updated["feedback"], [{"post_key": "k-1", "rating": 2}])

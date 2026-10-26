@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'auto_feedback.py'
+      - 'delivery_run.py'
       - 'content_card.py'
       - 'prepared_media.py'
       - 'editorial/imagegen_cards.json'
@@ -30,6 +31,7 @@ on:
   pull_request:
     paths:
       - 'auto_feedback.py'
+      - 'delivery_run.py'
       - 'content_card.py'
       - 'prepared_media.py'
       - 'editorial/imagegen_cards.json'

@@ -1,5 +1,22 @@
 # Reviewed imagegen delivery
 
+## Delivery outcome evidence
+
+The scheduled posting step executes `delivery_run.py`, which calls the existing
+publisher exactly once. It records ready-card selection blocks before execution,
+the publisher's result, and only new Buffer acceptance entries present in the
+durable publication ledger. A remaining pending key is an unknown send outcome;
+the wrapper never retries. `sent` reported by Buffer is not X display verification.
+Exceptions still fail the Actions step, while an `always()` artifact preserves
+the per-run record. The workflow also saves it under `reports/delivery-runs/`
+and updates `reports/delivery-latest.json` on main. Save failures remain visible
+in Actions; the artifact provides separate evidence. It never changes posted.json.
+
+CI mocks and manual checks cannot create production records. A workflow which
+has not started cannot emit an outcome: absence of a new report is not success,
+not a quality rejection, and not proof a scheduled event will eventually start.
+The seven schedules, all prerequisite tests and image gates are unchanged.
+
 The approved baseline is `generated/approved_midtjylland_20261023.png`,
 visually verified on X at https://x.com/stvvlabo/status/2113772119062372376.
 The earlier fixed headline layout is not the quality target.
