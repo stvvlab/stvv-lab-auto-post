@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T23:17:45+09:00",
+  "checked_at": "2026-10-27T00:13:45+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -19,7 +19,7 @@
       "news"
     ],
     "reviewed": true,
-    "status": "ready",
+    "status": "published",
     "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
     "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
     "dimensions": [
@@ -33,14 +33,30 @@
       "claim": "新川志音がリーグ初先発。",
       "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0"
     },
-    "review_note": "Built-in imagegen complete; visually verified name 新川志音 and リーグ初先発, English, crop, legibility and caption agreement. Exact official body milestone verified; no invented evaluation, people, faces, scores, crests or photographs. Boots/touchline are symbolic artwork. This is an unused player milestone, not a repeat of the published result. Existing seven slots only; pending, fact ID, source body digest and public image-byte gates remain mandatory.",
+    "review_note": "Built-in imagegen complete; visually verified name 新川志音 and リーグ初先発, English, crop, legibility and caption agreement. Exact official body milestone verified; no invented evaluation, people, faces, scores, crests or photographs. Boots/touchline are symbolic artwork. This is an unused player milestone, not a repeat of the published result. Existing seven slots only; pending, fact ID, source body digest and public image-byte gates remain mandatory. Existing 21:00 JST vote slot delivered at 23:35 on 2026-10-26; public X caption/source/image display verified 2026-10-27 00:10 JST. Do not repost this fact.",
     "mode": "ChatGPT built-in imagegen",
     "tool": "image_gen.imagegen",
     "tool_success": true,
     "generated_at": "2026-10-26T20:35:58.359840+09:00",
     "raw_png_sha256": "5c084aea29220fdb44ec639b262f80b57b4121d32eb03d7a1ea8717143f63997",
     "generation_prompt": "Use case: ads-marketing. Create ONE finished landscape 4:3 independent football editorial artwork for STVV LAB. Content: Japanese player 新川志音 made his first LEAGUE START for STVV in the Club Brugge match on 26 October 2026 JST. This is a player milestone feature, NOT a match result poster. Do NOT show scores, result, victory, player statistics or evaluations. No people, faces, humanoids, actual player likeness, official crests or logos, speech balloons or unlicensed photography. Style: premium retro American comic / European football magazine PRINT COLLAGE: bold halftone, cut-paper geometry, sharp screenprint edges, restrained grain. Navy, warm yellow, off-white and a small coral accent. Distinct from a rain-and-score ink poster. Scene: an empty football boot pair beside a stylized touchline, a strong diagonal yellow spotlight crossing paper layers; objects and setting are symbolic illustrations, not actual equipment/venue evidence. Generous negative space, strong restrained hierarchy, mobile readable, no fixed headline box. Main Japanese name rendered exactly: 「新川志音」. Large short headline exactly: 「リーグ初先発」. Supporting small label exactly: 「PLAYER FOCUS」. Footer text: 「STVV LAB」. Only these four text items. Typography clean bold Japanese sans-serif, all characters correct, no faux Japanese, no extra date/opponent/team data. Main focus on milestone typographic composition and boots as secondary narrative element; keep all words fully inside safe margins. Finished professional editorial image, not a mockup.",
-    "preparation_commit": "6657597c8128797a54ea770bd9b69447a62019d0"
+    "preparation_commit": "6657597c8128797a54ea770bd9b69447a62019d0",
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129",
+      "workflow_conclusion": "success",
+      "posting_result": "submitted_to_buffer",
+      "buffer_id": "6adf65368e6c1ef513f120ff",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T23:35:36.622617+09:00",
+      "scheduled_slot": "2026-10-26 21:00 JST vote",
+      "posting_step_start_delay_seconds": 9331,
+      "x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_display_verified_at": "2026-10-27T00:10:23+09:00",
+      "verification_method": "Public X detail-page DOM and rendered screenshot; exact caption, official source link, 新川志音 / リーグ初先発 artwork and full safe crop confirmed.",
+      "prerequisite_tests_passed": 218
+    }
   },
   "visual_review": {
     "passed": true,
@@ -56,12 +72,12 @@
   },
   "automation_state": {
     "built_in_generation_confirmed_in_scheduled_environment": true,
-    "ready_cards": 1,
-    "published_cards": 3,
+    "ready_cards": 0,
+    "published_cards": 4,
     "unattended_generation_and_manifest_registration_verified": true,
     "regular_slot_publication_verified": true,
-    "classification": "Previous Club Brugge ink-poster generation and scheduled delivery verified. Latest Shinkawa first-start card is ready; regular-slot delivery and X display remain unverified.",
-    "latest_card_regular_slot_publication_verified": false
+    "classification": "Shinkawa first-start print collage completed built-in imagegen preparation, exact-fact gates, regular-slot Buffer delivery, durable history/outcome evidence and actual X caption/image verification. One delayed delivery is not stable scheduling.",
+    "latest_card_regular_slot_publication_verified": true
   },
   "previous_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261023_3/",
@@ -95,17 +111,17 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T23:14:31.913099+09:00",
+    "checked_at": "2026-10-27T00:12:32.262570+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
         "status": "ok",
-        "eligible_items": 4
+        "eligible_items": 3
       },
       {
         "url": "https://stvv.jp/news/game/2026/",
         "status": "ok",
-        "eligible_items": 3
+        "eligible_items": 2
       },
       {
         "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -114,45 +130,49 @@
       }
     ],
     "unprepared_candidates": 0,
-    "research_drafts": 2,
-    "research_angles": [
-      "analysis",
-      "vote"
-    ],
-    "ready_cards": 1,
     "pending_posts": 0,
-    "prepared_claim_in_body": true,
+    "official_claim_present": true,
     "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
-    "public_image_bytes_verified": true,
-    "caption_length": 169,
-    "duplicate_reason": null,
+    "public_image_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+    "same_fact_resend_block": "同じ事実が投稿済み／確認待ち",
+    "paid_api_used": false,
     "image_generated": false,
-    "buffer_called": false,
-    "main_observed": "a51deb3394c8ded40e4d31839eb4a244a28baf82",
-    "observed_at": "2026-10-26T23:17:45+09:00",
+    "send_performed": false,
+    "observed_at": "2026-10-27T00:13:45+09:00",
+    "ready_cards": 0,
+    "new_publication": true,
+    "new_image_generated": false,
+    "manual_dispatch_performed": false,
     "observed_slots": [
       {
         "slot": "2026-10-26 21:00 JST vote",
-        "state": "not_started_in_actions"
+        "state": "published_and_x_display_verified",
+        "publication": {
+          "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129",
+          "workflow_conclusion": "success",
+          "posting_result": "submitted_to_buffer",
+          "buffer_id": "6adf65368e6c1ef513f120ff",
+          "buffer_status": "sent",
+          "submitted_at": "2026-10-26T23:35:36.622617+09:00",
+          "scheduled_slot": "2026-10-26 21:00 JST vote",
+          "posting_step_start_delay_seconds": 9331,
+          "x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+          "x_text_verified": true,
+          "x_image_rendering_verified": true,
+          "x_display_verified_at": "2026-10-27T00:10:23+09:00",
+          "verification_method": "Public X detail-page DOM and rendered screenshot; exact caption, official source link, 新川志音 / リーグ初先発 artwork and full safe crop confirmed.",
+          "prerequisite_tests_passed": 218
+        }
       },
       {
         "slot": "2026-10-26 23:00 JST recap",
-        "state": "not_started_in_actions"
+        "state": "no_run_observed_at_check"
       }
     ],
-    "last_observed_posting_run": {
-      "id": 40299786771,
-      "status": "completed",
-      "conclusion": "success",
-      "created_at": "2026-10-26T09:28:15Z"
-    },
-    "new_publication": false,
-    "new_image_generated": false,
-    "manual_dispatch_performed": false,
-    "supplemental_reply_transport": "unchanged_unavailable; current nine Metricool tools still expose no existing-post reply method",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40335044090",
-    "source_inventory_workflow_conclusion": "success",
-    "reason": "No new source candidate, one ready milestone, no pending send. Existing result must not be repeated. Scheduler non-start cause remains unidentified."
+    "source_inventory_method": "Fresh direct read of general/match/UEFA Japanese archives and exact article body; no unprepared eligible source found.",
+    "scheduled_prerequisite_tests_passed": 218,
+    "new_local_tests_run": false,
+    "supplemental_reply_sender_available": false
   },
   "editorial_breadth_expansion": {
     "implemented_at": "2026-10-26T20:28:00+09:00",
@@ -188,8 +208,8 @@
     "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/30",
     "policy_scope": "Exact reviewed league_first_start claim only; no arbitrary angle or recap exception",
     "fact_id": "cf1423218edf88bf40924cf22ebfec23e69e1d8b70c2999857f22befaf07b799",
-    "ready_cards": 1,
-    "new_publication": false,
+    "ready_cards": 0,
+    "new_publication": true,
     "tests": {
       "local_passed": 203,
       "github_actions_passed": 203,
@@ -235,14 +255,13 @@
       "asset_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
       "public_send_performed": false
     },
-    "next_existing_slot": "2026-10-26 21:00 JST vote",
+    "next_existing_slot": null,
     "manual_dispatch_performed": false,
-    "buffer_acceptance_verified": false,
-    "x_display_verified": false,
+    "buffer_acceptance_verified": true,
+    "x_display_verified": true,
     "remaining": [
-      "Observe existing scheduled vote slot; GitHub start time may be delayed.",
-      "Distinguish skipped/error/Buffer acceptance/sent/X display; never retry an unknown result.",
-      "Mark only this exact milestone caption/asset published after delivery verification."
+      "Verify future distinct content and individual images; do not reuse this milestone.",
+      "Investigate scheduled startup delay; one successful delivery is not stable operation."
     ],
     "slot_observation": {
       "checked_at": "2026-10-26T21:11:18.729583+09:00",
@@ -286,6 +305,22 @@
       "main_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318626571",
       "reason": "21:00 scheduled posting run has not appeared in Actions. Reviewed player milestone remains ready and passes current official-body, novelty, caption and public-image checks. No send or dispatch performed.",
       "supplemental_reply_transport": "unchanged_blocked; nine current Metricool tools still expose no existing-post reply method"
+    },
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129",
+      "workflow_conclusion": "success",
+      "posting_result": "submitted_to_buffer",
+      "buffer_id": "6adf65368e6c1ef513f120ff",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T23:35:36.622617+09:00",
+      "scheduled_slot": "2026-10-26 21:00 JST vote",
+      "posting_step_start_delay_seconds": 9331,
+      "x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_display_verified_at": "2026-10-27T00:10:23+09:00",
+      "verification_method": "Public X detail-page DOM and rendered screenshot; exact caption, official source link, 新川志音 / リーグ初先発 artwork and full safe crop confirmed.",
+      "prerequisite_tests_passed": 218
     }
   },
   "previous_generation": {
@@ -464,5 +499,24 @@
     "image_generated": false,
     "buffer_called": false,
     "post_fix_scheduled_execution_verified": false
+  },
+  "last_verified_publication": {
+    "source_url": "https://stvv.jp/news/game/20261026_1/",
+    "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+    "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129",
+    "workflow_conclusion": "success",
+    "posting_result": "submitted_to_buffer",
+    "buffer_id": "6adf65368e6c1ef513f120ff",
+    "buffer_status": "sent",
+    "submitted_at": "2026-10-26T23:35:36.622617+09:00",
+    "scheduled_slot": "2026-10-26 21:00 JST vote",
+    "posting_step_start_delay_seconds": 9331,
+    "x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+    "x_text_verified": true,
+    "x_image_rendering_verified": true,
+    "x_display_verified_at": "2026-10-27T00:10:23+09:00",
+    "verification_method": "Public X detail-page DOM and rendered screenshot; exact caption, official source link, 新川志音 / リーグ初先発 artwork and full safe crop confirmed.",
+    "prerequisite_tests_passed": 218
   }
 }

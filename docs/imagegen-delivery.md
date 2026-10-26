@@ -180,4 +180,19 @@ The prepared image's exact caption, slots, digest, dimensions and immutable publ
 bytes are still required. No paid API, text-only fallback, extra schedule or manual
 pilot is introduced. The first ready case is 新川志音's league first start, separate
 from the already published Club Brugge score recap. Its source body and artwork
-were reviewed; actual scheduled delivery must be confirmed separately.
+were reviewed; scheduled delivery and X display were subsequently verified below.
+
+## Verified first-start delivery
+
+The reviewed 新川志音 league-first-start print collage completed the existing
+2026-10-26 21:00 JST vote slot at 23:35 JST. Production run
+https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129
+passed 218 prerequisite tests, preserved pending before Buffer, saved acceptance
+and retained per-run delivery evidence. Public X text, official source and full
+image rendering were verified on 2026-10-27 00:10 JST at
+https://x.com/stvvlabo/status/2114727647368331366 .
+The exact card is published and its fact ID blocks a resend. This confirms this
+card's delivery, not stable scheduling: posting began 9,331 seconds after its
+nominal slot. The 23:00 recap run was still not observed at the later check.
+Raw delivery-run evidence retains the runner's X-unverified snapshot; subsequent
+X verification is recorded in the manifest and capability/design reports.

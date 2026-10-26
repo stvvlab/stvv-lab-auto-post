@@ -41,6 +41,21 @@
         "x_display_verified_at": "2026-10-26T09:07:36+09:00",
         "method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
       }
+    },
+    {
+      "parent_key": "daily_2026-10-26_vote",
+      "parent_x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+      "parent_post_id": "2114727647368331366",
+      "owner": "stvvlabo",
+      "verified": true,
+      "source_url": "https://stvv.jp/news/game/20261026_1/",
+      "parent_text": "🌟 新川志音がリーグ初先発。\nクラブ・ブルージュ戦で先発メンバーに名を連ねました。\n今後どんなプレーに期待しますか？\n\n公式：https://stvv.jp/news/game/20261026_1/\n\n#STVV #シントトロイデン",
+      "buffer_id": "6adf65368e6c1ef513f120ff",
+      "verification_evidence": {
+        "manifest_asset": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+        "x_display_verified_at": "2026-10-27T00:10:23+09:00",
+        "method": "Public X detail-page DOM and rendered screenshot; exact caption, official source link, 新川志音 / リーグ初先発 artwork and full safe crop confirmed."
+      }
     }
   ],
   "replies": []
