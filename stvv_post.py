@@ -1180,7 +1180,7 @@ def main():
     )
     if submitted:
         return run_result("submitted_to_buffer", f"{day} {slot}: Buffer受付成功")
-    return run_result("skipped_duplicate", f"{day} {slot}: 投稿済み／確認待ち")
+    return run_result("blocked_before_buffer", f"{day} {slot}: 送信前検証で停止。理由は直前ログを確認")
 
 
 if __name__ == "__main__":
