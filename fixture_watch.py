@@ -16,6 +16,7 @@ FIXTURE_DATE = date(2026, 11, 1)
 SOURCES = {
     "stvv": "https://stvv.com/nl/wedstrijden?timeframe=upcoming",
     "ohl": "https://ohleuven.com/teams/a-ploeg/kalender/",
+    "stvv_jp": "https://stvv.jp/news/event/20261002_2/",
 }
 TIME_RE = re.compile(r"\b(?:[01]?\d|2[0-3]):[0-5]\d\b")
 
@@ -55,9 +56,25 @@ def extract_ohl(markup):
     return found.pop()
 
 
+
+def extract_stvv_jp(markup):
+    text = page_text(markup)
+    found = set()
+    for match in re.finditer(
+            r"2026年11月1日\s*[（(]日[)）]\s*(\d{1,2})時([0-5]\d)分キックオフ",
+            text):
+        nearby = text[match.end():match.end() + 180]
+        if ("ベルギー時間" in nearby and "STVV" in nearby and
+                "OHルーヴェン" in nearby):
+            found.add(f"{int(match.group(1)):02d}:{match.group(2)}")
+    if len(found) != 1:
+        raise ValueError("Japanese official fixture time missing or ambiguous")
+    return found.pop()
+
+
 def fetch_official(session, url):
     expected = urlparse(url).hostname
-    if expected not in {"stvv.com", "ohleuven.com"} or urlparse(url).scheme != "https":
+    if expected not in {"stvv.com", "ohleuven.com", "stvv.jp"} or urlparse(url).scheme != "https":
         raise ValueError("Unapproved fixture source")
     response = session.get(url, timeout=20)
     response.raise_for_status()
@@ -88,7 +105,8 @@ def build_report(session, now):
     for name, url in SOURCES.items():
         try:
             markup = fetch_official(session, url)
-            value = extract_stvv(markup) if name == "stvv" else extract_ohl(markup)
+            value = {"stvv": extract_stvv, "ohl": extract_ohl,
+                     "stvv_jp": extract_stvv_jp}[name](markup)
             report["source_times_local"][name] = value
             report["source_checks"].append({"source": name, "url": url, "status": "ok"})
         except (requests.RequestException, ValueError, AttributeError) as error:
