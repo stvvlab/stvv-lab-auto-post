@@ -150,6 +150,14 @@ novelty and copy, then perform built-in imagegen/visual review and register a re
 card under all existing delivery gates. This expands research, not daily output by
 itself; it does not guarantee four or seven public posts.
 
+Research also excludes exact supported facts already held by a reviewed ready or
+published card, even when the official sentence adds a club-name prefix absent
+from the caption. Suppression requires the same canonical source and current
+official-body digest, using the strict `league_first_start` metadata validator.
+Unreviewed, malformed, different-source or changed-body metadata cannot hide a
+candidate. This prevents duplicate preparation only; it never approves publication
+or relaxes the ordinary same-match guard.
+
 ## Reviewed new facts from an already used match source
 
 A result recap remains protected by the original duplicate gate. A different

@@ -14,6 +14,7 @@ import requests
 
 from content_guard import canonical_source, duplicate_reason, plain
 from preparation_inventory import read_body
+from editorial_novelty import fact_metadata
 from stvv_post import HASHTAGS, JST, SESSION, x_length
 
 ROOT = Path(__file__).resolve().parent
@@ -43,6 +44,19 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
     known_text = [plain(p.get('text', '')) for p in records]
     known_text += [plain(c.get('text', '')) for c in manifest.get('cards', [])
                    if c.get('status') in {'ready', 'published'}]
+    known_claims = []
+    for card in manifest.get('cards', []):
+        if card.get('status') not in {'ready', 'published'}:
+            continue
+        # The same reviewed claim stays known after publication. Reuse the
+        # strict fact validator, without changing the manifest or send gate.
+        try:
+            fact = fact_metadata({**card, 'status': 'ready'}, now)
+        except (ValueError, TypeError):
+            fact = None
+        if fact:
+            known_claims.append((canonical_source(card['source_url']),
+                                 fact['source_body_sha256'], plain(fact['claim'])))
     sources = []
     for post in reversed(history.get('publication_log', [])):
         source = post.get('source')
@@ -64,11 +78,14 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
             continue
         checks.append({'source_url': source, 'status': 'ok'})
         body_digest = hashlib.sha256(body.encode()).hexdigest()
+        source_claims = [claim for url, digest, claim in known_claims
+                         if url == canonical_source(source) and digest == body_digest]
         fragments = [s.strip() for s in re.split(r'(?<=。)|\n', body) if s.strip()]
         for angle, (heading, terms) in ANGLES.items():
             evidence = next((s for s in fragments if any(t in s for t in terms)
                              and 8 <= x_length(s) <= 110
-                             and not any(plain(s) in old for old in known_text)), None)
+                             and not any(plain(s) in old for old in known_text)
+                             and not any(claim in plain(s) for claim in source_claims)), None)
             if not evidence:
                 continue
             # Quotes are exact source text. Questions are not claimed analysis.
