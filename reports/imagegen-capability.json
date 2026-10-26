@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T19:05:47+09:00",
+  "checked_at": "2026-10-26T20:09:47+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -114,10 +114,10 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T19:05:47+09:00",
-    "main_observed": "ca90de668158f1ca8c6c037a70dc792905bae210",
-    "source_inventory_checked_at": "2026-10-26T19:05:26.396545+09:00",
-    "source_inventory_method": "Read-only live scan against current main ledger and manifest; latest official match article body rechecked",
+    "checked_at": "2026-10-26T20:09:47+09:00",
+    "main_observed": "8cad0372ca75bb7797fc40c42eba7abdcafc164e",
+    "source_inventory_checked_at": "2026-10-26T20:08:44.912448+09:00",
+    "source_inventory_method": "Read-only direct fetch of all three official archives; last-seven-day article URLs compared to current main publication ledger and manifest. Sponsor category excluded per user policy. No non-sponsor unregistered URL found.",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -149,10 +149,10 @@
     "tests_repeated_locally": false,
     "scheduled_prerequisite_tests_passed": 187,
     "manual_dispatch_performed": false,
-    "reason": "All three official lists fetched successfully; zero new unposted candidates, ready cards or pending sends. No posting run newer than the previously verified 18:00 news duplicate skip; no generation or manual dispatch.",
+    "reason": "No new eligible official source, ready card, pending send or posting-slot result since the verified 18:00 duplicate skip. Existing generation success evidence retained; no image, code change or manual dispatch.",
     "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions.",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40298634752",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40306359707",
     "source_inventory_workflow_conclusion": "success",
-    "local_scan_note": "First local import needed a fresh Python process after dependency installation; completed scan succeeded. This is not a production failure."
+    "sponsor_urls_excluded": 8
   }
 }
