@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T08:07:00+09:00",
+  "updated_at": "2026-10-26T09:07:36+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,11 +8,9 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Verified new Japanese official Club Brugge match report body and ruled out pending/published source or match duplicates.",
-    "Generated one original no-person ink poster using ChatGPT built-in imagegen; reviewed Japanese, date, team-score pairing and safe crop.",
-    "Committed image bytes and reviewed ready manifest atomically; verified immutable public bytes against SHA256.",
-    "No public post, pilot/manual dispatch or paid API. Next eligible existing slot is 08:00 JST player.",
-    "Fixed ready-card-dependent offline test isolation without weakening production quality or duplicate gates; 187 local tests passed with the real ready card present."
+    "Observed existing 08:00 player slot production success at 08:12; 187 prerequisite tests passed.",
+    "Verified Buffer sent history and actual public X text, official citation and ink-poster rendering.",
+    "Marked exact reviewed card published; no regeneration or resend."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -24,7 +22,7 @@
       "recap"
     ],
     "reviewed": true,
-    "status": "ready",
+    "status": "published",
     "asset_path": "generated/imagegen_brugge_result_20261026.jpg",
     "sha256": "63a6a2ccb49bd29d047a80db8657353bd2696a04311473464d1b59939fe66621",
     "dimensions": [
@@ -52,7 +50,20 @@
       "player",
       "news",
       "recap"
-    ]
+    ],
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
+      "workflow_conclusion": "success",
+      "posting_result": "submitted_to_buffer",
+      "buffer_id": "6ade8cf66887a2efc12c271d",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T08:12:56.682729+09:00",
+      "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+      "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
+    }
   },
   "imagegen_capability": {
     "status": "available_and_verified",
@@ -60,8 +71,8 @@
     "paid_api_or_cli_used": false
   },
   "prepared_asset_delivery": {
-    "ready_cards": 1,
-    "published_cards": 2,
+    "ready_cards": 0,
+    "published_cards": 3,
     "manifest_enabled": true,
     "fail_closed_without_reviewed_asset": true,
     "caption_exact_match_required": true,
@@ -109,16 +120,22 @@
     }
   },
   "regular_slot_observation": {
-    "slot": "2026-10-25 23:00 JST recap",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40201486999",
+    "slot": "2026-10-26 08:00 JST player",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
     "workflow_conclusion": "success",
-    "actual_execution_at": "2026-10-25T23:17:21.061593+09:00",
-    "posting_result": "skipped_repeated_content",
-    "detail": "同じ出典／試合の内容で、新しい比較データがないため見送り",
-    "buffer_submission_reached": false,
-    "x_post_created": false,
-    "production_image_processing_reached": false,
-    "note": "Final RUN_RESULT in the actual python stvv_post.py step; unit-test mock successes excluded."
+    "posting_result": "submitted_to_buffer",
+    "buffer_id": "6ade8cf66887a2efc12c271d",
+    "buffer_status": "sent",
+    "submitted_at": "2026-10-26T08:12:56.682729+09:00",
+    "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+    "x_text_verified": true,
+    "x_image_rendering_verified": true,
+    "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+    "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed.",
+    "production_image_processing_reached": true,
+    "buffer_submission_reached": true,
+    "x_post_created": true,
+    "note": "Production Run STVV auto post step checked separately from 187 passing test mock output."
   },
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
@@ -127,56 +144,21 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "Historical Hajduk generation-to-X delivery verified. Latest Club Brugge ink artwork is prepared and reviewed; its regular-slot publication is unverified.",
+  "implementation_status": "Club Brugge ink-poster completed built-in imagegen, visual review, ready registration, existing scheduled-slot Buffer delivery and actual X text/image display verification. Future cards still require individual checks.",
   "uncompleted": [
-    "Latest Club Brugge artwork's existing scheduled-slot Buffer delivery and X display have not been observed.",
-    "Comic/ink variants are prepared with agent visual review; future quality and publication still require verification.",
-    "Supplemental reply transport remains unavailable; no actual reply sent."
+    "Future images still require source verification, built-in generation, visual review and individual publication verification.",
+    "Supplemental reply delivery transport remains unavailable; no actual reply sent."
   ],
-  "next_priority": "Observe regular 08:00 player slot consuming exact reviewed Club Brugge card; verify Buffer sent status and X rendering without resending on uncertain results.",
+  "next_priority": "Continue checking fresh official content; do not repost Club Brugge result. Preserve no-duplicate and pending protections.",
   "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
   "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
   "policy_fix_commits": [
     "8aee061128fd2c70c5de4da687cc0f8add7b24c7",
     "570663c58eca9a9e7db604553450027675786300"
   ],
-  "new_generation_this_pass": {
-    "source_url": "https://stvv.jp/news/game/20261026_1/",
-    "date_jst": "2026-10-26",
-    "text": "⚽ 試合終了\nSTVV 2–3 クラブ・ブルージュ\nセヴァウイのPKと谷口彰悟のゴールも、敵地で惜敗。\n\n公式：https://stvv.jp/news/game/20261026_1/",
-    "slots": [
-      "player",
-      "news",
-      "recap"
-    ],
-    "reviewed": true,
-    "status": "ready",
-    "asset_path": "generated/imagegen_brugge_result_20261026.jpg",
-    "sha256": "63a6a2ccb49bd29d047a80db8657353bd2696a04311473464d1b59939fe66621",
-    "dimensions": [
-      1448,
-      1086
-    ],
-    "art_direction": "ink-poster",
-    "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation.",
-    "mode": "ChatGPT built-in imagegen",
-    "tool": "image_gen.imagegen",
-    "tool_success": true,
-    "generated_at": "2026-10-26T03:10:45.659433+09:00",
-    "raw_png_sha256": "e34b993a3b9abc1925444b82df15dc4bf99aed14d3a5d084442a1fd5a79dd780",
-    "generation_prompt": "Use case: ads-marketing. Create ONE complete high-quality independent football media result poster for STVV LAB, landscape 4:3. Original hand-inked graphic novel / premium European football magazine style. Navy and rich yellow with restrained off-white and tiny muted pink accent. No people, no faces, no humanoid characters, no official crests, no unlicensed photos, no speech bubbles, no watermark. A striking original illustration of a rain-soaked football resting near a goal net with angular stadium architecture suggested abstractly; do not claim a real venue likeness. Diagonal cinematic ink lines, subtle halftone, rich tactile print texture, calm deliberate negative space. Serious, resilient post-defeat editorial mood, no trophy, no celebration. Design around this match's narrow loss rather than fixed title boxes. Large readable typographic hierarchy. Exact text only: small masthead 'STVV LAB'; medium 'FULL TIME'; dominant score with two unmistakably paired columns, left team 'STVV' directly over '2', right team 'CLUB BRUGGE' directly over '3', an en dash between the numbers. Short Japanese headline verbatim '敵地で惜敗' in large clear crisp type, not distorted brush scribbles. Small footer '26 OCT 2026'. The STVV score is TWO, Club Brugge score THREE. Do not reverse teams or scores. Keep all text safely inside 7 percent outer margins, high contrast, legible on a mobile X feed. No other text, no invented statistics, scorers, minutes, rankings, league logos or visual numbers. Render the finished artwork including all typography.",
-    "bytes": 1299266,
-    "queued_in_manifest": true,
-    "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
-    "public_post_created": false,
-    "public_asset_bytes_verified": true,
-    "public_asset_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/b1b89c37a92f719d0b6388a93c823c5a1f8bb318/generated/imagegen_brugge_result_20261026.jpg",
-    "caption_x_length_with_fixed_tags": 145,
-    "buffer_submission_reached": false,
-    "x_display_verified": false
-  },
+  "new_generation_this_pass": null,
   "preview_this_pass": null,
-  "new_publication_this_pass": false,
+  "new_publication_this_pass": true,
   "implementation_commit": "762d96822aeeed30f7ed363b38972db8d02cd6f1",
   "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/27",
   "image_design_diversity": {
@@ -186,19 +168,27 @@
     "paid_api_used": false,
     "generated_new_image": true,
     "reviewed_new_asset": true,
-    "comic_regular_publication_verified": false
+    "comic_regular_publication_verified": true
   },
   "latest_followup": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
-    "official_body_read_directly": true,
-    "source_date_jst": "2026-10-26",
-    "verified_result": "Club Brugge 3–2 STVV; STVV-first 2–3",
-    "source_issues_omitted": "Goal minute and substitution details have inconsistencies in source; omitted from caption and image.",
-    "ready_cards": 1,
+    "ready_cards": 0,
     "pending_posts": 0,
-    "new_image_generated": true,
-    "new_public_post": false,
-    "next": "Observe existing 2026-10-26 08:00 JST player slot; readiness is not publication."
+    "new_image_generated": false,
+    "new_public_post": true,
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
+      "workflow_conclusion": "success",
+      "posting_result": "submitted_to_buffer",
+      "buffer_id": "6ade8cf66887a2efc12c271d",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T08:12:56.682729+09:00",
+      "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+      "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
+    }
   },
   "candidate_preparation": {
     "module": "preparation_inventory.py",
@@ -206,7 +196,7 @@
     "schedule": "existing Discovery Brief workflow, hourly at :40 UTC",
     "live_scan": "New official Club Brugge result detected; body verified and one reviewed card prepared.",
     "new_candidates": 0,
-    "ready_cards": 1,
+    "ready_cards": 0,
     "source_evidence_automatically_approved": false,
     "paid_api_used": false,
     "first_scheduled_inventory_after_merge_observed": true,
@@ -224,12 +214,12 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40242487301",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40246840682",
       "conclusion": "success",
-      "checked_at": "2026-10-26T07:56:51.287723+09:00",
+      "checked_at": "2026-10-26T08:54:53.410634+09:00",
       "new_candidates": 0,
-      "ready_cards": 1,
-      "pending_posts": 0
+      "ready_cards_at_scan": 1,
+      "note": "Raw manifest count before verified publication reconciliation; current ready=0."
     },
     "note": "One new official source was converted into the current ready card; zero remaining unprepared sources from this scan."
   },
@@ -250,43 +240,29 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T08:07:00+09:00",
-    "main_observed": "eddfaecac6314878e49dfcacd86bb32c6912961b",
-    "source_inventory_checked_at": "2026-10-26T07:56:51.287723+09:00",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40242487301",
-    "source_inventory_workflow_conclusion": "success",
-    "source_checks": [
-      {
-        "url": "https://stvv.jp/news/2026/",
-        "status": "ok",
-        "eligible_items": 4
-      },
-      {
-        "url": "https://stvv.jp/news/game/2026/",
-        "status": "ok",
-        "eligible_items": 3
-      },
-      {
-        "url": "https://stvv.jp/news/uefa-news/2026/",
-        "status": "ok",
-        "eligible_items": 1
-      }
-    ],
-    "unprepared_candidates": 0,
-    "ready_cards": 1,
-    "pending_posts": 0,
-    "official_result_rechecked": "Belgian league round 9, Club Brugge 3–2 STVV, scorers セヴァウイ and 谷口",
-    "public_asset_bytes_sha256_verified": true,
-    "public_asset_verified_revision": "eddfaecac6314878e49dfcacd86bb32c6912961b",
-    "new_image_generated": false,
-    "new_publication": false,
+    "checked_at": "2026-10-26T09:07:36+09:00",
     "regular_slot": "2026-10-26 08:00 JST player",
-    "regular_slot_status": "not_started_in_observed_actions_list",
-    "buffer_submission_reached": false,
-    "x_display_verified": false,
+    "regular_slot_status": "published_and_x_display_verified",
+    "publication": {
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
+      "workflow_conclusion": "success",
+      "posting_result": "submitted_to_buffer",
+      "buffer_id": "6ade8cf66887a2efc12c271d",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T08:12:56.682729+09:00",
+      "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+      "x_text_verified": true,
+      "x_image_rendering_verified": true,
+      "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+      "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
+    },
+    "ready_cards": 0,
+    "pending_posts": 0,
+    "new_image_generated": false,
     "retry_or_manual_dispatch_performed": false,
-    "tests_repeated": false,
-    "reason": "Await regular workflow start; no skip, failure or delivery result observed. Do not infer publication from ready state.",
-    "supplemental_reply_transport": "unchanged_blocked; no reply/comment tool exposed in current catalogue"
+    "source_inventory_checked_at": "2026-10-26T08:54:53.410634+09:00",
+    "unprepared_candidates": 0,
+    "public_asset_bytes_sha256_verified": true,
+    "supplemental_reply_transport": "unchanged_blocked; public browser shows login prompt and no authentication was attempted."
   }
 }
