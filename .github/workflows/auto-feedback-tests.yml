@@ -6,6 +6,7 @@ on:
     paths:
       - 'auto_feedback.py'
       - 'delivery_run.py'
+      - 'state_sync.py'
       - 'content_card.py'
       - 'prepared_media.py'
       - 'editorial/imagegen_cards.json'
@@ -32,6 +33,7 @@ on:
     paths:
       - 'auto_feedback.py'
       - 'delivery_run.py'
+      - 'state_sync.py'
       - 'content_card.py'
       - 'prepared_media.py'
       - 'editorial/imagegen_cards.json'
