@@ -85,6 +85,19 @@ class ResearchTests(unittest.TestCase):
             self.assertEqual(manifest, before)
             self.assertFalse(result['publication_performed'])
 
+    def test_disqualified_published_first_start_is_not_recycled_as_new_research(self):
+        # Historical May 22 starter evidence invalidates a later unqualified
+        # career-first claim, but that already published claim stays "used".
+        from editorial_novelty import fact_metadata
+        card = self.reviewed_claim_card(BODY)
+        card['status'] = 'published'
+        self.assertIsNone(fact_metadata({**card, 'status': 'ready'}, NOW))
+        history = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}
+        with patch.object(research, 'read_body', return_value=BODY):
+            result = research.build_research(history, {'cards': [card]}, NOW, Mock())
+        self.assertNotIn('player', [d['angle'] for d in result['drafts']])
+        self.assertFalse(result['publication_performed'])
+
     def test_unreviewed_or_changed_body_requires_research_again(self):
         body = 'シント＝トロイデンVVは' + BODY
         state = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}

@@ -220,9 +220,9 @@ class AdvanceReservationTests(unittest.TestCase):
         self.assertFalse(self.history['publication_log'])
 
     def test_reviewed_first_start_checks_body_and_reservation_fact_identity(self):
-        claim = '新川志音がリーグ初先発。'
+        claim = '架空太郎がリーグ初先発。'
         self.card['text'] = claim + self.card['source_url']
-        self.card['editorial_fact'] = {'kind': 'league_first_start', 'subject': '新川志音',
+        self.card['editorial_fact'] = {'kind': 'league_first_start', 'subject': '架空太郎',
             'claim': claim, 'source_body_sha256': hashlib.sha256(claim.encode()).hexdigest()}
         self.write_card()
         with patch.object(a, 'read_body', return_value='changed official body'):

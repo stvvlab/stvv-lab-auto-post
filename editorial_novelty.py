@@ -5,6 +5,13 @@ from datetime import date
 
 from content_guard import canonical_source, plain
 
+# Historical official evidence takes precedence over a later article's
+# ambiguous "league first start" wording. Never reissue this as a career debut.
+# 2026-05-22: https://stvv.jp/news/game/20260522_1/
+KNOWN_PRIOR_LEAGUE_STARTS = {
+    '新川志音': 'https://stvv.jp/news/game/20260522_1/',
+}
+
 
 def fact_metadata(card, now):
     fact = card.get('editorial_fact')
@@ -28,6 +35,11 @@ def fact_metadata(card, now):
                 or not 0 <= (now.date() - day).days <= 7):
             return None
     except (KeyError, ValueError, TypeError):
+        return None
+    # The 2026-10-26 match report says "league first start", but the same
+    # official site documents Shinkawa starting on 2026-05-22. A single
+    # article's body hash cannot establish a career-first milestone.
+    if subject in KNOWN_PRIOR_LEAGUE_STARTS:
         return None
     identity = hashlib.sha256(('stvv:league_first_start:' + subject).encode()).hexdigest()
     return {**fact, 'fact_id': identity}
