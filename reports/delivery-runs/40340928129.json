@@ -1,0 +1,53 @@
+{
+  "started_at": "2026-10-26T23:35:31.379499+09:00",
+  "slot": "vote",
+  "date_jst": "2026-10-26",
+  "scheduled_at": "2026-10-26T21:00:00+09:00",
+  "start_delay_seconds": 9331,
+  "run_id": "40340928129",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129",
+  "commit": "a6f8d26c737f48a985f39f7240fc9604a5eb53e4",
+  "manual_dispatch_performed": false,
+  "status": "submitted_to_buffer",
+  "x_display_verified": false,
+  "queue_before": {
+    "ready_cards": 1,
+    "candidates": [
+      {
+        "source_url": "https://stvv.jp/news/game/20261026_1/",
+        "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+        "slots": [
+          "vote",
+          "player",
+          "news"
+        ],
+        "selection_block": null
+      }
+    ],
+    "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
+  },
+  "finished_at": "2026-10-26T23:35:37.949958+09:00",
+  "new_publications": [
+    {
+      "key": "daily_2026-10-26_vote",
+      "slot": "vote",
+      "source": "https://stvv.jp/news/game/20261026_1/",
+      "buffer_id": "6adf65368e6c1ef513f120ff",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-26T23:35:36.622617+09:00",
+      "text": "🌟 新川志音がリーグ初先発。\nクラブ・ブルージュ戦で先発メンバーに名を連ねました。\n今後どんなプレーに期待しますか？\n\n公式：https://stvv.jp/news/game/20261026_1/\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a6f8d26c737f48a985f39f7240fc9604a5eb53e4/generated/imagegen_shinkawa_first_start_20261026.jpg",
+      "visual_variant": "stadium",
+      "art_direction": "print-collage",
+      "editorial_fact": {
+        "kind": "league_first_start",
+        "subject": "新川志音",
+        "claim": "新川志音がリーグ初先発。",
+        "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+        "fact_id": "cf1423218edf88bf40924cf22ebfec23e69e1d8b70c2999857f22befaf07b799"
+      }
+    }
+  ],
+  "pending_key": null,
+  "delivery_state": "buffer_reports_sent_x_unverified"
+}
