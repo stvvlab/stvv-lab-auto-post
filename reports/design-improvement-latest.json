@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T00:56:16.860618+09:00",
+  "updated_at": "2026-10-27T03:14:29.707379+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,9 +8,9 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Replaced late shareNow in the regular scheduled wrapper with advance reservations for the same seven publication times.",
-    "Preserved reviewed image/public-byte/official-source/strict fact gates and durable pending before one mutation.",
-    "Measured existing Buffer schedule permission and capacity through a read-only probe; no new image or post this pass."
+    "Persist and reconcile accepted Buffer image asset IDs; stop before false publication on image replacement or missing identity.",
+    "Fresh official source inventory found zero unregistered eligible items; two research-only drafts were not approved.",
+    "Merged PR #40 after full 265-test CI success; no generation, reservation, public post, manual dispatch or paid API call."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -72,46 +72,13 @@
     "duplicate_guard_preserved": true
   },
   "tests": {
-    "local_suite_passed": 187,
-    "local_suite_failed": 0,
-    "initial_local_failure": "Required requests dependency and Japanese font missing; installed dependencies/font, then full suite passed.",
-    "quality_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185233508",
-    "quality_ci_conclusion": "success",
-    "full_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185233482",
-    "full_ci_conclusion": "success",
-    "full_ci_passed": 187,
-    "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185233543",
-    "visual_ci_conclusion": "success",
-    "buffer_and_save_mocked": true,
-    "no_test_publication": true,
-    "main_push_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
-    "main_push_ci_conclusion": "success",
-    "main_push_ci_passed": 187,
-    "preparation_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40185233576",
-    "preparation_ci_conclusion": "success",
-    "current_pass": {
-      "focused_passed": 18,
-      "focused_failed": 0,
-      "full_local_passed": 187,
-      "full_local_failed": 0,
-      "local_font_path": "Existing NotoSansCJKjp-Bold.otf supplied via STVV_CARD_FONT; local sudo font installer unavailable.",
-      "ready_manifest_present_during_full_suite": true,
-      "initial_github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220272103",
-      "initial_github_actions_conclusion": "failure",
-      "root_cause": "Scheduled fallback test read the real prepared queue and attempted ledger persistence. Read-only CI rejected persistence before transport.",
-      "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
-      "fix": "Isolate prepared_candidates in fallback scenarios, fail immediately on save/send, assert no publication for empty-source case.",
-      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40220552180",
-      "github_actions_conclusion": "success",
-      "no_actual_test_publication": true,
-      "github_actions_passed": 187,
-      "preview_render_and_upload": "success"
-    },
-    "publication_confirmation_ci": {
-      "url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40247839946",
-      "conclusion": "success",
-      "preview_render_and_upload": "success"
-    }
+    "local_full_passed": 265,
+    "final_focused_passed": 24,
+    "github_full_passed": 265,
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40375596990",
+    "github_actions_conclusion": "success",
+    "safety_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40375597010",
+    "safety_ci_conclusion": "success"
   },
   "regular_slot_observation": {
     "slot": "2026-10-26 21:00 JST vote",
@@ -141,7 +108,7 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "事前予約を設定・実装、実予約からX公開までの実動未確認",
+  "implementation_status": "自動化の設定／実装済み、実予約からX表示までの実動未確認",
   "uncompleted": [
     "A fresh reviewed new image is needed before the first real advance reservation.",
     "Reservation acceptance, Buffer sent and actual X caption/image delivery through multiple normal slots remain unverified.",
@@ -158,8 +125,8 @@
   "new_generation_this_pass": false,
   "preview_this_pass": null,
   "new_publication_this_pass": true,
-  "implementation_commit": "762d96822aeeed30f7ed363b38972db8d02cd6f1",
-  "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/27",
+  "implementation_commit": "bf8188ac8a3059bcb282bffd1d8038dd5f740258",
+  "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/40",
   "image_design_diversity": {
     "module": "design_brief.py",
     "directions": 5,
@@ -238,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T00:12:32.262570+09:00",
+    "checked_at": "2026-10-27T03:14:29.707379+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -256,49 +223,33 @@
         "eligible_items": 1
       }
     ],
+    "source_inventory_status": "no_unposted_candidate_in_scanned_lists",
     "unprepared_candidates": 0,
-    "pending_posts": 0,
-    "official_claim_present": true,
-    "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
-    "public_image_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
-    "same_fact_resend_block": "同じ事実が投稿済み／確認待ち",
-    "paid_api_used": false,
-    "image_generated": false,
-    "send_performed": false,
-    "observed_at": "2026-10-27T00:13:45+09:00",
     "ready_cards": 0,
-    "new_publication": true,
-    "new_image_generated": false,
-    "manual_dispatch_performed": false,
-    "observed_slots": [
+    "published_cards": 4,
+    "pending_posts": 0,
+    "reserved_posts": 0,
+    "research_only_drafts": 2,
+    "research_source_checks": [
       {
-        "slot": "2026-10-26 21:00 JST vote",
-        "state": "published_and_x_display_verified",
-        "publication": {
-          "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40340928129",
-          "workflow_conclusion": "success",
-          "posting_result": "submitted_to_buffer",
-          "buffer_id": "6adf65368e6c1ef513f120ff",
-          "buffer_status": "sent",
-          "submitted_at": "2026-10-26T23:35:36.622617+09:00",
-          "scheduled_slot": "2026-10-26 21:00 JST vote",
-          "posting_step_start_delay_seconds": 9331,
-          "x_url": "https://x.com/stvvlabo/status/2114727647368331366",
-          "x_text_verified": true,
-          "x_image_rendering_verified": true,
-          "x_display_verified_at": "2026-10-27T00:10:23+09:00",
-          "verification_method": "Public X detail-page DOM and rendered screenshot; exact caption, official source link, 新川志音 / リーグ初先発 artwork and full safe crop confirmed.",
-          "prerequisite_tests_passed": 218
-        }
+        "source_url": "https://stvv.jp/news/game/20261026_1/",
+        "status": "ok"
       },
       {
-        "slot": "2026-10-26 23:00 JST recap",
-        "state": "no_run_observed_at_check"
+        "source_url": "https://stvv.jp/news/game/20261023_3/",
+        "status": "ok"
       }
     ],
-    "source_inventory_method": "Fresh direct read of general/match/UEFA Japanese archives and exact article body; no unprepared eligible source found.",
-    "scheduled_prerequisite_tests_passed": 218,
-    "new_local_tests_run": false,
+    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40349598794",
+    "last_regular_result": "skipped_no_verified_content",
+    "last_regular_start_delay_seconds": 5318,
+    "reservation_mode_regular_run_observed": false,
+    "next_existing_slot_jst": "2026-10-27T08:00:00+09:00",
+    "next_slot_start_not_guaranteed": true,
+    "imagegen_retest_performed": false,
+    "image_generated": false,
+    "send_performed": false,
+    "new_publication": false,
     "supplemental_reply_sender_available": false
   },
   "last_verified_publication": {
@@ -645,5 +596,28 @@
     "delay_seconds": 5318,
     "new_publication": false,
     "pending_count": 0
+  },
+  "reservation_image_identity_fix": {
+    "checked_at": "2026-10-27T03:14:29.707379+09:00",
+    "implementation_commit": "bf8188ac8a3059bcb282bffd1d8038dd5f740258",
+    "validated_commit": "9879ed9a4b9dab8f6d69742be5bd9a4a8639a27e",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/40",
+    "change": "Persist Buffer's accepted image asset ID and require the same ID during reconciliation; missing or replaced IDs block publication history without a resend.",
+    "tests": {
+      "local_full_passed": 265,
+      "final_focused_passed": 24,
+      "github_full_passed": 265,
+      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40375596990",
+      "github_actions_conclusion": "success",
+      "safety_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40375597010",
+      "safety_ci_conclusion": "success"
+    },
+    "ready_cards": 0,
+    "new_image_generated": false,
+    "new_reservation_sent": false,
+    "new_publication": false,
+    "manual_dispatch_performed": false,
+    "paid_api_used": false,
+    "live_reservation_to_x_verified": false
   }
 }
