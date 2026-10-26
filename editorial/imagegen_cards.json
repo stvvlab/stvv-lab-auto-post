@@ -54,7 +54,7 @@
         "recap"
       ],
       "reviewed": true,
-      "status": "ready",
+      "status": "published",
       "asset_path": "generated/imagegen_brugge_result_20261026.jpg",
       "sha256": "63a6a2ccb49bd29d047a80db8657353bd2696a04311473464d1b59939fe66621",
       "dimensions": [
@@ -62,7 +62,20 @@
         1086
       ],
       "art_direction": "ink-poster",
-      "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation."
+      "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation. Existing 08:00 JST player slot sent at 08:12; X text, official link, team-score pairing and full image rendering visually confirmed 2026-10-26 09:07 JST.",
+      "publication": {
+        "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
+        "workflow_conclusion": "success",
+        "posting_result": "submitted_to_buffer",
+        "buffer_id": "6ade8cf66887a2efc12c271d",
+        "buffer_status": "sent",
+        "submitted_at": "2026-10-26T08:12:56.682729+09:00",
+        "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+        "x_text_verified": true,
+        "x_image_rendering_verified": true,
+        "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+        "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
+      }
     }
   ]
 }
