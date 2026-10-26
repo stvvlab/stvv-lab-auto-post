@@ -8,8 +8,9 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Fetched all three official Japanese archives and reconciled fresh article URLs with latest main history; sponsor category excluded as required.",
-    "Zero new eligible candidates, ready cards and pending sends; no newer posting outcome, image generation, transport action or code change."
+    "Merged PR #29: separate unused official-evidence research for player, review and participation angles.",
+    "Live body inspection produced 3 research-only drafts; all still blocked by current duplicate gate. No new image or public post.",
+    "All 193 local/CI tests passed; first scheduled research execution remains unverified."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -296,5 +297,32 @@
     "buffer_submission_reached": true,
     "x_post_created": true,
     "note": "Production Run STVV auto post step checked separately from 187 passing test mock output."
+  },
+  "editorial_breadth_expansion": {
+    "implemented_at": "2026-10-26T20:28:00+09:00",
+    "implementation_commit": "502e519507c13babaf50d8faa5524350b3b12fa5",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/29",
+    "module": "editorial_research.py",
+    "report": "reports/editorial-research-latest.json",
+    "behavior": "Revisit fresh published official sources and extract unused exact evidence into separate player, analysis-question and participation research drafts.",
+    "live_drafts": 3,
+    "ready_cards_created": 0,
+    "publications_created": 0,
+    "image_generation_performed": false,
+    "duplicate_gate_bypassed": false,
+    "posting_runner_changed": false,
+    "local_tests_passed": 193,
+    "github_actions_tests_passed": 193,
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40315093135",
+    "github_actions_conclusion": "success",
+    "inventory_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40315093079",
+    "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40315093083",
+    "first_scheduled_research_execution_verified": false,
+    "remaining": [
+      "Editorial consistency/novelty review of three drafts; each currently fails existing same-source duplicate gate.",
+      "Support genuinely distinct verified content under a carefully scoped policy; do not simply loosen repetition checks.",
+      "Built-in image generation and visual approval only for a publishable nonduplicate candidate.",
+      "Verify the next scheduled research report generation separately from public posting."
+    ]
   }
 }
