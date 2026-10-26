@@ -71,6 +71,13 @@ class ReservationPreviewTests(unittest.TestCase):
         result = plan(self.history, datetime.fromisoformat('2026-10-26T23:00:00+09:00'))
         self.assertEqual(result['proposals'], [])
 
+    def test_a_future_article_is_not_approved_just_because_publication_is_tomorrow(self):
+        self.card['date_jst'] = '2026-10-27'
+        self.write_card()
+        result = plan(self.history, datetime.fromisoformat('2026-10-26T23:00:00+09:00'))
+        self.assertEqual(result['proposals'], [])
+        self.assertEqual(result['blocked'][0]['reason'], 'future_article_date')
+
     def test_no_network_no_state_mutation_max_one(self):
         before = copy.deepcopy(self.history)
         original = self.manifest.read_bytes()

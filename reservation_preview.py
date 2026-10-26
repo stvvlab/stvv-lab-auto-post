@@ -7,7 +7,7 @@ and a persistent reservation lifecycle implemented before enabling delivery.
 import argparse
 import hashlib
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from prepared_media import prepared_candidates, prepared_duplicate_reason, exact_card
@@ -68,6 +68,8 @@ def plan(history, now):
             reason = (','.join(sorted(problems)) if problems else
                       prepared_duplicate_reason(history, message, source, slot, due))
             card = exact_card(slot, text, source)
+            if card and date.fromisoformat(card['date_jst']) > now.astimezone(JST).date():
+                reason = 'future_article_date'
             if reason or card is None:
                 report['blocked'].append({'key': key, 'source_url': source,
                                           'reason': reason or 'ambiguous_reviewed_card'})
