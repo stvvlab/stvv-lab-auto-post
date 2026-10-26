@@ -1,0 +1,39 @@
+{
+  "status": "scoped_organization_and_checks_passed",
+  "implementation_commit": "be7bd4f26090e6a9f7ebe85b55c314b2685c42d5",
+  "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/31",
+  "changes": [
+    "Extracted read-only news parsing and fetching to official_sources.py; compatibility entry points remain in stvv_post.py.",
+    "Moved audit/preflight tests into tests/, removed import-only bridge, updated CI commands and path filters.",
+    "Documented production, preparation, validation, legacy/manual and database entry points in README; ignored transient caches."
+  ],
+  "validation": {
+    "local_tests_passed": 203,
+    "github_actions_tests_passed": 203,
+    "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318446782",
+    "github_actions_conclusion": "success",
+    "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318446824",
+    "quality_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318446820",
+    "preparation_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318446759",
+    "parser_ast_unchanged": true,
+    "scanner_ast_change": "Only explicit session injection; retrieval/filtering logic identical",
+    "diff_check": "passed",
+    "live_preflight_checked_at": "2026-10-26T20:53:47.306529+09:00",
+    "official_body_digest_verified": true,
+    "public_image_bytes_verified": true,
+    "caption_weighted_length": 169
+  },
+  "publication": {
+    "ready_cards": 1,
+    "source_url": "https://stvv.jp/news/game/20261026_1/",
+    "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+    "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+    "next_existing_slot": "2026-10-26 21:00 JST vote",
+    "buffer_send_called": false,
+    "manual_dispatch_performed": false
+  },
+  "remaining": [
+    "Observe scheduled milestone delivery and X display; preparation and tests are not public posting.",
+    "Further decomposition of send/history/match-copy logic remains a future cleanup; legacy tools retained for existing references."
+  ]
+}
