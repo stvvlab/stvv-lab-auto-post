@@ -8,10 +8,11 @@ on:
       - 'quality_gate.py'
       - 'text_metrics.py'
       - 'design_brief.py'
-      - 'test_quality_gate.py'
-      - 'test_preflight_post.py'
+      - 'tests/test_quality_gate.py'
+      - 'tests/test_preflight_post.py'
       - 'preflight_post.py'
       - 'stvv_post.py'
+      - 'official_sources.py'
       - 'tests/test_quality*'
       - 'tests/test_design_brief.py'
       - '.github/workflows/quality-audit.yml'
@@ -29,6 +30,6 @@ jobs:
           python-version: '3.11'
       - run: pip install requests beautifulsoup4 pillow
       - name: Test quality audit rules
-        run: python -m unittest -v test_quality_gate.py test_preflight_post.py tests.test_quality_integration tests.test_design_brief
+        run: python -m unittest -v tests.test_quality_gate tests.test_preflight_post tests.test_quality_integration tests.test_design_brief
       - name: Check candidate post quality (report only)
         run: python quality_gate.py --posts posts.json
