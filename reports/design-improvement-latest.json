@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T10:02:37.359634+09:00",
+  "updated_at": "2026-10-26T11:08:35+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -125,22 +125,16 @@
     }
   },
   "regular_slot_observation": {
-    "slot": "2026-10-26 08:00 JST player",
-    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
+    "slot": "2026-10-26 10:30 JST compare",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40257377252",
     "workflow_conclusion": "success",
-    "posting_result": "submitted_to_buffer",
-    "buffer_id": "6ade8cf66887a2efc12c271d",
-    "buffer_status": "sent",
-    "submitted_at": "2026-10-26T08:12:56.682729+09:00",
-    "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
-    "x_text_verified": true,
-    "x_image_rendering_verified": true,
-    "x_display_verified_at": "2026-10-26T09:07:36+09:00",
-    "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed.",
-    "production_image_processing_reached": true,
-    "buffer_submission_reached": true,
-    "x_post_created": true,
-    "note": "Production Run STVV auto post step checked separately from 187 passing test mock output."
+    "actual_execution_at": "2026-10-26T11:06:05.970210+09:00",
+    "posting_result": "skipped_no_verified_content",
+    "detail": "compare: 検証済み新情報なし",
+    "buffer_submission_reached": false,
+    "x_post_created": false,
+    "production_image_processing_reached": false,
+    "note": "Production python stvv_post.py step; mock test output excluded."
   },
   "supplemental_replies": {
     "status": "partial_safety_implementation_transport_blocked",
@@ -245,8 +239,9 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T10:02:37.359634+09:00",
-    "main_observed": "c9f31124215fe93ecd9dc93cf56d57968bd4ef30",
+    "checked_at": "2026-10-26T11:08:35+09:00",
+    "main_observed": "6977e827190a40364497c63ad365e7db3c2c0682",
+    "source_inventory_checked_at": "2026-10-26T10:24:44.691800+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -269,12 +264,38 @@
     "pending_posts": 0,
     "new_image_generated": false,
     "new_publication": false,
+    "regular_slot_observation": {
+      "slot": "2026-10-26 10:30 JST compare",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40257377252",
+      "workflow_conclusion": "success",
+      "actual_execution_at": "2026-10-26T11:06:05.970210+09:00",
+      "posting_result": "skipped_no_verified_content",
+      "detail": "compare: 検証済み新情報なし",
+      "buffer_submission_reached": false,
+      "x_post_created": false,
+      "production_image_processing_reached": false,
+      "note": "Production python stvv_post.py step; mock test output excluded."
+    },
     "last_verified_publication": "https://x.com/stvvlabo/status/2114495450866712925",
-    "publication_confirmation_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40247839946",
-    "publication_confirmation_ci_conclusion": "success",
     "tests_repeated": false,
-    "next_regular_slot": "2026-10-26 10:30 JST compare",
-    "reason": "No new official source in all three archives. All reviewed cards published; no regeneration or extra publication.",
-    "supplemental_reply_transport": "unchanged_blocked; no current existing-post reply tool or authenticated free transport newly available."
+    "supplemental_reply_transport": "unchanged_blocked; no reply tool newly exposed; no paid API or authentication actions."
+  },
+  "last_verified_publication": {
+    "slot": "2026-10-26 08:00 JST player",
+    "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
+    "workflow_conclusion": "success",
+    "posting_result": "submitted_to_buffer",
+    "buffer_id": "6ade8cf66887a2efc12c271d",
+    "buffer_status": "sent",
+    "submitted_at": "2026-10-26T08:12:56.682729+09:00",
+    "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+    "x_text_verified": true,
+    "x_image_rendering_verified": true,
+    "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+    "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed.",
+    "production_image_processing_reached": true,
+    "buffer_submission_reached": true,
+    "x_post_created": true,
+    "note": "Production Run STVV auto post step checked separately from 187 passing test mock output."
   }
 }
