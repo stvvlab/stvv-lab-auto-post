@@ -1,0 +1,22 @@
+name: Adobe-free trial checks
+on:
+  pull_request:
+    paths:
+      - 'non_adobe_trial.py'
+      - 'tests/test_non_adobe_trial.py'
+      - '.github/workflows/non-adobe-trial-tests.yml'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests
+        run: python -m unittest tests.test_non_adobe_trial -v
+      - name: Read-only production manifest preflight
+        run: python non_adobe_trial.py
