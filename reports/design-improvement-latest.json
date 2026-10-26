@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T14:09:40+09:00",
+  "updated_at": "2026-10-26T15:07:32+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,8 +8,8 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Confirmed existing 12:30 data slot ran at 13:04 and safely skipped repeated content before image processing or Buffer send.",
-    "187 scheduled prerequisite tests passed. Live official three-list scan found zero new candidates; no image generated or extra post triggered."
+    "Read current main and verified no new unposted candidate in all three official Japanese lists.",
+    "No newer posting slot since the previously recorded 12:30 duplicate skip. No image generated, send attempted or code modified."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -213,9 +213,9 @@
       "no_posting_or_generation_performed": true
     },
     "latest_scheduled_check": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40267785444",
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40272923112",
       "conclusion": "success",
-      "checked_at": "2026-10-26T13:11:53.457609+09:00",
+      "checked_at": "2026-10-26T14:12:08.937792+09:00",
       "new_candidates": 0,
       "ready_cards_at_scan": 0
     },
@@ -238,10 +238,10 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T14:09:40+09:00",
-    "main_observed": "d219db656ac397ef3eaeadab629e7f1d8b5c17d6",
-    "source_inventory_checked_at": "2026-10-26T14:09:11.947932+09:00",
-    "source_inventory_method": "Read-only live scan with current main ledger and manifest",
+    "checked_at": "2026-10-26T15:07:32+09:00",
+    "main_observed": "a811f0f9e82e968cf6936ad2f9c2c2ee5600c0ac",
+    "source_inventory_checked_at": "2026-10-26T15:07:05.939793+09:00",
+    "source_inventory_method": "Read-only live scan against current main ledger and manifest",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -273,8 +273,10 @@
     "tests_repeated_locally": false,
     "scheduled_prerequisite_tests_passed": 187,
     "manual_dispatch_performed": false,
-    "reason": "All three official lists fetched successfully; no new unposted candidates. Existing scheduled data slot skipped duplicate content before media or Buffer send. No new image needed.",
-    "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions."
+    "reason": "All three official lists fetched successfully; no new unposted candidate, ready card, pending send or newer completed posting slot. 15:30 slot is still upcoming; no outcome inferred or manual dispatch performed.",
+    "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions.",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40272923112",
+    "source_inventory_workflow_conclusion": "success"
   },
   "last_verified_publication": {
     "slot": "2026-10-26 08:00 JST player",
