@@ -1,16 +1,16 @@
 {
-  "checked_at": "2026-10-26T22:56:52.849260+09:00",
+  "checked_at": "2026-10-27T00:50:46.954298+09:00",
   "status": "no_unposted_candidate_in_scanned_lists",
   "source_checks": [
     {
       "url": "https://stvv.jp/news/2026/",
       "status": "ok",
-      "eligible_items": 4
+      "eligible_items": 3
     },
     {
       "url": "https://stvv.jp/news/game/2026/",
       "status": "ok",
-      "eligible_items": 3
+      "eligible_items": 2
     },
     {
       "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -31,13 +31,9 @@
     {
       "source_url": "https://stvv.jp/news/uefa-news/20261023_1/",
       "reason": "Source already published, pending or registered"
-    },
-    {
-      "source_url": "https://stvv.jp/news/game/20261019_1/",
-      "reason": "Source already published, pending or registered"
     }
   ],
-  "ready_cards": 1,
+  "ready_cards": 0,
   "pending_posts": 0,
   "publication_performed": false,
   "image_generation_performed": false,
