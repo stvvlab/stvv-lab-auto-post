@@ -3,9 +3,10 @@
 ## Delivery outcome evidence
 
 The scheduled posting step executes `delivery_run.py`, which calls the existing
-publisher exactly once. It records ready-card selection blocks before execution,
-the publisher's result, and only new Buffer acceptance entries present in the
-durable publication ledger. A remaining pending key is an unknown send outcome;
+advance-reservation runner exactly once when STVV_ADVANCE_RESERVATIONS=true.
+The legacy shareNow publisher is blocked in that mode. It records selection blocks,
+the runner result, pending intents and durable reservations separately from
+Buffer-reported sent entries in the publication ledger. A remaining pending key is an unknown send outcome;
 the wrapper never retries. `sent` reported by Buffer is not X display verification.
 Exceptions still fail the Actions step, while an `always()` artifact preserves
 the per-run record. The workflow also saves it under `reports/delivery-runs/`
@@ -43,7 +44,8 @@ news-slot delivery and actual X image display were also verified; see
 `reports/imagegen-capability.json` for asset hashes and evidence.
 
 The preparer commits reviewed image bytes and `editorial/imagegen_cards.json`
-together. The existing seven scheduled posting slots consume ready entries.
+together. The existing seven scheduled runs reserve a reviewed ready entry for one of the
+next seven publication times, at least 30 minutes ahead and at most 24 hours ahead.
 No manual pilot or extra post is triggered by queue preparation.
 
 ## Manifest
@@ -196,3 +198,21 @@ card's delivery, not stable scheduling: posting began 9,331 seconds after its
 nominal slot. The 23:00 recap run was still not observed at the later check.
 Raw delivery-run evidence retains the runner's X-unverified snapshot; subsequent
 X verification is recorded in the manifest and capability/design reports.
+
+## Advance reservation delivery (2026-10-27)
+
+See docs/publication-timing.md for measured startup delay and the revised transport.
+The same seven GitHub schedules now run advance_reservations.py through the delivery
+wrapper. No additional posting trigger or manual dispatch is introduced. Each run
+may reserve at most one fresh reviewed image for a relevant future slot. The source
+body, strict fact metadata and immutable public bytes are rechecked before sending.
+Buffer's actual channel identity, scheduling permission, pause/connection state,
+queue capacity and existing remote posts are read before pending is saved.
+
+posted.json reserved_posts retains the exact caption/source/image/slot/due time/
+reservation key and returned Buffer ID. used_posts means the slot is occupied; it
+is not evidence of publication. Only a subsequent successful status query showing
+sent adds a publication_log entry. Neither operation asserts X display verification.
+An unknown outcome, changed identity, provider error or failed state save never
+causes another createPost. Reserved facts and sources also block the legacy and
+research duplicate paths. No reply transport or paid API has been added.

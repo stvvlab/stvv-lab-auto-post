@@ -57,6 +57,7 @@ jobs:
           STVV_AI_ART_ENABLED: "false"  # Built-in imagegen preparation only; no paid API
           GITHUB_SCHEDULE: ${{ github.event.schedule }}
           STVV_DELIVERY_RECORD: "true"
+          STVV_ADVANCE_RESERVATIONS: "true" # Future existing slots; never shareNow
         run: python delivery_run.py
 
       - name: Preserve actual delivery evidence even after a send error

@@ -4,6 +4,11 @@ on:
   pull_request:
     paths:
       - 'reservation_preview.py'
+      - 'advance_reservations.py'
+      - 'buffer_reservations.py'
+      - 'content_guard.py'
+      - 'editorial_novelty.py'
+      - 'delivery_run.py'
       - 'visual_rotation.py'
       - 'ai_art.py'
       - 'content_card.py'

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T00:13:45+09:00",
+  "updated_at": "2026-10-27T00:56:16.860618+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,9 +8,9 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Merged PR #30: narrow reviewed first-start fact policy with official-body digest and persistent fact ID.",
-    "Generated and visually reviewed one print-collage milestone image; exact caption 169 weighted characters with tags.",
-    "203 local/CI tests passed; live official-body and immutable public-byte preflight passed. No actual Buffer send or manual dispatch; ready for existing 21:00 vote slot."
+    "Replaced late shareNow in the regular scheduled wrapper with advance reservations for the same seven publication times.",
+    "Preserved reviewed image/public-byte/official-source/strict fact gates and durable pending before one mutation.",
+    "Measured existing Buffer schedule permission and capacity through a read-only probe; no new image or post this pass."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -61,7 +61,7 @@
   },
   "prepared_asset_delivery": {
     "ready_cards": 0,
-    "published_cards": 3,
+    "published_cards": 4,
     "manifest_enabled": true,
     "fail_closed_without_reviewed_asset": true,
     "caption_exact_match_required": true,
@@ -141,14 +141,14 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "Shinkawa first-start print collage completed built-in imagegen preparation, exact-fact gates, regular-slot Buffer delivery, durable history/outcome evidence and actual X caption/image verification. One delayed delivery is not stable scheduling.",
+  "implementation_status": "事前予約を設定・実装、実予約からX公開までの実動未確認",
   "uncompleted": [
-    "Future cards require individually verified new official facts, built-in generation, visual review and X delivery confirmation.",
-    "Scheduled start delay was 2h35m for the latest vote; stable start timing is not established.",
-    "The 2026-10-26 23:00 recap run has not appeared at this check.",
-    "Supplemental reply sender remains unavailable; no actual reply sent."
+    "A fresh reviewed new image is needed before the first real advance reservation.",
+    "Reservation acceptance, Buffer sent and actual X caption/image delivery through multiple normal slots remain unverified.",
+    "Startup delays still affect preparation and reservation creation; exact publication timing is not guaranteed.",
+    "Supplemental reply transport remains unavailable; no actual reply sent."
   ],
-  "next_priority": "Continue checking fresh official content; do not repost Club Brugge result. Preserve no-duplicate and pending protections.",
+  "next_priority": "Pass CI, then verify an eligible new image through a normal reservation, Buffer sent and actual X display; never resend known facts.",
   "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
   "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
   "policy_fix_commits": [
@@ -591,5 +591,59 @@
     "image_generated": false,
     "buffer_called": false,
     "post_fix_scheduled_execution_verified": false
+  },
+  "advance_reservation_improvement": {
+    "updated_at": "2026-10-27T00:56:16.860618+09:00",
+    "status": "implemented_configured_live_reservation_not_yet_verified",
+    "delivery_mode": "advance_reservations",
+    "publication_slots_jst": [
+      "08:00",
+      "10:30",
+      "12:30",
+      "15:30",
+      "18:00",
+      "21:00",
+      "23:00"
+    ],
+    "ready_cards": 0,
+    "new_images_this_pass": 0,
+    "new_publications_this_pass": 0,
+    "one_mutation_per_run": true,
+    "pending_durably_saved_before_send": true,
+    "unknown_send_never_retried": true,
+    "scheduled_is_not_published": true,
+    "legacy_share_now_blocked_in_reservation_mode": true,
+    "read_only_capability": {
+      "checked_at": "2026-10-27T00:59:20.515626+09:00",
+      "status": "read_permission_capacity_and_status_query_verified",
+      "mutations_attempted": 0,
+      "paid_api_or_contract_change": false,
+      "channel_id": "6ab8fce4ea19ca0bde027d80",
+      "scheduled_limit": 10,
+      "active_count": 0,
+      "remaining_capacity": 10,
+      "known_post_status_query_verified": true,
+      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40354684396",
+      "probe_commit": "6a78a153140805262373f915aec9ed3ca678346f"
+    },
+    "final_targeted_suite_passed": 38,
+    "github_actions_validation": "pending",
+    "remaining": [
+      "CI and main reflection",
+      "First eligible new reviewed image",
+      "Actual reservation acceptance on an existing regular run",
+      "Buffer sent and public X caption/image confirmation across multiple slots",
+      "Supplemental reply transport remains unavailable"
+    ],
+    "local_full_suite_passed_before_explicit_rejection_tests": 247,
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/37"
+  },
+  "latest_regular_slot_check": {
+    "run_id": "40349598794",
+    "result": "skipped_no_verified_content",
+    "actual_posting_step_started_at": "2026-10-27T00:28:38.974524+09:00",
+    "delay_seconds": 5318,
+    "new_publication": false,
+    "pending_count": 0
   }
 }

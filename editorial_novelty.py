@@ -38,9 +38,12 @@ def distinct_fact_reason(history, card, now):
     if not fact:
         return '新しい事実の審査情報が不正／未確認'
     source = canonical_source(card['source_url'])
-    records = history.get('publication_log', []) + list(history.get('pending_posts', {}).values())
+    reservations = list(history.get('reserved_posts', {}).values())
+    records = (history.get('publication_log', [])
+               + list(history.get('pending_posts', {}).values()) + reservations)
     if any(canonical_source(p.get('source')) == source
-           for p in history.get('pending_posts', {}).values()):
+           for p in list(history.get('pending_posts', {}).values())
+           + [r for r in reservations if r.get('buffer_status') != 'sent']):
         return '同じ出典の送信結果が確認待ち'
     for previous in records:
         old = previous.get('editorial_fact') or {}
