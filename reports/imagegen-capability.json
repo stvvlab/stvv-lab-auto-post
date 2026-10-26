@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T17:11:12+09:00",
+  "checked_at": "2026-10-26T18:32:06+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -114,10 +114,10 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T17:11:12+09:00",
-    "main_observed": "a17898258178e31e535d9c7e4a59806814aac329",
-    "source_inventory_checked_at": "2026-10-26T17:10:43.622176+09:00",
-    "source_inventory_method": "Read-only live scan against current main ledger and manifest",
+    "checked_at": "2026-10-26T18:32:06+09:00",
+    "main_observed": "84c73e2e2abb1b376c6ca22039524405cd96edf8",
+    "source_inventory_checked_at": "2026-10-26T18:19:40.960621+09:00",
+    "source_inventory_method": "Successful scheduled three-list inventory, checked against current main ledger and manifest; latest official match article body read again this run",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -140,18 +140,18 @@
     "pending_posts": 0,
     "new_image_generated": false,
     "new_publication": false,
-    "observed_slot": "2026-10-26 15:30 JST analysis",
-    "observed_slot_status": "skipped_no_verified_content",
-    "last_completed_slot": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40285676972",
-    "last_completed_slot_result": "skipped_no_verified_content",
+    "observed_slot": "2026-10-26 18:00 JST news",
+    "observed_slot_status": "skipped_repeated_content",
+    "last_completed_slot": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40299786771",
+    "last_completed_slot_result": "skipped_repeated_content",
     "last_verified_publication": "https://x.com/stvvlabo/status/2114495450866712925",
     "official_result_rechecked": "Japanese official article body re-read: league round 9, 26 October JST, Club Brugge 3–2 STVV; セヴァウイ PK and 谷口 scorers. Inconsistent minutes/substitutions not used.",
     "tests_repeated_locally": false,
     "scheduled_prerequisite_tests_passed": 187,
     "manual_dispatch_performed": false,
-    "reason": "All three official lists fetched successfully; no new unposted candidate, ready card or pending send. Existing scheduled analysis slot skipped before media or Buffer submission. No generation or manual dispatch.",
+    "reason": "All three official lists fetched successfully; zero new candidates. Existing scheduled news slot skipped repeated content before image processing or Buffer submission. No generation or manual dispatch.",
     "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions.",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40286082970",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40298634752",
     "source_inventory_workflow_conclusion": "success"
   }
 }
