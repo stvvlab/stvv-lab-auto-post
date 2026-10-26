@@ -28,6 +28,7 @@ def scan_articles(now, session):
     year = now.year
     sources = [f'https://stvv.jp/news/{year}/',
                f'https://stvv.jp/news/game/{year}/',
+               f'https://stvv.jp/news/team/{year}/',
                f'https://stvv.jp/news/uefa-news/{year}/']
     found, checks = {}, []
     for url in sources:
