@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T20:09:47+09:00",
+  "checked_at": "2026-10-26T21:11:18.729583+09:00",
   "status": "available_and_verified",
   "mode": "ChatGPT built-in imagegen",
   "tool_success": true,
@@ -44,22 +44,24 @@
   },
   "visual_review": {
     "passed": true,
+    "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+    "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
     "exact_japanese_checked": true,
-    "opponent_and_score_pairing_checked": true,
     "crop_and_mobile_legibility_checked": true,
     "no_people_or_faces": true,
     "no_club_logos_or_official_seals": true,
     "no_invented_dates_scores_venue_or_statistics": true,
-    "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation."
+    "review_note": "Built-in imagegen complete; visually verified name 新川志音 and リーグ初先発, English, crop, legibility and caption agreement. Exact official body milestone verified; no invented evaluation, people, faces, scores, crests or photographs. Boots/touchline are symbolic artwork. This is an unused player milestone, not a repeat of the published result. Existing seven slots only; pending, fact ID, source body digest and public image-byte gates remain mandatory.",
+    "reviewed_at": "2026-10-26T20:35:58.359840+09:00"
   },
   "automation_state": {
     "built_in_generation_confirmed_in_scheduled_environment": true,
-    "ready_cards": 0,
+    "ready_cards": 1,
     "published_cards": 3,
     "unattended_generation_and_manifest_registration_verified": true,
     "regular_slot_publication_verified": true,
-    "classification": "Club Brugge ink-poster completed built-in imagegen, visual review, ready registration, existing scheduled-slot Buffer delivery and actual X text/image display verification. Future cards still require individual checks.",
-    "latest_card_regular_slot_publication_verified": true
+    "classification": "Previous Club Brugge ink-poster generation and scheduled delivery verified. Latest Shinkawa first-start card is ready; regular-slot delivery and X display remain unverified.",
+    "latest_card_regular_slot_publication_verified": false
   },
   "previous_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261023_3/",
@@ -93,10 +95,7 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T20:09:47+09:00",
-    "main_observed": "8cad0372ca75bb7797fc40c42eba7abdcafc164e",
-    "source_inventory_checked_at": "2026-10-26T20:08:44.912448+09:00",
-    "source_inventory_method": "Read-only direct fetch of all three official archives; last-seven-day article URLs compared to current main publication ledger and manifest. Sponsor category excluded per user policy. No non-sponsor unregistered URL found.",
+    "checked_at": "2026-10-26T21:11:18.729583+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -115,24 +114,28 @@
       }
     ],
     "unprepared_candidates": 0,
-    "ready_cards": 0,
+    "ready_cards": 1,
     "pending_posts": 0,
+    "weighted_length": 169,
+    "quality_findings": [],
+    "duplicate_reason": null,
+    "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+    "exact_claim_in_source": true,
+    "public_image_bytes_verified": true,
+    "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9ca2fd97373954cabdf7fe9d766f4aab6921c0ee/generated/imagegen_shinkawa_first_start_20261026.jpg",
+    "asset_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+    "public_send_performed": false,
+    "main_observed": "9ca2fd97373954cabdf7fe9d766f4aab6921c0ee",
+    "observed_slot": "2026-10-26 21:00 JST vote",
+    "observed_slot_status": "not_started_at_check",
     "new_image_generated": false,
     "new_publication": false,
-    "observed_slot": "2026-10-26 18:00 JST news",
-    "observed_slot_status": "skipped_repeated_content",
-    "last_completed_slot": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40299786771",
-    "last_completed_slot_result": "skipped_repeated_content",
-    "last_verified_publication": "https://x.com/stvvlabo/status/2114495450866712925",
-    "official_result_rechecked": "Japanese official article body re-read: league round 9, 26 October JST, Club Brugge 3–2 STVV; セヴァウイ PK and 谷口 scorers. Inconsistent minutes/substitutions not used.",
-    "tests_repeated_locally": false,
-    "scheduled_prerequisite_tests_passed": 187,
     "manual_dispatch_performed": false,
-    "reason": "No new eligible official source, ready card, pending send or posting-slot result since the verified 18:00 duplicate skip. Existing generation success evidence retained; no image, code change or manual dispatch.",
-    "supplemental_reply_transport": "unchanged_blocked; current Metricool tool catalogue exposes no existing-post reply method. No paid API, credentials or authentication actions.",
-    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40306359707",
-    "source_inventory_workflow_conclusion": "success",
-    "sponsor_urls_excluded": 8
+    "scheduled_prerequisite_tests_passed": null,
+    "main_ci_tests_passed": 203,
+    "main_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318626571",
+    "reason": "21:00 scheduled posting run has not appeared in Actions. Reviewed player milestone remains ready and passes current official-body, novelty, caption and public-image checks. No send or dispatch performed.",
+    "supplemental_reply_transport": "unchanged_blocked; nine current Metricool tools still expose no existing-post reply method"
   },
   "editorial_breadth_expansion": {
     "implemented_at": "2026-10-26T20:28:00+09:00",
@@ -177,13 +180,41 @@
       "quality_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40316864749"
     },
     "live_preflight": {
-      "checked_at": "2026-10-26T20:41:47.440366+09:00",
+      "checked_at": "2026-10-26T21:11:18.729583+09:00",
       "official_body_digest_verified": true,
       "public_image_bytes_verified": true,
       "x_length_with_tags": 169,
       "publish_called": false,
       "buffer_send_called": false,
-      "main_public_bytes_verified_at": "2026-10-26T20:43:31.345672+09:00"
+      "main_public_bytes_verified_at": "2026-10-26T20:43:31.345672+09:00",
+      "source_checks": [
+        {
+          "url": "https://stvv.jp/news/2026/",
+          "status": "ok",
+          "eligible_items": 4
+        },
+        {
+          "url": "https://stvv.jp/news/game/2026/",
+          "status": "ok",
+          "eligible_items": 3
+        },
+        {
+          "url": "https://stvv.jp/news/uefa-news/2026/",
+          "status": "ok",
+          "eligible_items": 1
+        }
+      ],
+      "unprepared_candidates": 0,
+      "ready_cards": 1,
+      "pending_posts": 0,
+      "weighted_length": 169,
+      "quality_findings": [],
+      "duplicate_reason": null,
+      "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+      "exact_claim_in_source": true,
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9ca2fd97373954cabdf7fe9d766f4aab6921c0ee/generated/imagegen_shinkawa_first_start_20261026.jpg",
+      "asset_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+      "public_send_performed": false
     },
     "next_existing_slot": "2026-10-26 21:00 JST vote",
     "manual_dispatch_performed": false,
@@ -193,7 +224,50 @@
       "Observe existing scheduled vote slot; GitHub start time may be delayed.",
       "Distinguish skipped/error/Buffer acceptance/sent/X display; never retry an unknown result.",
       "Mark only this exact milestone caption/asset published after delivery verification."
-    ]
+    ],
+    "slot_observation": {
+      "checked_at": "2026-10-26T21:11:18.729583+09:00",
+      "source_checks": [
+        {
+          "url": "https://stvv.jp/news/2026/",
+          "status": "ok",
+          "eligible_items": 4
+        },
+        {
+          "url": "https://stvv.jp/news/game/2026/",
+          "status": "ok",
+          "eligible_items": 3
+        },
+        {
+          "url": "https://stvv.jp/news/uefa-news/2026/",
+          "status": "ok",
+          "eligible_items": 1
+        }
+      ],
+      "unprepared_candidates": 0,
+      "ready_cards": 1,
+      "pending_posts": 0,
+      "weighted_length": 169,
+      "quality_findings": [],
+      "duplicate_reason": null,
+      "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+      "exact_claim_in_source": true,
+      "public_image_bytes_verified": true,
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/9ca2fd97373954cabdf7fe9d766f4aab6921c0ee/generated/imagegen_shinkawa_first_start_20261026.jpg",
+      "asset_sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
+      "public_send_performed": false,
+      "main_observed": "9ca2fd97373954cabdf7fe9d766f4aab6921c0ee",
+      "observed_slot": "2026-10-26 21:00 JST vote",
+      "observed_slot_status": "not_started_at_check",
+      "new_image_generated": false,
+      "new_publication": false,
+      "manual_dispatch_performed": false,
+      "scheduled_prerequisite_tests_passed": null,
+      "main_ci_tests_passed": 203,
+      "main_ci_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40318626571",
+      "reason": "21:00 scheduled posting run has not appeared in Actions. Reviewed player milestone remains ready and passes current official-body, novelty, caption and public-image checks. No send or dispatch performed.",
+      "supplemental_reply_transport": "unchanged_blocked; nine current Metricool tools still expose no existing-post reply method"
+    }
   },
   "previous_generation": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
