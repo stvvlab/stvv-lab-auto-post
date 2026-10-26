@@ -8,62 +8,35 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Merged PR #29: separate unused official-evidence research for player, review and participation angles.",
-    "Live body inspection produced 3 research-only drafts; all still blocked by current duplicate gate. No new image or public post.",
-    "All 193 local/CI tests passed; first scheduled research execution remains unverified."
+    "Merged PR #30: narrow reviewed first-start fact policy with official-body digest and persistent fact ID.",
+    "Generated and visually reviewed one print-collage milestone image; exact caption 169 weighted characters with tags.",
+    "203 local/CI tests passed; live official-body and immutable public-byte preflight passed. No actual Buffer send or manual dispatch; ready for existing 21:00 vote slot."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
     "date_jst": "2026-10-26",
-    "text": "⚽ 試合終了\nSTVV 2–3 クラブ・ブルージュ\nセヴァウイのPKと谷口彰悟のゴールも、敵地で惜敗。\n\n公式：https://stvv.jp/news/game/20261026_1/",
+    "text": "🌟 新川志音がリーグ初先発。\nクラブ・ブルージュ戦で先発メンバーに名を連ねました。\n今後どんなプレーに期待しますか？\n\n公式：https://stvv.jp/news/game/20261026_1/",
     "slots": [
+      "vote",
       "player",
-      "news",
-      "recap"
+      "news"
     ],
     "reviewed": true,
-    "status": "published",
-    "asset_path": "generated/imagegen_brugge_result_20261026.jpg",
-    "sha256": "63a6a2ccb49bd29d047a80db8657353bd2696a04311473464d1b59939fe66621",
+    "status": "ready",
+    "asset_path": "generated/imagegen_shinkawa_first_start_20261026.jpg",
+    "sha256": "7eaec274cd6d9d01ad7ec91a98f36e7ffc93fb4befa4c8b34588ae7743941323",
     "dimensions": [
       1448,
       1086
     ],
-    "art_direction": "ink-poster",
-    "review_note": "Built-in imagegen completed and visually reviewed 2026-10-26. Official Japanese article body read directly: away league round 9, Club Brugge 3–2 STVV; STVV-first image explicitly pairs STVV with 2 and Club Brugge with 3. Caption scorers match source. Checked Japanese 敵地で惜敗, digits, date, safe crop and legibility. No people, faces, crests, unlicensed photos, invented stats or venue likeness. Rain and stadium are expressive fictional atmosphere, not weather or venue reporting. Inconsistent source minutes/substitution details deliberately omitted. One original ink poster; not the prior fixed template. No public post created by preparation.",
-    "mode": "ChatGPT built-in imagegen",
-    "tool": "image_gen.imagegen",
-    "tool_success": true,
-    "generated_at": "2026-10-26T03:10:45.659433+09:00",
-    "raw_png_sha256": "e34b993a3b9abc1925444b82df15dc4bf99aed14d3a5d084442a1fd5a79dd780",
-    "generation_prompt": "Use case: ads-marketing. Create ONE complete high-quality independent football media result poster for STVV LAB, landscape 4:3. Original hand-inked graphic novel / premium European football magazine style. Navy and rich yellow with restrained off-white and tiny muted pink accent. No people, no faces, no humanoid characters, no official crests, no unlicensed photos, no speech bubbles, no watermark. A striking original illustration of a rain-soaked football resting near a goal net with angular stadium architecture suggested abstractly; do not claim a real venue likeness. Diagonal cinematic ink lines, subtle halftone, rich tactile print texture, calm deliberate negative space. Serious, resilient post-defeat editorial mood, no trophy, no celebration. Design around this match's narrow loss rather than fixed title boxes. Large readable typographic hierarchy. Exact text only: small masthead 'STVV LAB'; medium 'FULL TIME'; dominant score with two unmistakably paired columns, left team 'STVV' directly over '2', right team 'CLUB BRUGGE' directly over '3', an en dash between the numbers. Short Japanese headline verbatim '敵地で惜敗' in large clear crisp type, not distorted brush scribbles. Small footer '26 OCT 2026'. The STVV score is TWO, Club Brugge score THREE. Do not reverse teams or scores. Keep all text safely inside 7 percent outer margins, high contrast, legible on a mobile X feed. No other text, no invented statistics, scorers, minutes, rankings, league logos or visual numbers. Render the finished artwork including all typography.",
-    "bytes": 1299266,
-    "queued_in_manifest": true,
-    "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
-    "public_post_created": false,
-    "public_asset_bytes_verified": true,
-    "public_asset_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/b1b89c37a92f719d0b6388a93c823c5a1f8bb318/generated/imagegen_brugge_result_20261026.jpg",
-    "caption_x_length_with_fixed_tags": 145,
-    "buffer_submission_reached": false,
-    "x_display_verified": false,
-    "slot": [
-      "player",
-      "news",
-      "recap"
-    ],
-    "publication": {
-      "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40243692458",
-      "workflow_conclusion": "success",
-      "posting_result": "submitted_to_buffer",
-      "buffer_id": "6ade8cf66887a2efc12c271d",
-      "buffer_status": "sent",
-      "submitted_at": "2026-10-26T08:12:56.682729+09:00",
-      "x_url": "https://x.com/stvvlabo/status/2114495450866712925",
-      "x_text_verified": true,
-      "x_image_rendering_verified": true,
-      "x_display_verified_at": "2026-10-26T09:07:36+09:00",
-      "verification_method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
-    }
+    "art_direction": "print-collage",
+    "editorial_fact": {
+      "kind": "league_first_start",
+      "subject": "新川志音",
+      "claim": "新川志音がリーグ初先発。",
+      "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0"
+    },
+    "review_note": "Built-in imagegen complete; visually verified name 新川志音 and リーグ初先発, English, crop, legibility and caption agreement. Exact official body milestone verified; no invented evaluation, people, faces, scores, crests or photographs. Boots/touchline are symbolic artwork. This is an unused player milestone, not a repeat of the published result. Existing seven slots only; pending, fact ID, source body digest and public image-byte gates remain mandatory."
   },
   "imagegen_capability": {
     "status": "available_and_verified",
@@ -156,7 +129,7 @@
     "8aee061128fd2c70c5de4da687cc0f8add7b24c7",
     "570663c58eca9a9e7db604553450027675786300"
   ],
-  "new_generation_this_pass": false,
+  "new_generation_this_pass": true,
   "preview_this_pass": null,
   "new_publication_this_pass": false,
   "implementation_commit": "762d96822aeeed30f7ed363b38972db8d02cd6f1",
@@ -323,6 +296,40 @@
       "Support genuinely distinct verified content under a carefully scoped policy; do not simply loosen repetition checks.",
       "Built-in image generation and visual approval only for a publishable nonduplicate candidate.",
       "Verify the next scheduled research report generation separately from public posting."
+    ]
+  },
+  "reviewed_fact_delivery": {
+    "implementation_commit": "6657597c8128797a54ea770bd9b69447a62019d0",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/30",
+    "policy_scope": "Exact reviewed league_first_start claim only; no arbitrary angle or recap exception",
+    "fact_id": "cf1423218edf88bf40924cf22ebfec23e69e1d8b70c2999857f22befaf07b799",
+    "ready_cards": 1,
+    "new_publication": false,
+    "tests": {
+      "local_passed": 203,
+      "github_actions_passed": 203,
+      "github_actions_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40316864732",
+      "github_actions_conclusion": "success",
+      "visual_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40316864774",
+      "quality_ci": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40316864749"
+    },
+    "live_preflight": {
+      "checked_at": "2026-10-26T20:41:47.440366+09:00",
+      "official_body_digest_verified": true,
+      "public_image_bytes_verified": true,
+      "x_length_with_tags": 169,
+      "publish_called": false,
+      "buffer_send_called": false,
+      "main_public_bytes_verified_at": "2026-10-26T20:43:31.345672+09:00"
+    },
+    "next_existing_slot": "2026-10-26 21:00 JST vote",
+    "manual_dispatch_performed": false,
+    "buffer_acceptance_verified": false,
+    "x_display_verified": false,
+    "remaining": [
+      "Observe existing scheduled vote slot; GitHub start time may be delayed.",
+      "Distinguish skipped/error/Buffer acceptance/sent/X display; never retry an unknown result.",
+      "Mark only this exact milestone caption/asset published after delivery verification."
     ]
   }
 }
