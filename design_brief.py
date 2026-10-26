@@ -11,7 +11,6 @@ ART_DIRECTIONS = {
     "comic-cover": "Bold comic cover, one strong focal point, dimensional English title and a short Japanese accent.",
     "ink-poster": "Expressive hand-inked football poster, asymmetrical balance and generous calm negative space.",
     "print-collage": "Retro football magazine collage, cut-paper shapes, halftone and restrained editorial captions.",
-    "abstract-motion": "Abstract pop-art football movement, varied diagonals and strong typographic hierarchy.",
     "stadium-graphic": "Graphic novel empty-stadium illustration, dramatic perspective, restrained textured ink.",
 }
 
