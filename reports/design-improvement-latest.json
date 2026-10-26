@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T11:08:35+09:00",
+  "updated_at": "2026-10-26T12:04:21+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -239,9 +239,11 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-26T11:08:35+09:00",
-    "main_observed": "6977e827190a40364497c63ad365e7db3c2c0682",
-    "source_inventory_checked_at": "2026-10-26T10:24:44.691800+09:00",
+    "checked_at": "2026-10-26T12:04:21+09:00",
+    "main_observed": "4d565b752af54613d6f9271a14edf4fe3d4cfb58",
+    "source_inventory_checked_at": "2026-10-26T11:13:22.062383+09:00",
+    "source_inventory_workflow": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40257997060",
+    "source_inventory_workflow_conclusion": "success",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -277,8 +279,11 @@
       "note": "Production python stvv_post.py step; mock test output excluded."
     },
     "last_verified_publication": "https://x.com/stvvlabo/status/2114495450866712925",
+    "official_result_rechecked": "Belgian league round 9, Club Brugge 3–2 STVV; scorers セヴァウイ and 谷口",
     "tests_repeated": false,
-    "supplemental_reply_transport": "unchanged_blocked; no reply tool newly exposed; no paid API or authentication actions."
+    "next_regular_slot": "2026-10-26 12:30 JST data",
+    "reason": "No new unposted sources; all existing reviewed images published. No code, image, caption, dispatch or ledger changes.",
+    "supplemental_reply_transport": "unchanged_blocked; no new reply-capable tool. No paid API, login or credential actions."
   },
   "last_verified_publication": {
     "slot": "2026-10-26 08:00 JST player",
