@@ -222,3 +222,17 @@ status reconciliation requires the same image ID, caption, channel and due time.
 A replacement image or missing saved image identity stops before a publication
 entry is added; it never causes a resend. Public X image verification remains
 a separate required observation.
+
+## Additional entrypoint observed on 2026-10-27
+
+Main commit 5a527affff2dcc562d8ca5a05fa2999e794d0382 adds
+reserve_on_approval.py and reserve-on-approved-card.yml. A manifest push to main
+can reserve at most one reviewed image for the same seven future publication
+times, reusing advance_reservations.run and the stvv-auto-post concurrency group.
+This is an additional reservation trigger, not an additional public posting time.
+No dispatch or pilot was performed during this check.
+
+Run 40383673544 was a pull_request check: its tests passed and its reserve job
+was skipped. It does not prove a real manifest-push reservation, Buffer acceptance,
+or X display. Queue ready=0 and the last regular posting outcome is still the
+2026-10-26 recap skip; retain the implemented/configured, live-unverified status.

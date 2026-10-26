@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-27T05:11:05.617104+09:00",
+  "implementation_commit": "5a527affff2dcc562d8ca5a05fa2999e794d0382",
+  "workflow": ".github/workflows/reserve-on-approved-card.yml",
+  "entrypoint": "reserve_on_approval.py",
+  "trigger": "push to main changing editorial/imagegen_cards.json",
+  "publication_times_added": false,
+  "manual_dispatch_performed": false,
+  "observed_workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40383673544",
+  "observed_event": "pull_request",
+  "test_job_conclusion": "success",
+  "reserve_job_conclusion": "skipped",
+  "local_focused_tests_passed": 28,
+  "local_focused_tests_scope": "Mocked early-entrypoint and existing reservation safety; not a real reservation",
+  "live_trigger_execution_verified": false,
+  "live_reservation_acceptance_verified": false,
+  "x_display_verified": false,
+  "ready_cards": 0
+}
