@@ -1,5 +1,6 @@
 import copy
 import unittest
+from unittest.mock import patch
 
 import supplemental_replies as replies
 
@@ -11,7 +12,8 @@ SOURCE = "https://stvv.jp/news/uefa-news/20261023_1/"
 
 def history():
     return {
-        "publication_log": [{"key": "approved", "source": SOURCE}],
+        "publication_log": [{"key": "approved", "source": SOURCE,
+                             "text": "verified original caption", "buffer_id": "fixture-buffer"}],
         "pending_replies": {},
         "used_reply_keys": [],
         "reply_publication_log": [],
@@ -31,6 +33,15 @@ def candidate():
 
 
 class SupplementalReplyTests(unittest.TestCase):
+    def setUp(self):
+        self.mapping = {'parent_key': 'approved', 'parent_x_url': PARENT_URL,
+                        'parent_post_id': PARENT_ID, 'owner': 'stvvlabo',
+                        'verified': True, 'source_url': SOURCE,
+                        'parent_text': 'verified original caption', 'buffer_id': 'fixture-buffer'}
+        patcher = patch.object(replies, 'read_parent_registry', return_value=[self.mapping])
+        self.registry = patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_parent_must_be_own_verified_publication(self):
         for field, value in [("parent_x_url", "https://x.com/other/status/123"),
                              ("parent_post_id", "123"), ("parent_key", "missing")]:
@@ -81,6 +92,31 @@ class SupplementalReplyTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "blocked_no_reply_transport"):
             replies.require_reply_transport()
         self.assertEqual(state, original)
+
+    def test_unrelated_own_status_cannot_borrow_a_parent_key(self):
+        item = candidate()
+        item['parent_post_id'] = '2113922269583917472'
+        item['parent_x_url'] = 'https://x.com/stvvlabo/status/2113922269583917472'
+        with self.assertRaises(replies.ReplyValidationError):
+            replies.validate_candidate(item, history())
+
+    def test_changed_parent_evidence_blocks_before_pending(self):
+        for field, value in [('parent_text', 'different caption'), ('buffer_id', 'other'),
+                             ('source_url', 'https://stvv.jp/news/game/20261026_1/'),
+                             ('verified', False)]:
+            state = history()
+            original = copy.deepcopy(state)
+            mapping = dict(self.mapping, **{field: value})
+            self.registry.return_value = [mapping]
+            with self.subTest(field=field), self.assertRaises(replies.ReplyValidationError):
+                replies.stage_pending(state, candidate(), lambda _: self.fail('must not persist'))
+            self.assertEqual(state, original)
+
+    def test_missing_or_ambiguous_parent_registry_blocks(self):
+        for mappings in [[], [self.mapping, self.mapping]]:
+            self.registry.return_value = mappings
+            with self.subTest(count=len(mappings)), self.assertRaises(replies.ReplyValidationError):
+                replies.validate_candidate(candidate(), history())
 
 
 if __name__ == "__main__":

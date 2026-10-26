@@ -8,7 +8,39 @@
       "parent_post_id": "2113772119062372376",
       "owner": "stvvlabo",
       "verified": true,
-      "source_url": "https://stvv.jp/news/uefa-news/20261023_1/"
+      "source_url": "https://stvv.jp/news/uefa-news/20261023_1/",
+      "parent_text": "⚽ STVV、敵地で1–0勝利！\nミッティランを下し、欧州大会2連勝。\n\n公式：https://stvv.jp/news/uefa-news/20261023_1/\n#STVV #シントトロイデン",
+      "buffer_id": "6adbeb4e8b3d437ddc8df023"
+    },
+    {
+      "parent_key": "daily_2026-10-24_news",
+      "parent_x_url": "https://x.com/stvvlabo/status/2113922269583917472",
+      "parent_post_id": "2113922269583917472",
+      "owner": "stvvlabo",
+      "verified": true,
+      "source_url": "https://stvv.jp/news/game/20261023_3/",
+      "parent_text": "📢 UEFAカンファレンスリーグ第4節、HNKハイドゥク・スプリト戦は無観客で開催されます。\n\nSTVVは渡航手配済みのサポーター対応などを検討中です。\n\n公式：https://stvv.jp/news/game/20261023_3/\n\n#STVV #シントトロイデン",
+      "buffer_id": "6adc77250b5343d07074efd5",
+      "verification_evidence": {
+        "manifest_asset": "generated/imagegen_hajduk_closed_doors_20261024.jpg",
+        "x_display_verified_at": "2026-10-24T18:59:00+09:00",
+        "method": "Previously verified public X text and image; recorded in published manifest"
+      }
+    },
+    {
+      "parent_key": "daily_2026-10-26_player",
+      "parent_x_url": "https://x.com/stvvlabo/status/2114495450866712925",
+      "parent_post_id": "2114495450866712925",
+      "owner": "stvvlabo",
+      "verified": true,
+      "source_url": "https://stvv.jp/news/game/20261026_1/",
+      "parent_text": "⚽ 試合終了\nSTVV 2–3 クラブ・ブルージュ\nセヴァウイのPKと谷口彰悟のゴールも、敵地で惜敗。\n\n公式：https://stvv.jp/news/game/20261026_1/\n\n#STVV #シントトロイデン",
+      "buffer_id": "6ade8cf66887a2efc12c271d",
+      "verification_evidence": {
+        "manifest_asset": "generated/imagegen_brugge_result_20261026.jpg",
+        "x_display_verified_at": "2026-10-26T09:07:36+09:00",
+        "method": "Public X detail page DOM and rendered screenshot; exact caption/source and STVV 2–3 CLUB BRUGGE image confirmed."
+      }
     }
   ],
   "replies": []
