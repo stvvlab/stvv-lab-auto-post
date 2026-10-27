@@ -69,9 +69,11 @@ def plan(history, now):
             reason = (','.join(sorted(problems)) if problems else
                       prepared_duplicate_reason(history, message, source, slot, due))
             card = exact_card(slot, text, source)
-            if (card and 'fixture_preview' in card
-                    and canonical_source(source) in {canonical_source(url) for url in history.get('news', [])}):
-                reason = 'fixture_source_already_marked_used_reconcile_history'
+            if card and 'fixture_preview' in card:
+                if not isinstance(history.get('news'), list):
+                    reason = 'fixture_source_ledger_missing'
+                elif canonical_source(source) in {canonical_source(url) for url in history['news']}:
+                    reason = 'fixture_source_already_marked_used_reconcile_history'
             if card and date.fromisoformat(card['date_jst']) > now.astimezone(JST).date():
                 reason = 'future_article_date'
             if reason or card is None:
