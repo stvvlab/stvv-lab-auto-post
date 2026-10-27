@@ -6,12 +6,25 @@ send a post, or waive the normal duplicate and Buffer checks.
 """
 import hashlib
 import re
+import unicodedata
 from datetime import date, datetime, timedelta
 from urllib.parse import urlparse
 
 SHA256 = re.compile(r"[a-f0-9]{64}\Z")
 ARTICLE = re.compile(r"/news/(?:event|game)/(\d{8})_[^/]+/\Z")
-CLOCK = re.compile(r"(?<!\d)\d{1,2}:\d{2}(?!\d)")
+CLOCK = re.compile(
+    r"(?<!\\d)(?:[01]?\\d|2[0-3]):[0-5]\\d(?!\\d)"
+    r"|(?:午前|午後)\\s*(?:[01]?\\d|2[0-3])\\s*時(?:[0-5]?\\d\\s*分)?"
+    r"|(?<!\\d)(?:[01]?\\d|2[0-3])\\s*時(?:[0-5]?\\d\\s*分)?"
+)
+
+
+def contains_kickoff_claim(text):
+    """No clock or start-time claim in a preview with disputed kickoff."""
+    normalized = unicodedata.normalize("NFKC", text)
+    return bool(CLOCK.search(normalized)) or any(
+        term in normalized for term in ("キックオフ", "開始時刻", "試合開始", "試合開始時間")
+    )
 
 
 def reviewed_fixture_date(card, now, body=None):
@@ -53,8 +66,7 @@ def reviewed_fixture_date(card, now, body=None):
             or len(date_label.strip()) < 4 or source not in caption
             or date_label not in excerpt or opponent not in excerpt
             or "STVV" not in caption or opponent not in caption
-            or date_label not in caption or CLOCK.search(caption)
-            or "キックオフ" in caption or "開始時刻" in caption):
+            or date_label not in caption or contains_kickoff_claim(caption)):
         return None
     # Require a human-reviewed date label with the exact fixture month/day.
     if date_label != f"{fixture.month}月{fixture.day}日":
