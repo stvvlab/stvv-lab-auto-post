@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-10-27T16:25:37.922773+09:00",
+  "status": "fixture_evidence_available",
+  "source_url": "https://stvv.jp/game/2026-2027/",
+  "candidates": [
+    {
+      "fixture_id": "4d838512b1a84f78180c0196",
+      "competition": "Belgian Pro League",
+      "round": 10,
+      "kickoff_jst": "2026-11-02T00:00:00+09:00",
+      "venue": "HOME",
+      "opponent": "OHルーベン",
+      "source_url": "https://stvv.jp/game/2026-2027/",
+      "evidence": "Official Japanese STVV match schedule; kickoff displayed in JST",
+      "reviewed": false,
+      "status": "fixture_evidence_only",
+      "can_publish": false,
+      "remaining": [
+        "Check official schedule again before publishing",
+        "Reconcile earlier articles and X/Buffer for this fixture",
+        "Approve a unique factual caption and rights-safe original image",
+        "Implement and test a separate strict fixture publishing gate"
+      ],
+      "design_direction": "Navy/yellow editorial fixture card; varied composition, no score or invented lineup. A caricatured real player requires verified reference, rights review and explicit visual approval."
+    }
+  ],
+  "image_generation_performed": false,
+  "publication_performed": false,
+  "note": "Draft-only evidence; does not bypass used-source, image approval, duplicate or reservation gates."
+}
