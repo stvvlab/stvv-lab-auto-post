@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T13:10:18.940264+09:00",
+  "updated_at": "2026-10-27T14:07:35.043130+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T13:10:18.940264+09:00",
+    "checked_at": "2026-10-27T14:07:35.043130+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -247,7 +247,7 @@
     ],
     "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
     "last_regular_result": "skipped_no_verified_content",
-    "actual_posting_step_checked": true,
+    "actual_posting_step_checked": false,
     "last_regular_start_delay_seconds": 1892,
     "reservation_mode_regular_run_observed": true,
     "next_existing_slot_jst": "2026-10-27T15:30:00+09:00",
@@ -266,7 +266,7 @@
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
     },
-    "latest_regular_result_evidence": "Actual production posting-step log and persisted per-run record; mocked test logs excluded.",
+    "latest_regular_result_evidence": "No later STVV Auto Post run in fresh Actions listing. Previously verified 12:30-slot skip remains latest; next existing slot 15:30 JST.",
     "tests_run_this_check": false,
     "regular_slot_observation": {
       "checked_at": "2026-10-27T13:10:18.940264+09:00",
@@ -830,5 +830,18 @@
     "x_display_verified": false,
     "prerequisite_tests_passed": 293,
     "classification": "Correct empty-queue skip, not a live reservation or public delivery."
+  },
+  "creative_preview_bridge_observation": {
+    "checked_at": "2026-10-27T14:07:35.043130+09:00",
+    "implementation_commit": "0d373e5",
+    "documentation": "docs/creative-preview-bridge.md",
+    "mode": "Manual original-artwork handoff into a Pillow review poster",
+    "built_in_imagegen_executed": false,
+    "preview_created_this_check": false,
+    "production_ready": false,
+    "manifest_changed": false,
+    "buffer_called": false,
+    "paid_api_used": false,
+    "note": "Requires supplied original art; review-only packet cannot substitute for content-specific built-in finished image, freshness, novelty and visual approval. No eligible new information, so no image generated solely to fill a slot."
   }
 }
