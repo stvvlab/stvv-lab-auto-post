@@ -3,7 +3,7 @@ name: STVV LAB Discovery Brief
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', '.github/workflows/discovery-brief.yml']
+    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'fixture_schedule_inventory.py', 'tests/test_fixture_schedule_inventory.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', '.github/workflows/discovery-brief.yml']
   schedule:
     - cron: "30 22 * * *" # JST 07:30
     - cron: "40 * * * *" # Read-only candidate preparation, hourly; never publishes
@@ -48,7 +48,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install requests beautifulsoup4 pillow
-      - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research -v
+      - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research tests.test_fixture_schedule_inventory -v
 
   preparation:
     needs: inventory-tests
@@ -66,6 +66,10 @@ jobs:
       - name: Collect unused evidence for editorial review without publishing
         if: always()
         run: python editorial_research.py
+      - name: Collect official upcoming fixture evidence without publishing
+        if: always()
+        continue-on-error: true
+        run: python fixture_schedule_inventory.py
       - name: Surface publishing supply blockers
         if: always()
         run: |
@@ -75,6 +79,7 @@ jobs:
           from pathlib import Path
           inventory = Path("reports/preparation-latest.json")
           research = Path("reports/editorial-research-latest.json")
+          fixtures = Path("reports/fixture-schedule-latest.json")
           manifest = Path("editorial/imagegen_cards.json")
           lines = ["## STVV LAB publishing supply", ""]
           if not inventory.exists():
@@ -102,6 +107,14 @@ jobs:
               except (ValueError, OSError, TypeError) as error:
                   lines.append(f"- Evidence unreadable ({type(error).__name__}); check artifacts.")
           lines.append(f"- Editorial research report: {'available' if research.exists() else 'missing'}")
+          if fixtures.exists():
+              try:
+                  future = json.loads(fixtures.read_text(encoding="utf-8"))
+                  lines.append(f"- Upcoming fixture evidence (not approved): {len(future.get('candidates', []))}")
+              except (ValueError, OSError):
+                  lines.append("- Upcoming fixture evidence unreadable; review preparation logs.")
+          else:
+              lines.append("- Upcoming fixture evidence unavailable; check fixture preparation step.")
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
               out.write("\n".join(lines) + "\n")
           print("\n".join(lines))
@@ -114,6 +127,7 @@ jobs:
           path: |
             reports/preparation-latest.json
             reports/editorial-research-latest.json
+            reports/fixture-schedule-latest.json
           retention-days: 14
       - name: Save latest preparation evidence
         if: always()
@@ -121,6 +135,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reports/preparation-latest.json reports/editorial-research-latest.json
+          if [ -f reports/fixture-schedule-latest.json ]; then
+            git add reports/fixture-schedule-latest.json
+          fi
           if ! git diff --cached --quiet; then
             git commit -m "Update official source preparation inventory"
             git pull --rebase origin main
