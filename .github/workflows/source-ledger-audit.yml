@@ -1,0 +1,28 @@
+name: STVV source ledger audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 7 * * *' # 16:15 JST, GitHub scheduling may be delayed
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test source audit
+        run: python -m unittest discover -s tests -p 'test_source_ledger_audit.py'
+      - name: Check source ledger without publishing
+        run: python source_ledger_audit.py --output reports/source-ledger-audit.json
+      - name: Preserve findings
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-ledger-audit
+          path: reports/source-ledger-audit.json
+          retention-days: 14
