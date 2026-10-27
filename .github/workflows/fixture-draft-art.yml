@@ -27,13 +27,13 @@ jobs:
         run: |
           python fixture_watch.py
           python fixture_draft_art.py
-      - name: Upload preview for editorial review, never publish
+      - name: Upload three concepts and contact sheet for editorial review, never publish
         if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v4
         with:
           name: fixture-draft-preview-${{ github.run_id }}
           path: |
-            generated/fixture_draft_preview.png
+            generated/fixture_draft_preview*.png
             reports/fixture-draft-preview.json
             reports/fixture-watch-latest.json
           if-no-files-found: warn
