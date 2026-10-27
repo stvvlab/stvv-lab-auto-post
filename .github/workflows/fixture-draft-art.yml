@@ -1,6 +1,14 @@
 name: STVV Adobe-free Fixture Draft Artwork
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'fixture_draft_art.py'
+      - 'fixture_watch.py'
+      - 'tests/test_fixture_draft_art.py'
+      - 'tests/test_fixture_watch.py'
+      - '.github/workflows/fixture-draft-art.yml'
   schedule:
     - cron: "20 0 * * *"  # 09:20 JST, review-only; no publication
   pull_request:
@@ -23,7 +31,7 @@ jobs:
       - name: Validate draft generator without network
         run: python -m unittest tests.test_fixture_draft_art -v
       - name: Refresh official fixture evidence on live runs
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         run: python fixture_watch.py
       - name: Create unapproved previews from checked fixture evidence
         run: python fixture_draft_art.py
