@@ -95,7 +95,7 @@ def parse_uefa_fixtures(markup, now):
     text = re.sub(r'\s+', ' ', soup.get_text(' ', strip=True)).strip()
     if '試合時間は日本時間の表記' not in text:
         raise ValueError('Official schedule JST notice missing')
-    if 'UEFAカンファレンスリーグ' not in text or 'BELGIAN CUP' not in text:
+    if 'UEFAカンファレンスリーグ' not in text:
         raise ValueError('Official UEFA section not found')
     sections = [part.split('BELGIAN CUP', 1)[0]
                 for part in text.split('UEFAカンファレンスリーグ')[1:]]
