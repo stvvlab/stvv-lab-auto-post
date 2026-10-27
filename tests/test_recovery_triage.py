@@ -11,7 +11,16 @@ class RecoveryTriageTests(unittest.TestCase):
         self.assertEqual(data["ready_reviewed_cards"], 0)
         self.assertIn("approved_ready_assets_zero", data["problems"])
         self.assertIn("github_start_delayed_over_30_minutes", data["problems"])
+        self.assertNotIn("scheduled_delivery_skipped", data["problems"])
+        self.assertNotIn("image_verification_blocked", data["problems"])
         self.assertFalse(data["publishing_attempted"])
+
+    def test_image_verification_skip_is_a_real_blocker(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "has_candidates"},
+                        {"status": "skipped_image_verification", "run_id": "124"})
+        self.assertIn("image_verification_blocked", data["problems"])
+        self.assertEqual(data["status"], "needs_recovery")
 
     def test_safe_pending_assets_do_not_claim_x_published(self):
         data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
