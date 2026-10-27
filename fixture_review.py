@@ -51,6 +51,7 @@ def reviewed_fixture_date(card, now, body=None):
             or not isinstance(digest, str) or not SHA256.fullmatch(digest)
             or len(opponent.strip()) < 3 or len(excerpt.strip()) < 15
             or len(date_label.strip()) < 4 or source not in caption
+            or date_label not in excerpt or opponent not in excerpt
             or "STVV" not in caption or opponent not in caption
             or date_label not in caption or CLOCK.search(caption)
             or "キックオフ" in caption or "開始時刻" in caption):
@@ -60,7 +61,7 @@ def reviewed_fixture_date(card, now, body=None):
         return None
     if body is not None:
         if (not isinstance(body, str) or excerpt not in body
-                or opponent not in body
+                or opponent not in body or date_label not in body
                 or hashlib.sha256(body.encode("utf-8")).hexdigest() != digest):
             return None
     return fixture
