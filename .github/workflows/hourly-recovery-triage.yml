@@ -1,0 +1,75 @@
+name: STVV hourly recovery triage
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '13 * * * *'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: stvv-recovery-triage
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test recovery checks
+        run: python -m unittest discover -s tests -p 'test_recovery_triage.py'
+      - name: Diagnose last persisted delivery and preparation
+        run: python recovery_triage.py
+      - name: Save evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: stvv-recovery-triage
+          path: reports/recovery-triage-latest.json
+          retention-days: 7
+      - name: Open or update one recovery issue without reposting
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+
+          data = json.load(open('reports/recovery-triage-latest.json', encoding='utf-8'))
+          if data['status'] != 'needs_recovery':
+              print('No known blocker; no issue mutation')
+              raise SystemExit(0)
+
+          title = '[Automation] STVV LAB posting recovery blocker'
+          body = ('Automated read-only triage; this is NOT evidence of X publication.\n\n'
+                  + 'Detected: ' + ', '.join(data['problems']) + '\n\n'
+                  + 'Ready images: ' + str(data['ready_reviewed_cards']) + '\n'
+                  + 'Delivery: ' + str(data['last_delivery_status']) + '\n'
+                  + 'Recorded run: ' + str(data['delivery_run_id']) + '\n'
+                  + 'Suggested remediation: ' + data['next_fix'] + '\n\n'
+                  + 'Requires controlled code/image work and validation. '
+                  + 'No auto-merge, no Buffer action, no duplicate retry.\n')
+          def gh(*args):
+              return subprocess.check_output(['gh', *args], text=True).strip()
+          results = json.loads(gh('issue', 'list', '--state', 'open', '--limit', '100',
+                                  '--json', 'number,title'))
+          matches = [r for r in results if r['title'] == title]
+          if matches:
+              number = str(matches[0]['number'])
+              existing = gh('issue', 'view', number, '--json', 'body', '--jq', '.body')
+              if existing == body.rstrip('\n'):
+                  print('Existing issue unchanged:', number)
+              else:
+                  gh('issue', 'edit', number, '--body', body)
+                  print('Updated issue:', number)
+          else:
+              print('Opened issue:', gh('issue', 'create', '--title', title, '--body', body))
+          PY
