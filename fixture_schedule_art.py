@@ -59,6 +59,8 @@ def validated_fixture(report, now):
         raise ValueError("Timezone-aware now required")
     if report.get("source_url") != SOURCE:
         raise ValueError("Unrecognized official schedule source")
+    if report.get("status") not in ("fixture_evidence_available", "no_upcoming_unrecorded_league_fixture"):
+        raise ValueError("Unverified official schedule inventory status")
     valid = []
     for item in report["candidates"]:
         if not isinstance(item, dict):
