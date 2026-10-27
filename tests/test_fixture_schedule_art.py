@@ -74,8 +74,10 @@ class DynamicFixtureArtTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             result = prepare(REPORT, tmp, NOW)
             with Image.open(result["variants"][1]["path"]) as image:
-                self.assertNotEqual(image.getpixel((170, 330)), (255, 219, 40))
+                # The new bulb center is below the title; the old center was
+                # y=330 and collided with the headline glyphs.
                 self.assertEqual(image.getpixel((170, 470)), (255, 219, 40))
+                self.assertNotEqual(image.getpixel((170, 400)), (255, 219, 40))
 
     def test_stale_persisted_report_never_creates_artwork(self):
         with tempfile.TemporaryDirectory() as tmp:
