@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "draft_unapproved",
+  "reviewed": false,
+  "source_url": "https://stvv.jp/game/2026-2027/",
+  "source_kind": "official_season_schedule",
+  "fixture_date_jst": "2026-11-06",
+  "opponent": "SKブラン",
+  "home_away": "HOME",
+  "kickoff_jst": "05:00",
+  "slots": [
+    "news"
+  ],
+  "text": "⚽ 次の欧州戦はホームでSKブランと対戦！\n11月6日（金）午前5時（日本時間）キックオフ予定。\n注目するポイントは？\n\n公式日程：https://stvv.jp/game/2026-2027/",
+  "asset_path": null,
+  "needs": [
+    "最新日程の再確認",
+    "過去投稿とBuffer予約の重複照合",
+    "オリジナル画像制作・目視審査",
+    "画像ハッシュとサイズ登録",
+    "承認manifestへの明示的登録"
+  ],
+  "auto_publish": false,
+  "notes": "This is editorial draft metadata only. Never register as reviewed/ready or send without source recheck and asset review. Date corresponds to Nov 5 20:00 Belgium."
+}
