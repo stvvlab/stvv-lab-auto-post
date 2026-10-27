@@ -30,6 +30,13 @@ class ScheduleInventoryTests(unittest.TestCase):
         self.assertEqual(original['fixture_id'], changed['fixture_id'])
         self.assertNotEqual(original['kickoff_jst'], changed['kickoff_jst'])
 
+    def test_competition_navigation_tabs_do_not_hide_real_fixtures(self):
+        nav = '<nav>BELGIAN PRO LEAGUE UEFAカンファレンスリーグ BELGIAN CUP</nav>'
+        result = inventory.parse_fixtures(
+            HTML.replace('<h2>BELGIAN PRO LEAGUE</h2>',
+                         nav + '<h2>BELGIAN PRO LEAGUE</h2>'), NOW)
+        self.assertEqual([x['opponent'] for x in result], ['OHルーベン'])
+
     def test_no_timezone_notice_fails_closed(self):
         with self.assertRaises(ValueError):
             inventory.parse_fixtures(HTML.replace('試合時間は日本時間の表記', 'Times TBD'), NOW)
