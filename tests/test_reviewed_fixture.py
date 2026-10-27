@@ -67,6 +67,14 @@ class ReviewedFixtureTests(unittest.TestCase):
         history["publication_log"].append({"key": "old", "source": SOURCE, "text": TEXT})
         self.assertEqual(plan(history, NOW)["proposals"], [])
 
+    def test_historical_used_source_blocks_even_without_publication_log(self):
+        history = {"news": [SOURCE], "used_posts": [], "pending_posts": {},
+                   "reserved_posts": {}, "publication_log": []}
+        result = plan(history, NOW)
+        self.assertEqual(result["proposals"], [])
+        self.assertIn("fixture_source_already_marked_used_reconcile_history",
+                      [x.get("reason") for x in result["blocked"]])
+
     def test_fails_closed_on_changed_body_or_metadata(self):
         self.assertIsNone(reviewed_fixture_date(self.card, NOW, BODY + "改訂"))
         for field, value in [
