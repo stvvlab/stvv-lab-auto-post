@@ -115,7 +115,8 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T16:03:28.109326+09:00",
+    "checked_at": "2026-10-27T17:12:46.613206+09:00",
+    "main_revision": "52d2d9ef28be3bda2916d3458c8a69ea9a0cc750",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -138,59 +139,29 @@
         "eligible_items": 1
       }
     ],
-    "source_inventory_status": "no_unposted_candidate_in_scanned_lists",
-    "unprepared_candidates": 0,
+    "new_eligible_news_candidates": 0,
+    "research_drafts": 2,
+    "research_publishable": false,
     "ready_cards": 0,
-    "published_cards": 4,
     "pending_posts": 0,
     "reserved_posts": 0,
-    "research_only_drafts": 2,
-    "research_source_checks": [
-      {
-        "source_url": "https://stvv.jp/news/game/20261026_1/",
-        "status": "ok"
-      },
-      {
-        "source_url": "https://stvv.jp/news/game/20261023_3/",
-        "status": "ok"
-      }
-    ],
-    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
-    "last_regular_result": "skipped_no_verified_content",
-    "actual_posting_step_checked": false,
-    "last_regular_start_delay_seconds": 1892,
-    "reservation_mode_regular_run_observed": true,
-    "next_existing_slot_jst": "2026-10-27T18:00:00+09:00",
-    "next_slot_start_not_guaranteed": true,
-    "imagegen_retest_performed": false,
-    "image_generated": false,
-    "send_performed": false,
-    "new_publication": false,
-    "supplemental_reply_sender_available": false,
-    "supplemental_reply_drafts": 1,
-    "supplemental_reply_sent": false,
-    "code_changed_this_check": false,
-    "historical_claim_conflict_confirmed": true,
-    "club_news_check": {
-      "url": "https://stvv.com/nl/nieuws",
-      "latest_listing_date": "2026-10-26",
-      "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
+    "new_image_generated": false,
+    "new_reservation_sent": false,
+    "manual_dispatch_performed": false,
+    "paid_api_used": false,
+    "local_tests_run": false,
+    "builtin_capability_evidence_sha256_rechecked": true,
+    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40466551214",
+    "last_regular_status": "skipped_no_verified_content",
+    "last_regular_started_at": "2026-10-27T16:21:14.582141+09:00",
+    "last_regular_delay_seconds": 3074,
+    "live_reservation_to_x_verified": false,
+    "reply_transport_available": false,
+    "reply_tool_catalog_checked": {
+      "metricool_tools": 9,
+      "existing_x_reply_tool_found": false
     },
-    "latest_regular_result_evidence": "No later STVV Auto Post run observed; last actual outcome remains verified 12:30-slot empty-queue skip.",
-    "tests_run_this_check": true,
-    "regular_slot_observation": {
-      "scheduled_at": "2026-10-27T15:30:00+09:00",
-      "checked_at": "2026-10-27T16:03:28.109326+09:00",
-      "status": "run_not_observed_in_actions",
-      "posting_step_outcome": null,
-      "cause": "not_identified",
-      "manual_dispatch_performed": false,
-      "new_buffer_acceptance_observed": false
-    },
-    "discovery_observed_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40459285785",
-    "discovery_status_at_initial_check": "in_progress; separate from publishing",
-    "local_focused_tests_passed": 4,
-    "tests_scope": "Read-only source-ledger audit only; no transport calls"
+    "note": "All four official news listings and two recent article bodies read. No new eligible news; no quota image or reservation. Empty-queue skip is not a publishing failure; startup delay remains measured, cause unknown. Existing reply drafts and source-conflict correction remain unsent."
   },
   "editorial_breadth_expansion": {
     "implemented_at": "2026-10-26T20:28:00+09:00",
@@ -765,12 +736,12 @@
     "note": "These are Buffer-reported values last updated Oct 26 14:30 JST, not a real-time X observation. Five heterogeneous posts do not establish a design effect or causality. No reply transport added."
   },
   "latest_regular_reservation_mode_execution": {
-    "checked_at": "2026-10-27T13:10:18.940264+09:00",
-    "run_id": "40447383388",
-    "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
-    "scheduled_at": "2026-10-27T12:30:00+09:00",
-    "started_at": "2026-10-27T13:01:32.026167+09:00",
-    "start_delay_seconds": 1892,
+    "checked_at": "2026-10-27T17:12:46.613206+09:00",
+    "run_id": "40466551214",
+    "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40466551214",
+    "scheduled_at": "2026-10-27T15:30:00+09:00",
+    "started_at": "2026-10-27T16:21:14.582141+09:00",
+    "start_delay_seconds": 3074,
     "delivery_mode": "advance_reservations",
     "status": "skipped_no_verified_content",
     "actual_posting_step_log_checked": true,
@@ -779,8 +750,7 @@
     "new_publications": 0,
     "buffer_acceptance_verified": false,
     "x_display_verified": false,
-    "prerequisite_tests_passed": 293,
-    "classification": "Correct empty-queue skip, not a live reservation or public delivery."
+    "classification": "Correct empty-queue skip, not an actual reservation or public delivery. Startup reason remains unknown."
   },
   "creative_preview_bridge_observation": {
     "checked_at": "2026-10-27T14:07:35.043130+09:00",
@@ -824,5 +794,37 @@
     "listing_url_count": 2,
     "fresh_article_count": 0,
     "interpretation": "All ten dated orphan entries are 24–40 days old; two entries are listing URLs. This audit does not identify an eligible fresh source falsely blocked by news history. Buffer/X reconciliation is still needed before any historical correction."
+  },
+  "fixture_schedule_preparation_observation": {
+    "checked_at": "2026-10-27T17:12:46.613206+09:00",
+    "implementation_commit": "52d2d9ef28be3bda2916d3458c8a69ea9a0cc750",
+    "source_url": "https://stvv.jp/game/2026-2027/",
+    "official_page_text_sha256": "a7ab058f1c73bef2f5303abe05062506e5a19847a1a9121af497fe45340ef369",
+    "body_read": true,
+    "observed_fixtures": [
+      {
+        "competition": "Belgian Pro League",
+        "opponent": "OHルーベン",
+        "date_jst": "2026-11-02",
+        "date_time_jst": "2026-11-02T00:00:00+09:00",
+        "home_away": "HOME",
+        "publishable": false,
+        "blocker": "Schedule source path has only an offline fixture gate; kickoff-source contradiction remains unreconciled."
+      },
+      {
+        "competition": "UEFA Conference League",
+        "opponent": "SKブラン",
+        "date_jst": "2026-11-06",
+        "home_away": "HOME",
+        "publishable": false,
+        "blocker": "November 6 fixture is 10 days ahead; draft is unapproved, has no image and schedule-source live delivery is not integrated."
+      }
+    ],
+    "new_generation_performed": false,
+    "production_ready": false,
+    "preview_mode": "Pillow review-only artwork",
+    "builtin_imagegen_success_claimed": false,
+    "manifest_changed": false,
+    "note": "Fresh official season page read; upcoming fixture evidence is separate from fresh news. Preserve current strict novelty and freshness gates; do not promote draft previews to approved images."
   }
 }
