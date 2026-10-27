@@ -39,7 +39,14 @@ def parse_fixtures(markup, now):
         raise ValueError('Official schedule JST notice missing')
     if 'BELGIAN PRO LEAGUE' not in text or 'UEFAカンファレンスリーグ' not in text:
         raise ValueError('Official competition sections not found')
-    league = text.split('BELGIAN PRO LEAGUE', 1)[1].split('UEFAカンファレンスリーグ', 1)[0]
+    # The page contains competition *tabs* before the actual fixture sections.
+    # The first heading pair can be navigation with no matches at all.
+    sections = [part.split('UEFAカンファレンスリーグ', 1)[0]
+                for part in text.split('BELGIAN PRO LEAGUE')[1:]]
+    league = next((part for part in sections if 'KICKOFF' in part
+                   and re.search(r'第\d+節', part)), None)
+    if league is None:
+        raise ValueError('Official league fixture section not found')
     pattern = re.compile(
         r'第(?P<round>\d{1,2})節\s+(?P<year>20\d{2})\s+'
         r'(?P<month>\d{1,2})\.(?P<day>\d{1,2})\s+'
