@@ -14,6 +14,7 @@ import stvv_post as publisher
 from buffer_reservations import BufferReservations, ReservationRejected
 from content_guard import canonical_source, plain
 from editorial_novelty import fact_metadata
+from fixture_review import reviewed_fixture_date
 from preparation_inventory import read_body
 from prepared_media import exact_card, prepared_media, prepared_duplicate_reason
 from reservation_preview import plan, future_slots
@@ -118,6 +119,8 @@ def run(history, now, client, save, session):
     body = read_body(session, source)
     if not body:
         raise RuntimeError('Official source body could not be verified')
+    if 'fixture_preview' in card and reviewed_fixture_date(card, due, body) is None:
+        raise RuntimeError('Reviewed fixture evidence changed or match is no longer upcoming')
     fact = fact_metadata(card, due) if 'editorial_fact' in card else None
     if 'editorial_fact' in card and (not fact or fact['claim'] not in body
             or hashlib.sha256(body.encode()).hexdigest() != fact['source_body_sha256']):
