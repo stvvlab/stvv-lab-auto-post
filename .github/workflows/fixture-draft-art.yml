@@ -14,7 +14,9 @@ on:
   pull_request:
     paths:
       - 'fixture_draft_art.py'
+      - 'fixture_watch.py'
       - 'tests/test_fixture_draft_art.py'
+      - 'tests/test_fixture_watch.py'
       - '.github/workflows/fixture-draft-art.yml'
 permissions:
   contents: read
