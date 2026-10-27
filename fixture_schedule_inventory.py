@@ -60,8 +60,10 @@ def parse_fixtures(markup, now):
             continue
         if not now.astimezone(JST) < kickoff <= now.astimezone(JST) + timedelta(days=7):
             continue
-        key = (f"jpl|{data['round']}|{kickoff.isoformat()}|"
-               f"{data['venue'].upper()}|{opponent}")
+        # A kickoff reschedule or opponent spelling change must not create a
+        # fresh publication identity for the same league round.
+        season = int(data['year']) if int(data['month']) >= 7 else int(data['year']) - 1
+        key = f"jpl|{season}-{season + 1}|round:{int(data['round'])}"
         results.append({
             'fixture_id': hashlib.sha256(key.encode()).hexdigest()[:24],
             'competition': 'Belgian Pro League',
