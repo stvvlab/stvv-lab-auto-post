@@ -32,6 +32,29 @@ class FixtureDraftArtTests(unittest.TestCase):
             self.assertFalse(info['buffer_called'])
             self.assertTrue(json.loads(metadata.read_text())['sha256'])
 
+    def test_three_distinct_variants_and_contact_sheet_are_generated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / 'draft.png'
+            metadata = Path(tmp) / 'draft.json'
+            info = prepare(REPORT, output, metadata, date(2026, 10, 27))
+            self.assertEqual(len(info['variants']), 3)
+            self.assertEqual(len({v['sha256'] for v in info['variants']}), 3)
+            self.assertEqual(
+                [v['concept'] for v in info['variants']],
+                ['editorial-poster', 'split-duel', 'stadium-lines'])
+            for variant in info['variants']:
+                self.assertTrue(Path(variant['image_path']).is_file())
+                self.assertFalse(variant['reviewed'])
+                self.assertFalse(variant['can_publish'])
+                with Image.open(variant['image_path']) as image:
+                    self.assertEqual(image.size, (1200, 1500))
+            with Image.open(info['contact_sheet']) as sheet:
+                self.assertEqual(sheet.size, (1180, 560))
+            persisted = json.loads(metadata.read_text())
+            self.assertEqual(len(persisted['variants']), 3)
+            self.assertFalse(persisted['can_publish'])
+            self.assertFalse(persisted['buffer_called'])
+
     def test_incomplete_source_blocks_preview(self):
         data = dict(REPORT, status='source_incomplete_block_kickoff')
         with self.assertRaises(ValueError):

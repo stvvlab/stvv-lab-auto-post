@@ -22,18 +22,18 @@ jobs:
       - run: python -m pip install pillow requests beautifulsoup4
       - name: Validate draft generator without network
         run: python -m unittest tests.test_fixture_draft_art -v
-      - name: Fetch official fixture evidence and create unapproved preview
+      - name: Refresh official fixture evidence on live runs
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: |
-          python fixture_watch.py
-          python fixture_draft_art.py
-      - name: Upload preview for editorial review, never publish
-        if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        run: python fixture_watch.py
+      - name: Create unapproved previews from checked fixture evidence
+        run: python fixture_draft_art.py
+      - name: Upload three concepts and contact sheet for editorial review, never publish
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: fixture-draft-preview-${{ github.run_id }}
           path: |
-            generated/fixture_draft_preview.png
+            generated/fixture_draft_preview*.png
             reports/fixture-draft-preview.json
             reports/fixture-watch-latest.json
           if-no-files-found: warn
