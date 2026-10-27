@@ -23,6 +23,13 @@ class ScheduleInventoryTests(unittest.TestCase):
         self.assertEqual(fixtures[0]['kickoff_jst'], '2026-11-02T00:00:00+09:00')
         self.assertEqual(fixtures[0]['venue'], 'HOME')
 
+    def test_reschedule_does_not_create_new_fixture_identity(self):
+        original = inventory.parse_fixtures(HTML, NOW)[0]
+        updated = HTML.replace('11.2 00:00', '11.3 01:00').replace('OHルーベン', 'OHルーヴェン')
+        changed = inventory.parse_fixtures(updated, NOW)[0]
+        self.assertEqual(original['fixture_id'], changed['fixture_id'])
+        self.assertNotEqual(original['kickoff_jst'], changed['kickoff_jst'])
+
     def test_no_timezone_notice_fails_closed(self):
         with self.assertRaises(ValueError):
             inventory.parse_fixtures(HTML.replace('試合時間は日本時間の表記', 'Times TBD'), NOW)
