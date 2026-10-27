@@ -116,6 +116,9 @@ def run(history, now, client, save, session):
         raise RuntimeError('Reviewed card or target slot changed')
     if card['date_jst'].replace('-', '') not in source:
         raise RuntimeError('Official source date does not match reviewed card')
+    if ('fixture_preview' in card and canonical_source(source) in
+            {canonical_source(url) for url in history['news']}):
+        raise RuntimeError('Fixture source already marked used; reconcile history before publishing')
     body = read_body(session, source)
     if not body:
         raise RuntimeError('Official source body could not be verified')
