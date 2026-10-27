@@ -7,6 +7,7 @@ from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 from PIL import Image
+from fixture_review import reviewed_fixture_date
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / 'editorial/imagegen_cards.json'
@@ -77,9 +78,16 @@ def prepared_candidates(slot, now):
         parsed = urlparse(source)
         if parsed.scheme != 'https' or parsed.netloc != 'stvv.jp' or not parsed.path.startswith('/news/'):
             continue
-        day = date.fromisoformat(card['date_jst'])
+        try:
+            day = date.fromisoformat(card['date_jst'])
+        except (KeyError, ValueError, TypeError):
+            continue
         text = card.get('text')
-        if 0 <= (now.date() - day).days <= 7 and isinstance(text, str) and source in text:
+        if 'fixture_preview' in card:
+            fresh = reviewed_fixture_date(card, now) is not None
+        else:
+            fresh = 0 <= (now.date() - day).days <= 7
+        if fresh and isinstance(text, str) and source in text:
             result.append((text, source))
     return result
 
@@ -110,6 +118,13 @@ def prepared_media(session, slot, message, source):
         if (fact['claim'] not in body
                 or hashlib.sha256(body.encode()).hexdigest() != fact['source_body_sha256']):
             raise ValueError('Official body or reviewed fact changed; re-review required')
+    if 'fixture_preview' in card:
+        from datetime import datetime
+        from stvv_post import JST
+        from preparation_inventory import read_body
+        body = read_body(session, source)
+        if reviewed_fixture_date(card, datetime.now(JST), body) is None:
+            raise ValueError('Reviewed fixture date or official article evidence changed')
     path = Path(card['asset_path'])
     if path.is_absolute() or path.parent != Path('generated') or path.suffix not in {'.png', '.jpg'}:
         raise ValueError('Prepared asset must be directly under generated/')
