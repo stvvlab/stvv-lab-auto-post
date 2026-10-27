@@ -59,13 +59,20 @@ class ReviewedFixtureTests(unittest.TestCase):
         self.assertEqual(prepared_media.prepared_candidates("news", NOW + timedelta(days=1)), [(TEXT, SOURCE)])
 
     def test_fixture_does_not_bypass_duplicate_gate(self):
-        history = {"used_posts": [], "pending_posts": {}, "publication_log": []}
+        history = {"news": [], "used_posts": [], "pending_posts": {}, "publication_log": []}
         proposal = plan(history, NOW)["proposals"][0]
         self.assertEqual(proposal["slot"], "news")
         self.assertEqual(proposal["due_jst"], "2026-10-27T18:00:00+09:00")
         self.assertEqual(proposal["source_url"], SOURCE)
         history["publication_log"].append({"key": "old", "source": SOURCE, "text": TEXT})
         self.assertEqual(plan(history, NOW)["proposals"], [])
+
+    def test_missing_news_ledger_cannot_be_treated_as_unused(self):
+        history = {"used_posts": [], "pending_posts": {}, "publication_log": []}
+        result = plan(history, NOW)
+        self.assertEqual(result["proposals"], [])
+        self.assertIn("fixture_source_ledger_missing",
+                      [x.get("reason") for x in result["blocked"]])
 
     def test_historical_used_source_blocks_even_without_publication_log(self):
         history = {"news": [SOURCE], "used_posts": [], "pending_posts": {},
