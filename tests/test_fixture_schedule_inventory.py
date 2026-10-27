@@ -82,6 +82,66 @@ class ScheduleInventoryTests(unittest.TestCase):
         belgium = datetime(2026, 11, 1, 16, tzinfo=ZoneInfo('Europe/Brussels'))
         self.assertEqual(belgium.astimezone(inventory.JST).isoformat(), '2026-11-02T00:00:00+09:00')
 
+
+    def test_uefa_fixture_is_discovered_from_actual_section(self):
+        # On Nov 1, the Nov 6 European fixture enters the seven-day window.
+        now = datetime(2026, 11, 1, 12, tzinfo=inventory.JST)
+        fixtures = inventory.parse_uefa_fixtures(HTML, now)
+        self.assertEqual(len(fixtures), 1)
+        self.assertEqual(fixtures[0]['opponent'], 'SKブラン')
+        self.assertEqual(fixtures[0]['competition'], 'UEFA Conference League')
+        self.assertEqual(fixtures[0]['kickoff_jst'], '2026-11-06T05:00:00+09:00')
+
+    def test_uefa_is_separate_from_league_and_never_approved(self):
+        now = datetime(2026, 11, 1, 12, tzinfo=inventory.JST)
+        response = Mock(text=HTML, url=URL)
+        response.raise_for_status.return_value = None
+        history = {'publication_log': [], 'pending_posts': {}, 'reserved_posts': {}}
+        report = inventory.build_inventory(history, now, Mock(get=Mock(return_value=response)))
+        self.assertEqual({x['competition'] for x in report['candidates']},
+                         {'Belgian Pro League', 'UEFA Conference League'})
+        self.assertEqual(len({x['fixture_id'] for x in report['candidates']}), 2)
+        self.assertTrue(all(not x['can_publish'] and not x['reviewed']
+                            for x in report['candidates']))
+
+    def test_uefa_duplicate_identity_and_timezone_notice(self):
+        now = datetime(2026, 11, 1, 12, tzinfo=inventory.JST)
+        uefa = inventory.parse_uefa_fixtures(HTML, now)[0]
+        response = Mock(text=HTML, url=URL)
+        response.raise_for_status.return_value = None
+        history = {'publication_log': [{'fixture_id': uefa['fixture_id']}]}
+        report = inventory.build_inventory(history, now, Mock(get=Mock(return_value=response)))
+        self.assertEqual([x['competition'] for x in report['candidates']],
+                         ['Belgian Pro League'])
+        with self.assertRaises(ValueError):
+            inventory.parse_uefa_fixtures(
+                HTML.replace('試合時間は日本時間の表記', 'Unspecified timezone'), now)
+
+    def test_malformed_uefa_section_keeps_league_fixture_and_warns(self):
+        # A partial official page must not suppress valid league evidence.
+        broken = HTML.replace('KICKOFF HOME VS.SKブラン', 'TIME TBC HOME VS.SKブラン')
+        now = datetime(2026, 11, 1, 12, tzinfo=inventory.JST)
+        response = Mock(text=broken, url=URL)
+        response.raise_for_status.return_value = None
+        history = {'publication_log': [], 'pending_posts': {}, 'reserved_posts': {}}
+        report = inventory.build_inventory(history, now, Mock(get=Mock(return_value=response)))
+        self.assertEqual([x['competition'] for x in report['candidates']],
+                         ['Belgian Pro League'])
+        self.assertEqual(report['source_warnings'][0]['competition'],
+                         'UEFA Conference League')
+        self.assertEqual(report['source_warnings'][0]['status'], 'section_unavailable')
+        self.assertTrue(all(not x['can_publish'] for x in report['candidates']))
+
+    def test_both_competitions_have_no_warnings(self):
+        now = datetime(2026, 11, 1, 12, tzinfo=inventory.JST)
+        response = Mock(text=HTML, url=URL)
+        response.raise_for_status.return_value = None
+        history = {'publication_log': [], 'pending_posts': {}, 'reserved_posts': {}}
+        report = inventory.build_inventory(history, now, Mock(get=Mock(return_value=response)))
+        self.assertEqual(report['source_warnings'], [])
+        self.assertEqual({x['competition'] for x in report['candidates']},
+                         {'Belgian Pro League', 'UEFA Conference League'})
+
     def test_season_rollover(self):
         self.assertEqual(inventory.schedule_url(datetime(2027, 1, 2, tzinfo=inventory.JST)), URL)
 
