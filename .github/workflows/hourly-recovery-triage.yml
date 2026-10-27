@@ -53,7 +53,7 @@ jobs:
                   + 'Detected: ' + ', '.join(data['problems']) + '\n\n'
                   + 'Ready images: ' + str(data['ready_reviewed_cards']) + '\n'
                   + 'Delivery: ' + str(data['last_delivery_status']) + '\n'
-                  + 'Recorded run: ' + str(data['delivery_run_id']) + '\n'
+                  + 'Evidence: https://github.com/' + os.environ['GH_REPO'] + '/blob/main/reports/delivery-latest.json\n'
                   + 'Suggested remediation: ' + data['next_fix'] + '\n\n'
                   + 'Requires controlled code/image work and validation. '
                   + 'No auto-merge, no Buffer action, no duplicate retry.\n')
