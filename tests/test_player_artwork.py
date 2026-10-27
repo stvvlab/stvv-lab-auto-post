@@ -2,7 +2,7 @@ import hashlib
 import tempfile
 import unittest
 from pathlib import Path
-from player_artwork import prepare_player_artwork
+from player_artwork import prepare_player_artwork, prepare_player_preview_brief
 
 class PlayerArtworkTest(unittest.TestCase):
     def setUp(self):
@@ -45,6 +45,38 @@ class PlayerArtworkTest(unittest.TestCase):
         self.manifest["reference_photo"] = "../file.png"
         with self.assertRaises(ValueError):
             prepare_player_artwork(self.manifest, root=self.root)
+
+    def test_first_pass_brief_does_not_require_approved_portrait(self):
+        preview = {
+            "player_name": "Taiga Hata",
+            "profile_url": "https://stvv.jp/team-member/taiga-hata/",
+            "reference_photo": "source.png",
+        }
+        result = prepare_player_preview_brief(preview, root=self.root)
+        self.assertEqual(result["status"], "unapproved_first_pass_brief")
+        self.assertFalse(result["publication_allowed"])
+        self.assertFalse(result["image_generation_performed"])
+        self.assertFalse(result["likeness_approved"])
+        self.assertEqual(result["reference_photo_sha256"], hashlib.sha256(b"photo").hexdigest())
+        self.assertIn("two-heads-tall", result["prompt"])
+        self.assertIn("actual image-to-image input", result["prompt"])
+        self.assertIn("lawfully", result["required_review"][0])
+        self.assertNotIn("approved_portrait", result)
+
+    def test_first_pass_brief_rejects_bad_reference_or_profile(self):
+        preview = {
+            "player_name": "Taiga Hata",
+            "profile_url": "https://stvv.jp/team-member/taiga-hata/",
+            "reference_photo": "source.png",
+        }
+        for path in ("../source.png", "missing.png", "source.txt"):
+            with self.subTest(path=path):
+                with self.assertRaises(ValueError):
+                    prepare_player_preview_brief({**preview, "reference_photo": path}, root=self.root)
+        with self.assertRaises(ValueError):
+            prepare_player_preview_brief({**preview, "profile_url": "https://example.com/player"}, root=self.root)
+        with self.assertRaises(ValueError):
+            prepare_player_preview_brief({**preview, "player_name": ""}, root=self.root)
 
 if __name__ == "__main__":
     unittest.main()

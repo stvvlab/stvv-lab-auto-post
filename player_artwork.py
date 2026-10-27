@@ -62,18 +62,69 @@ def prepare_player_artwork(manifest, *, root="."):
         "required_review": ["image-to-image reference actually supplied", "recognizable likeness", "portrait identity fidelity", "copyright and image-use permission", "text and number accuracy", "mobile crop", "explicit final human review"],
     }
 
+def prepare_player_preview_brief(manifest, *, root="."):
+    """Prepare a first-pass likeness brief without requiring a preapproved portrait.
+
+    This returns text instructions only. The reference image must actually be
+    supplied to an image-to-image tool later; no tool is called here.
+    """
+    if not isinstance(manifest, dict) or not official_profile(manifest.get("profile_url", "")):
+        raise ValueError("A specific HTTPS stvv.jp player profile is required")
+    for field in ("player_name", "reference_photo"):
+        if not isinstance(manifest.get(field), str) or not manifest[field].strip():
+            raise ValueError("Missing required field: " + field)
+    root = Path(root).resolve()
+    candidate = (root / manifest["reference_photo"]).resolve()
+    if (candidate == root or root not in candidate.parents or not candidate.is_file()
+            or candidate.suffix.lower() not in (".png", ".jpg", ".jpeg", ".webp")):
+        raise ValueError("Missing or unsafe player reference")
+    return {
+        "status": "unapproved_first_pass_brief",
+        "player": manifest["player_name"],
+        "official_profile": manifest["profile_url"],
+        "reference_photo": str(candidate.relative_to(root)),
+        "reference_photo_sha256": file_hash(candidate),
+        "image_generation_performed": False,
+        "publication_allowed": False,
+        "likeness_approved": False,
+        "prompt": (
+            "Use the supplied player reference image as an actual image-to-image input. "
+            "Create a wildly expressive, deliberately strange-but-cute football caricature: "
+            "two-heads-tall, enormously oversized head, extremely tiny body. "
+            "Preserve the player's identifiable face geometry, hairline, hairstyle, "
+            "eyebrows, nose and mouth from the actual reference; do not invent a generic face. "
+            "STVV LAB navy and yellow, dynamic comic editorial style, no speech bubbles. "
+            "No logos, sponsors, jersey numbers, scores, dates, fake text or watermarks. "
+            "Keep a safe crop and space for separately verified editorial text. "
+            "This is an UNAPPROVED REVIEW DRAFT, not a publication asset."
+        ),
+        "required_review": [
+            "confirm reference image may lawfully be used for this derivative work",
+            "confirm the reference image was actually passed to image-to-image generation",
+            "verify player likeness, hair, face, and distinctive features",
+            "verify body proportions and appealing visual variety",
+            "verify safe crop and no invented identifiers or text",
+            "obtain explicit final image approval before adding any ready card",
+            "hash the approved output bytes and independently verify public image delivery",
+        ],
+    }
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--manifest", required=True)
+    p.add_argument("--brief-for-review", action="store_true",
+                   help="Create unapproved first-pass instructions from a local player reference")
     p.add_argument("--root", default=".")
     p.add_argument("--output", default="reports/player-caricature-brief.json")
     args = p.parse_args()
     manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
-    result = prepare_player_artwork(manifest, root=args.root)
+    result = (prepare_player_preview_brief(manifest, root=args.root)
+              if args.brief_for_review else prepare_player_artwork(manifest, root=args.root))
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print("Unreviewed artwork brief written. No generation or X posting performed.")
+    print("Unapproved artwork instructions written. No image generation, Buffer call or X posting performed.")
 
 if __name__ == "__main__":
     main()
