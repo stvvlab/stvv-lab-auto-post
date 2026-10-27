@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T09:06:17.090736+09:00",
+  "updated_at": "2026-10-27T10:09:44.278654+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T09:06:17.090736+09:00",
+    "checked_at": "2026-10-27T10:09:44.278654+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -247,7 +247,7 @@
     ],
     "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40418810614",
     "last_regular_result": "skipped_no_verified_content",
-    "actual_posting_step_checked": true,
+    "actual_posting_step_checked": false,
     "last_regular_start_delay_seconds": 1118,
     "reservation_mode_regular_run_observed": true,
     "next_existing_slot_jst": "2026-10-27T10:30:00+09:00",
@@ -266,7 +266,7 @@
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
     },
-    "latest_regular_result_evidence": "Actual production posting-step log and persisted per-run record; mocked test logs excluded.",
+    "latest_regular_result_evidence": "No later STVV Auto Post run in fresh Actions listing; retain previously verified 08:18 empty-queue result.",
     "tests_run_this_check": false,
     "regular_slot_observation": {
       "checked_at": "2026-10-27T09:06:17.090736+09:00",
@@ -776,11 +776,18 @@
     "classification": "First regular reservation-mode execution observed; correctly skipped empty reviewed queue. Not a live reservation or publication success."
   },
   "fixture_preview_classification": {
-    "implementation_commit": "a0b7172",
+    "checked_at": "2026-10-27T10:09:44.278654+09:00",
     "mode": "Pillow geometric review-only preview",
+    "implementation_commit": "2039fc4",
+    "observed_workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40430065274",
+    "observed_job_conclusion": "success",
+    "observed_run_generated_single_preview": true,
+    "observed_run_uses_latest_three_variant_implementation": false,
+    "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40430065274/artifacts/12701731408",
     "built_in_imagegen_success": false,
     "production_ready": false,
     "generated_this_check": false,
-    "note": "Separate draft artwork must not substitute for content-specific built-in imagegen or enter the ready manifest without the required workflow."
+    "new_reservation_sent": false,
+    "note": "Historical single-preview scheduled run, not evidence that newer three-variant workflow ran. No ready manifest or publication created. Never use this drawing as built-in imagegen success or a production fallback."
   }
 }
