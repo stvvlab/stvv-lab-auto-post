@@ -19,6 +19,9 @@ on:
   pull_request:
     paths:
       - 'fixture_draft_art.py'
+      - 'fixture_schedule_art.py'
+      - 'fixture_schedule_inventory.py'
+      - 'tests/test_fixture_schedule_art.py'
       - 'fixture_creative_preview.py'
       - 'tests/test_fixture_creative_preview.py'
       - 'fixture_watch.py'
