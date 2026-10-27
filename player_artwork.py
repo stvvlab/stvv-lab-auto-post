@@ -56,7 +56,7 @@ def prepare_player_artwork(manifest, *, root="."):
         "approved_portrait_sha256": actual,
         "style": "STVV LAB navy/yellow comic editorial, no speech bubbles",
         "art_direction": "Oversized 2-head-tall caricature, extremely large head and tiny body; expressive playful crazy face. Preserve the exact approved facial identity, eyebrows, nose, lips, hair texture and silhouette. Only expression and body proportions may change. Avoid unrelated monsters and excessive captions.",
-        "prompt": "Use the approved portrait as an actual image reference (not text-only recreation). Preserve recognizable facial geometry and curly hair. Create a 2-head-tall, intentionally unbalanced STVV LAB football caricature in navy/yellow comic style. Exaggerate expression only. No invented numbers, sponsors, matches, crests or statistics. Leave information text to a verified separate layout stage.",
+        "prompt": "Use the approved portrait as an actual image reference (not text-only recreation). Preserve recognizable facial geometry, hair texture, hairline, and silhouette exactly as shown in the approved portrait; never invent hair type or facial traits. Create a 2-head-tall, intentionally unbalanced STVV LAB football caricature in navy/yellow comic style. Exaggerate expression only. No invented numbers, sponsors, matches, crests or statistics. Leave information text to a verified separate layout stage.",
         "verified_jersey_number": label,
         "publication_allowed": False,
         "required_review": ["image-to-image reference actually supplied", "recognizable likeness", "portrait identity fidelity", "copyright and image-use permission", "text and number accuracy", "mobile crop", "explicit final human review"],
