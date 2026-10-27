@@ -70,6 +70,15 @@ class DynamicFixtureArtTests(unittest.TestCase):
         self.assertIsNone(validated_fixture(
             REPORT, datetime(2026, 11, 3, tzinfo=timezone.utc)))
 
+    def test_stadium_lights_do_not_cover_fixture_headline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = prepare(REPORT, tmp, NOW)
+            with Image.open(result["variants"][1]["path"]) as image:
+                # The new bulb center is below the title; the old center was
+                # y=330 and collided with the headline glyphs.
+                self.assertEqual(image.getpixel((170, 470)), (255, 219, 40))
+                self.assertNotEqual(image.getpixel((170, 400)), (255, 219, 40))
+
     def test_stale_persisted_report_never_creates_artwork(self):
         with tempfile.TemporaryDirectory() as tmp:
             stale = dict(REPORT, checked_at="2026-10-27T12:00:00+09:00")

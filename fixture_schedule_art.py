@@ -116,11 +116,13 @@ def render(fixture, path, variant):
         d.rectangle((0, 0, W, 20), fill=YELLOW)
     elif variant == 1:
         # Abstract stadium floodlights, no claim about the actual venue.
+        # Keep yellow floodlight bulbs below the round headline; the first
+        # live artifact showed them covering the word FIXTURE.
         for cx in (170, 1030):
             for r in (85, 160, 250, 350):
-                d.ellipse((cx-r, 350-r, cx+r, 350+r), outline=(31, 69, 100), width=8)
+                d.ellipse((cx-r, 440-r, cx+r, 440+r), outline=(31, 69, 100), width=8)
             for dx in (-48, 0, 48):
-                d.ellipse((cx+dx-18, 330-18, cx+dx+18, 330+18), fill=YELLOW)
+                d.ellipse((cx+dx-18, 470-18, cx+dx+18, 470+18), fill=YELLOW)
         for y in range(1120, 1500, 62):
             d.line((0, y, W, y), fill=(31, 69, 100), width=4)
         d.rounded_rectangle((54, 590, 1146, 1200), radius=32, fill=(9, 27, 51),
