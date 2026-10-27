@@ -132,6 +132,26 @@ class ScheduleInventoryTests(unittest.TestCase):
         self.assertEqual(report['source_warnings'][0]['status'], 'section_unavailable')
         self.assertTrue(all(not x['can_publish'] for x in report['candidates']))
 
+    def test_missing_uefa_heading_preserves_league_and_warns(self):
+        # A missing European heading must not discard a verified league row.
+        broken = HTML.replace('<h2>UEFAカンファレンスリーグ</h2>',
+                              '<h2>BELGIAN CUP</h2>')
+        response = Mock(text=broken, url=URL)
+        response.raise_for_status.return_value = None
+        history = {'publication_log': [], 'pending_posts': {}, 'reserved_posts': {}}
+        report = inventory.build_inventory(history, NOW, Mock(get=Mock(return_value=response)))
+        self.assertEqual([x['opponent'] for x in report['candidates']], ['OHルーベン'])
+        self.assertEqual(report['source_warnings'][0]['status'], 'section_unavailable')
+        self.assertTrue(all(not x['can_publish'] for x in report['candidates']))
+
+    def test_cup_rows_cannot_leak_into_league_without_uefa_heading(self):
+        # Even if a cup row resembles a league row, the cup section is a hard boundary.
+        broken = HTML.replace(
+            '<h2>UEFAカンファレンスリーグ</h2><div>第3節 2026 11.6 05:00 KICKOFF HOME VS.SKブラン</div>',
+            '<h2>BELGIAN CUP</h2><div>第12節 2026 11.3 05:00 KICKOFF HOME VS.カップ相手 DAZN</div>')
+        fixtures = inventory.parse_fixtures(broken, NOW)
+        self.assertEqual([x['opponent'] for x in fixtures], ['OHルーベン'])
+
     def test_both_competitions_have_no_warnings(self):
         now = datetime(2026, 11, 1, 12, tzinfo=inventory.JST)
         response = Mock(text=HTML, url=URL)
