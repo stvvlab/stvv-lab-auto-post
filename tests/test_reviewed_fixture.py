@@ -103,6 +103,18 @@ class ReviewedFixtureTests(unittest.TestCase):
         modified["reviewed"] = False
         self.assertIsNone(reviewed_fixture_date(modified, NOW, BODY))
 
+    def test_disputed_kickoff_cannot_leak_through_japanese_or_fullwidth_clock(self):
+        # Official sources disagree; kickoff_omitted requires a time-free caption.
+        for claim in ("16:00", "１６：００", "午後4時", "16時00分",
+                      "午前5時", "試合開始", "キックオフ", "開始時刻"):
+            with self.subTest(claim=claim):
+                changed = copy.deepcopy(self.card)
+                changed["text"] += " " + claim
+                self.assertIsNone(reviewed_fixture_date(changed, NOW, BODY))
+        # The reviewed date-only wording is still allowed.
+        self.assertEqual(reviewed_fixture_date(self.card, NOW, BODY).isoformat(),
+                         "2026-11-01")
+
     def test_live_reservation_checks_body_before_buffer(self):
         history = {"news": [], "used_posts": [], "pending_posts": {},
                    "reserved_posts": {}, "publication_log": []}
