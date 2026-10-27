@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'fixture_draft_art.py'
+      - 'fixture_creative_preview.py'
+      - 'tests/test_fixture_creative_preview.py'
       - 'fixture_watch.py'
       - 'tests/test_fixture_draft_art.py'
       - 'tests/test_fixture_watch.py'
@@ -14,6 +16,8 @@ on:
   pull_request:
     paths:
       - 'fixture_draft_art.py'
+      - 'fixture_creative_preview.py'
+      - 'tests/test_fixture_creative_preview.py'
       - 'fixture_watch.py'
       - 'tests/test_fixture_draft_art.py'
       - 'tests/test_fixture_watch.py'
@@ -31,7 +35,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install pillow requests beautifulsoup4
       - name: Validate draft generator without network
-        run: python -m unittest tests.test_fixture_draft_art -v
+        run: python -m unittest tests.test_fixture_draft_art tests.test_fixture_creative_preview -v
       - name: Refresh official fixture evidence on live runs
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         run: python fixture_watch.py
