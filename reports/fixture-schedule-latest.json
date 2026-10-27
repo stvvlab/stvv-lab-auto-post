@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-28T02:21:07.264706+09:00",
+  "checked_at": "2026-10-28T03:15:09.721187+09:00",
   "status": "fixture_evidence_available",
   "source_url": "https://stvv.jp/game/2026-2027/",
   "candidates": [
@@ -24,6 +24,7 @@
       "design_direction": "Navy/yellow editorial fixture card; varied composition, no score or invented lineup. A caricatured real player requires verified reference, rights review and explicit visual approval."
     }
   ],
+  "source_warnings": [],
   "image_generation_performed": false,
   "publication_performed": false,
   "note": "Draft-only evidence; does not bypass used-source, image approval, duplicate or reservation gates."
