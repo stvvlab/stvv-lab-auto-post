@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'fixture_draft_art.py'
+      - 'fixture_schedule_art.py'
+      - 'fixture_schedule_inventory.py'
+      - 'tests/test_fixture_schedule_art.py'
       - 'fixture_creative_preview.py'
       - 'tests/test_fixture_creative_preview.py'
       - 'fixture_watch.py'
@@ -16,6 +19,9 @@ on:
   pull_request:
     paths:
       - 'fixture_draft_art.py'
+      - 'fixture_schedule_art.py'
+      - 'fixture_schedule_inventory.py'
+      - 'tests/test_fixture_schedule_art.py'
       - 'fixture_creative_preview.py'
       - 'tests/test_fixture_creative_preview.py'
       - 'fixture_watch.py'
@@ -34,6 +40,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install pillow requests beautifulsoup4
+      - name: Install Japanese font for dynamic opponent names
+        run: bash scripts/install-card-font.sh
+      - name: Validate dynamic fixture artwork without network
+        run: python -m unittest tests.test_fixture_schedule_art -v
       - name: Validate draft generator without network
         run: python -m unittest tests.test_fixture_draft_art tests.test_fixture_creative_preview -v
       - name: Refresh official fixture evidence on live runs
@@ -41,7 +51,13 @@ jobs:
         run: python fixture_watch.py
       - name: Create unapproved previews from checked fixture evidence
         run: python fixture_draft_art.py
-      - name: Upload three concepts and contact sheet for editorial review, never publish
+      - name: Refresh official league schedule for reusable artwork
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+        run: python fixture_schedule_inventory.py
+      - name: Generate dynamic opponent-specific unapproved artwork
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+        run: python fixture_schedule_art.py
+      - name: Upload all unapproved artwork concepts and review packets, never publish
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -50,5 +66,8 @@ jobs:
             generated/fixture_draft_preview*.png
             reports/fixture-draft-preview.json
             reports/fixture-watch-latest.json
+            generated/fixture_schedule_review/*.png
+            reports/fixture-schedule-review.json
+            reports/fixture-schedule-latest.json
           if-no-files-found: warn
           retention-days: 14
