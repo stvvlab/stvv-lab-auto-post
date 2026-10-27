@@ -20,6 +20,7 @@ def read_ledger(path):
 
 def queue_snapshot(root, history, now, slot):
     from prepared_media import prepared_duplicate_reason
+    from fixture_review import reviewed_fixture_date
     manifest = json.loads((root / 'editorial/imagegen_cards.json').read_text())
     candidates = []
     for card in manifest.get('cards', []):
@@ -33,7 +34,10 @@ def queue_snapshot(root, history, now, slot):
         else:
             try:
                 day = datetime.fromisoformat(card['date_jst']).date()
-                if not 0 <= (now.date() - day).days <= 7:
+                if 'fixture_preview' in card:
+                    if reviewed_fixture_date(card, now) is None:
+                        reason = 'invalid_or_expired_reviewed_fixture'
+                elif not 0 <= (now.date() - day).days <= 7:
                     reason = 'outside_freshness_window'
                 elif publisher.x_length(card['text'] + publisher.HASHTAGS) > 270:
                     reason = 'over_safe_x_length'
