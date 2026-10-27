@@ -29,6 +29,42 @@ class FixtureScheduleGateTest(unittest.TestCase):
         self.assertEqual(self.check(h={**HISTORY,"pending_posts":{"x":{"fixture_identity":BASE["fixture_identity"]}}}),"fixture_already_sent_or_pending")
     def test_kickoff_conflict_blocked(self):
         self.assertEqual(self.check({**BASE,"text":BASE["text"]+" キックオフ午前5時"}),"unverified_kickoff")
+    def test_unverified_numeric_and_fullwidth_times_are_blocked(self):
+        for time in ("16:00", "１６：００", "午後4時", "16時00分"):
+            with self.subTest(time=time):
+                self.assertEqual(
+                    self.check({**BASE, "text": BASE["text"] + " " + time}),
+                    "unverified_kickoff"
+                )
+
+    def test_verified_flag_alone_cannot_authorize_time(self):
+        self.assertEqual(
+            self.check({**BASE, "text": BASE["text"] + " 16:00",
+                        "kickoff_verified": True}),
+            "kickoff_evidence_missing"
+        )
+
+    def test_verified_time_requires_exact_source_excerpt(self):
+        card = {**BASE, "text": BASE["text"] + " 16:00",
+                "kickoff_verified": True,
+                "kickoff_evidence_excerpt": "11月6日 STVV SKブラン 16:00"}
+        self.assertEqual(
+            self.check(card, e="11月6日 STVV SKブラン 15:00"),
+            "kickoff_evidence_missing"
+        )
+        self.assertIsNone(self.check(card, e="11月6日 STVV SKブラン 16:00"))
+
+    def test_conflicting_official_kickoff_blocks_even_reviewed_time(self):
+        card = {**BASE, "text": BASE["text"] + " 16:00",
+                "kickoff_verified": True, "kickoff_conflict": True,
+                "kickoff_evidence_excerpt": "11月6日 STVV SKブラン 16:00"}
+        self.assertEqual(
+            self.check(card, e="11月6日 STVV SKブラン 16:00"),
+            "conflicting_kickoff_sources"
+        )
+        # The same fixture without a clock claim is still eligible offline.
+        self.assertIsNone(self.check({**card, "text": BASE["text"]}))
+
     def test_shared_schedule_url_needs_unique_identity(self):
         self.assertEqual(self.check({**BASE,"fixture_identity":"shared"}),"missing_unique_fixture_identity")
     def test_image_required(self):
