@@ -1,0 +1,30 @@
+name: STVV offline reservation preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install preview dependencies
+        run: python -m pip install 'Pillow>=10,<13' 'requests>=2.31,<3'
+      - name: Produce offline-only reservation preview
+        env:
+          BUFFER_ACCESS_TOKEN: ''
+          BUFFER_API_KEY: ''
+        run: python reservation_preview.py --output reports/reservation-preview-latest.json
+      - name: Upload diagnostic report
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-reservation-preview
+          path: reports/reservation-preview-latest.json
+          retention-days: 14
