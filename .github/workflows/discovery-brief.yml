@@ -61,14 +61,6 @@ jobs:
           response.raise_for_status()
           fixtures = parse_fixtures(response.text, now)
           print("LIVE_FIXTURE_PARSE_OK", [(x["opponent"], x["kickoff_jst"]) for x in fixtures])
-          if not fixtures:
-              import re
-              from bs4 import BeautifulSoup
-              plain = re.sub(r"\\s+", " ", BeautifulSoup(response.text, "html.parser").get_text(" ", strip=True))
-              for term in ("BELGIAN PRO LEAGUE", "第10節", "KICKOFF", "OHルーベン"):
-                  i = plain.find(term)
-                  print("LIVE_FIXTURE_DEBUG", term, i, plain[max(0, i-90):i+200] if i >= 0 else "")
-
           PY
 
   preparation:
