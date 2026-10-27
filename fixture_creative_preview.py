@@ -60,8 +60,9 @@ def make_preview(report, artwork, output, metadata, today):
     d.text((70, 1200), 'STVV', font=font(104), fill='white')
     d.text((440, 1241), 'VS', font=font(43), fill=YELLOW)
     d.text((560, 1217), 'OH LEUVEN', font=font(63), fill='white')
-    d.text((70, 1350), fixture_date.strftime('%d %b %Y').upper(),
-           font=font(53), fill=YELLOW)
+    # A Belgian local date differs from the JST calendar date. Do not put
+    # an ambiguous date on Japanese-facing review artwork.
+    d.text((70, 1350), 'MATCH PREVIEW', font=font(53), fill=YELLOW)
     d.text((70, 1450), 'UNAPPROVED REVIEW ART  /  KICKOFF OMITTED',
            font=font(19), fill='#d4dce8')
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -71,12 +72,12 @@ def make_preview(report, artwork, output, metadata, today):
         'can_publish': False, 'buffer_called': False, 'x_publication_performed': False,
         'fixture': report['fixture'], 'fixture_date_local': fixture_date.isoformat(),
         'source_conflict': report['status'] == 'official_sources_disagree_block_kickoff',
-        'kickoff_omitted': True,
+        'kickoff_omitted': True, 'date_omitted_from_artwork': True,
         'source_urls': [item['url'] for item in report['source_checks']],
         'original_artwork': str(artwork), 'original_sha256': digest(artwork),
         'preview_image': str(output), 'preview_sha256': digest(output),
         'dimensions': [W, H], 'subject': 'fictional football mascot, not a real player',
-        'draft_caption': '⚽ 11月1日はSTVV対OHルーヴェン。次戦、注目したいポイントは？\n\n公式：https://stvv.jp/news/event/20261002_2/',
+        'draft_caption': '⚽ 次戦プレビュー\nSTVV 対 OHルーベン\n注目ポイントは？\n\n公式日程：https://stvv.jp/game/2026-2027/',
         'required_review': [
             'source artwork rights and originality',
             'fictional mascot must not be presented as a real STVV player',
