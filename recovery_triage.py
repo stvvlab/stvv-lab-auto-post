@@ -15,9 +15,10 @@ def diagnose(manifest, preparation, delivery):
         problems.append("approved_ready_assets_zero")
     if preparation.get("status") == "no_unposted_candidate_in_scanned_lists":
         problems.append("no_new_verified_source")
-    if delivery.get("status") in ("skipped_no_verified_content",
-                                  "skipped_image_verification"):
-        problems.append("scheduled_delivery_skipped")
+    # An empty reviewed queue is a correct no-post outcome, not a failed
+    # publication. An actual rejected image is a separate safety blocker.
+    if delivery.get("status") == "skipped_image_verification":
+        problems.append("image_verification_blocked")
     if delivery.get("start_delay_seconds", 0) > 1800:
         problems.append("github_start_delayed_over_30_minutes")
     if not delivery.get("x_display_verified", False):
