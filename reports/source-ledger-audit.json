@@ -1,0 +1,30 @@
+{
+  "status": "needs_reconciliation",
+  "used_sources_without_publication_log": [
+    "stvv.jp/news/2025",
+    "stvv.jp/news/event/20261002_2",
+    "stvv.jp/news/game/20260920_1",
+    "stvv.jp/news/merchandise/20261003_1",
+    "stvv.jp/news/miracle-stvv-project/2026",
+    "stvv.jp/news/other/20260928_2",
+    "stvv.jp/news/sponsor/20260924_1",
+    "stvv.jp/news/sponsor/20260925_1",
+    "stvv.jp/news/sponsor/20260929_1",
+    "stvv.jp/news/sponsor/20260930_2",
+    "stvv.jp/news/sponsor/20261001_1",
+    "stvv.jp/news/team/20260917_1"
+  ],
+  "ready_reviewed_cards": 0,
+  "publication_source_count": 6,
+  "safe_to_repost_orphaned_sources": false,
+  "note": "A source missing from publication_log may still have been posted; verify Buffer and X before correcting history. This script performs no sends or writes to posting history.",
+  "checked_at": "2026-10-27T16:03:28.109326+09:00",
+  "implementation_commit": "4b4fc40",
+  "local_focused_tests_passed": 4,
+  "ledger_modified": false,
+  "buffer_called": false,
+  "old_dated_article_count": 10,
+  "listing_url_count": 2,
+  "fresh_article_count": 0,
+  "interpretation": "All ten dated orphan entries are 24–40 days old; two entries are listing URLs. This audit does not identify an eligible fresh source falsely blocked by news history. Buffer/X reconciliation is still needed before any historical correction."
+}

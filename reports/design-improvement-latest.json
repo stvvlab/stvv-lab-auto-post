@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T15:09:39.953218+09:00",
+  "updated_at": "2026-10-27T16:03:28.109326+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T15:09:39.953218+09:00",
+    "checked_at": "2026-10-27T16:03:28.109326+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -250,7 +250,7 @@
     "actual_posting_step_checked": false,
     "last_regular_start_delay_seconds": 1892,
     "reservation_mode_regular_run_observed": true,
-    "next_existing_slot_jst": "2026-10-27T15:30:00+09:00",
+    "next_existing_slot_jst": "2026-10-27T18:00:00+09:00",
     "next_slot_start_not_guaranteed": true,
     "imagegen_retest_performed": false,
     "image_generated": false,
@@ -266,28 +266,21 @@
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
     },
-    "latest_regular_result_evidence": "No later STVV Auto Post run in fresh Actions listing. 15:30 slot is still future at this observation; no manual dispatch or reservation attempted.",
-    "tests_run_this_check": false,
+    "latest_regular_result_evidence": "No later STVV Auto Post run observed; last actual outcome remains verified 12:30-slot empty-queue skip.",
+    "tests_run_this_check": true,
     "regular_slot_observation": {
-      "checked_at": "2026-10-27T13:10:18.940264+09:00",
-      "run_id": "40447383388",
-      "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
-      "scheduled_at": "2026-10-27T12:30:00+09:00",
-      "started_at": "2026-10-27T13:01:32.026167+09:00",
-      "start_delay_seconds": 1892,
-      "delivery_mode": "advance_reservations",
-      "status": "skipped_no_verified_content",
-      "actual_posting_step_log_checked": true,
-      "history_report_persisted": true,
-      "new_reservations": 0,
-      "new_publications": 0,
-      "buffer_acceptance_verified": false,
-      "x_display_verified": false,
-      "prerequisite_tests_passed": 293,
-      "classification": "Correct empty-queue skip, not a live reservation or public delivery."
+      "scheduled_at": "2026-10-27T15:30:00+09:00",
+      "checked_at": "2026-10-27T16:03:28.109326+09:00",
+      "status": "run_not_observed_in_actions",
+      "posting_step_outcome": null,
+      "cause": "not_identified",
+      "manual_dispatch_performed": false,
+      "new_buffer_acceptance_observed": false
     },
     "discovery_observed_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40459285785",
-    "discovery_status_at_initial_check": "in_progress; separate from publishing"
+    "discovery_status_at_initial_check": "in_progress; separate from publishing",
+    "local_focused_tests_passed": 4,
+    "tests_scope": "Read-only source-ledger audit only; no transport calls"
   },
   "last_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -845,5 +838,35 @@
     "buffer_called": false,
     "paid_api_used": false,
     "note": "Requires supplied original art; review-only packet cannot substitute for content-specific built-in finished image, freshness, novelty and visual approval. No eligible new information, so no image generated solely to fill a slot."
+  },
+  "source_ledger_audit": {
+    "status": "needs_reconciliation",
+    "used_sources_without_publication_log": [
+      "stvv.jp/news/2025",
+      "stvv.jp/news/event/20261002_2",
+      "stvv.jp/news/game/20260920_1",
+      "stvv.jp/news/merchandise/20261003_1",
+      "stvv.jp/news/miracle-stvv-project/2026",
+      "stvv.jp/news/other/20260928_2",
+      "stvv.jp/news/sponsor/20260924_1",
+      "stvv.jp/news/sponsor/20260925_1",
+      "stvv.jp/news/sponsor/20260929_1",
+      "stvv.jp/news/sponsor/20260930_2",
+      "stvv.jp/news/sponsor/20261001_1",
+      "stvv.jp/news/team/20260917_1"
+    ],
+    "ready_reviewed_cards": 0,
+    "publication_source_count": 6,
+    "safe_to_repost_orphaned_sources": false,
+    "note": "A source missing from publication_log may still have been posted; verify Buffer and X before correcting history. This script performs no sends or writes to posting history.",
+    "checked_at": "2026-10-27T16:03:28.109326+09:00",
+    "implementation_commit": "4b4fc40",
+    "local_focused_tests_passed": 4,
+    "ledger_modified": false,
+    "buffer_called": false,
+    "old_dated_article_count": 10,
+    "listing_url_count": 2,
+    "fresh_article_count": 0,
+    "interpretation": "All ten dated orphan entries are 24–40 days old; two entries are listing URLs. This audit does not identify an eligible fresh source falsely blocked by news history. Buffer/X reconciliation is still needed before any historical correction."
   }
 }
