@@ -115,7 +115,7 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T14:07:35.043130+09:00",
+    "checked_at": "2026-10-27T15:09:39.953218+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -176,7 +176,7 @@
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
     },
-    "latest_regular_result_evidence": "No later STVV Auto Post run in fresh Actions listing. Previously verified 12:30-slot skip remains latest; next existing slot 15:30 JST.",
+    "latest_regular_result_evidence": "No later STVV Auto Post run in fresh Actions listing. 15:30 slot is still future at this observation; no manual dispatch or reservation attempted.",
     "tests_run_this_check": false,
     "regular_slot_observation": {
       "checked_at": "2026-10-27T13:10:18.940264+09:00",
@@ -195,7 +195,9 @@
       "x_display_verified": false,
       "prerequisite_tests_passed": 293,
       "classification": "Correct empty-queue skip, not a live reservation or public delivery."
-    }
+    },
+    "discovery_observed_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40459285785",
+    "discovery_status_at_initial_check": "in_progress; separate from publishing"
   },
   "editorial_breadth_expansion": {
     "implemented_at": "2026-10-26T20:28:00+09:00",
