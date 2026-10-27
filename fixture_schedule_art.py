@@ -61,6 +61,15 @@ def validated_fixture(report, now):
         raise ValueError("Unrecognized official schedule source")
     if report.get("status") not in ("fixture_evidence_available", "no_upcoming_unrecorded_league_fixture"):
         raise ValueError("Unverified official schedule inventory status")
+    try:
+        checked = datetime.fromisoformat(report["checked_at"])
+        age = now.astimezone(JST) - checked.astimezone(JST)
+    except (KeyError, TypeError, ValueError, AttributeError):
+        return None
+    # Cache is only a way to continue producing UNAPPROVED review artwork.
+    # Never treat a saved report as a live verification or as publishable data.
+    if checked.tzinfo is None or not timedelta(0) <= age <= timedelta(hours=2):
+        return None
     valid = []
     for item in report["candidates"]:
         if not isinstance(item, dict):
@@ -145,7 +154,7 @@ def render(fixture, path, variant):
 def prepare(report, output_dir, now):
     fixture = validated_fixture(report, now)
     if fixture is None:
-        return {"status": "no_eligible_fixture_for_draft", "reviewed": False,
+        return {"status": "no_recent_verified_fixture_for_draft", "reviewed": False,
                 "auto_publish": False, "image_generation_performed": False,
                 "buffer_called": False, "x_publication_performed": False}
     directory = Path(output_dir)
@@ -184,6 +193,9 @@ def prepare(report, output_dir, now):
         "fixture_identity": f"belgian-pro-league:2026-2027:round:{fixture['round']}",
         "opponent": fixture["opponent"], "venue": fixture["venue"],
         "source_url": SOURCE, "fixture_date_local_evidence_only": local_date,
+        "source_checked_at": report["checked_at"],
+        "source_age_minutes": round((now - datetime.fromisoformat(report["checked_at"])).total_seconds() / 60, 1),
+        "fresh_live_recheck_required_before_approval": True,
         "kickoff_omitted": True, "date_omitted_from_artwork": True,
         "caption_draft": caption, "caption_reviewed": False,
         "variants": variants, "contact_sheet": str(contact),
