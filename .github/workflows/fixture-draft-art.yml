@@ -52,8 +52,13 @@ jobs:
       - name: Create unapproved previews from checked fixture evidence
         run: python fixture_draft_art.py
       - name: Refresh official league schedule for reusable artwork
+        id: refresh_schedule
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+        continue-on-error: true
         run: python fixture_schedule_inventory.py
+      - name: Explain source timeout and safe review-only fallback
+        if: steps.refresh_schedule.outcome == 'failure'
+        run: echo '::warning::Official schedule refresh failed. Only a report verified within two hours may produce UNAPPROVED artwork; publishing remains disabled.'
       - name: Generate dynamic opponent-specific unapproved artwork
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         run: python fixture_schedule_art.py
