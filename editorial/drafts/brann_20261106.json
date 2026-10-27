@@ -7,19 +7,18 @@
   "fixture_date_jst": "2026-11-06",
   "opponent": "SKブラン",
   "home_away": "HOME",
-  "kickoff_jst": "05:00",
   "slots": [
     "news"
   ],
-  "text": "⚽ 次の欧州戦はホームでSKブランと対戦！\n11月6日（金）午前5時（日本時間）キックオフ予定。\n注目するポイントは？\n\n公式日程：https://stvv.jp/game/2026-2027/",
+  "text": "⚽ STVV、次の欧州戦はSKブランと対戦！\n11月6日（金・日本時間）の試合、注目するポイントは？\n\n公式日程：https://stvv.jp/game/2026-2027/",
   "asset_path": null,
   "needs": [
-    "最新日程の再確認",
-    "過去投稿とBuffer予約の重複照合",
-    "オリジナル画像制作・目視審査",
-    "画像ハッシュとサイズ登録",
-    "承認manifestへの明示的登録"
+    "公式日程と時刻の再照合（不一致なら時刻を記載しない）",
+    "既存投稿・Buffer予約との重複照合",
+    "試作画像の文字・大会名・日付・権利確認",
+    "画像ファイルの承認とSHA256登録",
+    "投稿用manifestへの明示的登録"
   ],
   "auto_publish": false,
-  "notes": "This is editorial draft metadata only. Never register as reviewed/ready or send without source recheck and asset review. Date corresponds to Nov 5 20:00 Belgium."
+  "notes": "Official kickoff listings were previously reported inconsistent; omit kickoff from copy and artwork until independently reconciled. Fictional mascot graphic is a review draft, not a real player likeness; no approved asset or posting authorization. Publishing remains disabled."
 }
