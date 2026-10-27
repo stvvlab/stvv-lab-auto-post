@@ -76,6 +76,22 @@
       "review_note": "Draft only. Preserve the tentative 検討中 wording. Re-fetch official source and check for a subsequent update before review or any future send. No free authenticated reply transport is configured.",
       "x_weighted_length": 158,
       "can_send": false
+    },
+    {
+      "kind": "correction",
+      "parent_key": "daily_2026-10-26_vote",
+      "parent_post_id": "2114727647368331366",
+      "parent_x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+      "source_url": "https://stvv.jp/news/game/20260522_1/",
+      "source_date_jst": "2026-05-22",
+      "text": "【訂正】10/26の投稿で新川志音選手を「リーグ初先発」と紹介しましたが、STVV公式の5/22アンデルレヒト戦の記事には、すでに先発出場の記録があります。10/26を初先発と断定した表現は不正確でした。訂正します。\n公式：https://stvv.jp/news/game/20260522_1/",
+      "status": "draft",
+      "reviewed": false,
+      "created_at": "2026-10-27T21:59:45+09:00",
+      "evidence_excerpt": "新川志音がベルギー移籍後初先発",
+      "novelty_note": "Correction to the 2026-10-26 post, not a new standalone post. May 22 STVV official match report records Shinkawa starting in the league.",
+      "review_note": "Earlier official report conflicts with Oct 26 article wording. Manual review and X reply required. No authenticated free transport. No pending state or publication.",
+      "can_send": false
     }
   ]
 }
