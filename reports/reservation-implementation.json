@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T03:14:29.707379+09:00",
+  "updated_at": "2026-10-27T09:06:17.090736+09:00",
   "status": "implemented_configured_live_reservation_not_yet_verified",
   "delivery_mode": "advance_reservations",
   "publication_slots_jst": [
@@ -65,5 +65,24 @@
     "manual_dispatch_performed": false,
     "paid_api_used": false,
     "live_reservation_to_x_verified": false
+  },
+  "first_regular_reservation_mode_execution": {
+    "checked_at": "2026-10-27T09:06:17.090736+09:00",
+    "run_id": "40418810614",
+    "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40418810614",
+    "scheduled_at": "2026-10-27T08:00:00+09:00",
+    "started_at": "2026-10-27T08:18:38.992432+09:00",
+    "start_delay_seconds": 1118,
+    "delivery_mode": "advance_reservations",
+    "status": "skipped_no_verified_content",
+    "actual_posting_step_log_checked": true,
+    "history_report_persisted": true,
+    "new_reservations": 0,
+    "new_publications": 0,
+    "pending_reservation_keys": [],
+    "buffer_acceptance_verified": false,
+    "x_display_verified": false,
+    "prerequisite_tests_passed": 278,
+    "classification": "First regular reservation-mode execution observed; correctly skipped empty reviewed queue. Not a live reservation or publication success."
   }
 }

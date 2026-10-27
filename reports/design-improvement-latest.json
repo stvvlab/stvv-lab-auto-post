@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T08:05:18.607683+09:00",
+  "updated_at": "2026-10-27T09:06:17.090736+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -205,7 +205,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T08:05:18.607683+09:00",
+    "checked_at": "2026-10-27T09:06:17.090736+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -245,11 +245,11 @@
         "status": "ok"
       }
     ],
-    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40349598794",
+    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40418810614",
     "last_regular_result": "skipped_no_verified_content",
-    "actual_posting_step_checked": false,
-    "last_regular_start_delay_seconds": 5318,
-    "reservation_mode_regular_run_observed": false,
+    "actual_posting_step_checked": true,
+    "last_regular_start_delay_seconds": 1118,
+    "reservation_mode_regular_run_observed": true,
     "next_existing_slot_jst": "2026-10-27T10:30:00+09:00",
     "next_slot_start_not_guaranteed": true,
     "imagegen_retest_performed": false,
@@ -266,17 +266,26 @@
       "latest_listing_date": "2026-10-26",
       "result": "Only previously covered Brugge/Midtjylland highlights and October 22 Hajduk statement visible; no new eligible candidate."
     },
-    "latest_regular_result_evidence": "Unchanged durable delivery report for run 40349598794; no later STVV Auto Post run in fresh Actions listing.",
+    "latest_regular_result_evidence": "Actual production posting-step log and persisted per-run record; mocked test logs excluded.",
     "tests_run_this_check": false,
     "regular_slot_observation": {
+      "checked_at": "2026-10-27T09:06:17.090736+09:00",
+      "run_id": "40418810614",
+      "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40418810614",
       "scheduled_at": "2026-10-27T08:00:00+09:00",
-      "checked_at": "2026-10-27T08:05:18.607683+09:00",
-      "status": "run_not_observed_in_actions",
-      "posting_step_outcome": null,
-      "cause": "not_identified",
-      "new_buffer_acceptance_observed": false,
-      "manual_dispatch_performed": false,
-      "note": "No new production delivery record exists for this slot. Absence is not a skip, quality rejection, or proof of eventual execution."
+      "started_at": "2026-10-27T08:18:38.992432+09:00",
+      "start_delay_seconds": 1118,
+      "delivery_mode": "advance_reservations",
+      "status": "skipped_no_verified_content",
+      "actual_posting_step_log_checked": true,
+      "history_report_persisted": true,
+      "new_reservations": 0,
+      "new_publications": 0,
+      "pending_reservation_keys": [],
+      "buffer_acceptance_verified": false,
+      "x_display_verified": false,
+      "prerequisite_tests_passed": 278,
+      "classification": "First regular reservation-mode execution observed; correctly skipped empty reviewed queue. Not a live reservation or publication success."
     }
   },
   "last_verified_publication": {
@@ -746,5 +755,32 @@
     "implementation_scope": "Read-only advisory report; does not itself approve or publish a card and is not a universal publisher gate.",
     "manual_workflow_dispatch_performed": false,
     "local_tests_run_this_check": false
+  },
+  "first_regular_reservation_mode_execution": {
+    "checked_at": "2026-10-27T09:06:17.090736+09:00",
+    "run_id": "40418810614",
+    "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40418810614",
+    "scheduled_at": "2026-10-27T08:00:00+09:00",
+    "started_at": "2026-10-27T08:18:38.992432+09:00",
+    "start_delay_seconds": 1118,
+    "delivery_mode": "advance_reservations",
+    "status": "skipped_no_verified_content",
+    "actual_posting_step_log_checked": true,
+    "history_report_persisted": true,
+    "new_reservations": 0,
+    "new_publications": 0,
+    "pending_reservation_keys": [],
+    "buffer_acceptance_verified": false,
+    "x_display_verified": false,
+    "prerequisite_tests_passed": 278,
+    "classification": "First regular reservation-mode execution observed; correctly skipped empty reviewed queue. Not a live reservation or publication success."
+  },
+  "fixture_preview_classification": {
+    "implementation_commit": "a0b7172",
+    "mode": "Pillow geometric review-only preview",
+    "built_in_imagegen_success": false,
+    "production_ready": false,
+    "generated_this_check": false,
+    "note": "Separate draft artwork must not substitute for content-specific built-in imagegen or enter the ready manifest without the required workflow."
   }
 }
