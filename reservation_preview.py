@@ -51,6 +51,24 @@ def plan(history, now):
                   'Reconcile Buffer capacity and remote duplicates without paid API use',
                   'Persist pending before one send; reconcile unknown outcomes without resending',
                   'Keep scheduled acceptance separate from sent and X display verification']}
+    # Read-only fixture draft diagnostic: never adds proposals or sends.
+    draft_path = ROOT / 'editorial/drafts/brann_20261106.json'
+    if draft_path.exists():
+        from fixture_schedule_gate import review_fixture_candidate
+        try:
+            draft = json.loads(draft_path.read_text(encoding='utf-8'))
+            reason = review_fixture_candidate(draft, now.astimezone(JST), history,
+                                               official_text=None)
+            report['fixture_draft'] = {
+                'source_url': draft.get('source_url'),
+                'status': 'blocked',
+                'reason': reason or 'official_schedule_live_recheck_required',
+                'included_in_proposals': False,
+            }
+        except (ValueError, TypeError, KeyError) as error:
+            report['fixture_draft'] = {'status': 'blocked',
+                                      'reason': 'invalid_fixture_draft',
+                                      'included_in_proposals': False}
     occupied = (set(history['used_posts']) | set(history['pending_posts'])
                 | set(history.get('reserved_posts', {})))
     occupied.update(p.get('key') for p in history['publication_log'])
