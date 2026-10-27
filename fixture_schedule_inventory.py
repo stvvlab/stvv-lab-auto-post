@@ -37,11 +37,11 @@ def parse_fixtures(markup, now):
     text = re.sub(r'\s+', ' ', soup.get_text(' ', strip=True)).strip()
     if '試合時間は日本時間の表記' not in text:
         raise ValueError('Official schedule JST notice missing')
-    if 'BELGIAN PRO LEAGUE' not in text or 'UEFAカンファレンスリーグ' not in text:
-        raise ValueError('Official competition sections not found')
+    if 'BELGIAN PRO LEAGUE' not in text:
+        raise ValueError('Official league competition section not found')
     # The page contains competition *tabs* before the actual fixture sections.
     # The first heading pair can be navigation with no matches at all.
-    sections = [part.split('UEFAカンファレンスリーグ', 1)[0]
+    sections = [re.split(r'UEFAカンファレンスリーグ|BELGIAN CUP', part, maxsplit=1)[0]
                 for part in text.split('BELGIAN PRO LEAGUE')[1:]]
     league = next((part for part in sections if 'KICKOFF' in part
                    and re.search(r'第\d+節', part)), None)
