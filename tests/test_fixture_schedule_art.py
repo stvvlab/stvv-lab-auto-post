@@ -20,7 +20,8 @@ CANDIDATE = {
     "reviewed": False,
     "can_publish": False,
 }
-REPORT = {"source_url": SOURCE, "candidates": [CANDIDATE]}
+REPORT = {"source_url": SOURCE, "status": "fixture_evidence_available",
+          "candidates": [CANDIDATE]}
 
 
 class DynamicFixtureArtTests(unittest.TestCase):
@@ -49,7 +50,7 @@ class DynamicFixtureArtTests(unittest.TestCase):
 
     def test_no_fixture_produces_no_image_and_no_send(self):
         with tempfile.TemporaryDirectory() as tmp:
-            result = prepare({"source_url": SOURCE, "candidates": []}, tmp, NOW)
+            result = prepare({"source_url": SOURCE, "status": "no_upcoming_unrecorded_league_fixture", "candidates": []}, tmp, NOW)
             self.assertFalse(result["image_generation_performed"])
             self.assertFalse(result["buffer_called"])
             self.assertFalse(list(Path(tmp).glob("*.png")))
@@ -59,18 +60,18 @@ class DynamicFixtureArtTests(unittest.TestCase):
                         {"can_publish": True}, {"source_url": "https://example.com"}):
             candidate = dict(CANDIDATE, **changed)
             self.assertIsNone(validated_fixture(
-                {"source_url": SOURCE, "candidates": [candidate]}, NOW))
+                {"source_url": SOURCE, "status": "fixture_evidence_available", "candidates": [candidate]}, NOW))
 
     def test_untrusted_or_expired_source_is_not_rendered(self):
         with self.assertRaises(ValueError):
             validated_fixture({"source_url": "https://example.com",
-                               "candidates": [CANDIDATE]}, NOW)
+                               "status": "fixture_evidence_available", "candidates": [CANDIDATE]}, NOW)
         self.assertIsNone(validated_fixture(
             REPORT, datetime(2026, 11, 3, tzinfo=timezone.utc)))
 
     def test_japanese_long_opponent_name_stays_renderable(self):
         with tempfile.TemporaryDirectory() as tmp:
-            data = {"source_url": SOURCE, "candidates": [
+            data = {"source_url": SOURCE, "status": "fixture_evidence_available", "candidates": [
                 dict(CANDIDATE, opponent="サンプル長い日本語対戦相手名テストクラブ")]}
             result = prepare(data, tmp, NOW)
             self.assertEqual(len(result["variants"]), 3)
