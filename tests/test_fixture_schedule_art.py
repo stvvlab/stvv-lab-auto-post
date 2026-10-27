@@ -21,6 +21,7 @@ CANDIDATE = {
     "can_publish": False,
 }
 REPORT = {"source_url": SOURCE, "status": "fixture_evidence_available",
+          "checked_at": "2026-10-27T16:25:00+09:00",
           "candidates": [CANDIDATE]}
 
 
@@ -50,7 +51,7 @@ class DynamicFixtureArtTests(unittest.TestCase):
 
     def test_no_fixture_produces_no_image_and_no_send(self):
         with tempfile.TemporaryDirectory() as tmp:
-            result = prepare({"source_url": SOURCE, "status": "no_upcoming_unrecorded_league_fixture", "candidates": []}, tmp, NOW)
+            result = prepare({"source_url": SOURCE, "status": "no_upcoming_unrecorded_league_fixture", "checked_at": REPORT["checked_at"], "candidates": []}, tmp, NOW)
             self.assertFalse(result["image_generation_performed"])
             self.assertFalse(result["buffer_called"])
             self.assertFalse(list(Path(tmp).glob("*.png")))
@@ -60,18 +61,33 @@ class DynamicFixtureArtTests(unittest.TestCase):
                         {"can_publish": True}, {"source_url": "https://example.com"}):
             candidate = dict(CANDIDATE, **changed)
             self.assertIsNone(validated_fixture(
-                {"source_url": SOURCE, "status": "fixture_evidence_available", "candidates": [candidate]}, NOW))
+                {"source_url": SOURCE, "status": "fixture_evidence_available", "checked_at": REPORT["checked_at"], "candidates": [candidate]}, NOW))
 
     def test_untrusted_or_expired_source_is_not_rendered(self):
         with self.assertRaises(ValueError):
             validated_fixture({"source_url": "https://example.com",
-                               "status": "fixture_evidence_available", "candidates": [CANDIDATE]}, NOW)
+                               "status": "fixture_evidence_available", "checked_at": REPORT["checked_at"], "candidates": [CANDIDATE]}, NOW)
         self.assertIsNone(validated_fixture(
             REPORT, datetime(2026, 11, 3, tzinfo=timezone.utc)))
 
+    def test_stale_persisted_report_never_creates_artwork(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            stale = dict(REPORT, checked_at="2026-10-27T12:00:00+09:00")
+            result = prepare(stale, tmp, NOW)
+            self.assertEqual(result["status"], "no_recent_verified_fixture_for_draft")
+            self.assertFalse(result["image_generation_performed"])
+            self.assertFalse(result["buffer_called"])
+
+    def test_recent_cache_is_explicitly_not_live_publication_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = prepare(REPORT, tmp, NOW)
+            self.assertTrue(result["fresh_live_recheck_required_before_approval"])
+            self.assertGreater(result["source_age_minutes"], 0)
+            self.assertFalse(result["auto_publish"])
+
     def test_japanese_long_opponent_name_stays_renderable(self):
         with tempfile.TemporaryDirectory() as tmp:
-            data = {"source_url": SOURCE, "status": "fixture_evidence_available", "candidates": [
+            data = {"source_url": SOURCE, "status": "fixture_evidence_available", "checked_at": REPORT["checked_at"], "candidates": [
                 dict(CANDIDATE, opponent="サンプル長い日本語対戦相手名テストクラブ")]}
             result = prepare(data, tmp, NOW)
             self.assertEqual(len(result["variants"]), 3)
