@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-10-27T13:10:18.940264+09:00",
+  "observed_workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40445860165",
+  "observed_event": "schedule",
+  "status": "metrics_collected",
+  "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40445860165/artifacts/12708206731",
+  "artifact_report_sha256": "44743b4b4328d6bab4805115e8c55c00050907eeaa11a81285a3cc776ae0b5ce",
+  "artifact_report_path": "reports/buffer-metrics-latest.json",
+  "real_metrics_retrieval_verified": true,
+  "posts_with_metrics": 5,
+  "api_requests": 5,
+  "observed_at": "2026-10-27T03:44:48.788342+00:00",
+  "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+  "impressions_range": [
+    14,
+    29
+  ],
+  "reactions_comments_reposts_clicks_all_zero": true,
+  "x_display_verified": false,
+  "x_metrics_verified": false,
+  "new_publication": false,
+  "paid_api_used": false,
+  "note": "These are Buffer-reported values last updated Oct 26 14:30 JST, not a real-time X observation. Five heterogeneous posts do not establish a design effect or causality. No reply transport added."
+}

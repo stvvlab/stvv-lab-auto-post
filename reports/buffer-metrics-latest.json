@@ -1,0 +1,197 @@
+{
+  "observed_at": "2026-10-27T03:44:48.788342+00:00",
+  "source": "Buffer GraphQL read-only post metrics",
+  "x_display_verified": false,
+  "x_metrics_verified": false,
+  "post_count": 5,
+  "api_requests": 5,
+  "posts_with_metrics": 5,
+  "posts": [
+    {
+      "key": "daily_2026-10-24_news",
+      "slot": "news",
+      "buffer_id": "6adc77250b5343d07074efd5",
+      "submitted_at": "2026-10-24T18:15:19.752698+09:00",
+      "source_url": "https://stvv.jp/news/game/20261023_3/",
+      "x_display_verified": false,
+      "buffer_status": "sent",
+      "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+      "metrics": {
+        "reactions": {
+          "value": 0,
+          "unit": "count"
+        },
+        "comments": {
+          "value": 0,
+          "unit": "count"
+        },
+        "engagementRate": {
+          "value": 0,
+          "unit": "percentage"
+        },
+        "reposts": {
+          "value": 0,
+          "unit": "count"
+        },
+        "impressions": {
+          "value": 29,
+          "unit": "count"
+        },
+        "clicks": {
+          "value": 0,
+          "unit": "count"
+        }
+      },
+      "metrics_state": "available"
+    },
+    {
+      "key": "approved_imagegen_midtjylland_20261023_v1",
+      "slot": "recap",
+      "buffer_id": "6adbeb4e8b3d437ddc8df023",
+      "submitted_at": "2026-10-24T08:18:41.033017+09:00",
+      "source_url": "https://stvv.jp/news/uefa-news/20261023_1/",
+      "x_display_verified": false,
+      "buffer_status": "sent",
+      "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+      "metrics": {
+        "reactions": {
+          "value": 0,
+          "unit": "count"
+        },
+        "comments": {
+          "value": 0,
+          "unit": "count"
+        },
+        "engagementRate": {
+          "value": 0,
+          "unit": "percentage"
+        },
+        "reposts": {
+          "value": 0,
+          "unit": "count"
+        },
+        "impressions": {
+          "value": 14,
+          "unit": "count"
+        },
+        "clicks": {
+          "value": 0,
+          "unit": "count"
+        }
+      },
+      "metrics_state": "available"
+    },
+    {
+      "key": "daily_2026-10-22_vote",
+      "slot": "vote",
+      "buffer_id": "6ada03cee8cca8cdcc503081",
+      "submitted_at": "2026-10-22T21:38:40.351962+09:00",
+      "source_url": null,
+      "x_display_verified": false,
+      "buffer_status": "sent",
+      "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+      "metrics": {
+        "reactions": {
+          "value": 0,
+          "unit": "count"
+        },
+        "comments": {
+          "value": 0,
+          "unit": "count"
+        },
+        "engagementRate": {
+          "value": 0,
+          "unit": "percentage"
+        },
+        "reposts": {
+          "value": 0,
+          "unit": "count"
+        },
+        "impressions": {
+          "value": 19,
+          "unit": "count"
+        },
+        "clicks": {
+          "value": 0,
+          "unit": "count"
+        }
+      },
+      "metrics_state": "available"
+    },
+    {
+      "key": "daily_2026-10-21_data",
+      "slot": "data",
+      "buffer_id": "6ad838f1a9967de049732ff2",
+      "submitted_at": "2026-10-21T13:00:52.217513+09:00",
+      "source_url": "https://stvv.jp/news/game/20261019_1/",
+      "x_display_verified": false,
+      "buffer_status": "sent",
+      "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+      "metrics": {
+        "reactions": {
+          "value": 0,
+          "unit": "count"
+        },
+        "comments": {
+          "value": 0,
+          "unit": "count"
+        },
+        "engagementRate": {
+          "value": 0,
+          "unit": "percentage"
+        },
+        "reposts": {
+          "value": 0,
+          "unit": "count"
+        },
+        "impressions": {
+          "value": 26,
+          "unit": "count"
+        },
+        "clicks": {
+          "value": 0,
+          "unit": "count"
+        }
+      },
+      "metrics_state": "available"
+    },
+    {
+      "key": "approved_stadium_review_lommel_20261019_v1",
+      "slot": "recap",
+      "buffer_id": "6ad7b75025c4beedd139fd70",
+      "submitted_at": "2026-10-21T03:47:47.055840+09:00",
+      "source_url": "https://stvv.jp/news/game/20261019_1/",
+      "x_display_verified": false,
+      "buffer_status": "sent",
+      "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+      "metrics": {
+        "reactions": {
+          "value": 0,
+          "unit": "count"
+        },
+        "comments": {
+          "value": 0,
+          "unit": "count"
+        },
+        "engagementRate": {
+          "value": 0,
+          "unit": "percentage"
+        },
+        "reposts": {
+          "value": 0,
+          "unit": "count"
+        },
+        "impressions": {
+          "value": 23,
+          "unit": "count"
+        },
+        "clicks": {
+          "value": 0,
+          "unit": "count"
+        }
+      },
+      "metrics_state": "available"
+    }
+  ],
+  "status": "metrics_collected"
+}

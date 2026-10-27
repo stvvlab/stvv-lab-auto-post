@@ -115,7 +115,7 @@
     }
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T12:08:43.660609+09:00",
+    "checked_at": "2026-10-27T13:10:18.940264+09:00",
     "source_checks": [
       {
         "url": "https://stvv.jp/news/2026/",
@@ -155,12 +155,12 @@
         "status": "ok"
       }
     ],
-    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40436221816",
+    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
     "last_regular_result": "skipped_no_verified_content",
     "actual_posting_step_checked": true,
-    "last_regular_start_delay_seconds": 2051,
+    "last_regular_start_delay_seconds": 1892,
     "reservation_mode_regular_run_observed": true,
-    "next_existing_slot_jst": "2026-10-27T12:30:00+09:00",
+    "next_existing_slot_jst": "2026-10-27T15:30:00+09:00",
     "next_slot_start_not_guaranteed": true,
     "imagegen_retest_performed": false,
     "image_generated": false,
@@ -179,23 +179,22 @@
     "latest_regular_result_evidence": "Actual production posting-step log and persisted per-run record; mocked test logs excluded.",
     "tests_run_this_check": false,
     "regular_slot_observation": {
-      "checked_at": "2026-10-27T12:08:43.660609+09:00",
-      "run_id": "40436221816",
-      "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40436221816",
-      "scheduled_at": "2026-10-27T10:30:00+09:00",
-      "started_at": "2026-10-27T11:04:11.558374+09:00",
-      "start_delay_seconds": 2051,
+      "checked_at": "2026-10-27T13:10:18.940264+09:00",
+      "run_id": "40447383388",
+      "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
+      "scheduled_at": "2026-10-27T12:30:00+09:00",
+      "started_at": "2026-10-27T13:01:32.026167+09:00",
+      "start_delay_seconds": 1892,
       "delivery_mode": "advance_reservations",
       "status": "skipped_no_verified_content",
       "actual_posting_step_log_checked": true,
       "history_report_persisted": true,
       "new_reservations": 0,
       "new_publications": 0,
-      "pending_reservation_keys": [],
       "buffer_acceptance_verified": false,
       "x_display_verified": false,
       "prerequisite_tests_passed": 293,
-      "classification": "Regular reservation-mode run correctly skipped empty reviewed queue; no live reservation or publication success."
+      "classification": "Correct empty-queue skip, not a live reservation or public delivery."
     }
   },
   "editorial_breadth_expansion": {
@@ -747,35 +746,45 @@
     "note": "Historical single-preview scheduled run, not evidence that newer three-variant workflow ran. No ready manifest or publication created. Never use this drawing as built-in imagegen success or a production fallback."
   },
   "metrics_probe_observation": {
-    "checked_at": "2026-10-27T11:01:37.243777+09:00",
-    "implementation_commit": "39fc025",
-    "observed_workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40435647688",
-    "observed_event": "push",
-    "test_step": "success",
-    "read_metrics_step": "skipped",
-    "artifact_step": "skipped",
-    "real_metrics_retrieval_verified": false,
+    "checked_at": "2026-10-27T13:10:18.940264+09:00",
+    "observed_workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40445860165",
+    "observed_event": "schedule",
+    "status": "metrics_collected",
+    "artifact_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40445860165/artifacts/12708206731",
+    "artifact_report_sha256": "44743b4b4328d6bab4805115e8c55c00050907eeaa11a81285a3cc776ae0b5ce",
+    "artifact_report_path": "reports/buffer-metrics-latest.json",
+    "real_metrics_retrieval_verified": true,
+    "posts_with_metrics": 5,
+    "api_requests": 5,
+    "observed_at": "2026-10-27T03:44:48.788342+00:00",
+    "metrics_updated_at": "2026-10-26T05:30:29.082Z",
+    "impressions_range": [
+      14,
+      29
+    ],
+    "reactions_comments_reposts_clicks_all_zero": true,
+    "x_display_verified": false,
+    "x_metrics_verified": false,
     "new_publication": false,
     "paid_api_used": false,
-    "note": "Read-only code for up to five sent posts aged 48h–14d. This test-only push does not establish live metrics availability, X display, reply transport, or publishing success."
+    "note": "These are Buffer-reported values last updated Oct 26 14:30 JST, not a real-time X observation. Five heterogeneous posts do not establish a design effect or causality. No reply transport added."
   },
   "latest_regular_reservation_mode_execution": {
-    "checked_at": "2026-10-27T12:08:43.660609+09:00",
-    "run_id": "40436221816",
-    "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40436221816",
-    "scheduled_at": "2026-10-27T10:30:00+09:00",
-    "started_at": "2026-10-27T11:04:11.558374+09:00",
-    "start_delay_seconds": 2051,
+    "checked_at": "2026-10-27T13:10:18.940264+09:00",
+    "run_id": "40447383388",
+    "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40447383388",
+    "scheduled_at": "2026-10-27T12:30:00+09:00",
+    "started_at": "2026-10-27T13:01:32.026167+09:00",
+    "start_delay_seconds": 1892,
     "delivery_mode": "advance_reservations",
     "status": "skipped_no_verified_content",
     "actual_posting_step_log_checked": true,
     "history_report_persisted": true,
     "new_reservations": 0,
     "new_publications": 0,
-    "pending_reservation_keys": [],
     "buffer_acceptance_verified": false,
     "x_display_verified": false,
     "prerequisite_tests_passed": 293,
-    "classification": "Regular reservation-mode run correctly skipped empty reviewed queue; no live reservation or publication success."
+    "classification": "Correct empty-queue skip, not a live reservation or public delivery."
   }
 }
