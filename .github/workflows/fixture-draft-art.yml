@@ -14,6 +14,8 @@ on:
       - 'tests/test_fixture_draft_art.py'
       - 'tests/test_fixture_watch.py'
       - '.github/workflows/fixture-draft-art.yml'
+      - 'scripts/install-card-font.sh'
+      - 'tests/test_card_font_install.py'
   schedule:
     - cron: "20 0 * * *"  # 09:20 JST, review-only; no publication
   pull_request:
@@ -40,8 +42,15 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install pillow requests beautifulsoup4
+      - name: Restore verified Japanese font cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/stvv-fonts
+          key: ${{ runner.os }}-noto-cjk-bold-v1-${{ hashFiles('scripts/install-card-font.sh') }}
       - name: Install Japanese font for dynamic opponent names
         run: bash scripts/install-card-font.sh
+      - name: Verify Japanese font glyphs
+        run: python -m unittest tests.test_card_font_install -v
       - name: Validate dynamic fixture artwork without network
         run: python -m unittest tests.test_fixture_schedule_art -v
       - name: Validate draft generator without network
