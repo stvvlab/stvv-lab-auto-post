@@ -83,7 +83,7 @@ def render(fixture_date, destination, variant=0):
         d.polygon([(0, 1080), (540, 860), (640, 1030), (0, 1310)], fill='#173c61')
         d.text((65, 75), 'STVV LAB', font=font(49), fill='#ffffff')
         d.text((65, 165), 'MATCH', font=font(104), fill='#ffffff')
-        d.text((65, 285), 'PREVIEW', font=font(104), fill='#ffffff')
+        d.text((65, 285), 'PREVIEW', font=font(82), fill='#ffffff')
         d.line((65, 440, 1135, 440), fill='#ffffff', width=5)
         d.text((55, 570), 'STVV', font=font(132), fill='#ffffff')
         d.text((640, 615), 'OH', font=font(110), fill=NAVY)
@@ -110,8 +110,12 @@ def render(fixture_date, destination, variant=0):
         d.line((65, 1230, 1135, 1230), fill=YELLOW, width=8)
         d.text((65, 1270), fixture_date.strftime('%d %b %Y').upper(),
                font=font(72), fill='#ffffff')
-    d.text((65, 1430), 'UNAPPROVED DRAFT  /  NO KICKOFF TIME',
-           font=font(23), fill='#b8c8da')
+    if variant == 1:
+        d.text((65, 1430), 'DRAFT / TIME OMITTED',
+               font=font(19), fill='#ffffff')
+    else:
+        d.text((65, 1430), 'UNAPPROVED DRAFT  /  NO KICKOFF TIME',
+               font=font(23), fill='#b8c8da')
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     im.save(destination, 'PNG', optimize=True)
