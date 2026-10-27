@@ -27,6 +27,8 @@ class PlayerArtworkTest(unittest.TestCase):
         self.assertFalse(result["publication_allowed"])
         self.assertEqual(result["verified_jersey_number"], 3)
         self.assertIn("2-head-tall", result["prompt"])
+        self.assertIn("as shown in the approved portrait", result["prompt"])
+        self.assertNotIn("curly hair", result["prompt"])
     def test_unapproved_fails_closed(self):
         self.manifest["likeness_approved"] = False
         with self.assertRaises(ValueError):
