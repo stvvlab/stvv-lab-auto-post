@@ -33,8 +33,16 @@ def review_fixture_candidate(card, now, history, official_text=None):
         return "unverified_caption"
     if card.get("kickoff_verified") is not True and any(x in caption for x in ("キックオフ", "開始時刻", "午前5時", "午前6時")):
         return "unverified_kickoff"
-    if not isinstance(official_text, str) or opponent not in official_text or "STVV" not in official_text:
+    if not isinstance(official_text, str):
         return "official_schedule_unverified"
+    # Reject a season listing where opponent and date only occur in unrelated rows.
+    # Evidence must be a reviewed, contiguous match-specific excerpt.
+    excerpt = card.get("schedule_evidence_excerpt")
+    date_label = f"{match_day.month}月{match_day.day}日"
+    if (not isinstance(excerpt, str) or len(excerpt) > 700 or
+            opponent not in excerpt or date_label not in excerpt or
+            excerpt not in official_text):
+        return "match_specific_schedule_evidence_missing"
     identity = f"fixture:{match_day.isoformat()}:{plain(opponent)}"
     if card.get("fixture_identity") != identity:
         return "missing_unique_fixture_identity"
