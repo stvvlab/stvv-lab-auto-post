@@ -76,7 +76,7 @@ def render(fixture_date, destination, variant=0):
         d.text((70, 925), 'VS', font=font(75), fill=YELLOW)
         d.text((65, 1050), 'OH LEUVEN', font=font(88), fill='#ffffff')
         d.rectangle((65, 1240, 1135, 1360), fill=YELLOW)
-        d.text((96, 1259), fixture_date.strftime('%d %b %Y').upper(),
+        d.text((96, 1259), 'MATCH PREVIEW',
                font=font(62), fill=NAVY)
     elif variant == 1:  # Split duel, with a different text hierarchy
         d.polygon([(640, 0), (W, 0), (W, H), (390, H)], fill=YELLOW)
@@ -91,7 +91,7 @@ def render(fixture_date, destination, variant=0):
         d.ellipse((476, 830, 728, 1082), fill=NAVY, outline='#ffffff', width=8)
         d.text((505, 883), 'VS', font=font(88), fill=YELLOW)
         d.rectangle((65, 1270, 1135, 1370), fill=NAVY)
-        d.text((96, 1283), fixture_date.strftime('%d %b %Y').upper(),
+        d.text((96, 1283), 'FIXTURE PREVIEW',
                font=font(59), fill='#ffffff')
     else:  # Stadium-lines, symmetrical versus composition
         for r in (210, 330, 455, 600, 750):
@@ -108,7 +108,7 @@ def render(fixture_date, destination, variant=0):
         d.text((100, 820), 'VS', font=font(81), fill=YELLOW)
         d.text((100, 940), 'OH LEUVEN', font=font(91), fill='#ffffff')
         d.line((65, 1230, 1135, 1230), fill=YELLOW, width=8)
-        d.text((65, 1270), fixture_date.strftime('%d %b %Y').upper(),
+        d.text((65, 1270), 'MATCH PREVIEW',
                font=font(72), fill='#ffffff')
     if variant == 1:
         d.text((65, 1430), 'DRAFT / TIME OMITTED',
@@ -160,7 +160,7 @@ def prepare(report, output, metadata, today):
     sidecar = {
         'status': 'unreviewed_artwork_draft', 'reviewed': False, 'can_publish': False,
         'source_fixture': report['fixture'], 'fixture_date_local': fixture_date.isoformat(),
-        'kickoff_omitted': True, 'source_conflict': report['status'] == 'official_sources_disagree_block_kickoff',
+        'kickoff_omitted': True, 'date_omitted_from_artwork': True, 'source_conflict': report['status'] == 'official_sources_disagree_block_kickoff',
         'source_urls': [x['url'] for x in report['source_checks']],
         'image_path': str(path), 'sha256': digest, 'dimensions': [W, H],
         'variants': variants, 'contact_sheet': str(gallery),

@@ -5,7 +5,7 @@ from datetime import date
 from pathlib import Path
 from PIL import Image
 
-from fixture_draft_art import prepare, validate
+from fixture_draft_art import prepare, validate, render
 
 
 REPORT = {
@@ -28,6 +28,7 @@ class FixtureDraftArtTests(unittest.TestCase):
             self.assertFalse(info['can_publish'])
             self.assertFalse(info['reviewed'])
             self.assertTrue(info['kickoff_omitted'])
+            self.assertTrue(info['date_omitted_from_artwork'])
             self.assertTrue(info['source_conflict'])
             self.assertFalse(info['buffer_called'])
             self.assertTrue(json.loads(metadata.read_text())['sha256'])
@@ -54,6 +55,15 @@ class FixtureDraftArtTests(unittest.TestCase):
             self.assertEqual(len(persisted['variants']), 3)
             self.assertFalse(persisted['can_publish'])
             self.assertFalse(persisted['buffer_called'])
+
+    def test_local_date_never_appears_in_japanese_review_artwork(self):
+        # A Belgian local date differs from the JST calendar date. If the
+        # date were drawn, changing it would change the image bytes.
+        with tempfile.TemporaryDirectory() as tmp:
+            for variant in range(3):
+                first = render(date(2026, 11, 1), Path(tmp)/f'a{variant}.png', variant)
+                second = render(date(2026, 11, 2), Path(tmp)/f'b{variant}.png', variant)
+                self.assertEqual(first.read_bytes(), second.read_bytes())
 
     def test_incomplete_source_blocks_preview(self):
         data = dict(REPORT, status='source_incomplete_block_kickoff')
