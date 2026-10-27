@@ -141,7 +141,16 @@ def build_inventory(history, now, session=requests, *, url=None):
     final = urlparse(getattr(response, 'url', url))
     if final.scheme != 'https' or final.netloc != 'stvv.jp' or final.path != urlparse(url).path:
         raise ValueError('Official fixture schedule redirected or changed path')
-    fixtures = parse_fixtures(response.text, now) + parse_uefa_fixtures(response.text, now)
+    # UEFA parsing is independent: a malformed European section must not
+    # discard verified league fixtures from the same official schedule.
+    fixtures = parse_fixtures(response.text, now)
+    source_warnings = []
+    try:
+        fixtures.extend(parse_uefa_fixtures(response.text, now))
+    except ValueError as error:
+        source_warnings.append({'competition': 'UEFA Conference League',
+                                'status': 'section_unavailable',
+                                'reason': str(error)})
     known = (history['publication_log'] +
              list(history.get('pending_posts', {}).values()) +
              list(history.get('reserved_posts', {}).values()))
@@ -160,8 +169,10 @@ def build_inventory(history, now, session=requests, *, url=None):
                                     'Implement and test a separate strict fixture publishing gate'],
                       'design_direction': 'Navy/yellow editorial fixture card; varied composition, no score or invented lineup. A caricatured real player requires verified reference, rights review and explicit visual approval.'})
     return {'checked_at': now.astimezone(JST).isoformat(),
-            'status': 'fixture_evidence_available' if items else 'no_upcoming_unrecorded_league_fixture',
+            'status': ('fixture_evidence_available' if items else
+                       'no_upcoming_unrecorded_fixture'),
             'source_url': url, 'candidates': items,
+            'source_warnings': source_warnings,
             'image_generation_performed': False, 'publication_performed': False,
             'note': 'Draft-only evidence; does not bypass used-source, image approval, duplicate or reservation gates.'}
 
