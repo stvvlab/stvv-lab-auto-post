@@ -29,6 +29,48 @@ class RecoveryTriageTests(unittest.TestCase):
         self.assertIn("x_publication_not_verified", data["problems"])
         self.assertEqual(data["new_x_publications_verified"], 0)
 
+    def test_failed_scheduled_step_is_detected_even_with_ready_content(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "candidates_need_review"},
+                        {"status": "execution_failed", "delivery_state": "no_new_buffer_acceptance_recorded"})
+        self.assertIn("scheduled_delivery_execution_failed", data["problems"])
+        self.assertIn("failed scheduled job", data["next_fix"])
+        self.assertEqual(data["new_x_publications_verified"], 0)
+
+    def test_unknown_pending_without_publication_is_detected(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "candidates_need_review"},
+                        {"status": "blocked_pending_outcome_unknown",
+                         "pending_reservation_keys": ["reserve-123"],
+                         "new_publications": []})
+        self.assertIn("send_outcome_unknown_do_not_retry", data["problems"])
+        self.assertIn("without resending", data["next_fix"])
+
+    def test_explicit_buffer_rejection_and_reservation_error(self):
+        rejected = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                            {"status": "candidates_need_review"},
+                            {"status": "blocked_buffer_rejected",
+                             "delivery_state": "buffer_rejected_not_published"})
+        self.assertIn("buffer_explicitly_rejected", rejected["problems"])
+        error = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                         {"status": "candidates_need_review"},
+                         {"status": "blocked_reservation_error",
+                          "reservation_states": [{"buffer_status": "error"}]})
+        self.assertIn("buffer_reservation_error", error["problems"])
+
+    def test_scheduled_buffer_reservation_is_not_an_x_publication(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "candidates_need_review"},
+                        {"status": "reserved_in_buffer",
+                         "delivery_state": "buffer_scheduled_not_published",
+                         "new_reservations": [{"buffer_id": "one"}],
+                         "reservation_states": [{"buffer_status": "scheduled"}],
+                         "new_publications": []})
+        self.assertEqual(data["new_buffer_reservations"], 1)
+        self.assertEqual(data["new_x_publications_verified"], 0)
+        self.assertNotIn("x_publication_not_verified", data["problems"])
+        self.assertNotIn("buffer_reservation_error", data["problems"])
+
     def test_valid_state_does_not_create_issue(self):
         data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
                         {"status": "has_candidates"},
