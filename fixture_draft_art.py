@@ -111,7 +111,7 @@ def render(fixture_date, destination, variant=0):
         d.text((65, 1270), fixture_date.strftime('%d %b %Y').upper(),
                font=font(72), fill='#ffffff')
     d.text((65, 1430), 'UNAPPROVED DRAFT  /  NO KICKOFF TIME',
-           font=font(23), fill='#b8c8da' if variant != 1 else NAVY)
+           font=font(23), fill='#b8c8da')
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     im.save(destination, 'PNG', optimize=True)
