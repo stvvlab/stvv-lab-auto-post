@@ -51,3 +51,4 @@ jobs:
               git push origin HEAD:main
             fi
           fi
+# Re-run after identity-message test compatibility fix; still zero Buffer mutations.
