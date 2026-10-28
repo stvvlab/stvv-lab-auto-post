@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-10-29T02:01:32.554316+09:00",
+  "trigger": "approved_manifest_main_push",
+  "mode": "existing_seven_slot_advance_reservations",
+  "x_display_verified": false,
+  "publications_performed": 0,
+  "new_reservations": [],
+  "status": "execution_failed_do_not_retry",
+  "error_type": "RuntimeError"
+}
