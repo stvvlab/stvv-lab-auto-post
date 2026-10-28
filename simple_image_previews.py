@@ -27,7 +27,7 @@ PALETTES = {
 }
 
 
-def render_card(title, path, palette="navy_gold"):
+def render_card(title, path, palette="navy_gold", layout="editorial"):
     """Only render supplied reviewed-text draft as a preview (not an approved asset)."""
     if not isinstance(title, str) or not title.strip() or len(title) > 90:
         raise ValueError("Invalid official headline")
@@ -38,19 +38,29 @@ def render_card(title, path, palette="navy_gold"):
         raise ValueError("Only PNG preview supported")
     if palette not in PALETTES:
         raise ValueError("Unknown palette")
+    if layout not in {"editorial", "centered", "sideband"}:
+        raise ValueError("Unknown layout")
     background, accent, foreground = PALETTES[palette]
     image = Image.new("RGB", (1448, 1086), background)
     draw = ImageDraw.Draw(image)
     yellow = accent
-    draw.rectangle((72, 98, 1376, 110), fill=yellow)
-    draw.text((80, 135), "STVV LAB", font=font(70), fill=yellow)
-    draw.text((80, 246), "OFFICIAL NEWS", font=font(36), fill=foreground)
+    if layout == "sideband":
+        draw.rectangle((70, 84, 92, 950), fill=accent)
+        heading_y, title_y, left = 110, 330, 145
+    elif layout == "centered":
+        draw.rectangle((72, 160, 1376, 170), fill=accent)
+        heading_y, title_y, left = 210, 410, 100
+    else:
+        draw.rectangle((72, 98, 1376, 110), fill=accent)
+        heading_y, title_y, left = 135, 360, 80
+    draw.text((left, heading_y), "STVV LAB", font=font(70), fill=accent)
+    draw.text((left, heading_y + 110), "OFFICIAL NEWS", font=font(36), fill=foreground)
     # Width-based wrapping keeps mixed Japanese/Latin headlines inside safe area.
     lines, current = [], ""
     headline_font = font(63)
     for character in re.sub(r"\s+", " ", title).strip():
         candidate = current + character
-        if draw.textbbox((0, 0), candidate, font=headline_font)[2] > 1230 and current:
+        if draw.textbbox((0, 0), candidate, font=headline_font)[2] > (1220 if layout != "sideband" else 1150) and current:
             lines.append(current)
             current = character
         else:
@@ -60,10 +70,10 @@ def render_card(title, path, palette="navy_gold"):
     if len(lines) > 5:
         raise ValueError("Headline will not fit the safe area")
     for n, line in enumerate(lines):
-        draw.text((80, 360 + n * 100), line, font=headline_font, fill=foreground)
+        draw.text((left, title_y + n * 95), line, font=headline_font, fill=foreground)
     draw.rectangle((72, 961, 1376, 968), fill=yellow)
     draw.text((80, 992), "SOURCE: STVV OFFICIAL  •  DRAFT PREVIEW", font=font(29),
-              fill=(235, 240, 250))
+              fill=foreground)
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path, format="PNG")
     return path
@@ -81,9 +91,10 @@ def build_previews(drafts, output_dir):
         destination = Path(output_dir) / f"official_draft_{idx:03d}.png"
         try:
             palette = tuple(PALETTES)[idx % len(PALETTES)]
-            render_card(headline, destination, palette=palette)
+            layout = ("editorial", "centered", "sideband")[idx % 3]
+            render_card(headline, destination, palette=palette, layout=layout)
             results.append({"source_url": draft.get("source_url"),
-                            "preview_path": str(destination), "palette": palette,
+                            "preview_path": str(destination), "palette": palette, "layout": layout,
                             "status": "needs_visual_review", "reviewed": False})
         except (ValueError, RuntimeError, OSError) as error:
             results.append({"source_url": draft.get("source_url"),
