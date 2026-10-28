@@ -49,10 +49,10 @@ def verify_echo(post, record):
     if not id_ok and not source_ok:
         raise RuntimeError('Buffer image identity absent; do not resend')
     if record.get('buffer_asset_ids') and [aid] != record['buffer_asset_ids']:
-        raise RuntimeError('Buffer image asset ID changed; do not resend')
+        raise RuntimeError('Buffer image identity changed (asset ID); do not resend')
     if record.get('buffer_asset_sources') and (
             not source_ok or [asset.get('source')] != record['buffer_asset_sources']):
-        raise RuntimeError('Buffer image asset source changed; do not resend')
+        raise RuntimeError('Buffer image identity changed (asset source); do not resend')
 
 
 def remote_block(snapshot, proposal, history):
