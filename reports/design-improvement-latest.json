@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T16:03:28.109326+09:00",
+  "updated_at": "2026-10-28T17:06:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,9 +8,9 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Merged PR #78: known Belgian club links no longer starve the bounded unseen article discovery scan.",
-    "Three PR checks passed, including live Belgian source parser smoke; this is research-only, not production posting.",
-    "Latest evidenced 12:30 JST regular slot started 41m41s late and correctly skipped ready=0; no Buffer reservation or new X publication."
+    "Found two fresh 2026-10-27 Belgian STVV official articles; Japanese football news inventory still has no unused eligible article.",
+    "Created draft PR #79: exact Belgian official article URL/date/body SHA256 checks before reviewed-image reservation and remote duplicate scan; no publication gates relaxed.",
+    "PR #79 CI: visual pipeline 369 tests passed, feedback safety 369 passed, discovery inventory 50 passed; no new image, Buffer mutation or X post."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -873,40 +873,45 @@
   },
   "latest_monitoring_run": {
     "checked_date_jst": "2026-10-28",
-    "classification": "research_discovery_fix_merged; live_reservation_and_x_delivery_still_unverified",
-    "confirmed_problem": "Belgian club official news discovery counted known/published links toward the max_articles fetch limit, starving unseen links lower in the listing.",
-    "actual_fix": "Scan known links without consuming the bounded unseen article fetch budget; preserve read-only status and publishing gates.",
-    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/78",
-    "merged_commit": "90ea46d5e0c1b9e8389c19b876bfef246d3e4025",
+    "classification": "source_gate_pr_ci_passed_not_merged_live_reservation_unverified",
+    "confirmed_problem": "Reviewed ready=0; Japanese official lists have no unused eligible article while Belgian club official posted fresh 2026-10-27 news, but current production source gate is stvv.jp-only.",
+    "actual_fix": "Prepared a fail-closed stvv.com source gate, digest/date/redirect checks and tests in draft PR #79, plus a source-backed Japan Day draft; production main remains unchanged.",
+    "pull_request": "https://github.com/stvvlab/stvv-lab-auto-post/pull/79",
     "ci": {
-      "discovery_brief": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40647324389",
-      "visual_pipeline": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40647324284",
-      "feedback_safety": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40647324287",
-      "all_conclusions": "success",
-      "live_belgian_parser_smoke": "success"
+      "visual_pipeline": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40654250915",
+      "visual_tests_passed": 369,
+      "feedback_safety": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40654250941",
+      "feedback_tests_passed": 369,
+      "discovery": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40654250919",
+      "discovery_tests_passed": 50
     },
-    "regular_delivery": {
-      "run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40630881467",
-      "scheduled_at_jst": "2026-10-28 12:30",
-      "started_at_jst": "2026-10-28 13:11:41",
-      "delay_seconds": 2501,
+    "official_sources": [
+      "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
+      "https://stvv.jp/game/2026-2027/"
+    ],
+    "latest_delivery": {
+      "run_id": "40650783209",
+      "scheduled_at": "2026-10-28T15:30:00+09:00",
+      "started_at": "2026-10-28T16:33:25+09:00",
+      "start_delay_seconds": 3805,
       "status": "skipped_no_verified_content",
       "ready_cards": 0,
-      "pending_posts": 0,
-      "reserved_posts": 0,
-      "new_buffer_reservations": 0,
+      "new_reservations": 0,
       "new_publications": 0
     },
-    "generation_performed": false,
-    "buffer_mutation_performed": false,
-    "x_publication_verified_this_pass": false,
+    "new_images": 0,
+    "ready_cards": 0,
+    "new_reservations": 0,
+    "new_publications": 0,
+    "manual_dispatch": false,
     "paid_api_used": false,
+    "reply_sent": false,
     "remaining": [
-      "Need a newly verified eligible fact and an approved image; Belgian stvv.com candidates remain research-only under the existing stvv.jp production source gate.",
-      "Observe an actual customScheduled reservation, Buffer sent, and public X image/text across multiple regular slots.",
-      "GitHub schedule delay still observed; reason not proven.",
-      "Existing-post supplemental replies still lack an authenticated free sending transport.",
-      "Historical Shinkawa league-first-start claim remains contradicted by earlier official starting record; correction not sent."
+      "PR #79 remains draft and unmerged; official Belgian article source gate is not active in production.",
+      "Exact live club article digest, reviewed Japanese copy, built-in generated image and immutable asset registration are still needed.",
+      "No observed live advance reservation -> Buffer sent -> X display across multiple regular slots.",
+      "Supplemental replies still have no authenticated free sending transport; correction draft remains unsent."
     ]
   }
 }
