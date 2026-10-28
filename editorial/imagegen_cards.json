@@ -153,7 +153,8 @@
         1086
       ],
       "source_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
-      "review_note": "STAGED ON DRAFT PR ONLY. Do not mark ready or merge until exact 2,786,361-byte imagegen PNG is uploaded to this branch and SHA256+1448x1086+source-body digest are independently reverified. Visually inspected artwork in conversation: STVV LAB, NEXT MATCH, STVV VS OH LEUVEN, 11月2日(月), 午前0:00, 日本時間, DAIO WASABI STAYEN; no player, jersey or club crest. Caption focuses next match while adding the genuinely new 2026-10-27 club-announced three-match Stayen home sequence, not duplicate Japan Day. The earlier 2026-10-02 fixture/Japan Day notice is not a new fact. Existing G-football 2026-10-29 18:00 reservation must not be cancelled or resent. Existing seven scheduled slots only."
+      "review_note": "STAGED ON DRAFT PR ONLY. Do not mark ready or merge until exact 2,786,361-byte imagegen PNG is uploaded to this branch and SHA256+1448x1086+source-body digest are independently reverified. Visually inspected artwork in conversation: STVV LAB, NEXT MATCH, STVV VS OH LEUVEN, 11月2日(月), 午前0:00, 日本時間, DAIO WASABI STAYEN; no player, jersey or club crest. Caption focuses next match while adding the genuinely new 2026-10-27 club-announced three-match Stayen home sequence, not duplicate Japan Day. The earlier 2026-10-02 fixture/Japan Day notice is not a new fact. Existing G-football 2026-10-29 18:00 reservation must not be cancelled or resent. Existing seven scheduled slots only. Publication must occur before kickoff; expiry is checked against target dueAt, not only article's 7-day freshness.",
+      "expires_at_jst": "2026-11-02T00:00:00+09:00"
     }
   ]
 }
