@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-29T02:02:58.717607+09:00",
+  "checked_at": "2026-10-29T02:03:49.127558+09:00",
   "status": "read_only_completed",
   "mutation_count": 0,
   "mode": "read_only_no_mutations_no_retries",
@@ -12,5 +12,34 @@
       "matches": [],
       "status": "unresolved_do_not_retry"
     }
-  ]
+  ],
+  "filtered_statuses_checked": [
+    "scheduled",
+    "sending",
+    "needs_approval",
+    "error",
+    "sent"
+  ],
+  "unfiltered_scan": {
+    "channel_posts_seen": 136,
+    "results": [
+      {
+        "pending_key": "daily_2026-10-29_news",
+        "caption_matched_posts": 1,
+        "exact_remote_matches": 0,
+        "matches": [
+          {
+            "buffer_id": "6ae22a71c79ca14f286ed242",
+            "status": "scheduled",
+            "due_at_matches": true,
+            "due_at": "2026-10-29T09:00:00.000Z",
+            "asset_count": 1,
+            "asset_ids_present": false,
+            "asset_ids": []
+          }
+        ],
+        "status": "unresolved_do_not_retry"
+      }
+    ]
+  }
 }
