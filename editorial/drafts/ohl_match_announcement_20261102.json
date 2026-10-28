@@ -36,7 +36,7 @@
       "日本時間",
       "DAIO WASABI STAYEN"
     ],
-    "note": "Original no-crest/no-player graphic, visually checked 2026-10-29. Image bytes are not in repository. Do not mark ready without same-commit image+manifest."
+    "note": "Original imagegen artwork verified in local container (SHA256 81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5); binary not available to GitHub connector from local container path. No silent JPEG recompression or image substitution. Do not mark ready without same-commit exact bytes + manifest."
   },
   "duplication_review": "The 2026-10-27 Japan Day article repeats the 2026-10-02 Japanese announcement; do not repost Japan Day-only content. Fixture announcement must pass separate existing novelty/fixture gates; no bypass.",
   "outstanding": [
@@ -46,5 +46,53 @@
     "Allow existing 7 scheduled workflows to reserve; no manual dispatch or retries",
     "Verify Buffer scheduled -> sent -> public X text and image"
   ],
-  "created_for": "User's 2026-10-29 request to carry forward the 2026-10-28 approved STVV vs OH Leuven announcement. No Buffer action performed."
+  "created_for": "User's 2026-10-29 request to carry forward the 2026-10-28 approved STVV vs OH Leuven announcement. No Buffer action performed.",
+  "source_verification": {
+    "checked_at_jst": "2026-10-29T02:57:32+09:00",
+    "fixture_verified": true,
+    "corroborating_primary_sources": [
+      {
+        "url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+        "date": "2026-10-27",
+        "local_kickoff": "2026-11-01 16:00 CET",
+        "venue": "Stayen"
+      },
+      {
+        "url": "https://ohleuven.com/news/ga-mee-naar-stvv/",
+        "date": "2026-10-26",
+        "local_kickoff": "2026-11-01 16:00 CET"
+      },
+      {
+        "url": "https://stvv.jp/news/event/20261002_2/",
+        "date": "2026-10-02",
+        "local_kickoff": "2026-11-01 16:00 CET"
+      },
+      {
+        "url": "https://stvv.jp/",
+        "date": "checked 2026-10-29",
+        "kickoff_jst": "2026-11-02 00:00"
+      }
+    ],
+    "conflicting_source": "https://stvv.com/nl/wedstrijden?timeframe=upcoming displays 15:00 without an explicit time-zone label; do not override three dated official articles and Japanese official JST fixture. Reconfirm if source changes.",
+    "duplicate_japan_day_notice": "2026-10-02 Japanese article already announced Japan Day, so this is a next-match support post, not a new Japan Day announcement.",
+    "x_length_including_fixed_hashtags": 190,
+    "source_body_digest": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+    "source_body_digest_status": "previously measured from reports/club-official-latest.json; re-fetch exact article before any ready status",
+    "image_sha256_reverified_local": true,
+    "image_exact_path_in_local_container": "/mnt/data/wide_dynamic_sports_match_announcement_graphic_po.png",
+    "image_bytes_in_git": false
+  },
+  "publication_order_conflict": {
+    "verified_2026_10_29_jst": "2026-10-29T02:57:32+09:00",
+    "existing_earlier_scheduled_post": {
+      "buffer_id": "6ae22a71c79ca14f286ed242",
+      "due_at_jst": "2026-10-29T18:00:00+09:00",
+      "content": "G football community match",
+      "status": "scheduled",
+      "do_not_resend_or_cancel_without_approval": true
+    },
+    "match_announcement_status": "not_scheduled",
+    "priority_requirement": "User wants match announcement first; this is not currently achieved. Do not claim otherwise.",
+    "next_safe_step": "Transfer exact image bytes and review a fixture-specific novelty gate without bypassing duplicate, source, media or approval controls; schedule via existing seven slots only after validation."
+  }
 }
