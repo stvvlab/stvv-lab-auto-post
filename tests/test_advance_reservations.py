@@ -369,6 +369,11 @@ class BufferTransportTests(unittest.TestCase):
         with patch.dict(os.environ, {'BUFFER_API_KEY': 'offline-fixture'}):
             BufferReservations(session).schedule('確認済み', 'https://example.test/image', DUE)
         session.post.assert_called_once()
+        # The strict verify_echo() requires full image identity in the first
+        # createPost response, not merely an asset ID. No second mutation.
+        graphql = session.post.call_args.kwargs['json']['query']
+        for required in ('source', 'type', 'mimeType', 'ImageAsset', 'width height'):
+            self.assertIn(required, graphql)
         args = session.post.call_args.kwargs['json']['variables']['input']
         self.assertEqual(args['mode'], 'customScheduled')
         self.assertEqual(args['dueAt'], DUE)
