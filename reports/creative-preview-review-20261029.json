@@ -1,0 +1,38 @@
+{
+  "checked_at_jst": "2026-10-29T00:00:00+09:00",
+  "official_source": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "verified_article_date": "2026-10-27",
+  "imagegen_tool_success": true,
+  "images": [
+    {
+      "sha256": "0498d78a470a0ee5f1e9d6681982337ea19af71543c475b7160e84833087773b",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "PNG",
+      "file_location": "conversation_only",
+      "review": "rejected",
+      "reason": "The image prints Belgian-local 11/1, 11/5, 11/8 without timezone label. Japanese-language audience may mistake these for Japan dates; OH Leuven official kickoff time also conflicts across official listings."
+    },
+    {
+      "sha256": "6da2f48a1ca3c14ade2ecd7cf96b56a3f368dc21a8d6f54b7d9c74b5a012404b",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "PNG",
+      "file_location": "conversation_only",
+      "review": "rejected",
+      "reason": "Second generation retained the same unlabeled Belgian-local dates despite revision attempt; cannot be approved."
+    }
+  ],
+  "novelty": "The article groups three already scheduled home fixtures. An editorially new claim and duplicate review are required; calendar regrouping alone is not sufficient.",
+  "ready_cards_created": 0,
+  "manifest_modified": false,
+  "image_bytes_committed": false,
+  "buffer_mutation_performed": false,
+  "x_publication_performed": false,
+  "paid_api_used": false,
+  "next_action": "Prefer genuinely new community-football official article, or revise the three-match graphic to omit dates and confirm distinct novelty before any approval. No additional generation in this run."
+}
