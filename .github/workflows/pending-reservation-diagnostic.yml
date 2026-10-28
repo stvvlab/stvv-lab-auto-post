@@ -1,0 +1,46 @@
+name: STVV Pending Reservation Read-Only Diagnosis
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pending_reservation_diagnostic.py'
+      - '.github/workflows/pending-reservation-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 pillow
+      - name: Read-only reconcile pending against Buffer, no post mutations
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python pending_reservation_diagnostic.py
+      - name: Preserve diagnosis even if API fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pending-reservation-diagnosis-${{ github.run_id }}
+          path: reports/pending-reservation-diagnostic-latest.json
+          if-no-files-found: warn
+      - name: Save sanitized diagnosis to main
+        if: always()
+        run: |
+          if [ -f reports/pending-reservation-diagnostic-latest.json ]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add reports/pending-reservation-diagnostic-latest.json
+            if ! git diff --cached --quiet; then
+              git commit -m 'Record read-only pending Buffer reservation diagnosis'
+              git pull --rebase origin main
+              git push origin HEAD:main
+            fi
+          fi
