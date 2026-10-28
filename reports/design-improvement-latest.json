@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T01:00:58+09:00",
+  "updated_at": "2026-10-29T02:57:32+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content. Color palette is unrestricted and selected for the story, with strong contrast and legibility; navy/yellow are optional, not mandatory. Do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -60,7 +60,7 @@
     "paid_api_or_cli_used": false
   },
   "prepared_asset_delivery": {
-    "ready_cards": 0,
+    "ready_cards": 1,
     "published_cards": 4,
     "manifest_enabled": true,
     "fail_closed_without_reviewed_asset": true,
@@ -69,7 +69,8 @@
     "freshness_days": 7,
     "pending_before_send_preserved": true,
     "public_byte_sha256_check_preserved": true,
-    "duplicate_guard_preserved": true
+    "duplicate_guard_preserved": true,
+    "reserved_cards": 1
   },
   "tests": {
     "local_full_passed": 265,
@@ -108,14 +109,17 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "自動化の設定／実装済み、実予約からX表示までの実動未確認",
+  "implementation_status": "G-football image+caption scheduled in Buffer for 2026-10-29 18:00 JST; X sent/display unverified. OH Leuven match announcement draft/imagegen exists locally, not transferred or scheduled.",
   "uncompleted": [
     "A fresh reviewed new image is needed before the first real advance reservation.",
     "Reservation acceptance, Buffer sent and actual X caption/image delivery through multiple normal slots remain unverified.",
     "Startup delays still affect preparation and reservation creation; exact publication timing is not guaranteed.",
-    "Supplemental reply transport remains unavailable; no actual reply sent."
+    "Supplemental reply transport remains unavailable; no actual reply sent.",
+    "OH Leuven match image binary not in GitHub; match announcement not scheduled",
+    "Existing G-football 18:00 reservation precedes requested match announcement; do not silently cancel",
+    "Buffer scheduled -> sent -> actual X image display for 2026-10-29 not yet verified"
   ],
-  "next_priority": "Pass CI, then verify an eligible new image through a normal reservation, Buffer sent and actual X display; never resend known facts.",
+  "next_priority": "Prioritize STVV vs OH Leuven match announcement for 2026-11-02 00:00 JST, with safe exact binary transfer, non-Japan-Day duplicate review and existing 7-slot Buffer scheduling. Do not cancel/resend existing G post without approval.",
   "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
   "test_isolation_fix_commit": "475df54bb047594c8b2cf2c66c77c30eb06f6385",
   "policy_fix_commits": [
@@ -948,5 +952,36 @@
     "pending_posts": 0,
     "reserved_posts": 0,
     "notes": "Verified updated main contains the new color instruction, documentation and regression test. CI success is not a Buffer/X publication success. Last regular slot at 2026-10-28 23:42 JST skipped with zero ready cards; 42m40s delayed."
+  },
+  "latest_monitoring_check_20261029": {
+    "checked_at": "2026-10-29T02:57:32+09:00",
+    "latest_verified_x_publication": "2026-10-26T23:35:36+09:00",
+    "latest_verified_x_url": "https://x.com/stvvlabo/status/2114727647368331366",
+    "latest_ledger_reserved_posts": 1,
+    "latest_ledger_pending_posts": 0,
+    "latest_ledger_ready_cards": 1,
+    "buffer_reserved_post_id": "6ae22a71c79ca14f286ed242",
+    "buffer_reserved_due_jst": "2026-10-29T18:00:00+09:00",
+    "buffer_status_from_ledger": "scheduled",
+    "buffer_status_last_checked_at": "2026-10-29T02:06:28.380678+09:00",
+    "x_display_verified": false,
+    "next_match": "STVV vs OH Leuven",
+    "next_match_kickoff_jst": "2026-11-02T00:00:00+09:00",
+    "match_draft": "editorial/drafts/ohl_match_announcement_20261102.json",
+    "match_draft_commit": "d49fa6b315dd929dce27be1dad795d6c12549f85",
+    "imagegen_local_png_sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+    "imagegen_local_png_dimensions": [
+      1448,
+      1086
+    ],
+    "imagegen_local_png_in_github": false,
+    "match_ready": false,
+    "match_reserved": false,
+    "published_new_x_post_this_check": false,
+    "paid_api_used": false,
+    "manual_dispatch_performed": false,
+    "source_discrepancy": "STVV match list displays 15:00 without explicit timezone, but dated STVV/OH Leuven articles and STVV Japan confirm 16:00 CET / 00:00 JST; flagged in draft.",
+    "blocker": "GitHub connector cannot read raw local PNG bytes directly; create_blob requires full base64. No unapproved Adobe/paid API/third-party public upload workaround.",
+    "next_action": "Verified exact image transfer + same-commit manifest after review, then normal scheduled reservation. Preserve existing G reservation; do not promise match post is next."
   }
 }
