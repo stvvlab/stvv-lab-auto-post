@@ -49,6 +49,29 @@ jobs:
           python-version: '3.12'
       - run: pip install requests beautifulsoup4 pillow
       - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research tests.test_fixture_schedule_inventory tests.test_club_official_inventory -v
+      - name: Live Belgian club news parser smoke (read-only; no approval or publishing)
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          from datetime import datetime
+          import requests
+          from club_official_inventory import LISTING, JST, approved_url, listing_links, article_evidence
+          client = requests.Session()
+          index = client.get(LISTING, timeout=20)
+          index.raise_for_status()
+          assert index.url == LISTING or index.url == LISTING + '/'
+          links = listing_links(index.text)
+          assert links, 'No Belgian official article links'
+          url, _ = links[0]
+          assert approved_url(url)
+          page = client.get(url, timeout=20)
+          page.raise_for_status()
+          assert approved_url(page.url)
+          evidence = article_evidence(page.text, datetime.now(JST))
+          assert evidence is not None, 'Latest article not in seven-day window'
+          print('LIVE_BELGIAN_SOURCE_OK', url, evidence['date_jst'],
+                'kickoff_requires_review=', evidence['kickoff_time_requires_cross_source_check'])
+          PY
       - name: Live official fixture parser smoke (read-only; no approval or publishing)
         continue-on-error: true
         run: |
