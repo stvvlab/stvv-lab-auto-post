@@ -3,13 +3,33 @@ import hashlib
 import json
 import re
 import subprocess
-from datetime import date
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / 'editorial/imagegen_cards.json'
+
+
+def unexpired_at(card, now):
+    """Reject an expiring announcement at or after its event start.
+
+    Optional for evergreen content; malformed or timezone-naive expiry is a
+    block, never a reason to ignore the expiry. `now` is the intended Buffer
+    publication time in prepared_candidates, not the preparation timestamp.
+    """
+    raw = card.get('expires_at_jst')
+    if raw is None:
+        return True
+    if not isinstance(raw, str) or not isinstance(now, datetime) or now.tzinfo is None:
+        return False
+    try:
+        cutoff = datetime.fromisoformat(raw)
+        return (cutoff.tzinfo is not None and cutoff.utcoffset() == timedelta(hours=9)
+                and now.astimezone(cutoff.tzinfo) < cutoff)
+    except (TypeError, ValueError, OverflowError):
+        return False
 
 
 def exact_card(slot, message, source):
@@ -112,7 +132,8 @@ def prepared_candidates(slot, now):
         except (KeyError, ValueError, TypeError):
             continue
         text = card.get('text')
-        if 0 <= (now.date() - day).days <= 7 and isinstance(text, str) and source in text:
+        if (0 <= (now.date() - day).days <= 7 and isinstance(text, str)
+                and source in text and unexpired_at(card, now)):
             result.append((text, source))
     return result
 
@@ -131,6 +152,9 @@ def prepared_media(session, slot, message, source):
     if len(cards) != 1:
         return True, None
     card = cards[0]
+    from stvv_post import JST
+    if not unexpired_at(card, datetime.now(JST)):
+        return True, None
     if urlparse(source).netloc == 'stvv.com' or 'editorial_fact' in card:
         from datetime import datetime
         from stvv_post import JST
