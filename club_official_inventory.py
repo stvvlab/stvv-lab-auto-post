@@ -49,19 +49,27 @@ def listing_links(markup):
 
 def article_evidence(markup, now):
     soup = BeautifulSoup(markup, 'html.parser')
-    main = soup.select_one('main') or soup.select_one('article')
-    if main is None:
-        raise ValueError('Official article main/body not found')
-    heading = main.find('h1')
+    # STVV's current article pages may use a div-based layout without
+    # semantic <main>/<article>. Require an H1 and an immediately following
+    # publication date before treating any body text as evidence.
+    node = soup.select_one('main') or soup.select_one('article') or soup.body or soup
+    for child in node.select('script, style, iframe, noscript'):
+        child.decompose()
+    heading = node.find('h1')
     if heading is None:
         raise ValueError('Official article heading not found')
     title = heading.get_text(' ', strip=True)
-    text = re.sub(r'\s+', ' ', main.get_text(' ', strip=True)).strip()
+    text = re.sub(r'\s+', ' ', node.get_text(' ', strip=True)).strip()
     start = text.find(title)
     if start < 0:
         raise ValueError('Heading not in article body')
+    text = text[start:]
+    # Avoid accidentally hashing site navigation/footer as article evidence.
+    footer = re.search(r'\bContact\s+Tiensesteenweg\b', text)
+    if footer:
+        text = text[:footer.start()].strip()
     # The article date must follow its heading; never infer it from the listing.
-    match = DATE.search(text[start + len(title):start + len(title) + 180])
+    match = DATE.search(text[len(title):len(title) + 180])
     if not match:
         raise ValueError('Official article publication date not found')
     day = datetime(int(match[3]), MONTHS[match[2].lower()], int(match[1])).date()
