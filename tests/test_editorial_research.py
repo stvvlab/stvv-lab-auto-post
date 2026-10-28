@@ -98,6 +98,32 @@ class ResearchTests(unittest.TestCase):
         self.assertNotIn('player', [d['angle'] for d in result['drafts']])
         self.assertFalse(result['publication_performed'])
 
+    def test_published_disproved_claim_stays_suppressed_after_article_body_change(self):
+        # A live official article may be edited; its new digest must not
+        # resurrect the already-published, historically contradicted claim.
+        card = self.reviewed_claim_card(BODY)
+        card['status'] = 'published'
+        changed_body = '公式記事を更新しました。' + BODY
+        history = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}
+        with patch.object(research, 'read_body', return_value=changed_body):
+            result = research.build_research(history, {'cards': [card]}, NOW, Mock())
+        self.assertNotIn('player', [d['angle'] for d in result['drafts']])
+        self.assertIn('analysis', [d['angle'] for d in result['drafts']])
+        self.assertFalse(result['publication_performed'])
+
+    def test_reserved_source_blocks_new_research_drafts(self):
+        history = {'publication_log': [{'source': URL, 'text': '以前の結果'}],
+                   'pending_posts': {},
+                   'reserved_posts': {'r': {'source': URL, 'text': '予約済み本文'}}}
+        before = copy.deepcopy(history)
+        with patch.object(research, 'read_body') as read:
+            result = research.build_research(history, {'cards': []}, NOW, Mock())
+        read.assert_not_called()
+        self.assertEqual(history, before)
+        self.assertEqual(result['drafts'], [])
+        self.assertEqual(result['source_checks'][0]['status'],
+                         'blocked_pending_or_reserved_source')
+
     def test_unreviewed_or_changed_body_requires_research_again(self):
         body = 'シント＝トロイデンVVは' + BODY
         state = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}
