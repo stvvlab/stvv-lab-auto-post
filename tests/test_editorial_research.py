@@ -103,7 +103,7 @@ class ResearchTests(unittest.TestCase):
         # resurrect the already-published, historically contradicted claim.
         card = self.reviewed_claim_card(BODY)
         card['status'] = 'published'
-        changed_body = '公式記事を更新しました。' + BODY
+        changed_body = 'シント＝トロイデンVVは' + BODY
         history = {'publication_log': [{'source': URL, 'text': 'STVV 2–3 クラブ・ブルージュ'}]}
         with patch.object(research, 'read_body', return_value=changed_body):
             result = research.build_research(history, {'cards': [card]}, NOW, Mock())
