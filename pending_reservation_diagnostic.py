@@ -29,13 +29,19 @@ def diagnose(history, posts):
         for post in matches:
             assets = post.get("assets")
             ids = [a.get("id") for a in assets if isinstance(a, dict)] if isinstance(assets, list) else []
+            asset = assets[0] if isinstance(assets, list) and len(assets) == 1 and isinstance(assets[0], dict) else {}
+            image_meta = asset.get("image") if isinstance(asset.get("image"), dict) else {}
             entries.append({"buffer_id": post.get("id"),
                             "status": post.get("status"),
                             "due_at_matches": same_time(post.get("dueAt"), record.get("due_at")),
                             "due_at": post.get("dueAt"),
                             "asset_count": len(assets) if isinstance(assets, list) else None,
                             "asset_ids_present": len(ids) == 1 and bool(ids[0]),
-                            "asset_ids": ids if len(ids) == 1 and bool(ids[0]) else []})
+                            "asset_ids": ids if len(ids) == 1 and bool(ids[0]) else [],
+                            "asset_source": asset.get("source"),
+                            "asset_mime_type": asset.get("mimeType"),
+                            "asset_type": asset.get("type"),
+                            "asset_dimensions": [image_meta.get("width"), image_meta.get("height")]})
         exact = [e for e in entries if e["due_at_matches"] and e["asset_ids_present"]
                  and e["status"] in ("scheduled", "sending", "sent")]
         report["results"].append({"pending_key": key, "caption_matched_posts": len(matches),
@@ -59,7 +65,7 @@ def scan_all_channel_posts(client):
         for _ in range(5):
             after = ", after: " + json.dumps(cursor) if cursor else ""
             query = ("query { posts(first: 100" + after + ", input: {organizationId: "
-                     + json.dumps(oid) + "}) { edges { node { id text channelId status dueAt assets { id } } } "
+                     + json.dumps(oid) + "}) { edges { node { id text channelId status dueAt assets { id source mimeType type ... on ImageAsset { image { width height } } } } } "
                      "pageInfo { hasNextPage endCursor } } }")
             response = client.query(query).get("posts")
             if not isinstance(response, dict) or not isinstance(response.get("edges"), list):
