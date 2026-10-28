@@ -1,0 +1,50 @@
+{
+  "status": "draft_image_created_not_queued",
+  "reviewed": false,
+  "can_publish": false,
+  "priority": "next_match_announcement",
+  "opponent": "OH Leuven",
+  "fixture": "STVV vs OH Leuven",
+  "kickoff_jst": "2026-11-02T00:00:00+09:00",
+  "fixture_local": "2026-11-01T16:00:00+01:00",
+  "venue": "DAIO WASABI STAYEN",
+  "source_urls": [
+    "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+    "https://ohleuven.com/news/ga-mee-naar-stvv/",
+    "https://stvv.jp/game/2026-2027/"
+  ],
+  "caption": "⚽ 次戦はOHルーヴェン戦！\n📅 11月2日（月）午前0:00（日本時間）\n🏟 DAIO WASABI STAYEN\n\nホームで勝利をつかめ！STVVの熱い戦いに期待。🇯🇵\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "fixed_hashtags": [
+    "#STVV",
+    "#シントトロイデン"
+  ],
+  "image": {
+    "generated_with": "ChatGPT built-in imagegen",
+    "conversation_only": true,
+    "filename": "wide_dynamic_sports_match_announcement_graphic_po.png",
+    "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+    "dimensions": [
+      1448,
+      1086
+    ],
+    "visible_text": [
+      "STVV LAB",
+      "NEXT MATCH",
+      "STVV VS OH LEUVEN",
+      "11月2日(月)",
+      "午前0:00",
+      "日本時間",
+      "DAIO WASABI STAYEN"
+    ],
+    "note": "Original no-crest/no-player graphic, visually checked 2026-10-29. Image bytes are not in repository. Do not mark ready without same-commit image+manifest."
+  },
+  "duplication_review": "The 2026-10-27 Japan Day article repeats the 2026-10-02 Japanese announcement; do not repost Japan Day-only content. Fixture announcement must pass separate existing novelty/fixture gates; no bypass.",
+  "outstanding": [
+    "Transfer exact image bytes to generated/ on main with verified SHA256",
+    "Re-review prior match announcement duplication and automated novelty gate",
+    "Commit asset bytes and manifest together only if approved",
+    "Allow existing 7 scheduled workflows to reserve; no manual dispatch or retries",
+    "Verify Buffer scheduled -> sent -> public X text and image"
+  ],
+  "created_for": "User's 2026-10-29 request to carry forward the 2026-10-28 approved STVV vs OH Leuven announcement. No Buffer action performed."
+}
