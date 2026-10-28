@@ -14,7 +14,7 @@ import requests
 
 from content_guard import canonical_source, duplicate_reason, plain
 from preparation_inventory import read_body
-from editorial_novelty import fact_metadata
+from editorial_novelty import KNOWN_PRIOR_LEAGUE_STARTS, fact_metadata
 from stvv_post import HASHTAGS, JST, SESSION, x_length
 
 ROOT = Path(__file__).resolve().parent
@@ -40,11 +40,17 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
     """Return evidence-backed drafts; never mutate the ledger or ready queue."""
     if not 1 <= max_sources <= 3:
         raise ValueError('Research must inspect between one and three sources')
-    records = history.get('publication_log', []) + list(history.get('pending_posts', {}).values())
+    # A scheduled Buffer post is already committed content, not unused research.
+    reservations = list(history.get('reserved_posts', {}).values())
+    records = (history.get('publication_log', [])
+               + list(history.get('pending_posts', {}).values()) + reservations)
     known_text = [plain(p.get('text', '')) for p in records]
     known_text += [plain(c.get('text', '')) for c in manifest.get('cards', [])
                    if c.get('status') in {'ready', 'published'}]
     known_claims = []
+    # Never rediscover a published claim disproved by earlier official evidence,
+    # even when the live article body has changed since its stored digest.
+    discredited_published_claims = set()
     for card in manifest.get('cards', []):
         if card.get('status') not in {'ready', 'published'}:
             continue
@@ -73,6 +79,9 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
                     and re.fullmatch(r'[a-f0-9]{64}', old['source_body_sha256'])):
                 known_claims.append((canonical_source(card['source_url']),
                                      old['source_body_sha256'], plain(old['claim'])))
+                if (card['status'] == 'published'
+                        and old['subject'] in KNOWN_PRIOR_LEAGUE_STARTS):
+                    discredited_published_claims.add(plain(old['claim']))
     sources = []
     for post in reversed(history.get('publication_log', [])):
         source = post.get('source')
@@ -84,8 +93,8 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
     for source in sources:
         # An uncertain submission must not spawn related material.
         if any(canonical_source(p.get('source')) == canonical_source(source)
-               for p in history.get('pending_posts', {}).values()):
-            checks.append({'source_url': source, 'status': 'blocked_pending_source'})
+               for p in list(history.get('pending_posts', {}).values()) + reservations):
+            checks.append({'source_url': source, 'status': 'blocked_pending_or_reserved_source'})
             continue
         try:
             body = read_body(session, source)
@@ -101,7 +110,8 @@ def build_research(history, manifest, now, session=SESSION, max_sources=2):
             evidence = next((s for s in fragments if any(t in s for t in terms)
                              and 8 <= x_length(s) <= 110
                              and not any(plain(s) in old for old in known_text)
-                             and not any(claim in plain(s) for claim in source_claims)), None)
+                             and not any(claim in plain(s) for claim in source_claims)
+                             and not any(claim in plain(s) for claim in discredited_published_claims)), None)
             if not evidence:
                 continue
             # Quotes are exact source text. Questions are not claimed analysis.
