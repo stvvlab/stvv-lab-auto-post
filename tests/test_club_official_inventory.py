@@ -88,6 +88,21 @@ class BelgianOfficialTests(unittest.TestCase):
                 + '<a href="/nl/nieuws/artikel/de-week-van-de-waarheid?x=1">dup</a>')
         self.assertEqual(source.listing_links(html), [(URL, 'De week van de waarheid')])
 
+    def test_single_verified_article_rejects_stale_redirect_and_unapproved_url(self):
+        client = Mock()
+        client.get.return_value = Mock(url=URL, text=BODY)
+        evidence = source.read_verified_article(client, URL, NOW)
+        self.assertEqual(evidence['date_jst'], '2026-10-27')
+        self.assertEqual(len(evidence['body_sha256']), 64)
+        with self.assertRaises(ValueError):
+            source.read_verified_article(client, 'https://evil.test/nl/nieuws/artikel/bad', NOW)
+        client.get.return_value = Mock(url='https://evil.test/redirect', text=BODY)
+        with self.assertRaises(ValueError):
+            source.read_verified_article(client, URL, NOW)
+        client.get.return_value = Mock(url=URL, text=BODY.replace('27 oktober', '10 oktober'))
+        with self.assertRaises(ValueError):
+            source.read_verified_article(client, URL, NOW)
+
 
 if __name__ == '__main__':
     unittest.main()
