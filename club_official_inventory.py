@@ -108,10 +108,16 @@ def build_inventory(history, manifest, now, session=SESSION, max_articles=4):
         links = listing_links(response.text)
         if not links:
             raise ValueError('No valid article links in official listing')
-        for url, listing_title in links[:max_articles]:
+        # A known article must not consume the bounded fetch budget. Otherwise
+        # the first N previously published links can starve newer unseen news.
+        unseen_checked = 0
+        for url, listing_title in links:
             if canonical_source(url) in known:
                 report['skipped'].append({'source_url': url, 'reason': 'already registered or pending'})
                 continue
+            if unseen_checked >= max_articles:
+                break
+            unseen_checked += 1
             item = {'source_url': url, 'listing_heading': listing_title,
                     'reviewed': False, 'can_publish': False}
             try:
