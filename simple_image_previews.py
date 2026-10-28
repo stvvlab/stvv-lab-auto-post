@@ -19,7 +19,15 @@ def font(size):
     raise RuntimeError("Japanese card font unavailable; cannot render")
 
 
-def render_card(title, path):
+PALETTES = {
+    "navy_gold": ((8, 23, 57), (248, 212, 65), (235, 240, 250)),
+    "ice_blue": ((13, 47, 72), (115, 227, 231), (245, 250, 252)),
+    "crimson": ((53, 19, 36), (255, 146, 123), (252, 242, 240)),
+    "forest": ((14, 45, 43), (169, 226, 170), (244, 250, 244)),
+}
+
+
+def render_card(title, path, palette="navy_gold"):
     """Only render supplied reviewed-text draft as a preview (not an approved asset)."""
     if not isinstance(title, str) or not title.strip() or len(title) > 90:
         raise ValueError("Invalid official headline")
@@ -28,12 +36,15 @@ def render_card(title, path):
     path = Path(path)
     if path.suffix.lower() != ".png":
         raise ValueError("Only PNG preview supported")
-    image = Image.new("RGB", (1448, 1086), (8, 23, 57))
+    if palette not in PALETTES:
+        raise ValueError("Unknown palette")
+    background, accent, foreground = PALETTES[palette]
+    image = Image.new("RGB", (1448, 1086), background)
     draw = ImageDraw.Draw(image)
-    yellow = (248, 212, 65)
+    yellow = accent
     draw.rectangle((72, 98, 1376, 110), fill=yellow)
     draw.text((80, 135), "STVV LAB", font=font(70), fill=yellow)
-    draw.text((80, 246), "OFFICIAL NEWS", font=font(36), fill=(235, 240, 250))
+    draw.text((80, 246), "OFFICIAL NEWS", font=font(36), fill=foreground)
     # Width-based wrapping keeps mixed Japanese/Latin headlines inside safe area.
     lines, current = [], ""
     headline_font = font(63)
@@ -49,7 +60,7 @@ def render_card(title, path):
     if len(lines) > 5:
         raise ValueError("Headline will not fit the safe area")
     for n, line in enumerate(lines):
-        draw.text((80, 360 + n * 100), line, font=headline_font, fill="white")
+        draw.text((80, 360 + n * 100), line, font=headline_font, fill=foreground)
     draw.rectangle((72, 961, 1376, 968), fill=yellow)
     draw.text((80, 992), "SOURCE: STVV OFFICIAL  •  DRAFT PREVIEW", font=font(29),
               fill=(235, 240, 250))
@@ -69,9 +80,10 @@ def build_previews(drafts, output_dir):
         headline = title[1].split("\n", 1)[0]
         destination = Path(output_dir) / f"official_draft_{idx:03d}.png"
         try:
-            render_card(headline, destination)
+            palette = tuple(PALETTES)[idx % len(PALETTES)]
+            render_card(headline, destination, palette=palette)
             results.append({"source_url": draft.get("source_url"),
-                            "preview_path": str(destination),
+                            "preview_path": str(destination), "palette": palette,
                             "status": "needs_visual_review", "reviewed": False})
         except (ValueError, RuntimeError, OSError) as error:
             results.append({"source_url": draft.get("source_url"),
