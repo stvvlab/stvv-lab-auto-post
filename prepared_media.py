@@ -156,8 +156,6 @@ def prepared_media(session, slot, message, source):
     if not unexpired_at(card, datetime.now(JST)):
         return True, None
     if urlparse(source).netloc == 'stvv.com' or 'editorial_fact' in card:
-        from datetime import datetime
-        from stvv_post import JST
         from editorial_novelty import fact_metadata
         body = reviewed_official_body(session, card, datetime.now(JST))
         if 'editorial_fact' in card:
