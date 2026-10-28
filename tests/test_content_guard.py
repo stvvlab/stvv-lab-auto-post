@@ -13,7 +13,19 @@ SHOTS = '⚔️ シュート数比較\nSTVV 4–1 ロンメル\nSTVV 14／相手
 NOW = datetime(2026, 10, 21, 14, tzinfo=timezone(timedelta(hours=9)))
 
 
+class FixedDateTime(datetime):
+    """Keep historical duplicate-guard tests at their original 2026-10-21 clock."""
+    @classmethod
+    def now(cls, tz=None):
+        return NOW.astimezone(tz) if tz is not None else NOW.replace(tzinfo=None)
+
+
 class ContentGuardTests(unittest.TestCase):
+    def setUp(self):
+        clock = patch.object(posting, 'datetime', FixedDateTime)
+        clock.start()
+        self.addCleanup(clock.stop)
+
     def history(self, text=OLD, source=URL, pending=False):
         item = {'text': text, 'source': source, 'submitted_at': NOW.isoformat()}
         return {'used_posts': [], 'publication_log': [] if pending else [item],
