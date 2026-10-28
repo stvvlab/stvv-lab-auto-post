@@ -92,7 +92,9 @@ def build_brief(source_url, reviewed_text, history):
             + " Composition: " + variation["composition"]
             + " Motif: " + variation["motif"]
             + " Texture: " + variation["texture"]
-            + " Navy and yellow; restrained red/pink accent; readable on mobile. "
+            + " Choose an expressive, content-appropriate color palette freely; do not require navy or yellow. "
+            + " Match the visual mood to the story (dramatic match result, elegant player feature, playful poll), "
+            + " and vary colors across publications when useful. Prioritize strong contrast and mobile readability. "
             "Design the composition around the verified point rather than a fixed headline box. "
             "No speech bubbles, real people, human faces, invented players, official crests or unlicensed photos. Fictional non-human creatures only. "
             "Do not add dates, scores, opponent names, charts or statistics beyond the reviewed copy. "
