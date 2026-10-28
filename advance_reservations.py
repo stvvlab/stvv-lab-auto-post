@@ -28,17 +28,31 @@ def stamp(value):
 
 
 def verify_echo(post, record):
+    """Buffer asset.id is nullable; verify the immutable image URL when absent."""
     if (str(post.get('id', '')) != str(record.get('buffer_id', post.get('id', '')))
             or not post.get('id') or post.get('text') != record['text']
             or post.get('channelId') != publisher.CHANNEL
             or stamp(post.get('dueAt', '')) != stamp(record['due_at'])
             or not isinstance(post.get('assets'), list) or len(post['assets']) != 1
-            or not isinstance(post['assets'][0], dict)
-            or not isinstance(post['assets'][0].get('id'), str)
-            or not post['assets'][0]['id']
-            or ('buffer_asset_ids' in record
-                and [asset['id'] for asset in post['assets']] != record['buffer_asset_ids'])):
+            or not isinstance(post['assets'][0], dict)):
         raise RuntimeError('Buffer reservation identity changed; do not resend')
+    asset = post['assets'][0]
+    aid = asset.get('id')
+    id_ok = isinstance(aid, str) and bool(aid)
+    dimensions = asset.get('image')
+    source_ok = (
+        asset.get('source') == record.get('image_url')
+        and asset.get('type') == 'image'
+        and asset.get('mimeType') in {'image/png', 'image/jpeg'}
+        and isinstance(dimensions, dict)
+        and [dimensions.get('width'), dimensions.get('height')] == record.get('dimensions'))
+    if not id_ok and not source_ok:
+        raise RuntimeError('Buffer image identity absent; do not resend')
+    if record.get('buffer_asset_ids') and [aid] != record['buffer_asset_ids']:
+        raise RuntimeError('Buffer image asset ID changed; do not resend')
+    if record.get('buffer_asset_sources') and (
+            not source_ok or [asset.get('source')] != record['buffer_asset_sources']):
+        raise RuntimeError('Buffer image asset source changed; do not resend')
 
 
 def remote_block(snapshot, proposal, history):
@@ -92,10 +106,12 @@ def run(history, now, client, save, session):
         if (not isinstance(record, dict) or not all(record.get(k) for k in
                 ('buffer_id', 'due_at', 'text', 'source', 'slot', 'image_url', 'buffer_status'))
                 or key not in history['used_posts']
-                or not isinstance(record.get('buffer_asset_ids'), list)
-                or len(record['buffer_asset_ids']) != 1
-                or not isinstance(record['buffer_asset_ids'][0], str)
-                or not record['buffer_asset_ids'][0]):
+                or not ((isinstance(record.get('buffer_asset_ids'), list)
+                          and len(record['buffer_asset_ids']) == 1
+                          and isinstance(record['buffer_asset_ids'][0], str)
+                          and bool(record['buffer_asset_ids'][0]))
+                         or (isinstance(record.get('buffer_asset_sources'), list)
+                             and record['buffer_asset_sources'] == [record.get('image_url')]))):
             raise ValueError('Reservation ledger is incomplete; do not resend')
     updates = reconcile(history, client, now, save)
     if history['pending_posts']:
@@ -161,9 +177,12 @@ def run(history, now, client, save, session):
     verify_echo(post, record)
     if post.get('status') != 'scheduled':
         raise RuntimeError('Reservation was not confirmed scheduled; do not resend')
+    asset = post['assets'][0]
+    identity = ({'buffer_asset_ids': [asset['id']]}
+                if isinstance(asset.get('id'), str) and asset['id']
+                else {'buffer_asset_sources': [asset['source']]})
     record.update(buffer_id=str(post['id']), buffer_status='scheduled',
-                  buffer_asset_ids=[asset['id'] for asset in post['assets']],
-                  submitted_at=datetime.now(publisher.JST).isoformat())
+                  **identity, submitted_at=datetime.now(publisher.JST).isoformat())
     reservations[key] = record
     history['used_posts'].append(key)  # Occupied, not proof of publication.
     del history['pending_posts'][key]
