@@ -125,3 +125,32 @@ class PreparedMediaTests(unittest.TestCase):
             self.write()
             self.assertEqual(media.prepared_candidates('news', now), [])
             self.card = original
+
+    def test_next_match_card_expires_at_kickoff_not_article_seven_day_limit(self):
+        source = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
+        self.card.update(source_url=source, date_jst='2026-10-27',
+                         source_body_sha256='a' * 64,
+                         text='⚽ 次戦はOHルーヴェン戦。' + source,
+                         expires_at_jst='2026-11-02T00:00:00+09:00')
+        self.write()
+        before = datetime.fromisoformat('2026-11-01T23:00:00+09:00')
+        kickoff = datetime.fromisoformat('2026-11-02T00:00:00+09:00')
+        after = datetime.fromisoformat('2026-11-02T08:00:00+09:00')
+        self.assertEqual(media.prepared_candidates('news', before),
+                         [(self.card['text'], source)])
+        self.assertEqual(media.prepared_candidates('news', kickoff), [])
+        self.assertEqual(media.prepared_candidates('news', after), [])
+        self.assertTrue(media.unexpired_at(self.card, before))
+        self.assertFalse(media.unexpired_at(self.card, kickoff))
+        self.assertFalse(media.unexpired_at(self.card, datetime(2026, 11, 1, 23)))
+        for invalid in ['2026-11-02T00:00:00', 'not-a-date',
+                        '2026-11-02T00:00:00+00:00']:
+            with self.subTest(invalid=invalid):
+                self.card['expires_at_jst'] = invalid
+                self.write()
+                self.assertEqual(media.prepared_candidates('news', before), [])
+        self.card['expires_at_jst'] = '2026-11-02T00:00:00+09:00'
+        self.write()
+        with patch.object(media, 'unexpired_at', return_value=False):
+            self.assertEqual(self.deliver(), (True, None))
+        self.session.get.assert_not_called()
