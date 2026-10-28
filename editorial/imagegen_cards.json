@@ -136,6 +136,24 @@
       ],
       "source_body_sha256": "3044ff9bebeee0d5914e44073d250d2b2f6ecfb0fe04067fe42bd02b69bf39f7",
       "review_note": "2026-10-29 restoration: original pixel-art infographic reviewed visually. Correct STVV and KFC Neeroeteren naming, 24 October event date, Stayen, older eight-a-side and younger four-a-side. No score, actual children, identifiable likeness, logos, stadium photograph or invented match detail. English visual text and Japanese caption cross-checked against Belgian STVV official inventory. Original image bytes registered in the same tree as this manifest; live official body SHA/date, immutable public bytes, Buffer duplicate and capacity checks must still pass before scheduling. No user approval or X publication claimed."
+    },
+    {
+      "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "date_jst": "2026-10-27",
+      "text": "⚽ STVV、7日間でホーム3連戦！\n初戦はOHルーヴェン戦🔥\n📅 11月2日（月）午前0:00（日本時間）\n🏟 DAIO WASABI STAYEN\n\n続くSKブラン、ズルテ・ワレヘム戦へ弾みを！まずはホームで勝利をつかもう💛\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "slots": [
+        "news"
+      ],
+      "reviewed": false,
+      "status": "awaiting_exact_image_bytes",
+      "asset_path": "generated/ohl_match_announcement_20261102.png",
+      "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "source_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+      "review_note": "STAGED ON DRAFT PR ONLY. Do not mark ready or merge until exact 2,786,361-byte imagegen PNG is uploaded to this branch and SHA256+1448x1086+source-body digest are independently reverified. Visually inspected artwork in conversation: STVV LAB, NEXT MATCH, STVV VS OH LEUVEN, 11月2日(月), 午前0:00, 日本時間, DAIO WASABI STAYEN; no player, jersey or club crest. Caption focuses next match while adding the genuinely new 2026-10-27 club-announced three-match Stayen home sequence, not duplicate Japan Day. The earlier 2026-10-02 fixture/Japan Day notice is not a new fact. Existing G-football 2026-10-29 18:00 reservation must not be cancelled or resent. Existing seven scheduled slots only."
     }
   ]
 }
