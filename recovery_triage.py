@@ -6,7 +6,27 @@ import json
 from pathlib import Path
 
 
-def diagnose(manifest, preparation, delivery):
+def outstanding_x_verifications(history):
+    """Track unresolved Buffer-sent reservations across later scheduled runs.
+
+    Older shareNow records have no durable X-verification state, so only the
+    advance-reservation records are in scope. A later verified reservation
+    supersedes an older publication-log snapshot.
+    """
+    records = {}
+    for record in history.get("publication_log", []):
+        if (isinstance(record, dict)
+                and record.get("delivery_state") == "buffer_reports_sent_x_unverified"
+                and record.get("key")):
+            records[record["key"]] = record
+    for key, record in history.get("reserved_posts", {}).items():
+        if isinstance(record, dict) and record.get("buffer_status") == "sent":
+            records[key] = record
+    return sorted(key for key, record in records.items()
+                  if record.get("x_display_verified") is not True)
+
+
+def diagnose(manifest, preparation, delivery, history=None):
     cards = manifest.get("cards", [])
     ready = sum(isinstance(c, dict) and c.get("status") == "ready"
                 and c.get("reviewed") is True for c in cards)
@@ -41,10 +61,11 @@ def diagnose(manifest, preparation, delivery):
         problems.append("buffer_reservation_error")
     if delivery.get("start_delay_seconds", 0) > 1800:
         problems.append("github_start_delayed_over_30_minutes")
-    if not delivery.get("x_display_verified", False):
-        # Absence of verification is not itself proof of a missed post.
-        if delivery.get("new_publications"):
-            problems.append("x_publication_not_verified")
+    outstanding = outstanding_x_verifications(history or {})
+    if (outstanding or (not delivery.get("x_display_verified", False)
+                        and delivery.get("new_publications"))):
+        # This is missing X evidence, not proof of failed publication.
+        problems.append("x_publication_not_verified")
     if "send_outcome_unknown_do_not_retry" in problems:
         next_fix = ("Reconcile the exact pending ID and remote Buffer state without "
                     "resending. Preserve the ledger until the outcome is proven.")
@@ -57,6 +78,10 @@ def diagnose(manifest, preparation, delivery):
     elif "image_verification_blocked" in problems:
         next_fix = ("Verify approved image bytes, public asset identity and caption; "
                     "do not bypass the image gate.")
+    elif "x_publication_not_verified" in problems:
+        next_fix = ("Verify the exact X text and image for each Buffer-sent "
+                    "reservation, then record evidence in the durable ledger. "
+                    "Never resend an unverified post.")
     elif ready == 0:
         next_fix = ("Prepare and explicitly approve a genuinely new fact-checked "
                     "image/card, then verify Buffer reservation and public X display. "
@@ -73,6 +98,8 @@ def diagnose(manifest, preparation, delivery):
         "delivery_run_id": delivery.get("run_id"),
         "preparation_checked_at": preparation.get("checked_at"),
         "new_buffer_reservations": len(delivery.get("new_reservations", [])),
+        "outstanding_x_verification_count": len(outstanding),
+        "outstanding_x_verification_keys": outstanding,
         "new_x_publications_verified": sum(
             1 for p in delivery.get("new_publications", [])
             if isinstance(p, dict) and p.get("x_display_verified") is True),
@@ -93,7 +120,8 @@ def main():
         return data
     result = diagnose(load("editorial/imagegen_cards.json"),
                       load("reports/preparation-latest.json"),
-                      load("reports/delivery-latest.json"))
+                      load("reports/delivery-latest.json"),
+                      load("posted.json"))
     out = Path(args.output)
     out.parent.mkdir(exist_ok=True, parents=True)
     out.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n",

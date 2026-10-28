@@ -71,6 +71,57 @@ class RecoveryTriageTests(unittest.TestCase):
         self.assertNotIn("x_publication_not_verified", data["problems"])
         self.assertNotIn("buffer_reservation_error", data["problems"])
 
+    def test_prior_sent_reservation_remains_unverified_after_later_skip(self):
+        data = diagnose({"cards": []},
+                        {"status": "no_unposted_candidate_in_scanned_lists"},
+                        {"status": "skipped_no_verified_content",
+                         "new_publications": [], "new_reservations": []},
+                        {"reserved_posts": {"reserve-one": {
+                            "buffer_id": "buffer-one", "buffer_status": "sent",
+                            "x_display_verified": False}},
+                         "publication_log": []})
+        self.assertIn("x_publication_not_verified", data["problems"])
+        self.assertEqual(data["outstanding_x_verification_count"], 1)
+        self.assertEqual(data["outstanding_x_verification_keys"], ["reserve-one"])
+        self.assertIn("Never resend", data["next_fix"])
+
+    def test_scheduled_reservation_and_old_share_now_do_not_create_x_alert(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "has_candidates"},
+                        {"status": "skipped_no_verified_content",
+                         "new_publications": []},
+                        {"reserved_posts": {"reserve-one": {
+                            "buffer_status": "scheduled", "x_display_verified": False}},
+                         "publication_log": [{"key": "legacy", "buffer_status": "sent"}]})
+        self.assertNotIn("x_publication_not_verified", data["problems"])
+        self.assertEqual(data["outstanding_x_verification_count"], 0)
+
+    def test_verified_reservation_supersedes_stale_publication_snapshot(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "has_candidates"},
+                        {"status": "skipped_no_verified_content",
+                         "new_publications": []},
+                        {"publication_log": [{
+                            "key": "reserve-one",
+                            "delivery_state": "buffer_reports_sent_x_unverified",
+                            "x_display_verified": False}],
+                         "reserved_posts": {"reserve-one": {
+                            "buffer_status": "sent", "x_display_verified": True}}})
+        self.assertEqual(data["outstanding_x_verification_count"], 0)
+        self.assertNotIn("x_publication_not_verified", data["problems"])
+
+    def test_unverified_publication_log_survives_without_reservation_snapshot(self):
+        data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
+                        {"status": "has_candidates"},
+                        {"status": "skipped_no_verified_content",
+                         "new_publications": []},
+                        {"publication_log": [{
+                            "key": "reserve-two",
+                            "delivery_state": "buffer_reports_sent_x_unverified",
+                            "x_display_verified": False}]})
+        self.assertEqual(data["outstanding_x_verification_keys"], ["reserve-two"])
+        self.assertIn("x_publication_not_verified", data["problems"])
+
     def test_valid_state_does_not_create_issue(self):
         data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
                         {"status": "has_candidates"},
