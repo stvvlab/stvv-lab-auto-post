@@ -48,7 +48,7 @@ def remote_block(snapshot, proposal, history):
             return 'remote_duplicate_caption'
         if post.get('dueAt') and stamp(post['dueAt']) == stamp(proposal['due_utc']):
             return 'remote_slot_occupied'
-        urls = re.findall(r'https://(?:stvv\\.jp/news/|stvv\\.com/nl/nieuws/artikel/)[^\\s]+', post['text'])
+        urls = re.findall(r'https://(?:stvv\.jp/news/|stvv\.com/nl/nieuws/artikel/)[^\s]+', post['text'])
         if any(canonical_source(url) == canonical_source(proposal['source_url']) for url in urls):
             # A supported reviewed first-start may follow an already known recap.
             # Unknown remote source use must never be waved through.
