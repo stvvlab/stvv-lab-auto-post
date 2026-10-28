@@ -63,7 +63,18 @@ No manual pilot or extra post is triggered by queue preparation.
 - `review_note`: design choices, checked facts, any unresolved issue.
 
 Use content-specific composition and concise copy. Do not place an entire
-article headline into a fixed box. Align scores with their team labels;
+article headline into a fixed box.
+
+### Color policy (user-approved 2026-10-28)
+
+Colors are **not restricted to navy and yellow**. The built-in imagegen brief
+must choose a content-appropriate palette and may use any colors that improve
+impact and clarity. For example, match results can be dramatic, player features
+stylish and polls playful; these are directions, not mandatory palettes.
+Vary color, layout and mood rather than reusing one visual formula. Maintain
+legible Japanese, sufficient contrast, accurate facts, rights checks and
+human visual approval. No palette alone makes a card ready for publication.
+ Align scores with their team labels;
 STVV-first ordering is allowed even for away games, but must be explicit.
 No invented faces, statistics, crests, venue claims or unverified photographs.
 
