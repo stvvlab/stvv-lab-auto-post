@@ -1,0 +1,38 @@
+{
+  "status": "research_only",
+  "reviewed": false,
+  "can_publish": false,
+  "priority": "secondary_community_news",
+  "source_url": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
+  "source_date": "2026-10-27",
+  "event_date_local": "2026-10-24",
+  "official_heading": "G-voetballers beleven droomdag op Stayen",
+  "source_body_sha256_from_inventory": "3044ff9bebeee0d5914e44073d250d2b2f6ecfb0fe04067fe42bd02b69bf39f7",
+  "source_body_sha256_verified_live_this_run": false,
+  "source_verified_at_jst": "2026-10-29T00:00:00+09:00",
+  "source_facts": [
+    "STVV invited KFC Neeroeteren's G-football players to a friendly meeting with STVV's G-team at Stayen on Saturday 24 October 2026.",
+    "Older players played eight-a-side and younger players four-a-side; the official article does not report a final score."
+  ],
+  "draft_text": "💛 STVVが地域のGサッカーチームをホームスタジアムへ招待！\n10/24、KFCネーローテレンとSTVVのGチームが交流試合を実施。年齢に応じて8対8・4対4でプレーしました。\n\n公式：https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
+  "x_weighted_length_with_fixed_hashtags": 210,
+  "slots": [
+    "news"
+  ],
+  "novelty_check": {
+    "posted_json_source_match": false,
+    "posted_json_event_keyword_match": false,
+    "current_manifest_source_match": false,
+    "note": "New community event article; not the prior Club Brugge or Japan Day repeat. Still needs full editorial approval and same-source remote duplicate check at reservation time."
+  },
+  "image_brief": "If editorially selected, use built-in imagegen to create a novel navy/yellow illustrated community-football concept. Abstract empty pitch and two groups represented by formations of geometric markers only, not identifiable children, people, logos, photographs or a claim about actual stadium architecture. No final score, invented names or unsupported numbers. Short Japanese headline and safe crop.",
+  "remaining": [
+    "Check whether a community story is editorially worthwhile for STVV LAB before using an image-generation slot.",
+    "Re-fetch exact official Dutch body and recompute SHA-256 with production extractor; require unchanged date and body.",
+    "Generate one original image, visually verify Japanese text/facts/crop, transfer actual bytes to GitHub, register sha256/dimensions and reviewed manifest in the same commit.",
+    "Only an existing scheduled 7-slot run may reserve; no manual dispatch, extra post, paid API or uncertain-outcome retry."
+  ],
+  "no_image_generated_for_this_candidate": true,
+  "buffer_mutation_performed": false,
+  "x_post_created": false
+}
