@@ -51,6 +51,12 @@ class BelgianOfficialTests(unittest.TestCase):
         result = source.build_inventory({}, {}, NOW, session(BODY.replace('27 oktober', '10 oktober')))
         self.assertEqual(result['status'], 'no_new_club_articles')
 
+    def test_div_based_official_article_without_main_is_parsed(self):
+        div_body = BODY.replace('<main>', '<div class="news-body">').replace('</main>', '</div>')
+        result = source.build_inventory({}, {}, NOW, session(div_body))
+        self.assertEqual(result['candidates'][0]['status'], 'needs_editorial_review')
+        self.assertEqual(result['candidates'][0]['date_jst'], '2026-10-27')
+
     def test_no_article_body_fails_closed(self):
         result = source.build_inventory({}, {}, NOW, session('<h1>De week van de waarheid</h1>'))
         self.assertEqual(result['candidates'][0]['status'], 'source_unavailable')
