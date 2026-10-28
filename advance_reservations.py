@@ -43,7 +43,8 @@ def verify_echo(post, record):
     source_ok = (
         asset.get('source') == record.get('image_url')
         and asset.get('type') == 'image'
-        and asset.get('mimeType') in {'image/png', 'image/jpeg'}
+        and asset.get('mimeType') == ({'.png': 'image/png', '.jpg': 'image/jpeg'}.get(
+            os.path.splitext(str(record.get('asset_path', '')))[1].lower()))
         and isinstance(dimensions, dict)
         and [dimensions.get('width'), dimensions.get('height')] == record.get('dimensions'))
     if not id_ok and not source_ok:
