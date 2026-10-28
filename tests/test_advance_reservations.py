@@ -19,6 +19,11 @@ NOW = datetime.fromisoformat('2026-10-27T06:00:00+09:00')
 DUE = '2026-10-26T23:00:00Z'
 KEY = 'daily_2026-10-27_player'
 
+# Exact source, MIME and dimensions are required even when Buffer returns an ID.
+VALID_ASSET = {'id': 'asset', 'source': 'https://raw.githubusercontent.com/image',
+               'type': 'image', 'mimeType': 'image/png',
+               'image': {'width': 1448, 'height': 1086}}
+
 
 class AdvanceReservationTests(unittest.TestCase):
     def setUp(self):
@@ -40,7 +45,7 @@ class AdvanceReservationTests(unittest.TestCase):
         self.client.preflight.return_value = {'posts': [], 'remaining_capacity': 10}
         self.client.schedule.side_effect = lambda text, image, due: {
             'id': 'buffer-fixture', 'text': text, 'channelId': publisher.CHANNEL,
-            'dueAt': due, 'status': 'scheduled', 'assets': [{'id': 'asset'}]}
+            'dueAt': due, 'status': 'scheduled', 'assets': [copy.deepcopy(VALID_ASSET)]}
         for p in [patch.object(media, 'MANIFEST', self.manifest),
                   patch.object(a, 'read_body', return_value='公式発表の確認済み本文。'),
                   patch.object(a, 'prepared_media', return_value=(True, 'https://raw.githubusercontent.com/image')),
@@ -68,7 +73,7 @@ class AdvanceReservationTests(unittest.TestCase):
         def send(text, image, due):
             self.assertIn(KEY, self.durable['pending_posts'])
             return {'id': 'buffer-fixture', 'text': text, 'channelId': publisher.CHANNEL,
-                    'dueAt': due, 'status': 'scheduled', 'assets': [{'id': 'asset'}]}
+                    'dueAt': due, 'status': 'scheduled', 'assets': [copy.deepcopy(VALID_ASSET)]}
         self.client.schedule.side_effect = send
         record = self.accepted()
         self.assertEqual(record['due_at'], DUE)
@@ -120,7 +125,7 @@ class AdvanceReservationTests(unittest.TestCase):
     def test_reconcile_sent_once_and_keep_x_unverified(self):
         record = self.accepted()
         self.client.get_post.return_value = {'id': 'buffer-fixture', 'text': record['text'],
-            'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'sent', 'assets': [{'id': 'asset'}]}
+            'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'sent', 'assets': [copy.deepcopy(VALID_ASSET)]}
         later = datetime.fromisoformat('2026-10-27T10:30:00+09:00')
         a.run(self.history, later, self.client, self.save, Mock())
         a.run(self.history, later, self.client, self.save, Mock())
@@ -132,7 +137,7 @@ class AdvanceReservationTests(unittest.TestCase):
     def test_changed_identity_or_early_sent_blocks_without_resending(self):
         record = self.accepted()
         original = {'id': 'buffer-fixture', 'text': record['text'], 'dueAt': DUE,
-                    'channelId': publisher.CHANNEL, 'status': 'scheduled', 'assets': [{'id': 'asset'}]}
+                    'channelId': publisher.CHANNEL, 'status': 'scheduled', 'assets': [copy.deepcopy(VALID_ASSET)]}
         for change in [{'id': 'different'}, {'text': 'changed'}, {'channelId': 'other'},
                        {'dueAt': '2026-10-27T09:00:00Z'}, {'status': 'sent'}, {'assets': []}]:
             with self.subTest(change=change):
@@ -145,9 +150,45 @@ class AdvanceReservationTests(unittest.TestCase):
         record = self.accepted()
         self.client.get_post.return_value = {'id': 'buffer-fixture', 'text': record['text'],
             'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'sent',
-            'assets': [{'id': 'replaced-image'}]}
+            'assets': [{**copy.deepcopy(VALID_ASSET), 'id': 'replaced-image'}]}
         later = datetime.fromisoformat('2026-10-27T10:30:00+09:00')
         with self.assertRaisesRegex(RuntimeError, 'identity changed'):
+            a.run(self.history, later, self.client, self.save, Mock())
+        self.assertFalse(self.history['publication_log'])
+        self.assertEqual(self.durable['reserved_posts'][KEY]['buffer_status'], 'scheduled')
+        self.client.schedule.assert_called_once()
+
+    def test_nonnull_buffer_id_never_masks_wrong_image_source_or_metadata(self):
+        """A matching asset ID is insufficient if the actual image changed."""
+        base = copy.deepcopy(VALID_ASSET)
+        for bad_asset in [
+            {**base, 'source': 'https://example.org/other.png'},
+            {**base, 'mimeType': 'image/jpeg'},
+            {**base, 'type': 'video'},
+            {**base, 'image': {'width': 1, 'height': 1086}},
+            {'id': 'asset'},
+        ]:
+            with self.subTest(bad_asset=bad_asset):
+                with self.assertRaisesRegex(RuntimeError, 'image identity changed'):
+                    a.verify_echo({'id': 'buffer-fixture',
+                    'text': 'exact text', 'channelId': publisher.CHANNEL,
+                    'dueAt': DUE, 'status': 'scheduled', 'assets': [bad_asset]},
+                    {'text': 'exact text', 'due_at': DUE,
+                     'image_url': base['source'],
+                     'asset_path': 'generated/card.png',
+                     'dimensions': [1448, 1086],
+                     'buffer_asset_ids': ['asset']})
+                # No publication or resend occurs during this read-only check.
+
+    def test_changed_image_source_with_same_id_blocks_sent_and_no_resend(self):
+        record = self.accepted()
+        self.client.get_post.return_value = {
+            'id': 'buffer-fixture', 'text': record['text'],
+            'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'sent',
+            'assets': [{**copy.deepcopy(VALID_ASSET),
+                        'source': 'https://example.org/replaced.png'}]}
+        later = datetime.fromisoformat('2026-10-27T10:30:00+09:00')
+        with self.assertRaisesRegex(RuntimeError, 'image identity changed'):
             a.run(self.history, later, self.client, self.save, Mock())
         self.assertFalse(self.history['publication_log'])
         self.assertEqual(self.durable['reserved_posts'][KEY]['buffer_status'], 'scheduled')
@@ -197,7 +238,7 @@ class AdvanceReservationTests(unittest.TestCase):
     def test_buffer_error_blocks_new_sends(self):
         record = self.accepted()
         self.client.get_post.return_value = {'id': 'buffer-fixture', 'text': record['text'],
-            'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'error', 'assets': [{'id': 'asset'}]}
+            'dueAt': DUE, 'channelId': publisher.CHANNEL, 'status': 'error', 'assets': [copy.deepcopy(VALID_ASSET)]}
         self.assertEqual(self.run_one()['status'], 'blocked_reservation_error')
         self.assertFalse(self.history['publication_log'])
         self.client.schedule.assert_called_once()
@@ -210,7 +251,7 @@ class AdvanceReservationTests(unittest.TestCase):
         self.assertTrue(reason)
         self.client.get_post.return_value = {'id': 'buffer-fixture',
             'text': self.card['text'] + publisher.HASHTAGS, 'dueAt': DUE,
-            'channelId': publisher.CHANNEL, 'status': 'scheduled', 'assets': [{'id': 'asset'}]}
+            'channelId': publisher.CHANNEL, 'status': 'scheduled', 'assets': [copy.deepcopy(VALID_ASSET)]}
         self.assertEqual(self.run_one()['status'], 'skipped_no_verified_content')
         self.client.schedule.assert_called_once()
 
@@ -277,7 +318,7 @@ class AdvanceReservationTests(unittest.TestCase):
     def test_unexpected_mutation_echo_retains_pending(self):
         self.client.schedule.side_effect = None
         self.client.schedule.return_value = {'id': 'returned', 'text': 'wrong',
-            'channelId': publisher.CHANNEL, 'dueAt': DUE, 'status': 'scheduled', 'assets': [{'id': 'asset'}]}
+            'channelId': publisher.CHANNEL, 'dueAt': DUE, 'status': 'scheduled', 'assets': [copy.deepcopy(VALID_ASSET)]}
         with self.assertRaises(RuntimeError):
             self.run_one()
         self.assertIn(KEY, self.durable['pending_posts'])
