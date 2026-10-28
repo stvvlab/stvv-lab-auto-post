@@ -47,12 +47,33 @@ class FixtureScheduleGateTest(unittest.TestCase):
     def test_verified_time_requires_exact_source_excerpt(self):
         card = {**BASE, "text": BASE["text"] + " 16:00",
                 "kickoff_verified": True,
-                "kickoff_evidence_excerpt": "11月6日 STVV SKブラン 16:00"}
+                "kickoff_evidence_excerpt": "11月6日 STVV SKブラン 16:00",
+                "schedule_evidence_excerpt": "11月6日 STVV SKブラン 16:00"}
         self.assertEqual(
             self.check(card, e="11月6日 STVV SKブラン 15:00"),
             "kickoff_evidence_missing"
         )
         self.assertIsNone(self.check(card, e="11月6日 STVV SKブラン 16:00"))
+
+    def test_every_caption_clock_must_match_reviewed_evidence(self):
+        card = {**BASE, "text": BASE["text"] + " 16:00 / 15:00",
+                "kickoff_verified": True,
+                "kickoff_evidence_excerpt": "11月6日 STVV SKブラン 16:00",
+                "schedule_evidence_excerpt": "11月6日 STVV SKブラン 16:00"}
+        self.assertEqual(
+            self.check(card, e="11月6日 STVV SKブラン 16:00"),
+            "kickoff_evidence_missing"
+        )
+
+    def test_matching_time_from_another_fixture_row_is_not_proof(self):
+        card = {**BASE, "text": BASE["text"] + " 16:00",
+                "kickoff_verified": True,
+                "kickoff_evidence_excerpt": "11月7日 STVV OTHER 16:00"}
+        official = "11月6日 STVV SKブラン 15:00\\n11月7日 STVV OTHER 16:00"
+        self.assertEqual(
+            self.check(card, e=official),
+            "kickoff_evidence_not_match_specific"
+        )
 
     def test_conflicting_official_kickoff_blocks_even_reviewed_time(self):
         card = {**BASE, "text": BASE["text"] + " 16:00",
