@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-29T02:03:49.127558+09:00",
+  "checked_at": "2026-10-29T02:04:44.857126+09:00",
   "status": "read_only_completed",
   "mutation_count": 0,
   "mode": "read_only_no_mutations_no_retries",
@@ -35,7 +35,14 @@
             "due_at": "2026-10-29T09:00:00.000Z",
             "asset_count": 1,
             "asset_ids_present": false,
-            "asset_ids": []
+            "asset_ids": [],
+            "asset_source": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f56ac637c3984d355860fe988b041df1dd400e99/generated/community_football_20261027.png",
+            "asset_mime_type": "image/png",
+            "asset_type": "image",
+            "asset_dimensions": [
+              960,
+              540
+            ]
           }
         ],
         "status": "unresolved_do_not_retry"
