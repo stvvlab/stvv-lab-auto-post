@@ -153,6 +153,38 @@ class AdvanceReservationTests(unittest.TestCase):
         self.assertEqual(self.durable['reserved_posts'][KEY]['buffer_status'], 'scheduled')
         self.client.schedule.assert_called_once()
 
+    def test_nullable_buffer_image_id_uses_exact_immutable_source_and_dimensions(self):
+        """Buffer officially allows null asset IDs; no false retry or weak match."""
+        source = 'https://raw.githubusercontent.com/image'
+        def nullable_send(text, image, due):
+            return {'id': 'buffer-null-id', 'text': text,
+                    'channelId': publisher.CHANNEL, 'dueAt': due,
+                    'status': 'scheduled', 'assets': [{
+                        'id': None, 'source': source, 'type': 'image',
+                        'mimeType': 'image/png',
+                        'image': {'width': 1448, 'height': 1086}}]}
+        self.client.schedule.side_effect = nullable_send
+        record = self.accepted()
+        self.assertEqual(record['buffer_asset_sources'], [source])
+        self.assertNotIn('buffer_asset_ids', record)
+        self.assertFalse(self.history['pending_posts'])
+        self.assertEqual(self.client.schedule.call_count, 1)
+        remote = nullable_send(record['text'], source, record['due_at'])
+        self.client.get_post.return_value = remote
+        self.assertEqual(self.run_one()['status'], 'skipped_no_verified_content')
+        self.assertEqual(self.client.schedule.call_count, 1)
+        for bad_asset in [
+            {**remote['assets'][0], 'source': 'https://example.org/replaced.png'},
+            {**remote['assets'][0], 'image': {'width': 1, 'height': 1086}},
+            {**remote['assets'][0], 'mimeType': 'image/jpeg'},
+            {**remote['assets'][0], 'type': 'video'},
+        ]:
+            with self.subTest(bad_asset=bad_asset):
+                self.client.get_post.return_value = {**remote, 'assets': [bad_asset]}
+                with self.assertRaises(RuntimeError):
+                    self.run_one()
+        self.assertEqual(self.client.schedule.call_count, 1)
+
     def test_missing_durable_image_id_does_not_get_implicitly_trusted(self):
         self.accepted()
         del self.history['reserved_posts'][KEY]['buffer_asset_ids']
