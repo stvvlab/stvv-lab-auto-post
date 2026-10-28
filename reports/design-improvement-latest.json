@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-28T17:06:00+09:00",
-  "policy": "Use ChatGPT built-in imagegen to design each card from verified content; do not fall back to the old fixed renderer when a reviewed image is unavailable.",
+  "updated_at": "2026-10-29T01:00:58+09:00",
+  "policy": "Use ChatGPT built-in imagegen to design each card from verified content. Color palette is unrestricted and selected for the story, with strong contrast and legibility; navy/yellow are optional, not mandatory. Do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
     "x_url": "https://x.com/stvvlabo/status/2113772119062372376",
@@ -913,5 +913,40 @@
       "No observed live advance reservation -> Buffer sent -> X display across multiple regular slots.",
       "Supplemental replies still have no authenticated free sending transport; correction draft remains unsent."
     ]
+  },
+  "latest_color_policy_update": {
+    "status": "merged_to_main",
+    "user_decision": "2026-10-28 daytime: increase color freedom, no navy/yellow requirement",
+    "pr": "https://github.com/stvvlab/stvv-lab-auto-post/pull/80",
+    "merge_commit": "83798c0bd728ed47a3f77149b2d3e4a34407eb87",
+    "files": [
+      "design_brief.py",
+      "docs/imagegen-delivery.md",
+      "tests/test_design_brief.py"
+    ],
+    "checks": [
+      {
+        "run_id": 40716303397,
+        "name": "STVV LAB Quality Audit",
+        "conclusion": "success"
+      },
+      {
+        "run_id": 40716303286,
+        "name": "Visual pipeline checks",
+        "conclusion": "success"
+      },
+      {
+        "run_id": 40716303229,
+        "name": "STVV Feedback Safety Tests",
+        "conclusion": "success"
+      }
+    ],
+    "actual_new_image_generated": false,
+    "buffer_reservations_created": 0,
+    "x_posts_verified_this_pass": 0,
+    "ready_cards": 0,
+    "pending_posts": 0,
+    "reserved_posts": 0,
+    "notes": "Verified updated main contains the new color instruction, documentation and regression test. CI success is not a Buffer/X publication success. Last regular slot at 2026-10-28 23:42 JST skipped with zero ready cards; 42m40s delayed."
   }
 }
