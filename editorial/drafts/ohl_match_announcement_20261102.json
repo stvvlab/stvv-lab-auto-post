@@ -94,5 +94,25 @@
     "match_announcement_status": "not_scheduled",
     "priority_requirement": "User wants match announcement first; this is not currently achieved. Do not claim otherwise.",
     "next_safe_step": "Transfer exact image bytes and review a fixture-specific novelty gate without bypassing duplicate, source, media or approval controls; schedule via existing seven slots only after validation."
+  },
+  "novelty_review_20261029": {
+    "reviewed_at_jst": "2026-10-29T03:55:43+09:00",
+    "compared_primary_sources": [
+      "https://stvv.jp/news/event/20261002_2/",
+      "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "https://stvv.jp/game/2026-2027/"
+    ],
+    "already_announced": "The 2026-10-02 Japanese official article explicitly announced the 2026-11-01 16:00 CET STVV vs OH Leuven fixture and Japan Day. Repeating only the fixture, time and Japan Day as a newly announced fact is not novel.",
+    "distinct_fact_in_2026_10_27_article": "The club newly frames three successive Stayen home matches: OH Leuven on 1 Nov, SK Brann on 5 Nov, and Zulte Waregem on 8 Nov (local dates), with a seven-day home sequence. This is separate from the 2026-10-02 Japan Day notice.",
+    "alternative_caption_without_japan_day": "⚽ STVV、ホーム3連戦へ！\n初戦はOHルーヴェン戦🔥\n📅 11月2日（月）午前0:00（日本時間）\n🏟 DAIO WASABI STAYEN\n\nホームで勝利をつかもう！🇯🇵\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+    "alternative_requires_new_editorial_approval": true,
+    "original_caption_preserved": true,
+    "source_digest_expected": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+    "source_digest_recheck_before_ready": true,
+    "image_binary_sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+    "no_asset_bytes_in_repository": true,
+    "cannot_schedule_without_same_commit_review": true,
+    "prior_g_football_reservation_unchanged": true,
+    "no_buffer_mutation": true
   }
 }
