@@ -124,7 +124,8 @@
     "approved_imagegen_midtjylland_20261023_v1",
     "daily_2026-10-24_news",
     "daily_2026-10-26_player",
-    "daily_2026-10-26_vote"
+    "daily_2026-10-26_vote",
+    "daily_2026-10-29_news"
   ],
   "publication_log": [
     {
@@ -906,7 +907,9 @@
       }
     }
   ],
-  "pending_posts": {
+  "pending_posts": {},
+  "tracked_topics": {},
+  "reserved_posts": {
     "daily_2026-10-29_news": {
       "slot": "news",
       "source": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
@@ -923,9 +926,14 @@
       "reservation_key": "4ae95f6ee9ead2058c0d8a89d424529367c29f84ae0a6d535d965d03a2230cd8",
       "created_at": "2026-10-29T02:01:36.121700+09:00",
       "delivery_mode": "customScheduled",
-      "x_display_verified": false
+      "x_display_verified": false,
+      "buffer_id": "6ae22a71c79ca14f286ed242",
+      "buffer_status": "scheduled",
+      "status_checked_at": "2026-10-29T02:06:28.380678+09:00",
+      "recovered_without_resend": true,
+      "buffer_asset_sources": [
+        "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f56ac637c3984d355860fe988b041df1dd400e99/generated/community_football_20261027.png"
+      ]
     }
-  },
-  "tracked_topics": {},
-  "reserved_posts": {}
+  }
 }
