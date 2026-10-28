@@ -1,5 +1,5 @@
 {
-  "status": "draft",
+  "status": "held_prior_announcement_not_novel",
   "reviewed": false,
   "can_publish": false,
   "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
@@ -16,11 +16,11 @@
   ],
   "image_brief": "Original navy/yellow STVV LAB editorial graphic. Japan Day as main story; football field lines and stylized abstract Japan-Belgium bridge, no people, faces, crests, flags used as official logos, fictional statistics or score. Clear Japanese title and large local/JST timing only after live reconfirmation. No reuse of fixed layout.",
   "remaining": [
-    "Binary PNG exists only as a conversation-local file; GitHub connector text-file writes cannot transfer these bytes, so ready manifest registration and reservation remain blocked until verified asset upload is supported.",
-    "Preserve and transfer generated preview bytes into the repository with SHA256 verification; image is currently conversation-local, not a public immutable asset",
-    "Reconfirm live source digest, fixture time and duplicate state immediately before approval",
-    "Commit reviewed image bytes and ready manifest together only after factual/visual approval",
-    "Observe existing scheduled Buffer reservation, sent and X display; do not dispatch or resend"
+    "Current Japan Day-only caption is not a newly announced fact: do not mark ready or reserve from the 2026-10-27 re-announcement.",
+    "If proposing a genuinely new 2026-10-27 fact, compare its exact claim against the 2026-10-02 Japan Day article and posted/pending/reserved history; re-review caption and graphic together.",
+    "The generated preview binary is conversation-local, not in GitHub; image bytes plus manifest would require a verified transfer and same-commit review before publication.",
+    "Reconfirm official article/date, kickoff and duplicate state before any future ready approval; no paid API, manual dispatch or retries.",
+    "Only after a genuinely new approved claim and immutable public image bytes are present, verify regular Buffer scheduled -> sent -> X text/image."
   ],
   "no_paid_api": true,
   "no_send": true,
@@ -73,5 +73,14 @@
       ],
       "notes": "Visually inspected actual conversation-local PNG: all visible Japanese and digits legible, no faces, players, crests or scores. Stylized stadium/architecture is fictional editorial artwork, not a verified depiction of Stayen. This does not constitute public asset registration, user publication approval or a Buffer reservation."
     }
+  },
+  "novelty_review": {
+    "checked_at_jst": "2026-10-28T22:01:48+09:00",
+    "finding": "The 2026-10-27 Belgian official article repeats the Japan Day event already announced by STVV Japan on 2026-10-02. Current draft/graphic only communicate Japan Day, opponent and kickoff, not a distinct new 2026-10-27 fact. Hold even if the binary can be transferred; source URL freshness alone is not novelty.",
+    "prior_primary_source": "https://stvv.jp/news/event/20261002_2/",
+    "prior_source_in_posted_news": true,
+    "prior_source_in_publication_log": false,
+    "do_not_infer_published_from_news_array": true,
+    "review_required_for_any_new_angle": true
   }
 }
