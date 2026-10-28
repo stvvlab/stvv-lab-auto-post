@@ -47,6 +47,26 @@ class BelgianOfficialTests(unittest.TestCase):
         self.assertEqual(result['candidates'], [])
         self.assertEqual(client.get.call_count, 1)
 
+    def test_known_links_do_not_exhaust_unseen_fetch_budget(self):
+        second_url = 'https://stvv.com/nl/nieuws/artikel/nieuw-bericht'
+        index = (INDEX + '<a href="/nl/nieuws/artikel/nieuw-bericht">'
+                 'Nieuw bericht</a>')
+        page = BODY.replace('De week van de waarheid', 'Nieuw bericht')
+        client = Mock()
+        client.get.side_effect = [
+            Mock(url=source.LISTING, text=index),
+            Mock(url=second_url, text=page),
+        ]
+        history = {'publication_log': [{'source': URL}]}
+        result = source.build_inventory(
+            history, {'cards': []}, NOW, client, max_articles=1)
+        self.assertEqual(client.get.call_count, 2)
+        self.assertEqual(result['status'], 'candidates_need_review')
+        self.assertEqual([c['source_url'] for c in result['candidates']],
+                         [second_url])
+        self.assertEqual(result['skipped'][0]['source_url'], URL)
+        self.assertFalse(result['can_publish'])
+
     def test_old_articles_are_not_new(self):
         result = source.build_inventory({}, {}, NOW, session(BODY.replace('27 oktober', '10 oktober')))
         self.assertEqual(result['status'], 'no_new_club_articles')
