@@ -64,7 +64,7 @@ def review_fixture_candidate(card, now, history, official_text=None):
         if (not isinstance(evidence, str) or not evidence
                 or evidence not in official_text
                 or not _times(caption)
-                or not (_times(caption) & _times(evidence))):
+                or not _times(caption).issubset(_times(evidence))):
             return "kickoff_evidence_missing"
     # Reject a season listing where opponent and date only occur in unrelated rows.
     # Evidence must be a reviewed, contiguous match-specific excerpt.
@@ -74,6 +74,10 @@ def review_fixture_candidate(card, now, history, official_text=None):
             opponent not in excerpt or date_label not in excerpt or
             excerpt not in official_text):
         return "match_specific_schedule_evidence_missing"
+    # The clock proof must belong to this same reviewed fixture row.
+    # A matching clock elsewhere on the season page is not sufficient.
+    if _mentions_kickoff(caption) and evidence not in excerpt:
+        return "kickoff_evidence_not_match_specific"
     identity = f"fixture:{match_day.isoformat()}:{plain(opponent)}"
     if card.get("fixture_identity") != identity:
         return "missing_unique_fixture_identity"
