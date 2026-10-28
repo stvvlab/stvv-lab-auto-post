@@ -1,0 +1,54 @@
+{
+  "status": "draft",
+  "reviewed": false,
+  "can_publish": false,
+  "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "source_date": "2026-10-27",
+  "fixture_source_url": "https://stvv.jp/game/2026-2027/",
+  "fixture_kickoff_jst": "2026-11-02T00:00:00+09:00",
+  "source_claims": [
+    "STVV club official article dated 2026-10-27 announces 2026-11-01 16:00 local OH Leuven home match as Japan Day",
+    "Japanese official 2026-2027 schedule lists 2026-11-02 00:00 JST HOME versus OHルーベン"
+  ],
+  "draft_text": "🇯🇵 次のホーム戦はJapan Day！\n11/2(月) 0:00（日本時間）、STVVはOHルーベンと対戦。現地クラブ公式が日本のサポーターを迎える特別な試合として案内しています。\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "slots": [
+    "news"
+  ],
+  "image_brief": "Original navy/yellow STVV LAB editorial graphic. Japan Day as main story; football field lines and stylized abstract Japan-Belgium bridge, no people, faces, crests, flags used as official logos, fictional statistics or score. Clear Japanese title and large local/JST timing only after live reconfirmation. No reuse of fixed layout.",
+  "remaining": [
+    "Preserve and transfer generated preview bytes into the repository with SHA256 verification; image is currently conversation-local, not a public immutable asset",
+    "Reconfirm live source digest, fixture time and duplicate state immediately before approval",
+    "Finish PR #79 safety review; merge only when safe, never to bypass approval",
+    "Commit reviewed image bytes and ready manifest together only after factual/visual approval",
+    "Observe existing scheduled Buffer reservation, sent and X display; do not dispatch or resend"
+  ],
+  "no_paid_api": true,
+  "no_send": true,
+  "source_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+  "source_verification": {
+    "belgian_official_checked": "2026-10-28",
+    "japanese_official_schedule_checked": "2026-10-28",
+    "verified_home_fixture": true,
+    "verified_japan_day": true,
+    "verified_kickoff_jst": "2026-11-02T00:00:00+09:00",
+    "article_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+    "source_body_digest_from": "reports/club-official-latest.json"
+  },
+  "imagegen_preview": {
+    "generated": true,
+    "generated_with": "ChatGPT built-in imagegen",
+    "sha256": "ca153af932a7851f035ba5607b391b926dfe78dd8c76807dde8e86b989b7fc52",
+    "dimensions": [
+      1448,
+      1086
+    ],
+    "bytes": 2718790,
+    "format": "PNG",
+    "gen_id": "ad536bca-d390-4fe7-b8b5-bde43a752d24",
+    "conversation_file_id": "file_00000000307c81f6b6c9fb7e887fca40",
+    "visual_check": "Japan Day, STVV x OHルーベン, 11月2日(月) 0:00 日本時間, mobile-readable navy/yellow, no player faces or official crest",
+    "asset_committed_to_repository": false,
+    "manifest_ready_registered": false,
+    "x_post_created": false
+  }
+}

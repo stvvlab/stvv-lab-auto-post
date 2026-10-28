@@ -82,6 +82,20 @@ def article_evidence(markup, now):
             'kickoff_time_requires_cross_source_check': bool(re.search(r'\b\d{1,2}(?::|u)\d{2}\b', text))}
 
 
+def read_verified_article(session, url, now):
+    """Fetch one exact, recent, official Belgian club article, never a redirect."""
+    if not approved_url(url):
+        raise ValueError('Unapproved Belgian club article URL')
+    response = session.get(url, timeout=20)
+    response.raise_for_status()
+    if not approved_url(response.url) or response.url.rstrip('/') != url.rstrip('/'):
+        raise ValueError('Belgian club article redirected or changed identity')
+    evidence = article_evidence(response.text, now)
+    if evidence is None:
+        raise ValueError('Belgian club article is outside freshness window')
+    return evidence
+
+
 def build_inventory(history, manifest, now, session=SESSION, max_articles=4):
     if not 1 <= max_articles <= 6:
         raise ValueError('Limit official source requests')

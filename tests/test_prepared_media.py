@@ -87,6 +87,32 @@ class PreparedMediaTests(unittest.TestCase):
             self.assertIsNone(posting.content_card_media('news', '2026-10-24', '別の情報', self.card['source_url']))
             render.assert_not_called()
 
+    def test_belgian_source_needs_exact_date_digest_and_public_image(self):
+        source = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
+        body = 'STVV official article with verified event details'
+        digest = hashlib.sha256(body.encode()).hexdigest()
+        self.card.update(source_url=source, date_jst='2026-10-27',
+                         source_body_sha256=digest,
+                         text='11月の公式ニュース。' + source)
+        self.write()
+        now = datetime(2026, 10, 28)
+        self.assertEqual(media.prepared_candidates('news', now),
+                         [(self.card['text'], source)])
+        evidence = dict(date_jst='2026-10-27', body_sha256=digest,
+                        source_body=body)
+        with patch('club_official_inventory.read_verified_article', return_value=evidence):
+            self.assertTrue(self.deliver()[1].endswith('/generated/card.png'))
+        with patch('club_official_inventory.read_verified_article',
+                   return_value={**evidence, 'body_sha256': '0' * 64}):
+            with self.assertRaisesRegex(ValueError, 'body/date differs'):
+                self.deliver()
+        self.card.pop('source_body_sha256')
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', now), [])
+        with patch('club_official_inventory.read_verified_article', return_value=evidence):
+            with self.assertRaises(ValueError):
+                self.deliver()
+
     def test_candidates_require_fresh_date_official_source_and_visible_citation(self):
         now = datetime(2026, 10, 24)
         self.card.update(date_jst='2026-10-23', text='結果\n' + self.card['source_url'])

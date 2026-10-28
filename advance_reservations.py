@@ -15,7 +15,8 @@ from buffer_reservations import BufferReservations, ReservationRejected
 from content_guard import canonical_source, plain
 from editorial_novelty import fact_metadata
 from preparation_inventory import read_body
-from prepared_media import exact_card, prepared_media, prepared_duplicate_reason
+from prepared_media import exact_card, prepared_media, prepared_duplicate_reason, reviewed_official_body
+from urllib.parse import urlparse
 from reservation_preview import plan, future_slots
 
 
@@ -47,7 +48,7 @@ def remote_block(snapshot, proposal, history):
             return 'remote_duplicate_caption'
         if post.get('dueAt') and stamp(post['dueAt']) == stamp(proposal['due_utc']):
             return 'remote_slot_occupied'
-        urls = re.findall(r'https://stvv\.jp/news/[^\s]+', post['text'])
+        urls = re.findall(r'https://(?:stvv\.jp/news/|stvv\.com/nl/nieuws/artikel/)[^\s]+', post['text'])
         if any(canonical_source(url) == canonical_source(proposal['source_url']) for url in urls):
             # A supported reviewed first-start may follow an already known recap.
             # Unknown remote source use must never be waved through.
@@ -113,9 +114,12 @@ def run(history, now, client, save, session):
     due = stamp(proposal['due_utc']).astimezone(publisher.JST)
     if card is None or (due, slot) not in future_slots(now):
         raise RuntimeError('Reviewed card or target slot changed')
-    if card['date_jst'].replace('-', '') not in source:
-        raise RuntimeError('Official source date does not match reviewed card')
-    body = read_body(session, source)
+    if urlparse(source).netloc == 'stvv.com':
+        body = reviewed_official_body(session, card, now)
+    else:
+        if card['date_jst'].replace('-', '') not in source:
+            raise RuntimeError('Official source date does not match reviewed card')
+        body = read_body(session, source)
     if not body:
         raise RuntimeError('Official source body could not be verified')
     fact = fact_metadata(card, due) if 'editorial_fact' in card else None

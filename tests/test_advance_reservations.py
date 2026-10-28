@@ -181,6 +181,37 @@ class AdvanceReservationTests(unittest.TestCase):
         self.assertEqual(self.run_one()['status'], 'skipped_no_verified_content')
         self.client.schedule.assert_called_once()
 
+    def test_belgian_official_reviewed_article_can_reserve_only_after_live_check(self):
+        source = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
+        body = 'Verified Belgian official news'
+        self.card.update(source_url=source, date_jst='2026-10-27',
+                         source_body_sha256=hashlib.sha256(body.encode()).hexdigest(),
+                         text='公式クラブニュース。' + source)
+        self.write_card()
+        with patch.object(a, 'reviewed_official_body', return_value=body) as verify:
+            record = self.accepted()
+        verify.assert_called_once()
+        self.assertEqual(record['source'], source)
+        self.assertFalse(self.history['publication_log'])
+        self.assertEqual(self.client.schedule.call_count, 1)
+
+    def test_belgian_official_source_failure_and_remote_duplicate_block_send(self):
+        source = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
+        self.card.update(source_url=source, date_jst='2026-10-27',
+                         source_body_sha256='a' * 64,
+                         text='公式クラブニュース。' + source)
+        self.write_card()
+        with patch.object(a, 'reviewed_official_body', side_effect=ValueError('body changed')):
+            with self.assertRaises(ValueError):
+                self.run_one()
+        self.client.schedule.assert_not_called()
+        self.client.preflight.return_value['posts'] = [{
+            'text': 'Already published: ' + source, 'dueAt': None,
+            'id': 'unregistered', 'status': 'scheduled'}]
+        with patch.object(a, 'reviewed_official_body', return_value='verified body'):
+            self.assertEqual(self.run_one()['status'], 'blocked_remote_source_used_or_pending')
+        self.client.schedule.assert_not_called()
+
     def test_official_or_image_gate_failure_sends_nothing(self):
         with patch.object(a, 'read_body', return_value=''):
             with self.assertRaises(RuntimeError):
