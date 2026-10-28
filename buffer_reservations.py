@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 
 import stvv_post as publisher
 
-POST_FIELDS = 'id text channelId status dueAt assets { id }'
+POST_FIELDS = 'id text channelId status dueAt assets { id source type mimeType ... on ImageAsset { image { width height } } }'
 
 
 class ReservationRejected(RuntimeError):
