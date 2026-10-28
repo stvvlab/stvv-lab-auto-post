@@ -38,7 +38,6 @@ def verify_echo(post, record):
         raise RuntimeError('Buffer reservation identity changed; do not resend')
     asset = post['assets'][0]
     aid = asset.get('id')
-    id_ok = isinstance(aid, str) and bool(aid)
     dimensions = asset.get('image')
     source_ok = (
         asset.get('source') == record.get('image_url')
@@ -47,8 +46,10 @@ def verify_echo(post, record):
             os.path.splitext(str(record.get('asset_path', '')))[1].lower()))
         and isinstance(dimensions, dict)
         and [dimensions.get('width'), dimensions.get('height')] == record.get('dimensions'))
-    if not id_ok and not source_ok:
-        raise RuntimeError('Buffer image identity absent; do not resend')
+    # Buffer may return a null image ID, but its immutable source and image
+    # metadata must always match. A non-null ID must not mask a wrong image.
+    if not source_ok:
+        raise RuntimeError('Buffer image identity changed (source/type/dimensions); do not resend')
     if record.get('buffer_asset_ids') and [aid] != record['buffer_asset_ids']:
         raise RuntimeError('Buffer image identity changed (asset ID); do not resend')
     if record.get('buffer_asset_sources') and (

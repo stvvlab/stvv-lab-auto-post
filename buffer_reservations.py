@@ -114,7 +114,9 @@ class BufferReservations:
             raise ValueError('A valid exact caption and reviewed image are required')
         data = self.query('''mutation ReservePost($input: CreatePostInput!) {
           createPost(input: $input) {
-            ... on PostActionSuccess { post { id text channelId status dueAt assets { id } } }
+            ... on PostActionSuccess { post { id text channelId status dueAt assets {
+              id source type mimeType ... on ImageAsset { image { width height } }
+            } } }
             ... on MutationError { message }
           }
         }''', {'input': {'text': text, 'channelId': publisher.CHANNEL,
