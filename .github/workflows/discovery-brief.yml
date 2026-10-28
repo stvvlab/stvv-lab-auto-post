@@ -67,6 +67,13 @@ jobs:
           page = client.get(url, timeout=20)
           page.raise_for_status()
           assert approved_url(page.url)
+          from bs4 import BeautifulSoup
+          soup = BeautifulSoup(page.text, 'html.parser')
+          print('LIVE_DOM_STRUCTURE', 'main=', len(soup.select('main')),
+                'article=', len(soup.select('article')),
+                'h1=', [(h.name, h.get('class'), h.parent.name, h.parent.get('class'))
+                        for h in soup.select('h1')[:3]],
+                'visible_text_length=', len(soup.get_text(' ', strip=True)))
           evidence = article_evidence(page.text, datetime.now(JST))
           assert evidence is not None, 'Latest article not in seven-day window'
           print('LIVE_BELGIAN_SOURCE_OK', url, evidence['date_jst'],
