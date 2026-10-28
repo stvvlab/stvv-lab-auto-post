@@ -3,7 +3,7 @@ name: STVV LAB Discovery Brief
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'fixture_schedule_inventory.py', 'tests/test_fixture_schedule_inventory.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', 'simple_post_drafts.py', 'tests/test_simple_post_drafts.py', '.github/workflows/discovery-brief.yml']
+    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'fixture_schedule_inventory.py', 'tests/test_fixture_schedule_inventory.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', 'simple_post_drafts.py', 'tests/test_simple_post_drafts.py', 'simple_image_previews.py', 'tests/test_simple_image_previews.py', 'ai_image_pilot.py', 'tests/test_ai_image_pilot.py', '.github/workflows/discovery-brief.yml']
   schedule:
     - cron: "30 22 * * *" # JST 07:30
     - cron: "40 * * * *" # Read-only candidate preparation, hourly; never publishes
@@ -48,7 +48,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install requests beautifulsoup4 pillow
-      - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research tests.test_fixture_schedule_inventory tests.test_simple_post_drafts -v
+      - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research tests.test_fixture_schedule_inventory tests.test_simple_post_drafts tests.test_simple_image_previews tests.test_ai_image_pilot -v
       - name: Live official fixture parser smoke (read-only; no approval or publishing)
         continue-on-error: true
         run: |
