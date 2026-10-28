@@ -3,7 +3,7 @@ name: STVV LAB Discovery Brief
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['official_sources.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'fixture_schedule_inventory.py', 'tests/test_fixture_schedule_inventory.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', '.github/workflows/discovery-brief.yml']
+    paths: ['official_sources.py', 'club_official_inventory.py', 'tests/test_club_official_inventory.py', 'preparation_inventory.py', 'editorial_research.py', 'editorial_novelty.py', 'tests/test_editorial_research.py', 'fixture_schedule_inventory.py', 'tests/test_fixture_schedule_inventory.py', 'stvv_post.py', 'tests/test_preparation_inventory.py', 'tests/test_news_articles.py', '.github/workflows/discovery-brief.yml']
   schedule:
     - cron: "30 22 * * *" # JST 07:30
     - cron: "40 * * * *" # Read-only candidate preparation, hourly; never publishes
@@ -48,7 +48,37 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install requests beautifulsoup4 pillow
-      - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research tests.test_fixture_schedule_inventory -v
+      - run: python -m unittest tests.test_news_articles tests.test_preparation_inventory tests.test_editorial_research tests.test_fixture_schedule_inventory tests.test_club_official_inventory -v
+      - name: Live Belgian club news parser smoke (read-only; no approval or publishing)
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          from datetime import datetime
+          import requests
+          from club_official_inventory import LISTING, JST, approved_url, listing_links, article_evidence
+          client = requests.Session()
+          index = client.get(LISTING, timeout=20)
+          index.raise_for_status()
+          assert index.url == LISTING or index.url == LISTING + '/'
+          links = listing_links(index.text)
+          assert links, 'No Belgian official article links'
+          url, _ = links[0]
+          assert approved_url(url)
+          page = client.get(url, timeout=20)
+          page.raise_for_status()
+          assert approved_url(page.url)
+          from bs4 import BeautifulSoup
+          soup = BeautifulSoup(page.text, 'html.parser')
+          print('LIVE_DOM_STRUCTURE', 'main=', len(soup.select('main')),
+                'article=', len(soup.select('article')),
+                'h1=', [(h.name, h.get('class'), h.parent.name, h.parent.get('class'))
+                        for h in soup.select('h1')[:3]],
+                'visible_text_length=', len(soup.get_text(' ', strip=True)))
+          evidence = article_evidence(page.text, datetime.now(JST))
+          assert evidence is not None, 'Latest article not in seven-day window'
+          print('LIVE_BELGIAN_SOURCE_OK', url, evidence['date_jst'],
+                'kickoff_requires_review=', evidence['kickoff_time_requires_cross_source_check'])
+          PY
       - name: Live official fixture parser smoke (read-only; no approval or publishing)
         continue-on-error: true
         run: |
@@ -76,6 +106,10 @@ jobs:
       - run: pip install requests beautifulsoup4 pillow
       - name: Collect unpublished official source evidence without publishing
         run: python preparation_inventory.py
+      - name: Inspect Belgian STVV official articles (research only; not approved)
+        if: always()
+        continue-on-error: true
+        run: python club_official_inventory.py
       - name: Collect unused evidence for editorial review without publishing
         if: always()
         run: python editorial_research.py
@@ -139,6 +173,7 @@ jobs:
           name: preparation-${{ github.run_id }}
           path: |
             reports/preparation-latest.json
+            reports/club-official-latest.json
             reports/editorial-research-latest.json
             reports/fixture-schedule-latest.json
           retention-days: 14
@@ -148,6 +183,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reports/preparation-latest.json reports/editorial-research-latest.json
+          if [ -f reports/club-official-latest.json ]; then
+            git add reports/club-official-latest.json
+          fi
           if [ -f reports/fixture-schedule-latest.json ]; then
             git add reports/fixture-schedule-latest.json
           fi
