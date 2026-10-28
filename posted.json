@@ -906,6 +906,26 @@
       }
     }
   ],
-  "pending_posts": {},
-  "tracked_topics": {}
+  "pending_posts": {
+    "daily_2026-10-29_news": {
+      "slot": "news",
+      "source": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
+      "text": "💛 STVVが地域のGサッカーチームをホームスタジアムへ招待！\n10/24、KFCネーローテレンとSTVVのGチームが交流試合を実施。年齢に応じて8対8・4対4でプレーしました。\n\n公式：https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f56ac637c3984d355860fe988b041df1dd400e99/generated/community_football_20261027.png",
+      "asset_path": "generated/community_football_20261027.png",
+      "sha256": "1b93e8ce690fc27dc982458444d1cca17becd2124b7ab89565e0631dc339b42d",
+      "dimensions": [
+        960,
+        540
+      ],
+      "due_at": "2026-10-29T09:00:00Z",
+      "official_body_sha256": "3044ff9bebeee0d5914e44073d250d2b2f6ecfb0fe04067fe42bd02b69bf39f7",
+      "reservation_key": "4ae95f6ee9ead2058c0d8a89d424529367c29f84ae0a6d535d965d03a2230cd8",
+      "created_at": "2026-10-29T02:01:36.121700+09:00",
+      "delivery_mode": "customScheduled",
+      "x_display_verified": false
+    }
+  },
+  "tracked_topics": {},
+  "reserved_posts": {}
 }
