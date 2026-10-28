@@ -44,14 +44,56 @@ def diagnose(history, posts):
                                   and len(matches) == 1 else "unresolved_do_not_retry"})
     return report
 
+def scan_all_channel_posts(client):
+    """Read all statuses (including drafts) without any mutation."""
+    account = client.query("query { account { organizations { id } } }").get("account")
+    orgs = account.get("organizations") if isinstance(account, dict) else None
+    if not isinstance(orgs, list):
+        raise RuntimeError("Buffer organizations unavailable")
+    found = []
+    for org in orgs:
+        oid = org.get("id")
+        if not oid:
+            continue
+        cursor = None
+        for _ in range(5):
+            after = ", after: " + json.dumps(cursor) if cursor else ""
+            query = ("query { posts(first: 100" + after + ", input: {organizationId: "
+                     + json.dumps(oid) + "}) { edges { node { id text channelId status dueAt assets { id } } } "
+                     "pageInfo { hasNextPage endCursor } } }")
+            response = client.query(query).get("posts")
+            if not isinstance(response, dict) or not isinstance(response.get("edges"), list):
+                raise RuntimeError("Unfiltered Buffer listing unavailable")
+            for edge in response["edges"]:
+                node = edge.get("node") if isinstance(edge, dict) else None
+                if isinstance(node, dict) and node.get("channelId") == publisher.CHANNEL:
+                    found.append(node)
+            page = response.get("pageInfo") or {}
+            if page.get("hasNextPage") is False:
+                return found
+            cursor = page.get("endCursor")
+            if not cursor:
+                raise RuntimeError("Buffer pagination cursor missing")
+    return found
+
 def main():
     result = {"checked_at": datetime.now(publisher.JST).isoformat(),
               "status": "not_checked", "mutation_count": 0,
               "mode": "read_only_no_mutations_no_retries"}
     try:
         history = publisher.load()
-        snapshot = BufferReservations().preflight()
+        client = BufferReservations()
+        snapshot = client.preflight()
         result.update(diagnose(history, snapshot["posts"]))
+        result["filtered_statuses_checked"] = ["scheduled", "sending", "needs_approval", "error", "sent"]
+        try:
+            all_posts = scan_all_channel_posts(client)
+            all_result = diagnose(history, all_posts)
+            result["unfiltered_scan"] = {"channel_posts_seen": len(all_posts),
+                                         "results": all_result["results"]}
+        except Exception as exc:
+            result["unfiltered_scan"] = {"status": "unavailable",
+                                         "error_type": type(exc).__name__}
         result["status"] = "read_only_completed"
     except Exception as exc:
         result.update(status="read_only_failed", error_type=type(exc).__name__)
