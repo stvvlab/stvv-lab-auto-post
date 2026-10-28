@@ -1,0 +1,9 @@
+{
+  "checked_at": "2026-10-29T02:06:27.815473+09:00",
+  "mode": "read_only_buffer_plus_local_ledger_reconciliation",
+  "buffer_mutations": 0,
+  "status": "existing_reservation_reconciled",
+  "buffer_id": "6ae22a71c79ca14f286ed242",
+  "due_at": "2026-10-29T09:00:00Z",
+  "image_identity": "exact_immutable_source"
+}
