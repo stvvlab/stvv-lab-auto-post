@@ -16,9 +16,9 @@
   ],
   "image_brief": "Original navy/yellow STVV LAB editorial graphic. Japan Day as main story; football field lines and stylized abstract Japan-Belgium bridge, no people, faces, crests, flags used as official logos, fictional statistics or score. Clear Japanese title and large local/JST timing only after live reconfirmation. No reuse of fixed layout.",
   "remaining": [
+    "Binary PNG exists only as a conversation-local file; GitHub connector text-file writes cannot transfer these bytes, so ready manifest registration and reservation remain blocked until verified asset upload is supported.",
     "Preserve and transfer generated preview bytes into the repository with SHA256 verification; image is currently conversation-local, not a public immutable asset",
     "Reconfirm live source digest, fixture time and duplicate state immediately before approval",
-    "Finish PR #79 safety review; merge only when safe, never to bypass approval",
     "Commit reviewed image bytes and ready manifest together only after factual/visual approval",
     "Observe existing scheduled Buffer reservation, sent and X display; do not dispatch or resend"
   ],
@@ -32,7 +32,13 @@
     "verified_japan_day": true,
     "verified_kickoff_jst": "2026-11-02T00:00:00+09:00",
     "article_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
-    "source_body_digest_from": "reports/club-official-latest.json"
+    "source_body_digest_from": "reports/club-official-latest.json",
+    "followup_checked_at_jst": "2026-10-28T20:01:43+09:00",
+    "followup_sources": [
+      "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "https://stvv.jp/game/2026-2027/"
+    ],
+    "followup_conclusion": "Belgian official 2026-10-27 article confirms Japan Day at 2026-11-01 16:00 local; Japanese official season schedule confirms HOME OHルーベン 2026-11-02 00:00 JST. Recheck before any future send."
   },
   "imagegen_preview": {
     "generated": true,
@@ -49,6 +55,23 @@
     "visual_check": "Japan Day, STVV x OHルーベン, 11月2日(月) 0:00 日本時間, mobile-readable navy/yellow, no player faces or official crest",
     "asset_committed_to_repository": false,
     "manifest_ready_registered": false,
-    "x_post_created": false
+    "x_post_created": false,
+    "local_file_sha256_reverified_at": "2026-10-28T20:01:43+09:00",
+    "local_file_sha256_reverified": true,
+    "local_visual_inspection": {
+      "status": "passed_for_nonpublic_preview_only",
+      "checked_at_jst": "2026-10-28T20:01:43+09:00",
+      "verified_text": [
+        "JAPAN DAY",
+        "STVV × OHルーベン",
+        "11月2日(月) 0:00 日本時間",
+        "STVV LAB"
+      ],
+      "verified_dimensions": [
+        1448,
+        1086
+      ],
+      "notes": "Visually inspected actual conversation-local PNG: all visible Japanese and digits legible, no faces, players, crests or scores. Stylized stadium/architecture is fictional editorial artwork, not a verified depiction of Stayen. This does not constitute public asset registration, user publication approval or a Buffer reservation."
+    }
   }
 }
