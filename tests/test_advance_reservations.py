@@ -177,6 +177,7 @@ class AdvanceReservationTests(unittest.TestCase):
             {**remote['assets'][0], 'source': 'https://example.org/replaced.png'},
             {**remote['assets'][0], 'image': {'width': 1, 'height': 1086}},
             {**remote['assets'][0], 'mimeType': 'image/jpeg'},
+            {**remote['assets'][0], 'mimeType': 'image/webp'},
             {**remote['assets'][0], 'type': 'video'},
         ]:
             with self.subTest(bad_asset=bad_asset):
