@@ -44,6 +44,14 @@ class DesignBriefTests(unittest.TestCase):
             history["publication_log"].append(dict(current, art_direction="comic-cover"))
         self.assertEqual(4, len({p["composition"] for p in history["publication_log"]}))
 
+    def test_palette_is_content_driven_not_fixed(self):
+        brief = build_brief(self.source, "確認済みの本文 " + self.source, {})
+        prompt = brief["prompt"]
+        self.assertIn("color palette freely", prompt)
+        self.assertIn("do not require navy or yellow", prompt)
+        self.assertIn("strong contrast and mobile readability", prompt)
+        self.assertNotIn("Navy and yellow;", prompt)
+
     def test_invalid_source_or_missing_citation_rejected(self):
         for source, text in [("https://stvv.jp.evil/news/a", "text"), (self.source, "no source")]:
             with self.assertRaises(ValueError):
