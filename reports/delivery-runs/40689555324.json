@@ -1,0 +1,26 @@
+{
+  "started_at": "2026-10-28T21:39:40.969416+09:00",
+  "slot": "vote",
+  "date_jst": "2026-10-28",
+  "scheduled_at": "2026-10-28T21:00:00+09:00",
+  "start_delay_seconds": 2380,
+  "run_id": "40689555324",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40689555324",
+  "commit": "bc87eb5c5d8d192af50a3e7ffbc99951e9c91cc5",
+  "manual_dispatch_performed": false,
+  "status": "skipped_no_verified_content",
+  "x_display_verified": false,
+  "delivery_mode": "advance_reservations",
+  "queue_before": {
+    "ready_cards": 0,
+    "candidates": [],
+    "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
+  },
+  "finished_at": "2026-10-28T21:39:40.985191+09:00",
+  "new_publications": [],
+  "pending_key": null,
+  "delivery_state": "no_new_buffer_acceptance_recorded",
+  "new_reservations": [],
+  "reservation_states": [],
+  "pending_reservation_keys": []
+}
