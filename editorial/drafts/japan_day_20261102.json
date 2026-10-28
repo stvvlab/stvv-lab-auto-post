@@ -1,0 +1,27 @@
+{
+  "status": "draft",
+  "reviewed": false,
+  "can_publish": false,
+  "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "source_date": "2026-10-27",
+  "fixture_source_url": "https://stvv.jp/game/2026-2027/",
+  "fixture_kickoff_jst": "2026-11-02T00:00:00+09:00",
+  "source_claims": [
+    "STVV club official article dated 2026-10-27 announces 2026-11-01 16:00 local OH Leuven home match as Japan Day",
+    "Japanese official 2026-2027 schedule lists 2026-11-02 00:00 JST HOME versus OHルーベン"
+  ],
+  "draft_text": "🇯🇵 次のホーム戦はJapan Day！\n11/2(月) 0:00（日本時間）、STVVはOHルーベンと対戦。現地クラブ公式が日本のサポーターを迎える特別な試合として案内しています。\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "slots": [
+    "news"
+  ],
+  "image_brief": "Original navy/yellow STVV LAB editorial graphic. Japan Day as main story; football field lines and stylized abstract Japan-Belgium bridge, no people, faces, crests, flags used as official logos, fictional statistics or score. Clear Japanese title and large local/JST timing only after live reconfirmation. No reuse of fixed layout.",
+  "remaining": [
+    "Obtain exact original-body SHA256 from live club_official_inventory parser",
+    "Recheck official Japanese fixture schedule and Dutch source before approving date/time",
+    "Check Buffer and X for same event/source duplicate",
+    "Generate content-specific original built-in image and visually inspect Japanese/digits/crop",
+    "Register asset SHA256 and reviewed ready card only after source-gate PR CI and approval"
+  ],
+  "no_paid_api": true,
+  "no_send": true
+}
