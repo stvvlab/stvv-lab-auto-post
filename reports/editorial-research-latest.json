@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-28T08:07:05.480274+09:00",
+  "checked_at": "2026-10-28T11:33:49.385652+09:00",
   "status": "research_drafts_available",
   "source_checks": [
     {
@@ -13,10 +13,30 @@
   ],
   "drafts": [
     {
+      "candidate_id": "5b01fdb57443ea04cc9e48d7d93a63fb77387189750c5eddce4bf76f3393a406",
+      "angle": "player",
+      "source_url": "https://stvv.jp/news/game/20261026_1/",
+      "source_body_sha256": "eec7ecafb9e15ec37af346df0d6ee1e882b6b96cfb950ac122d136cedc3faecc",
+      "evidence_excerpt": "シント＝トロイデンVVは新川志音がリーグ初先発。",
+      "draft_text": "選手の新しい材料\n公式本文：「シント＝トロイデンVVは新川志音がリーグ初先発。」\n次戦も注目したい選手は？\n\n公式：https://stvv.jp/news/game/20261026_1/",
+      "x_length_with_tags": 158,
+      "reviewed": false,
+      "status": "research_only",
+      "current_duplicate_gate": "同じ出典／試合の内容で、新しい比較データがないため見送り",
+      "can_publish": false,
+      "remaining": [
+        "check source consistency and whether evidence is genuinely new",
+        "edit specific natural Japanese copy and distinguish opinion from fact",
+        "resolve duplicate gate with genuinely new verified information",
+        "built-in imagegen and visual review",
+        "register reviewed ready card"
+      ]
+    },
+    {
       "candidate_id": "700b9d229d63db5b079a4827873b17863997e703d6962ead2525b6651f5eaa77",
       "angle": "analysis",
       "source_url": "https://stvv.jp/news/game/20261026_1/",
-      "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+      "source_body_sha256": "eec7ecafb9e15ec37af346df0d6ee1e882b6b96cfb950ac122d136cedc3faecc",
       "evidence_excerpt": "12分、石渡のスルーパスが畑につながり、ゴール前へクロス。",
       "draft_text": "振り返りの論点\n公式本文：「12分、石渡のスルーパスが畑につながり、ゴール前へクロス。」\nこの場面、映像で確認したいポイントは？\n\n公式：https://stvv.jp/news/game/20261026_1/",
       "x_length_with_tags": 180,
@@ -36,7 +56,7 @@
       "candidate_id": "e160d47fc54d9055204e97a4bfd4f3766c9364b5b1f5769e8316d90674935756",
       "angle": "vote",
       "source_url": "https://stvv.jp/news/game/20261026_1/",
-      "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
+      "source_body_sha256": "eec7ecafb9e15ec37af346df0d6ee1e882b6b96cfb950ac122d136cedc3faecc",
       "evidence_excerpt": "リーグ4連敗となってしまった。",
       "draft_text": "次戦へ注目したい点\n公式本文：「リーグ4連敗となってしまった。」\n次戦へ、最も改善を期待する点は？\n\n公式：https://stvv.jp/news/game/20261026_1/",
       "x_length_with_tags": 151,
