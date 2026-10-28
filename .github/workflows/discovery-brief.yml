@@ -82,6 +82,15 @@ jobs:
           if [ -f reports/preparation-latest.json ]; then
             python simple_post_drafts.py
           fi
+      - name: Install Japanese font for draft previews
+        if: always()
+        run: bash scripts/install-card-font.sh
+      - name: Render unapproved image previews
+        if: always()
+        run: |
+          if [ -f reports/simple-post-drafts.json ]; then
+            python simple_image_previews.py
+          fi
       - name: Collect unused evidence for editorial review without publishing
         if: always()
         run: python editorial_research.py
@@ -146,6 +155,8 @@ jobs:
           path: |
             reports/preparation-latest.json
             reports/simple-post-drafts.json
+            reports/simple-image-previews.json
+            generated/draft-previews/
             reports/editorial-research-latest.json
             reports/fixture-schedule-latest.json
           retention-days: 14
@@ -157,6 +168,9 @@ jobs:
           git add reports/preparation-latest.json reports/editorial-research-latest.json
           if [ -f reports/simple-post-drafts.json ]; then
             git add reports/simple-post-drafts.json
+          fi
+          if [ -f reports/simple-image-previews.json ]; then
+            git add reports/simple-image-previews.json
           fi
           if [ -f reports/fixture-schedule-latest.json ]; then
             git add reports/fixture-schedule-latest.json
