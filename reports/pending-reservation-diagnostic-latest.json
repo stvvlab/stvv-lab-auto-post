@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-10-29T02:02:58.717607+09:00",
+  "status": "read_only_completed",
+  "mutation_count": 0,
+  "mode": "read_only_no_mutations_no_retries",
+  "pending_count": 1,
+  "results": [
+    {
+      "pending_key": "daily_2026-10-29_news",
+      "caption_matched_posts": 0,
+      "exact_remote_matches": 0,
+      "matches": [],
+      "status": "unresolved_do_not_retry"
+    }
+  ]
+}
