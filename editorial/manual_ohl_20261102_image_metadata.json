@@ -1,0 +1,9 @@
+{
+  "status": "staged_locally_not_uploaded",
+  "asset_path": "generated/manual_ohl_20261102.png",
+  "dimensions": [
+    1374,
+    1145
+  ],
+  "note": "Image bytes exist only in local staging ZIP; do not mark reviewed or ready. Upload the exact PNG before SHA256 and visual checks. No Buffer send."
+}
