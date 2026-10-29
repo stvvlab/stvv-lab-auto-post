@@ -17,16 +17,16 @@ from stvv_post import HASHTAGS, JST, SLOTS
 ROOT = Path(__file__).resolve().parent
 
 
-def future_slots(now, *, lead_minutes=30, horizon_hours=24):
+def future_slots(now, *, lead_minutes=30, horizon_hours=36):
     if now.tzinfo is None or now.utcoffset() is None:
         raise ValueError('An aware current time is required')
-    if lead_minutes < 30 or not 0 < horizon_hours <= 24:
-        raise ValueError('Use at least 30 minutes lead and at most 24 hours horizon')
+    if lead_minutes < 30 or not 0 < horizon_hours <= 36:
+        raise ValueError('Use at least 30 minutes lead and at most 36 hours horizon')
     now = now.astimezone(JST)
     earliest = now + timedelta(minutes=lead_minutes)
     latest = now + timedelta(hours=horizon_hours)
     slots = []
-    for offset in (0, 1):
+    for offset in (0, 1, 2):
         for slot, hour, minute in SLOTS.values():
             due = (now + timedelta(days=offset)).replace(
                 hour=hour, minute=minute, second=0, microsecond=0)
