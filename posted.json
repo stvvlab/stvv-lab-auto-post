@@ -907,7 +907,31 @@
       }
     }
   ],
-  "pending_posts": {},
+  "pending_posts": {
+    "daily_2026-10-30_news": {
+      "slot": "news",
+      "source": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "text": "⚽ 次戦はOHルーヴェン戦！\n📅 11月2日（月）午前0:00（日本時間）\n🏟 DAIO WASABI STAYEN\n\nホームで勝利をつかめ！STVVの熱い戦いに期待。🇯🇵\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f84e118468e52356e327309f8b07e0e6a7bc7983/generated/ohl_match_announcement_20261102.png",
+      "asset_path": "generated/ohl_match_announcement_20261102.png",
+      "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "due_at": "2026-10-30T09:00:00Z",
+      "official_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+      "reservation_key": "d203cafdeadcf3195da292e2f0c53c91c48382354d2c21fddd887feef27addd9",
+      "created_at": "2026-10-29T23:11:04.849134+09:00",
+      "delivery_mode": "customScheduled",
+      "x_display_verified": false,
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "initial",
+        "event_id": "stvv-ohl-2026-11-02"
+      }
+    }
+  },
   "tracked_topics": {},
   "reserved_posts": {
     "daily_2026-10-29_news": {
