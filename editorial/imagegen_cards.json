@@ -126,8 +126,8 @@
       "slots": [
         "news"
       ],
-      "reviewed": true,
-      "status": "ready",
+      "reviewed": false,
+      "status": "cancelled",
       "asset_path": "generated/community_football_20261027.png",
       "sha256": "1b93e8ce690fc27dc982458444d1cca17becd2124b7ab89565e0631dc339b42d",
       "dimensions": [
@@ -135,7 +135,8 @@
         540
       ],
       "source_body_sha256": "3044ff9bebeee0d5914e44073d250d2b2f6ecfb0fe04067fe42bd02b69bf39f7",
-      "review_note": "2026-10-29 restoration: original pixel-art infographic reviewed visually. Correct STVV and KFC Neeroeteren naming, 24 October event date, Stayen, older eight-a-side and younger four-a-side. No score, actual children, identifiable likeness, logos, stadium photograph or invented match detail. English visual text and Japanese caption cross-checked against Belgian STVV official inventory. Original image bytes registered in the same tree as this manifest; live official body SHA/date, immutable public bytes, Buffer duplicate and capacity checks must still pass before scheduling. No user approval or X publication claimed."
+      "review_note": "2026-10-29 restoration: original pixel-art infographic reviewed visually. Correct STVV and KFC Neeroeteren naming, 24 October event date, Stayen, older eight-a-side and younger four-a-side. No score, actual children, identifiable likeness, logos, stadium photograph or invented match detail. English visual text and Japanese caption cross-checked against Belgian STVV official inventory. Original image bytes registered in the same tree as this manifest; live official body SHA/date, immutable public bytes, Buffer duplicate and capacity checks must still pass before scheduling. No user approval or X publication claimed.",
+      "cancellation_note": "User explicitly excluded this G-football story on 2026-10-29. Never select, reserve, or republish. Buffer post 6ae22a71c79ca14f286ed242 was manually moved to Drafts; historical reservation ledger must be reconciled read-only before state changes."
     }
   ]
 }
