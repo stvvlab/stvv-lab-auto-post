@@ -81,14 +81,14 @@ class AdvanceReservationTests(unittest.TestCase):
         self.client.schedule.assert_called_once()
         self.assertEqual(len(self.saved), 2)
 
-    def test_user_moved_reservation_to_drafts_never_reposts(self):
+    def test_buffer_draft_does_not_attribute_cancellation_to_user_or_repost(self):
         record = self.accepted()
         self.client.schedule.reset_mock()
         self.client.get_post.return_value = {
             'id': record['buffer_id'], 'channelId': publisher.CHANNEL,
             'text': record['text'], 'status': 'draft', 'dueAt': None}
         result = self.run_one()
-        self.assertEqual(record['buffer_status'], 'cancelled_by_user')
+        self.assertEqual(record['buffer_status'], 'draft_no_longer_scheduled')
         self.assertFalse(self.history['publication_log'])
         self.assertIn(KEY, self.history['used_posts'])
         self.assertEqual(result['status'], 'skipped_no_verified_content')
