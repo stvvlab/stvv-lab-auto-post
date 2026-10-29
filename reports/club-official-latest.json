@@ -1,21 +1,8 @@
 {
-  "checked_at": "2026-10-29T23:38:45.080866+09:00",
+  "checked_at": "2026-10-30T04:49:40.257053+09:00",
   "listing_url": "https://stvv.com/nl/nieuws",
-  "status": "candidates_need_review",
-  "candidates": [
-    {
-      "source_url": "https://stvv.com/nl/nieuws/artikel/statement-hajduk-split-stvv",
-      "listing_heading": "22 oktober 2026 Statement Hajduk Split - STVV STVV bekijkt mogelijkheden om supporters te ondersteunen na beslissing UEFA Lezen",
-      "reviewed": false,
-      "can_publish": false,
-      "date_jst": "2026-10-22",
-      "official_heading": "Statement Hajduk Split - STVV",
-      "source_body": "Statement Hajduk Split - STVV 22 oktober 2026 STVV bekijkt mogelijkheden om supporters te ondersteunen na beslissing UEFA STVV werd gisterenavond op de hoogte gebracht van de beslissing van de UEFA om de Conference League-wedstrijd Hajduk Split – STVV achter gesloten deuren te laten plaatsvinden. Deze beslissing volgt op de incidenten met supporters van Hajduk Split voor, tijdens en na de wedstrijd tegen Ajax. STVV betreurt dat haar supporters hierdoor de mogelijkheid verliezen om een historische uitwedstrijd mee te maken. Als club gaan onze eerste zorgen daarom uit naar de Kanaries die uitkeken naar een onvergetelijke Europese verplaatsing . Na intern beraad hebben we besloten om de volgende initiatieven te ondernemen: Enerzijds onderzoeken we of de reiskosten kunnen gerecupeerd worden van mensen die al een vliegtuigticket geboekt hadden. We zullen ons daarom nog deze week juridisch bevragen en vervolgens een officieel schrijven versturen naar zowel de UEFA als Hajduk Split. Anderzijds bekijken we de mogelijkheid om een event op poten te zetten in Sint-Truiden , waar de supporters samen de wedstrijd kunnen beleven Ook de optie om de aanwezigheid te forceren van uitsupporters die al een (vlieg)ticket gekocht hadden, is intern besproken. En natuurlijk hadden we het liefst zij aan zij met jullie gestaan in Kroatië. Maar op basis van de veiligheidsinschatting ter plaatse lijkt het ons niet verantwoord om Kanaries naar Split te laten afreizen . De situatie is vervelend. En als club kunnen we geen grote beloftes doen. Maar we beloven jullie wel dat we alles zullen doen om er - in de gegeven omstandigheden - het beste van te maken.",
-      "body_sha256": "dfe71e057adca9b350c7fc43a77c5d17267171425d8beab81dbc0b17e1d6731d",
-      "kickoff_time_requires_cross_source_check": false,
-      "status": "needs_editorial_review"
-    }
-  ],
+  "status": "no_new_club_articles",
+  "candidates": [],
   "skipped": [
     {
       "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
@@ -24,6 +11,10 @@
     {
       "source_url": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
       "reason": "already registered or pending"
+    },
+    {
+      "source_url": "https://stvv.com/nl/nieuws/artikel/statement-hajduk-split-stvv",
+      "reason": "outside seven days"
     },
     {
       "source_url": "https://stvv.com/nl/nieuws/artikel/fc-midtjylland-doorgelicht",
