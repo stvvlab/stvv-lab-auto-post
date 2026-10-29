@@ -79,6 +79,8 @@ def duplicate_reason(history, message, source, now):
     pending = list(history.get('pending_posts', {}).values())
     reserved = list(history.get('reserved_posts', {}).values())
     records = publications + pending + reserved
+    if any(not isinstance(p, dict) for p in records):
+        return '投稿履歴が不正のため確認待ち'
 
     # Do not permit a verbatim repeat merely because the previous X post
     # is more than seven days old. News inventory alone is not consulted.
