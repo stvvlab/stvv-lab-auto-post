@@ -4,6 +4,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from datetime import datetime
 from unittest.mock import patch
 
 import delivery_run as d
@@ -29,6 +30,36 @@ class DeliveryRunTests(unittest.TestCase):
         before['publication_log'] = [{'key': 'daily_2026-10-26_vote'}]
         self.assertEqual(d.delivery_evidence(before, before, '2026-10-26', 'vote')
                          ['new_publications'], [])
+
+    def test_six_hour_late_guard_records_failure_without_buffer_or_false_pending_claim(self):
+        # The 18:00 JST cron was actually started at 00:43 the next day.
+        # A prior production run failed before creating any delivery evidence.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '40904274559',
+                   'GITHUB_SCHEDULE': '0 9 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
+                    patch.object(d.publisher, 'slot_for_run',
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
+                    patch('advance_reservations.main') as reserve, \
+                    patch.object(d.publisher, 'main') as legacy:
+                clock.now.return_value = datetime.fromisoformat('2026-10-30T00:43:04+09:00')
+                with self.assertRaisesRegex(RuntimeError, '6時間以上'):
+                    d.main()
+                reserve.assert_not_called()
+                legacy.assert_not_called()
+            report = json.loads((root / 'reports/delivery-runs/40904274559.json').read_text())
+            self.assertEqual(report['status'], 'blocked_schedule_more_than_six_hours_late')
+            self.assertEqual(report['scheduled_at'], '2026-10-29T18:00:00+09:00')
+            self.assertEqual(report['start_delay_seconds'], 24184)
+            self.assertEqual(report['delivery_state'], 'no_buffer_call_due_to_schedule_guard')
+            self.assertEqual(report['pending_state'], 'not_checked')
+            self.assertFalse(report['x_display_verified'])
+            self.assertEqual(report['new_reservations'], [])
+            self.assertEqual(json.loads((root / 'reports/delivery-latest.json').read_text()),
+                             report)
 
     def test_ci_and_manual_calls_cannot_create_evidence(self):
         with patch.dict(os.environ, {'GITHUB_RUN_ID': '123',

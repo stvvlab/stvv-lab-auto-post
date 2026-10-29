@@ -5,7 +5,7 @@ No retries, dispatches, new schedules or alternative publishing transports.
 import json
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import stvv_post as publisher
@@ -101,6 +101,49 @@ def delivery_evidence(before, after, day, slot, *, advance=False):
     return result
 
 
+
+def record_late_start(now, run_id, advance):
+    """Persist a failed scheduled run even when the six-hour guard stops it.
+
+    No ledger is read and no Buffer operation is attempted. The report does
+    not imply that other runs have no pending posts or reservations.
+    """
+    cron = os.getenv('GITHUB_SCHEDULE', '').strip()
+    if cron not in publisher.SLOTS:
+        return False
+    slot, hour, minute = publisher.SLOTS[cron]
+    scheduled = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    if now < scheduled:
+        scheduled -= timedelta(days=1)
+    delay = now - scheduled
+    if delay <= timedelta(hours=6):
+        return False
+
+    report = {
+        'started_at': now.isoformat(), 'finished_at': datetime.now(publisher.JST).isoformat(),
+        'slot': slot, 'date_jst': scheduled.date().isoformat(),
+        'scheduled_at': scheduled.isoformat(),
+        'start_delay_seconds': int(delay.total_seconds()),
+        'run_id': run_id,
+        'workflow_url': f'https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/{run_id}',
+        'commit': os.getenv('GITHUB_SHA'), 'manual_dispatch_performed': False,
+        'status': 'blocked_schedule_more_than_six_hours_late',
+        'delivery_state': 'no_buffer_call_due_to_schedule_guard',
+        'delivery_mode': 'advance_reservations' if advance else 'shareNow',
+        'x_display_verified': False, 'new_publications': [], 'new_reservations': [],
+        'pending_state': 'not_checked', 'error_type': 'RuntimeError',
+    }
+    directory = ROOT / 'reports/delivery-runs'
+    directory.mkdir(parents=True, exist_ok=True)
+    content = json.dumps(report, ensure_ascii=False, indent=2) + '\n'
+    (directory / f'{run_id}.json').write_text(content, encoding='utf-8')
+    (ROOT / 'reports/delivery-latest.json').write_text(content, encoding='utf-8')
+    print('DELIVERY_EVIDENCE ' + json.dumps({
+        'status': report['status'], 'delivery_state': report['delivery_state'],
+        'workflow_url': report['workflow_url']}, ensure_ascii=False))
+    return True
+
+
 def main():
     # Only Actions' actual posting step opts in. CI test calls cannot create
     # production evidence or touch the real posting history.
@@ -110,7 +153,11 @@ def main():
         raise RuntimeError('Delivery recording requires the scheduled posting step')
     advance = os.getenv('STVV_ADVANCE_RESERVATIONS') == 'true'
     now = datetime.now(publisher.JST)
-    slot, day = publisher.slot_for_run(now)
+    try:
+        slot, day = publisher.slot_for_run(now)
+    except RuntimeError:
+        record_late_start(now, run_id, advance)
+        raise
     _, hour, minute = publisher.SLOTS[os.environ['GITHUB_SCHEDULE']]
     scheduled = datetime.fromisoformat(day).replace(
         hour=hour, minute=minute, tzinfo=publisher.JST)
