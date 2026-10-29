@@ -929,7 +929,7 @@
       "x_display_verified": false,
       "buffer_id": "6ae22a71c79ca14f286ed242",
       "buffer_status": "scheduled",
-      "status_checked_at": "2026-10-29T02:06:28.380678+09:00",
+      "status_checked_at": "2026-10-29T11:02:04.282065+09:00",
       "recovered_without_resend": true,
       "buffer_asset_sources": [
         "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f56ac637c3984d355860fe988b041df1dd400e99/generated/community_football_20261027.png"
