@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T02:57:32+09:00",
+  "updated_at": "2026-10-29T22:10:00+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content. Color palette is unrestricted and selected for the story, with strong contrast and legibility; navy/yellow are optional, not mandatory. Do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -8,9 +8,11 @@
     "same_match_must_not_be_reposted": true
   },
   "changes_this_pass": [
-    "Found two fresh 2026-10-27 Belgian STVV official articles; Japanese football news inventory still has no unused eligible article.",
-    "Created draft PR #79: exact Belgian official article URL/date/body SHA256 checks before reviewed-image reservation and remote duplicate scan; no publication gates relaxed.",
-    "PR #79 CI: visual pipeline 369 tests passed, feedback safety 369 passed, discovery inventory 50 passed; no new image, Buffer mutation or X post."
+    "Merged PR #88 (c67780f): official site history is not STVV LAB publication; first fixture reminder regression test, no publishing bypass.",
+    "Merged PR #89 (ac298fb): duplicate guard now blocks all-time identical captions, never ages out pending/cancelled reservations, and avoids treating sent+logged reservations as unresolved; CI Visual 40878817047 and Feedback 40878817062 both passed.",
+    "Read-only current manifest shows 0 ready, 4 published, 1 cancelled. Current ledger has 0 pending and one cancelled G-football reservation; no new Buffer send or X verification.",
+    "Local approved OH Leuven PNG exists at /mnt/data/ohl_match_announcement_20261102.png and matches expected SHA256 81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5, dimensions 1448x1086; no supported connector file-to-GitHub binary bridge verified.",
+    "STVV 2026-10-27 and OH Leuven 2026-10-26 official articles confirm 1 Nov 16:00 CET; STVV schedule listing currently displays 15:00 with no clear timezone, so continue source conflict check before publishing."
   ],
   "latest_prepared_card": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
@@ -60,7 +62,7 @@
     "paid_api_or_cli_used": false
   },
   "prepared_asset_delivery": {
-    "ready_cards": 1,
+    "ready_cards": 0,
     "published_cards": 4,
     "manifest_enabled": true,
     "fail_closed_without_reviewed_asset": true,
@@ -70,7 +72,8 @@
     "pending_before_send_preserved": true,
     "public_byte_sha256_check_preserved": true,
     "duplicate_guard_preserved": true,
-    "reserved_cards": 1
+    "reserved_cards": 0,
+    "cancelled_cards": 1
   },
   "tests": {
     "local_full_passed": 265,
@@ -109,7 +112,7 @@
     "sender_implemented": false,
     "reason": "No free authenticated supported transport for replying to an existing published X post was available."
   },
-  "implementation_status": "G-football image+caption scheduled in Buffer for 2026-10-29 18:00 JST; X sent/display unverified. OH Leuven match announcement draft/imagegen exists locally, not transferred or scheduled.",
+  "implementation_status": "2026-10-29 20:05 JST read-only Buffer verification found the prior G-football reservation moved to draft; ledger records cancelled_by_user and manifest status cancelled. OH Leuven fixture draft is not ready, image exact bytes are available in conversation container but not committed to GitHub, no Buffer reservation or new X display verified.",
   "uncompleted": [
     "A fresh reviewed new image is needed before the first real advance reservation.",
     "Reservation acceptance, Buffer sent and actual X caption/image delivery through multiple normal slots remain unverified.",
@@ -117,7 +120,10 @@
     "Supplemental reply transport remains unavailable; no actual reply sent.",
     "OH Leuven match image binary not in GitHub; match announcement not scheduled",
     "Existing G-football 18:00 reservation precedes requested match announcement; do not silently cancel",
-    "Buffer scheduled -> sent -> actual X image display for 2026-10-29 not yet verified"
+    "Buffer scheduled -> sent -> actual X image display for 2026-10-29 not yet verified",
+    "Review broader intent-based novelty schema before allowing different facts from one official source; PR #89 hardens history but does not auto-approve same-source content.",
+    "Transfer exact OH Leuven image bytes and same-commit manifest; no supported file-to-GitHub binary bridge yet.",
+    "Confirm next regular Actions start and actual Buffer/X publication; CI success is not X delivery."
   ],
   "next_priority": "Prioritize STVV vs OH Leuven match announcement for 2026-11-02 00:00 JST, with safe exact binary transfer, non-Japan-Day duplicate review and existing 7-slot Buffer scheduling. Do not cancel/resend existing G post without approval.",
   "preparation_commit": "b1b89c37a92f719d0b6388a93c823c5a1f8bb318",
@@ -209,53 +215,32 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-27T17:12:46.613206+09:00",
-    "main_revision": "52d2d9ef28be3bda2916d3458c8a69ea9a0cc750",
-    "source_checks": [
-      {
-        "url": "https://stvv.jp/news/2026/",
-        "status": "ok",
-        "eligible_items": 3
-      },
-      {
-        "url": "https://stvv.jp/news/game/2026/",
-        "status": "ok",
-        "eligible_items": 2
-      },
-      {
-        "url": "https://stvv.jp/news/team/2026/",
-        "status": "ok",
-        "eligible_items": 0
-      },
-      {
-        "url": "https://stvv.jp/news/uefa-news/2026/",
-        "status": "ok",
-        "eligible_items": 1
-      }
-    ],
-    "new_eligible_news_candidates": 0,
-    "research_drafts": 2,
-    "research_publishable": false,
+    "checked_at": "2026-10-29T22:10:00+09:00",
+    "main_revision": "ac298fb828a257d0e1032d8e99ff99cb5f52386b",
     "ready_cards": 0,
+    "published_cards": 4,
+    "cancelled_cards": 1,
     "pending_posts": 0,
-    "reserved_posts": 0,
+    "buffer_g_football_state": "cancelled_by_user (read-only 20:05 JST)",
+    "ohl_fixture_status": "draft_not_queued",
+    "ohl_image_sha256_verified_locally": true,
+    "ohl_image_bytes_in_git": false,
     "new_image_generated": false,
     "new_reservation_sent": false,
+    "new_x_display_verified": false,
     "manual_dispatch_performed": false,
     "paid_api_used": false,
-    "local_tests_run": false,
-    "builtin_capability_evidence_sha256_rechecked": true,
-    "last_regular_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40466551214",
-    "last_regular_status": "skipped_no_verified_content",
-    "last_regular_started_at": "2026-10-27T16:21:14.582141+09:00",
-    "last_regular_delay_seconds": 3074,
-    "live_reservation_to_x_verified": false,
+    "duplicate_review_prs": [
+      "https://github.com/stvvlab/stvv-lab-auto-post/pull/88",
+      "https://github.com/stvvlab/stvv-lab-auto-post/pull/89"
+    ],
+    "duplicate_review_ci": [
+      "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40878817047",
+      "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40878817062"
+    ],
     "reply_transport_available": false,
-    "reply_tool_catalog_checked": {
-      "metricool_tools": 9,
-      "existing_x_reply_tool_found": false
-    },
-    "note": "All four official news listings and two recent article bodies read. No new eligible news; no quota image or reservation. Empty-queue skip is not a publishing failure; startup delay remains measured, cause unknown. Existing reply drafts and source-conflict correction remain unsent."
+    "last_regular_delivery_report": "2026-10-29T16:26:02+09:00",
+    "last_regular_delivery_report_is_stale": true
   },
   "last_verified_publication": {
     "source_url": "https://stvv.jp/news/game/20261026_1/",
