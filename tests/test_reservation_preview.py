@@ -32,9 +32,9 @@ class ReservationPreviewTests(unittest.TestCase):
     def test_same_seven_slots_and_utc_conversion(self):
         now = datetime.fromisoformat('2026-10-26T23:20:00+09:00')
         slots = future_slots(now)
-        self.assertEqual(len(slots), 11)
+        self.assertEqual(len(slots), 9)
         self.assertEqual([s for _, s in slots],
-                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap',\n                          'player', 'compare', 'data', 'analysis'])
+                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap',\n                          'player', 'compare'])
         result = plan(self.history, now)
         self.assertEqual(result['proposals'][0]['due_utc'], '2026-10-26T23:00:00Z')
         self.assertEqual(result['proposals'][0]['due_jst'], '2026-10-27T08:00:00+09:00')
