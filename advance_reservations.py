@@ -180,6 +180,10 @@ def run(history, now, client, save, session):
               'delivery_mode': 'customScheduled', 'x_display_verified': False}
     if fact:
         record['editorial_fact'] = fact
+    if 'editorial_purpose' in card:
+        # Persist the reviewed identity in the pending intent before Buffer is
+        # contacted, and then in the reservation / publication history.
+        record['editorial_purpose'] = copy.deepcopy(card['editorial_purpose'])
     history['pending_posts'][key] = copy.deepcopy(record)
     save(history)  # Must durably reach main before the ONE createPost attempt.
     try:
