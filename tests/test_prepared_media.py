@@ -56,6 +56,18 @@ class PreparedMediaTests(unittest.TestCase):
         self.assertEqual(self.deliver(), (True, None))
         self.session.get.assert_not_called()
 
+    def test_user_cancelled_story_is_never_selected_or_delivered(self):
+        """A Buffer draft moved by the user must not be requeued by the manifest."""
+        self.card.update(
+            source_url='https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen',
+            text='中止済み記事 https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen',
+            date_jst='2026-10-29', status='cancelled', reviewed=False)
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', datetime(2026, 10, 29)), [])
+        self.assertIsNone(media.exact_card('news', self.card['text'], self.card['source_url']))
+        self.assertEqual(self.deliver(), (True, None))
+        self.session.get.assert_not_called()
+
     def test_ambiguous_entries_are_not_delivered(self):
         self.manifest.write_text(json.dumps(dict(enabled=True, cards=[self.card, self.card])))
         self.assertEqual(self.deliver(), (True, None))

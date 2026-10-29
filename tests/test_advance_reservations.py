@@ -81,6 +81,31 @@ class AdvanceReservationTests(unittest.TestCase):
         self.client.schedule.assert_called_once()
         self.assertEqual(len(self.saved), 2)
 
+    def test_user_moved_reservation_to_drafts_never_reposts(self):
+        record = self.accepted()
+        self.client.schedule.reset_mock()
+        self.client.get_post.return_value = {
+            'id': record['buffer_id'], 'channelId': publisher.CHANNEL,
+            'text': record['text'], 'status': 'draft', 'dueAt': None}
+        result = self.run_one()
+        self.assertEqual(record['buffer_status'], 'cancelled_by_user')
+        self.assertFalse(self.history['publication_log'])
+        self.assertIn(KEY, self.history['used_posts'])
+        self.assertEqual(result['status'], 'skipped_no_verified_content')
+        self.client.schedule.assert_not_called()
+        self.run_one()
+        self.client.schedule.assert_not_called()
+
+    def test_draft_identity_mismatch_fails_closed(self):
+        record = self.accepted()
+        self.client.schedule.reset_mock()
+        self.client.get_post.return_value = {
+            'id': record['buffer_id'], 'channelId': publisher.CHANNEL,
+            'text': 'changed', 'status': 'draft'}
+        with self.assertRaisesRegex(RuntimeError, 'Draft identity mismatch'):
+            self.run_one()
+        self.client.schedule.assert_not_called()
+
     def test_pending_save_failure_sends_nothing(self):
         with self.assertRaises(OSError):
             a.run(self.history, NOW, self.client, Mock(side_effect=OSError()), Mock())
