@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-29T22:10:00+09:00",
+  "updated_at": "2026-10-29T22:07:12+09:00",
   "policy": "Use ChatGPT built-in imagegen to design each card from verified content. Color palette is unrestricted and selected for the story, with strong contrast and legibility; navy/yellow are optional, not mandatory. Do not fall back to the old fixed renderer when a reviewed image is unavailable.",
   "quality_baseline": {
     "path": "generated/approved_midtjylland_20261023.png",
@@ -215,7 +215,7 @@
     "note": "Next regular scheduled run completed without code changes or manual rerun. No updates required; does not mean all database fields are complete."
   },
   "latest_monitoring_check": {
-    "checked_at": "2026-10-29T22:10:00+09:00",
+    "checked_at": "2026-10-29T22:07:12+09:00",
     "main_revision": "ac298fb828a257d0e1032d8e99ff99cb5f52386b",
     "ready_cards": 0,
     "published_cards": 4,
