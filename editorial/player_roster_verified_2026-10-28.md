@@ -17,7 +17,7 @@
 | DF | 23 | ジョードリック・ピュペ (Joedrick Pupe) | 1997-06-04 | ベルギー | 2026 | [一次情報](https://stvv.jp/team-member/joedrick-pupe/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
 | DF | 26 | ヴィサル・ムスリウ (Visar Musliu) | 1994-11-13 | 北マケドニア | 2024 | [一次情報](https://stvv.jp/team-member/visar-musliu/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
 | DF | 27 | ジェレミー・ムバンビ (Jeremy Mbambi) | 2008-05-04 | ベルギー | 2026 | [一次情報](https://stvv.jp/team-member/jeremy-mbambi/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
-| DF | 34 | ヒューゴ・ランボット (Hugo Lambotte) | 2006-06-20 | ベルギー | 2024 | [一次情報](https://stvv.jp/team-member/hugo-lambotte/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
+| DF | 34 | ヒューゴ・ランボット (Hugo Lambotte) | 2006-06-20 | ベルギー | 2024 | [一次情報](https://stvv.jp/team-member/hugo-lambotte/) | **2026-08-15付でVirtonへ期限付き移籍とSTVV本国公式発表。日本公式一覧には残存。現所属をSTVVトップチーム稼働中と扱わない／詳細分析未完** |
 | MF | 7 | アルブノール・ムヤ (Arbnor Muja) | 1998-11-29 | アルバニア | 2025（要照合） | [一次情報](https://stvv.jp/team-member/arbnor-muja/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
 | MF | 8 | アブドゥライ・シサコ (Abdoulaye Sissako) | 1998-05-26 | フランス | 2025 | [一次情報](https://stvv.jp/team-member/abdoulaye-sissako/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
 | MF | 10 | イリアス・セヴァウイ (Ilias Sebaoui) | 2001-10-04 | ベルギー／モロッコ | 2025 | [一次情報](https://stvv.jp/team-member/ilias-sebaoui/) | 名簿・基礎プロフィール確認済／詳細分析未完 |
@@ -79,3 +79,34 @@
 ### 安全上の扱い
 
 このファイルは**資料の収集・検証台帳**であり、Xの予約・画像manifest・品質ゲート・Buffer経路には接続しない。全27人の詳細項目と具体的プレー根拠が揃うまでは**完成通知不可**。
+
+
+## 2026-10-29追加調査：本国公式一次情報の照合（投稿未承認）
+
+**名簿の重要な整合性問題**：日本公式[選手一覧](https://stvv.jp/team-member/)には27人が掲載されるが、STVV本国公式は2026-08-15に**ヒューゴ・ランボットのRoyal Excelsior Virtonへの期限付き移籍**を発表し、2027-28シーズン開始時のSTVV復帰予定と記載。したがって「日本公式サイトに掲載の27人」と「現在STVVトップチームでプレー可能な27人」は同義ではない。貸出中の選手を誤って現所属・直近試合出場候補として扱わない。公式掲載27人は調査母集団として維持し、**暫定26人在籍＋貸出中1人（他の異動がないことは未確認）**として精査する。[本国公式・貸出発表（2026-08-15）](https://stvv.com/nl/nieuws/artikel/stvv-verhuurt-hugo-lambotte-aan-royal-excelsior-virton)。確認日2026-10-29。
+
+### 代表歴・具体的出場記録の追加確認
+
+以下はクラブ公式の2026-10-02・10-08代表活動報告に記載された**出場・招集事実**。国籍欄の表記と代表選択国は別フィールド。代表カテゴリーは記事の表記に従い、代表キャップ総数は未確認。
+
+| 選手 | 代表カテゴリー・確認済み事実 | 情報の限界／次に注目したいこと（編集視点） | 公式出典 |
+|---|---|---|---|
+| 小久保玲央ブライアン | 日本A代表に招集。ベネズエラ戦に先発し前半45分出場、無失点で交代（クラブ公式10/02記事）。 | 代表招集と出場を区別。STVVでのシュートストップ・配球を複数試合で検証。 | [10/02](https://stvv.com/nl/nieuws/artikel/een-eerste-reisverslag-van-onze-internationale-kanaries) |
+| マット・レンドフレス | ベルギーU21に追加招集。デンマーク戦は出場なし（10/08記事）。2024年クラブ公式で過去の年代別代表選出に言及。 | 代表招集を出場歴と誤記しない。クラブSDは2024年に足元の技術・体格を評価したが、直近の実測評価とは別。 | [10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries)／[2024-07-17](https://stvv.com/nl/nieuws/artikel/matt-lendfers-kiest-voor-een-toekomst-bij-stvv) |
+| ヴィサル・ムスリウ | 北マケドニアA代表。スコットランド戦・スイス戦とも90分出場（10/08記事）。 | 対人守備とゴール前の位置取りを試合映像で確認。 | [10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries) |
+| ジェレミー・ムバンビ | ベルギーU19。北アイルランド戦45分出場、イングランド戦74分から出場（10/08記事）。加入時公式発表ではU16〜U18の代表選出歴も記載。 | **左利きは加入公式で確認**。中央DF・左サイドDF両対応と明記。育成カテゴリーの実績とSTVVトップチームの実戦評価は区別。 | [10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries)／[加入発表2026-09-03](https://stvv.com/nl/nieuws/artikel/stvv-huurt-jeremy-mbambi-met-aankoopoptie-van-pisa) |
+| アブドゥライ・シサコ | **ウガンダA代表**でDRコンゴとの親善試合2試合に各90分出場、1試合目にドリブルからアシスト（10/08記事）。10/02時点ではビザ問題で合流遅延と記載。 | 公式プロフィールの国籍「フランス」と代表チーム「ウガンダ」は異なる属性。中盤から運ぶプレーの根拠が追加。ただし2試合の守備の質は未検証。 | [10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries) |
+| 石渡ネルソン | 日本の五輪代表として大会参加。10/02記事でタイ戦35分途中出場、準決勝120分出場とPK成功。10/08記事で韓国との決勝81分から途中出場と記載。 | 代表の大会・試合の時刻とSTVVのリーグ戦を混同しない。守備切替の評価は別途映像確認。 | [10/02](https://stvv.com/nl/nieuws/artikel/een-eerste-reisverslag-van-onze-internationale-kanaries)／[10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries) |
+| ナタナエル・ムブク | DRコンゴA代表。赤道ギニア戦4分にアシスト、ジンバブエ戦先発、10/05ウガンダ戦90分出場し得点（10/02・10/08記事）。 | 公式はサイドアタッカー（flankaanvaller）と表現。攻撃への具体的貢献は確認できるが、利き足・左右の主戦場は未確認。 | [10/02](https://stvv.com/nl/nieuws/artikel/een-eerste-reisverslag-van-onze-internationale-kanaries)／[10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries) |
+| サメド・バジュダル | ボスニア・ヘルツェゴビナA代表。ポーランド戦に78分から途中出場（10/08記事）。 | 前線での役割・ポストプレーの評価は映像未検証。 | [10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries) |
+| 新川志音 | 日本U19代表。アゼルバイジャン戦90分出場（10/08記事）。 | 代表の出場とSTVVでのリーグ初先発は別事実。攻撃の判断を実映像で検証。 | [10/08](https://stvv.com/nl/nieuws/artikel/terugblik-op-de-laatste-interlands-van-onze-internationale-kanaries) |
+| アルイ・ディルキン | ベルギー年代別代表で本人談による計3試合の国際試合経験（2026-03-31インタビュー）。本国公式は**守備的MFを主な役割、CBとして育成された経歴**を記載（2025-10-28）。 | 主：守備的MF／副：CBはクラブの役割記述からの整理であり、直近の起用実績は別途確認。クラブ評価の勤勉さ・ボール保持力は独立検証前。 | [本人インタビュー2026-03-31](https://stvv.com/nl/nieuws/artikel/alouis-diriken-een-talent-van-torpedo-op-stayen)／[契約発表2025-10-28](https://stvv.com/nl/nieuws/artikel/alouis-diriken-tekent-een-nieuw-meerjarig-contract) |
+
+### クラブによる選手特性の評価（映像での再現性は未確認）
+
+- **ジェレミー・ムバンビ**：左利き／中央DFと左サイドDFに対応（事実として加入発表で明記）。クラブCEOは「後方からのビルドアップへの貢献」「スピード」を評価。これは**獲得時のクラブ側評価**であり、STVVの試合で実証済みの強みと断定しない。期待ポイント：左サイドからの前進パスと守備への戻りを試合映像で検証。[公式](https://stvv.com/nl/nieuws/artikel/stvv-huurt-jeremy-mbambi-met-aankoopoptie-van-pisa)
+- **アルイ・ディルキン**：守備的MFとして成長、元々CBとして育成。クラブは運動量・ボール保持力を評価。期待ポイント：中盤での受け方と守備ラインの前でのカバーを実戦で確認。[公式](https://stvv.com/nl/nieuws/artikel/alouis-diriken-tekent-een-nieuw-meerjarig-contract)
+- **マット・レンドフレス**：2024年のクラブSDによる評価は「体格と足元の技術」。期待ポイント：GKからのビルドアップ参加とシュート対応の映像を確認。[公式](https://stvv.com/nl/nieuws/artikel/matt-lendfers-kiest-voor-een-toekomst-bij-stvv)
+- **ウォーク・ヤンセンス**：2026-04-30本国公式は多用途DFと記述。若い頃はFWとして起用された経歴も明記。期待ポイント：複数守備ポジションでの判断・位置取りを試合映像で検証。過去のFW起用を現時点の副ポジションと混同しない。[公式](https://stvv.com/nl/nieuws/artikel/stvv-verlengt-het-contract-van-wolke-janssens)
+
+**2026-10-29時点の検証状況**：公式掲載27人の基礎名簿は保持。貸出中1人を確認。新たに10人の代表活動／年代別代表歴を公式資料で具体化、ムバンビの左利き・詳細守備位置、ディルキンの守備的MF・CB育成歴を確認。全員の利き足・詳細ポジション・直近3〜5試合の出場分・映像タイムコード・複数試合での強みと改善点は未完了。**投稿審査済み／全選手完成ではない**。自動投稿経路・画像審査・品質ゲートへの接続なし。
