@@ -1,0 +1,21 @@
+{
+  "started_at": "2026-10-30T03:08:58.078825+09:00",
+  "finished_at": "2026-10-30T03:08:58.078859+09:00",
+  "slot": "vote",
+  "date_jst": "2026-10-29",
+  "scheduled_at": "2026-10-29T21:00:00+09:00",
+  "start_delay_seconds": 22138,
+  "schedule_delay_diagnostic": "severe_runner_start_delay",
+  "run_id": "40928022974",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40928022974",
+  "commit": "5576b40cba29765ca9b9f7beacde3d132095e84b",
+  "manual_dispatch_performed": false,
+  "status": "blocked_schedule_more_than_six_hours_late",
+  "delivery_state": "no_buffer_call_due_to_schedule_guard",
+  "delivery_mode": "advance_reservations",
+  "x_display_verified": false,
+  "new_publications": [],
+  "new_reservations": [],
+  "pending_state": "not_checked",
+  "error_type": "RuntimeError"
+}

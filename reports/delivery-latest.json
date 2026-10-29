@@ -1,42 +1,21 @@
 {
-  "started_at": "2026-10-29T16:26:02.153106+09:00",
-  "slot": "compare",
+  "started_at": "2026-10-30T03:08:58.078825+09:00",
+  "finished_at": "2026-10-30T03:08:58.078859+09:00",
+  "slot": "vote",
   "date_jst": "2026-10-29",
-  "scheduled_at": "2026-10-29T10:30:00+09:00",
-  "start_delay_seconds": 21362,
-  "run_id": "40835329940",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40835329940",
-  "commit": "020b65a8efb36215a881da72f732b4fdade51a7f",
+  "scheduled_at": "2026-10-29T21:00:00+09:00",
+  "start_delay_seconds": 22138,
+  "schedule_delay_diagnostic": "severe_runner_start_delay",
+  "run_id": "40928022974",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40928022974",
+  "commit": "5576b40cba29765ca9b9f7beacde3d132095e84b",
   "manual_dispatch_performed": false,
-  "status": "skipped_no_verified_content",
-  "x_display_verified": false,
+  "status": "blocked_schedule_more_than_six_hours_late",
+  "delivery_state": "no_buffer_call_due_to_schedule_guard",
   "delivery_mode": "advance_reservations",
-  "queue_before": {
-    "ready_cards": 1,
-    "candidates": [
-      {
-        "source_url": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
-        "asset_path": "generated/community_football_20261027.png",
-        "slots": [
-          "news"
-        ],
-        "selection_block": "different_slot"
-      }
-    ],
-    "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
-  },
-  "finished_at": "2026-10-29T16:26:03.954715+09:00",
+  "x_display_verified": false,
   "new_publications": [],
-  "pending_key": null,
-  "delivery_state": "buffer_scheduled_not_published",
   "new_reservations": [],
-  "reservation_states": [
-    {
-      "key": "daily_2026-10-29_news",
-      "buffer_status": "scheduled",
-      "due_at": "2026-10-29T09:00:00Z",
-      "x_display_verified": false
-    }
-  ],
-  "pending_reservation_keys": []
+  "pending_state": "not_checked",
+  "error_type": "RuntimeError"
 }
