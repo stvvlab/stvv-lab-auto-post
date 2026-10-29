@@ -1,13 +1,23 @@
 {
-  "checked_at": "2026-10-29T19:00:06.884297+09:00",
+  "checked_at": "2026-10-29T20:05:43.332235+09:00",
   "status": "read_permission_capacity_and_status_query_verified",
   "mutations_attempted": 0,
   "paid_api_or_contract_change": false,
-  "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40854006776",
-  "probe_commit": "a8595eb799c4eaee902259f2b85900e3a646a63e",
+  "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40862675149",
+  "probe_commit": "9bfb49d77649f608aaa6ccfa14330455ea1c8053",
   "channel_id": "6ab8fce4ea19ca0bde027d80",
   "scheduled_limit": 10,
   "active_count": 0,
   "remaining_capacity": 10,
-  "known_post_status_query_verified": true
+  "known_post_status_query_verified": true,
+  "observed_reservation_states": [
+    {
+      "key": "daily_2026-10-29_news",
+      "buffer_id": "6ae22a71c79ca14f286ed242",
+      "ledger_status": "scheduled",
+      "remote_status": "draft",
+      "ledger_updated": false,
+      "x_display_verified": false
+    }
+  ]
 }
