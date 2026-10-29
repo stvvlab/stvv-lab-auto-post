@@ -68,7 +68,8 @@ def remote_block(snapshot, proposal, history):
             # A supported reviewed first-start may follow an already known recap.
             # Unknown remote source use must never be waved through.
             if (str(post['id']) not in known or post['status'] != 'sent'
-                    or not proposal.get('editorial_fact')):
+                    or not (proposal.get('editorial_fact') or
+                            proposal.get('editorial_purpose'))):
                 return 'remote_source_used_or_pending'
     return None
 
@@ -163,6 +164,8 @@ def run(history, now, client, save, session):
         raise RuntimeError('Reviewed immutable public image could not be verified')
     if fact:
         proposal['editorial_fact'] = fact
+    if 'editorial_purpose' in card:
+        proposal['editorial_purpose'] = copy.deepcopy(card['editorial_purpose'])
     snapshot = client.preflight()
     reason = remote_block(snapshot, proposal, history)
     if reason:
