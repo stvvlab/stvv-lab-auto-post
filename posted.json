@@ -928,12 +928,20 @@
       "delivery_mode": "customScheduled",
       "x_display_verified": false,
       "buffer_id": "6ae22a71c79ca14f286ed242",
-      "buffer_status": "scheduled",
-      "status_checked_at": "2026-10-29T16:26:02.169781+09:00",
+      "buffer_status": "cancelled_by_user",
+      "status_checked_at": "2026-10-29T20:05:43.332235+09:00",
       "recovered_without_resend": true,
       "buffer_asset_sources": [
         "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f56ac637c3984d355860fe988b041df1dd400e99/generated/community_football_20261027.png"
-      ]
+      ],
+      "cancellation_verification": {
+        "method": "Buffer read-only get_post exact id/channel/caption match",
+        "remote_status": "draft",
+        "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40862675149",
+        "checked_at": "2026-10-29T20:05:43.332235+09:00",
+        "buffer_mutation_performed": false,
+        "x_display_verified": false
+      }
     }
   }
 }
