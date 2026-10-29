@@ -1,26 +1,42 @@
 {
-  "started_at": "2026-10-28T23:42:40.387247+09:00",
-  "slot": "recap",
-  "date_jst": "2026-10-28",
-  "scheduled_at": "2026-10-28T23:00:00+09:00",
-  "start_delay_seconds": 2560,
-  "run_id": "40708534378",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40708534378",
-  "commit": "8d90c1e2c278423a0482792bae329f291a306d96",
+  "started_at": "2026-10-29T11:02:04.266498+09:00",
+  "slot": "player",
+  "date_jst": "2026-10-29",
+  "scheduled_at": "2026-10-29T08:00:00+09:00",
+  "start_delay_seconds": 10924,
+  "run_id": "40803874578",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/40803874578",
+  "commit": "ad8e0e7e65d3ad07a885d1b0d8f91196195e5e3d",
   "manual_dispatch_performed": false,
   "status": "skipped_no_verified_content",
   "x_display_verified": false,
   "delivery_mode": "advance_reservations",
   "queue_before": {
-    "ready_cards": 0,
-    "candidates": [],
+    "ready_cards": 1,
+    "candidates": [
+      {
+        "source_url": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
+        "asset_path": "generated/community_football_20261027.png",
+        "slots": [
+          "news"
+        ],
+        "selection_block": "different_slot"
+      }
+    ],
     "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
   },
-  "finished_at": "2026-10-28T23:42:40.407811+09:00",
+  "finished_at": "2026-10-29T11:02:06.032482+09:00",
   "new_publications": [],
   "pending_key": null,
-  "delivery_state": "no_new_buffer_acceptance_recorded",
+  "delivery_state": "buffer_scheduled_not_published",
   "new_reservations": [],
-  "reservation_states": [],
+  "reservation_states": [
+    {
+      "key": "daily_2026-10-29_news",
+      "buffer_status": "scheduled",
+      "due_at": "2026-10-29T09:00:00Z",
+      "x_display_verified": false
+    }
+  ],
   "pending_reservation_keys": []
 }
