@@ -39,11 +39,11 @@ class DeliveryRunTests(unittest.TestCase):
             env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '40904274559',
                    'GITHUB_SCHEDULE': '0 9 * * *', 'GITHUB_EVENT_NAME': 'schedule',
                    'STVV_ADVANCE_RESERVATIONS': 'true'}
-            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \\
-                    patch.object(d, 'datetime', wraps=datetime) as clock, \\
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
                     patch.object(d.publisher, 'slot_for_run',
-                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \\
-                    patch('advance_reservations.main') as reserve, \\
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
+                    patch('advance_reservations.main') as reserve, \
                     patch.object(d.publisher, 'main') as legacy:
                 clock.now.return_value = datetime.fromisoformat('2026-10-30T00:43:04+09:00')
                 with self.assertRaisesRegex(RuntimeError, '6時間以上'):
