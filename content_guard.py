@@ -66,13 +66,46 @@ def measured_facts(text):
 
 
 def duplicate_reason(history, message, source, now):
-    """Compare published and pending content before creating or sending media."""
+    """Check actual account publications separately from unresolved send intents.
+
+    An official article appearing in history['news'] is *not* evidence that
+    this account published it. Exact repeated captions are blocked for all
+    time. Unknown sends and user-cancelled reservations never age out and
+    cannot be bypassed by a new statistics angle. Only confirmed historical
+    publications use the seven-day topical comparison window.
+    """
     keys = context_keys(message, source)
-    matched = []
     publications = history.get('publication_log', [])
-    pending = (list(history.get('pending_posts', {}).values())
-               + list(history.get('reserved_posts', {}).values()))
-    for previous in publications + pending:
+    pending = list(history.get('pending_posts', {}).values())
+    reserved = list(history.get('reserved_posts', {}).values())
+    records = publications + pending + reserved
+    if any(not isinstance(p, dict) for p in records):
+        return '投稿履歴が不正のため確認待ち'
+
+    # Do not permit a verbatim repeat merely because the previous X post
+    # is more than seven days old. News inventory alone is not consulted.
+    normalized = plain(message)
+    if normalized and any(normalized == plain(p.get('text', '')) for p in records):
+        return '同じ内容の本文が投稿済み／確認待ち'
+
+    # A pending Buffer request can be older than seven days and still have an
+    # unknown outcome. A draft moved by the user must not be auto-resubmitted.
+    for previous in pending + reserved:
+        if not isinstance(previous, dict):
+            return '送信待ち履歴が不正のため確認待ち'
+        if previous.get('buffer_status') == 'sent' and any(
+                p.get('buffer_id') == previous.get('buffer_id')
+                and previous.get('buffer_id') for p in publications):
+            continue  # The same confirmed publication is handled below.
+        if keys & context_keys(previous.get('text', ''), previous.get('source')):
+            if previous.get('buffer_status') == 'cancelled_by_user':
+                return 'ユーザー取消済み予約が存在するため自動再送不可'
+            return '同じ出典／試合の送信待ち・結果不明が存在'
+
+    matched = []
+    for previous in publications:
+        if not isinstance(previous, dict):
+            return '公開履歴が不正のため確認待ち'
         stamp = previous.get('submitted_at') or previous.get('created_at')
         if stamp:
             try:
@@ -81,10 +114,7 @@ def duplicate_reason(history, message, source, now):
                     continue
             except (TypeError, ValueError):
                 pass
-        old_text = previous.get('text', '')
-        if plain(message) == plain(old_text):
-            return '同じ内容の本文が投稿済み／確認待ち'
-        if keys & context_keys(old_text, previous.get('source')):
+        if keys & context_keys(previous.get('text', ''), previous.get('source')):
             matched.append(previous)
     if not matched:
         return None
