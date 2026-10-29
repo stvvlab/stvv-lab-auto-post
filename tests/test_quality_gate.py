@@ -1,5 +1,12 @@
 """Quality rules: critical findings block publication; warnings remain advisory."""
+import io
+import json
+import tempfile
 import unittest
+from contextlib import redirect_stdout
+from pathlib import Path
+from unittest.mock import patch
+import quality_gate
 from quality_gate import audit, can_publish
 
 
@@ -54,6 +61,27 @@ class QualityGateTests(unittest.TestCase):
     def test_url_requires_host_and_no_embedded_credentials(self):
         for source in ["https:///news", "https://user:password@stvv.jp/news/a", "https://[bad"]:
             self.assertFalse(can_publish({"type": "news", "text": "公式発表", "source_url": source}))
+
+    def test_strict_cli_blocks_critical_but_not_style_warnings(self):
+        cases = [
+            ("stylistic warning", {"type": "vote", "text": "ここが重要"}, ["--strict"], False),
+            ("critical issue", {"type": "vote", "text": "スポンサー発表"}, ["--strict"], True),
+            ("explicit all findings", {"type": "vote", "text": "ここが重要"}, ["--strict-all"], True),
+            ("critical only alias", {"type": "vote", "text": "ここが重要"}, ["--enforce-critical"], False),
+        ]
+        for name, post, flags, should_fail in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "posts.json"
+                path.write_text(json.dumps([post], ensure_ascii=False), encoding="utf-8")
+                argv = ["quality_gate.py", "--posts", str(path), *flags]
+                with patch("sys.argv", argv), redirect_stdout(io.StringIO()):
+                    if should_fail:
+                        with self.assertRaises(SystemExit) as raised:
+                            quality_gate.main()
+                        self.assertEqual(raised.exception.code, 1)
+                    else:
+                        quality_gate.main()
+
 
 
 if __name__ == "__main__":
