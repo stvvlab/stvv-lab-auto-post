@@ -44,6 +44,27 @@ class ContentGuardTests(unittest.TestCase):
         self.assertIsNone(duplicate_reason(self.history(), SHOTS, 'thesportsdb:2611487', NOW))
         self.assertIsNotNone(duplicate_reason(self.history(SHOTS), SHOTS.replace('比較', 'データ'), URL, NOW))
 
+    def test_first_fixture_announcement_is_not_blocked_by_official_website_history(self):
+        # A fetched official article is not an X post. Only publication,
+        # pending and reservation records establish a posting duplicate.
+        fixture = ('⚽ 次戦はOHルーヴェン戦！\n'
+                   '📅 11月2日（月）午前0:00（日本時間）\n'
+                   'ホームで勝利をつかめ！')
+        official = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
+        history = {'news': ['https://stvv.jp/news/event/20261002_2/'],
+                   'used_posts': [], 'publication_log': [],
+                   'pending_posts': {}, 'reserved_posts': {}}
+        self.assertIsNone(duplicate_reason(history, fixture, official, NOW))
+        # A real prior publication or an uncertain send still blocks a repeat.
+        prior = {'text': fixture, 'source': official,
+                 'submitted_at': NOW.isoformat()}
+        for field, value in [('publication_log', [prior]),
+                             ('pending_posts', {'pending': prior}),
+                             ('reserved_posts', {'reserved': prior})]:
+            with self.subTest(field=field):
+                existing = {**history, field: value}
+                self.assertIsNotNone(duplicate_reason(existing, fixture, official, NOW))
+
     def test_unrelated_new_official_news_is_allowed(self):
         self.assertIsNone(duplicate_reason(self.history(), '新しい公式発表', 'https://stvv.jp/news/new-announcement/', NOW))
 
