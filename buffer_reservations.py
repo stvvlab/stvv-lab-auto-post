@@ -112,12 +112,15 @@ class BufferReservations:
     def schedule(self, text, image_url, due_utc):
         if publisher.x_length(text) > 270 or not image_url:
             raise ValueError('A valid exact caption and reviewed image are required')
-        data = self.query('''mutation ReservePost($input: CreatePostInput!) {
-          createPost(input: $input) {
-            ... on PostActionSuccess { post { id text channelId status dueAt assets { id } } }
-            ... on MutationError { message }
-          }
-        }''', {'input': {'text': text, 'channelId': publisher.CHANNEL,
+        # Buffer may return a null asset.id. Request the immutable image source,
+        # MIME type and dimensions in the mutation echo, just as get_post does.
+        # Otherwise a successful createPost becomes an unknown pending send.
+        mutation = ('mutation ReservePost($input: CreatePostInput!) {'
+                    ' createPost(input: $input) {'
+                    ' ... on PostActionSuccess { post { ' + POST_FIELDS + ' } }'
+                    ' ... on MutationError { message }'
+                    ' } }')
+        data = self.query(mutation, {'input': {'text': text, 'channelId': publisher.CHANNEL,
             'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': due_utc,
             'assets': [{'image': {'url': image_url}}]}})
         post = (data.get('createPost') or {}).get('post')
