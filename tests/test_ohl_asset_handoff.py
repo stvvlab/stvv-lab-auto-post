@@ -39,16 +39,19 @@ class OhlExactAssetHandoffTests(unittest.TestCase):
         self.assertNotIn("Japan Day", card.get("text", ""))
 
         path = ROOT / ASSET
-        if card.get("status") != "ready":
+        if card.get("status") not in {"ready", "published"}:
             self.assertIs(card.get("reviewed"), False,
                           "Non-ready OH Leuven card must not be reviewed")
             self.assertEqual(card.get("status"), "awaiting_exact_image_bytes")
-            self.assertFalse(path.exists(),
-                             "Uploaded PNG must be explicitly reviewed and promoted, not silently ignored")
-            return
+            # A staged upload may precede the separate editorial approval.
+            # The upload itself is never permission to publish.
+            if not path.exists():
+                return
+        else:
+            self.assertIs(card.get("reviewed"), True)
+            self.assertTrue(path.is_file(), "Ready/published status without original PNG")
 
-        self.assertIs(card.get("reviewed"), True)
-        self.assertTrue(path.is_file(), "Ready status without original PNG")
+        self.assertTrue(path.is_file(), "Uploaded asset is not a regular file")
         self.assertFalse(path.is_symlink(), "Image symlink not allowed")
         raw = path.read_bytes()
         self.assertEqual(len(raw), EXPECTED_SIZE, "Original PNG size changed")
