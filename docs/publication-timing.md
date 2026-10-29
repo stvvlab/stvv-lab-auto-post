@@ -84,3 +84,9 @@ reservation-capability.ymlはコード更新時の読み取り検証のみで、
 ## 2026-10-27 08時枠の実測
 
 通常run 40418810614は08:18:14 JSTに作成され、実投稿ステップは08:18:38に開始（18分38秒遅延）。advance_reservations方式で起動し、ready=0のためskipped_no_verified_content。新規予約・公開・pendingは0件で、delivery-runs/40418810614.jsonとlatestの保存を確認した。これは通常枠の起動・正しいスキップ・証跡保存の実測であり、実予約→Buffer sent→X表示の証明ではない。278テストの出力と実投稿ステップの結果は区別する。
+
+## Bufferのdraft状態と取消主体の区別（2026-10-30）
+
+予約済み投稿をBufferの読み取りAPIで再照合した際、statusが`draft`になっている場合は、**予約が維持されていないことだけ**を確定できる。ユーザー自身が取り消したのか、Buffer側の操作・状態変更なのかは、この応答だけでは特定できない。以前の`cancelled_by_user`は取消主体を推定した不適切なラベルであり、過去の台帳に残る同ラベルも利用者の取消を証明しない。
+
+新規の遷移は`draft_no_longer_scheduled`として記録する。既存`cancelled_by_user`は互換性のため終端状態として読み取るが、報告では`buffer_draft_not_scheduled_x_unverified`とする。どちらも公開成功ではなく、元の予約枠は使用済みのまま保持し、**再送・再予約・取消を自動実行しない**。原因や操作主体を特定するには別の監査証跡が必要。
