@@ -46,8 +46,23 @@ jobs:
         timeout-minutes: 5
         run: bash scripts/install-card-font.sh
 
-      - name: Test adopted renderer and posting safety
-        run: python -m unittest discover -s tests -v
+      # Full test suite runs in pull-request CI. Keep only publication-critical
+      # smoke tests on the seven scheduled runs to avoid unrelated test failures
+      # blocking otherwise verified, reviewed posts.
+      - name: Run publication safety smoke tests
+        run: |
+          python -m unittest -q \
+            tests.test_quality_gate \
+            tests.test_preflight_post \
+            tests.test_quality_integration \
+            tests.test_prepared_media \
+            tests.test_advance_reservations \
+            tests.test_delivery_run \
+            tests.test_state_sync \
+            tests.test_posting_policy \
+            tests.test_content_guard \
+            tests.test_editorial_repeat_policy \
+            tests.test_editorial_novelty
 
       - name: Run STVV auto post
         if: github.event_name == 'schedule'
