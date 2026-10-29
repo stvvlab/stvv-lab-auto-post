@@ -6,7 +6,10 @@ import hashlib
 import json
 from pathlib import Path
 
-from verify_ohl_image import ASSET, EXPECTED_SHA256, verify_asset
+try:
+    from scripts.verify_ohl_image import ASSET, EXPECTED_SHA256, verify_asset
+except ModuleNotFoundError:
+    from verify_ohl_image import ASSET, EXPECTED_SHA256, verify_asset
 
 ROOT = Path(__file__).resolve().parents[1]
 
