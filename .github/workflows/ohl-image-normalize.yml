@@ -1,0 +1,41 @@
+name: Normalize approved OH Leuven mobile upload
+
+on:
+  push:
+    branches:
+      - fix/ohl-exact-image-transfer-gate-20261029
+    paths:
+      - generated/**
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ohl-image-normalize
+  cancel-in-progress: false
+
+jobs:
+  normalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image validation dependency
+        run: python -m pip install pillow
+      - name: Verify and normalize only the exact original bytes
+        run: python scripts/normalize_ohl_upload.py
+      - name: Commit verified rename to this upload branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A generated/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Normalize approved OH Leuven PNG upload filename'
+            git push origin HEAD:fix/ohl-exact-image-transfer-gate-20261029
+          fi
