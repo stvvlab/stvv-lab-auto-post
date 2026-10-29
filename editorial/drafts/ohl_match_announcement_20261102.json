@@ -1,5 +1,5 @@
 {
-  "status": "draft_image_created_not_queued",
+  "status": "superseded_by_reviewed_manifest_and_buffer_reservation",
   "reviewed": false,
   "can_publish": false,
   "priority": "next_match_announcement",
@@ -20,7 +20,7 @@
   ],
   "image": {
     "generated_with": "ChatGPT built-in imagegen",
-    "conversation_only": true,
+    "conversation_only": false,
     "filename": "wide_dynamic_sports_match_announcement_graphic_po.png",
     "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
     "dimensions": [
@@ -36,15 +36,13 @@
       "日本時間",
       "DAIO WASABI STAYEN"
     ],
-    "note": "Original imagegen artwork verified in local container (SHA256 81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5); binary not available to GitHub connector from local container path. No silent JPEG recompression or image substitution. Do not mark ready without same-commit exact bytes + manifest."
+    "note": "Original imagegen bytes transferred unchanged to generated/ohl_match_announcement_20261102.png; SHA256 matches the reviewed ready manifest and durable Buffer reservation. This draft is historical and must not be independently queued."
   },
   "duplication_review": "Do not confuse a fixture already announced on official club websites with a post already published by STVV LAB. The 2026-10-02 official Japan Day article is background evidence, not a STVV LAB publication. At the latest ledger inspection, no OH Leuven match-announcement publication, pending intent, or reservation was found. Check the live publication_log/pending_posts/reserved_posts and remote Buffer duplicates again before scheduling. Separate fact recency/editorial approval from duplicate checks; no automatic ready status.",
   "outstanding": [
-    "Transfer exact image bytes to generated/ on main with verified SHA256",
-    "Re-review prior match announcement duplication and automated novelty gate",
-    "Commit asset bytes and manifest together only if approved",
-    "Allow existing 7 scheduled workflows to reserve; no manual dispatch or retries",
-    "Verify Buffer scheduled -> sent -> public X text and image"
+    "Confirm Buffer status after 2026-10-30 18:00 JST without resending",
+    "Verify exact caption and image displayed on public X @stvvlabo",
+    "Record X display evidence only after actual verification; require repeated verified publications before declaring stable"
   ],
   "created_for": "User's 2026-10-29 request to carry forward the 2026-10-28 approved STVV vs OH Leuven announcement. No Buffer action performed.",
   "source_verification": {
@@ -77,10 +75,10 @@
     "duplicate_japan_day_notice": "2026-10-02 Japanese article already announced Japan Day, so this is a next-match support post, not a new Japan Day announcement.",
     "x_length_including_fixed_hashtags": 190,
     "source_body_digest": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
-    "source_body_digest_status": "previously measured from reports/club-official-latest.json; re-fetch exact article before any ready status",
+    "source_body_digest_status": "Verified against the official body when reservation was accepted; see reservation ledger official_body_sha256",
     "image_sha256_reverified_local": true,
     "image_exact_path_in_local_container": "/mnt/data/wide_dynamic_sports_match_announcement_graphic_po.png",
-    "image_bytes_in_git": false
+    "image_bytes_in_git": true
   },
   "publication_order_conflict": {
     "verified_2026_10_29_jst": "2026-10-29T02:57:32+09:00",
@@ -115,5 +113,21 @@
     "prior_g_football_reservation_unchanged": true,
     "no_buffer_mutation": true,
     "fixture_post_history_review": "At latest local history inspection: 0 OH Leuven-related entries in publication_log, pending_posts, and reserved_posts. The earlier source URL in posted.json.news is a fetched/used official-source marker, not proof of an X post. Recheck live Buffer/ledger before publishing; do not bypass any actual duplicate."
+  },
+  "current_delivery_state": {
+    "checked_at_jst": "2026-10-30T03:55:00+09:00",
+    "canonical_manifest": "editorial/imagegen_cards.json",
+    "manifest_status": "ready",
+    "manifest_reviewed": true,
+    "asset_path": "generated/ohl_match_announcement_20261102.png",
+    "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+    "ledger": "posted.json",
+    "reservation_key": "daily_2026-10-30_news",
+    "buffer_id": "6ae353fa835dd2febef21af5",
+    "buffer_status": "scheduled",
+    "due_at_utc": "2026-10-30T09:00:00Z",
+    "x_display_verified": false,
+    "manual_resend_performed": false,
+    "note": "This is a ledger snapshot, not a live Buffer/X query. Earlier G-football reservation is cancelled_by_user."
   }
 }
