@@ -34,7 +34,8 @@ class ReservationPreviewTests(unittest.TestCase):
         slots = future_slots(now)
         self.assertEqual(len(slots), 9)
         self.assertEqual([s for _, s in slots],
-                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap',\n                          'player', 'compare'])
+                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap',
+                          'player', 'compare'])
         result = plan(self.history, now)
         self.assertEqual(result['proposals'][0]['due_utc'], '2026-10-26T23:00:00Z')
         self.assertEqual(result['proposals'][0]['due_jst'], '2026-10-27T08:00:00+09:00')
