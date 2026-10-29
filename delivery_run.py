@@ -102,6 +102,17 @@ def delivery_evidence(before, after, day, slot, *, advance=False):
 
 
 
+def schedule_delay_diagnostic(delay_seconds):
+    """Explain lateness without pretending to know GitHub's queue cause."""
+    if delay_seconds < 0:
+        return 'clock_or_schedule_mismatch'
+    if delay_seconds >= 3600:
+        return 'severe_runner_start_delay'
+    if delay_seconds >= 900:
+        return 'runner_start_delay'
+    return 'within_15_minutes'
+
+
 def record_late_start(now, run_id, advance):
     """Persist a failed scheduled run even when the six-hour guard stops it.
 
@@ -124,6 +135,7 @@ def record_late_start(now, run_id, advance):
         'slot': slot, 'date_jst': scheduled.date().isoformat(),
         'scheduled_at': scheduled.isoformat(),
         'start_delay_seconds': int(delay.total_seconds()),
+        'schedule_delay_diagnostic': schedule_delay_diagnostic(int(delay.total_seconds())),
         'run_id': run_id,
         'workflow_url': f'https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/{run_id}',
         'commit': os.getenv('GITHUB_SHA'), 'manual_dispatch_performed': False,
@@ -166,11 +178,17 @@ def main():
     report = {'started_at': now.isoformat(), 'slot': slot, 'date_jst': day,
               'scheduled_at': scheduled.isoformat(),
               'start_delay_seconds': max(0, int((now - scheduled).total_seconds())),
+              'schedule_delay_diagnostic': schedule_delay_diagnostic(int((now - scheduled).total_seconds())),
               'run_id': run_id,
               'workflow_url': f'https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/{run_id}',
               'commit': os.getenv('GITHUB_SHA'), 'manual_dispatch_performed': False,
               'status': 'started', 'x_display_verified': False,
               'delivery_mode': 'advance_reservations' if advance else 'shareNow'}
+    if report['schedule_delay_diagnostic'] != 'within_15_minutes':
+        print('SCHEDULE_DELAY_WARNING ' + json.dumps({
+            'classification': report['schedule_delay_diagnostic'],
+            'delay_seconds': report['start_delay_seconds'],
+            'workflow_url': report['workflow_url']}, ensure_ascii=False))
     directory = ROOT / 'reports/delivery-runs'
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / f'{run_id}.json'
