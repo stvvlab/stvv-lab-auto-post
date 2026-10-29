@@ -4,9 +4,11 @@
 Usage:
   python quality_gate.py --posts posts.json
   python quality_gate.py --posts posts.json --strict
+  python quality_gate.py --posts posts.json --strict-all
 
-Without --strict the command only reports problems and exits successfully.
-Integrate --strict into publishing only after reviewing existing posts.
+By default, findings are reported without failing the command.
+--strict and --enforce-critical fail only on publish-blocking findings.
+--strict-all explicitly opts into failing on stylistic warnings too.
 """
 import argparse
 import json
@@ -68,7 +70,10 @@ def can_publish(post):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--posts", default="posts.json")
-    parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--strict", action="store_true",
+                        help="Fail only on publish-blocking findings; warnings are advisory")
+    parser.add_argument("--strict-all", action="store_true",
+                        help="Opt into failing on all findings, including stylistic warnings")
     parser.add_argument("--enforce-critical", action="store_true",
                         help="Exit with error only for publish-blocking findings")
     args = parser.parse_args()
@@ -87,9 +92,9 @@ def main():
             print(f"POST {idx}: {', '.join(problems)}")
     print(f"Audited {len(posts)} posts; flagged {flagged}; "
           f"publish-blocking {critical_count}.")
-    if args.enforce_critical and critical_count:
+    if (args.enforce_critical or args.strict) and critical_count:
         raise SystemExit(1)
-    if args.strict and flagged:
+    if args.strict_all and flagged:
         raise SystemExit(1)
 
 
