@@ -1,20 +1,8 @@
 {
-  "checked_at": "2026-10-29T16:38:43.227635+09:00",
+  "checked_at": "2026-10-29T23:38:45.080866+09:00",
   "listing_url": "https://stvv.com/nl/nieuws",
   "status": "candidates_need_review",
   "candidates": [
-    {
-      "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
-      "listing_heading": "Lees het volledige artikel",
-      "reviewed": false,
-      "can_publish": false,
-      "date_jst": "2026-10-27",
-      "official_heading": "De week van de waarheid 🔥",
-      "source_body": "De week van de waarheid 🔥 27 oktober 2026 Drieluiiik OHL - Brann - ZW Kanaries, Wie donderdagavond naar Midtjylland – STVV (0-1) keek, besefte: onze Kanaries zijn herboren. Kokubo ranselde alles uit zijn kooi, Mbuku dartelde langs de flank, onze ploeg bikkelde voor elke vierkante meter. Dit STVV is wakker, hongerig en klaar voor meer. En dat komt geen dag te vroeg. Want wat volgt is een van de belangrijkste weken van het seizoen: in zeven dagen tijd gaan de poorten van Stayen drie keer open. Een drieluiiik (heb je ‘m?) dat we vol ambitie aanpakken. Met jou in de tribune. 🇯🇵 STVV – OH Leuven: tijd voor de jongste Kanaries Zondag 1 november, 16u00 September was even wennen voor de jongste Kanaries. De voorbije maand begon niet alleen het nieuwe schooljaar, STVV speelde ook verschillende laatavondwedstrijden. Aanstaande zondag spelen we gelukkig wél op een kindvriendelijk uur : neem de volgende generatie Kanaries dus onder jouw vleugels en kom naar Stayen. STVV – OHL wordt bovendien onze jaarlijkse Japan Day : onze Japanse supporters komen de ploeg vocaal steunen en in de Rvue kan je verse ramen slurpen. P.S. Voor deze match geldt de combiregeling. Je kan dus kaarten kopen tot en met zaterdag 31 oktober. 🇪🇺 STVV – SK Brann: het vervolg van onze Europese veroveringstocht Donderdag 5 november, 21u00 In Denemarken schreven we geschiedenis. Nu willen we het thuis afmaken. Met 6 op 6 op zak gaan we tegen Brann voor de volgende stap: met een zege in eigen huis beuken we de deur naar de volgende ronde wagenwijd open. Een Europese avond onder de lichten van Stayen, met de Noren op bezoek en onze kwalificatie binnen handbereik. Dat wil je niet vanuit jouw luie zetel meemaken. Kom naar Stayen en kolk mee op de golven van de vulkaan. 💛 STVV – Zulte Waregem: Stayen toont zich van z’n warmste kant Zondag 8 november, 19u15 De laatste thuismatch voor de interlandbreak krijgt een extra hartslag. Samen met Pleegzorg Limburg nodigen we pleegkinderen uit om de match bij te wonen en deel uit te maken van de STVV-familie . Want op Stayen hoort iedereen erbij. Samen maken we er een warme zondagavond van, om dit drieluiiik in schoonheid af te sluiten. Mis onze drieluiiik niet, bestel jouw tickets hier",
-      "body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
-      "kickoff_time_requires_cross_source_check": true,
-      "status": "needs_editorial_review"
-    },
     {
       "source_url": "https://stvv.com/nl/nieuws/artikel/statement-hajduk-split-stvv",
       "listing_heading": "22 oktober 2026 Statement Hajduk Split - STVV STVV bekijkt mogelijkheden om supporters te ondersteunen na beslissing UEFA Lezen",
@@ -29,6 +17,10 @@
     }
   ],
   "skipped": [
+    {
+      "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "reason": "already registered or pending"
+    },
     {
       "source_url": "https://stvv.com/nl/nieuws/artikel/g-voetballers-beleven-droomdag-op-stayen",
       "reason": "already registered or pending"
