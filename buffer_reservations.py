@@ -166,7 +166,7 @@ def probe():
         for key, record in reservations.items():
             if not isinstance(record, dict):
                 raise RuntimeError('Reservation record is malformed')
-            if record.get('buffer_status') in {'sent', 'error', 'cancelled_by_user'}:
+            if record.get('buffer_status') in {'sent', 'error', 'cancelled_by_user', 'draft_no_longer_scheduled'}:
                 continue
             if not all(record.get(field) for field in ('buffer_id', 'text', 'due_at')):
                 raise RuntimeError('Outstanding reservation identity is incomplete')

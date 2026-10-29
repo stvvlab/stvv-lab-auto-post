@@ -90,12 +90,12 @@ def delivery_evidence(before, after, day, slot, *, advance=False):
             # Drafts are a deliberate cancellation, not a scheduled delivery.
             # An unrecognized state is not evidence that Buffer will publish.
             statuses = {r.get('buffer_status') for r in reserved.values()}
-            if not statuses <= {'scheduled', 'sending', 'sent', 'cancelled_by_user'}:
+            if not statuses <= {'scheduled', 'sending', 'sent', 'cancelled_by_user', 'draft_no_longer_scheduled'}:
                 result['delivery_state'] = 'buffer_reservation_state_unverified_do_not_retry'
             elif statuses & {'scheduled', 'sending'}:
                 result['delivery_state'] = 'buffer_scheduled_not_published'
-            elif 'cancelled_by_user' in statuses:
-                result['delivery_state'] = 'buffer_cancelled_by_user_not_published'
+            elif statuses & {'cancelled_by_user', 'draft_no_longer_scheduled'}:
+                result['delivery_state'] = 'buffer_draft_not_scheduled_x_unverified'
             else:
                 result['delivery_state'] = 'no_new_buffer_acceptance_recorded'
     return result

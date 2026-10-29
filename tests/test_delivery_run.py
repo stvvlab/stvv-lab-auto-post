@@ -174,17 +174,21 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(result['new_reservations'][0]['key'], 'daily_2026-10-28_player')
             self.assertEqual(result['new_publications'], [])
 
-    def test_draft_cancellation_is_not_reported_as_scheduled(self):
-        before = history()
-        after = history()
-        after['reserved_posts'] = {'daily_2026-10-29_news': {
-            'buffer_id': 'buffer-fixture', 'buffer_status': 'cancelled_by_user',
-            'due_at': '2026-10-29T09:00:00Z'}}
-        result = d.delivery_evidence(before, after, '2026-10-29', 'news', advance=True)
-        self.assertEqual(result['delivery_state'], 'buffer_cancelled_by_user_not_published')
-        self.assertEqual(result['reservation_states'][0]['buffer_status'], 'cancelled_by_user')
-        self.assertFalse(result['x_display_verified'])
-        self.assertEqual(result['new_publications'], [])
+    def test_draft_is_not_scheduled_and_never_attributes_actor(self):
+        # Old ledgers used an actor-attributing label. Keep them readable,
+        # but never infer a human action from Buffer's draft status.
+        for status in ('draft_no_longer_scheduled', 'cancelled_by_user'):
+            with self.subTest(status=status):
+                before = history()
+                after = history()
+                after['reserved_posts'] = {'daily_2026-10-29_news': {
+                    'buffer_id': 'buffer-fixture', 'buffer_status': status,
+                    'due_at': '2026-10-29T09:00:00Z'}}
+                result = d.delivery_evidence(before, after, '2026-10-29', 'news', advance=True)
+                self.assertEqual(result['delivery_state'], 'buffer_draft_not_scheduled_x_unverified')
+                self.assertEqual(result['reservation_states'][0]['buffer_status'], status)
+                self.assertFalse(result['x_display_verified'])
+                self.assertEqual(result['new_publications'], [])
 
     def test_unknown_buffer_status_does_not_claim_scheduled(self):
         before = history()

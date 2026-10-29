@@ -77,20 +77,21 @@ def remote_block(snapshot, proposal, history):
 def reconcile(history, client, now, save):
     updates = []
     for key, record in history.get('reserved_posts', {}).items():
-        if record.get('buffer_status') in {'sent', 'error', 'cancelled_by_user'}:
+        if record.get('buffer_status') in {'sent', 'error', 'cancelled_by_user', 'draft_no_longer_scheduled'}:
             continue
         post = client.get_post(record['buffer_id'])
-        # A user may move a scheduled Buffer post to Drafts. Its dueAt can
-        # disappear; never treat that as sent or silently reserve it again.
+        # Buffer reports a draft without a scheduled dueAt. This proves the
+        # reservation is no longer scheduled, not who changed it or why.
+        # Never treat it as sent or silently reserve it again.
         if post.get('status') == 'draft':
             if (str(post.get('id', '')) != str(record['buffer_id'])
                     or post.get('channelId') != publisher.CHANNEL
                     or post.get('text') != record['text']):
                 raise RuntimeError('Draft identity mismatch; manual review required')
-            record['buffer_status'] = 'cancelled_by_user'
+            record['buffer_status'] = 'draft_no_longer_scheduled'
             record['status_checked_at'] = now.isoformat()
             record['x_display_verified'] = False
-            updates.append({'key': key, 'buffer_status': 'cancelled_by_user',
+            updates.append({'key': key, 'buffer_status': 'draft_no_longer_scheduled',
                             'x_display_verified': False})
             continue
         verify_echo(post, record)
