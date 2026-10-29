@@ -9,6 +9,14 @@ from scripts.verify_ohl_image import ASSET, EXPECTED_SHA256, EXPECTED_SIZE, veri
 
 
 class ImageHandoffTests(unittest.TestCase):
+    def test_uploaded_branch_image_matches_exact_user_approved_png(self):
+        # PR checks checkout the uploaded binary; unlike metadata-only tests,
+        # this verifies the actual bytes, image format and dimensions.
+        result = verify_asset()
+        self.assertTrue(result['verified'])
+        self.assertFalse(result['publication_approved'])
+        self.assertEqual(result['sha256'], EXPECTED_SHA256)
+
     def test_expected_identity_is_pinned(self):
         self.assertEqual(ASSET.as_posix(), 'generated/ohl_match_announcement_20261102.png')
         self.assertEqual(EXPECTED_SHA256, '81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5')
