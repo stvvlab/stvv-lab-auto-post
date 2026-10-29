@@ -145,6 +145,23 @@ def record_late_start(now, run_id, advance):
         'x_display_verified': False, 'new_publications': [], 'new_reservations': [],
         'pending_state': 'not_checked', 'error_type': 'RuntimeError',
     }
+    # Read-only coverage diagnosis. Never reconcile remotely or create a post
+    # after the stale-run safety guard has fired.
+    try:
+        history = read_ledger(ROOT / 'posted.json')
+        reserved = history.get('reserved_posts')
+        pending = history.get('pending_posts')
+        if not isinstance(reserved, dict) or not isinstance(pending, dict):
+            raise ValueError('Malformed reservation ledger')
+        report['reservation_coverage'] = {
+            'reserved_count': len(reserved),
+            'pending_count': len(pending),
+            'scheduled_keys': sorted(k for k, v in reserved.items()
+                                     if isinstance(v, dict) and v.get('buffer_status') == 'scheduled'),
+            'note': 'Local ledger only; Buffer and X were not queried',
+        }
+    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as error:
+        report['reservation_coverage_error'] = type(error).__name__
     directory = ROOT / 'reports/delivery-runs'
     directory.mkdir(parents=True, exist_ok=True)
     content = json.dumps(report, ensure_ascii=False, indent=2) + '\n'

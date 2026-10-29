@@ -61,6 +61,36 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(json.loads((root / 'reports/delivery-latest.json').read_text()),
                              report)
 
+    def test_late_guard_reports_local_reservations_without_network_or_send(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'posted.json').write_text(json.dumps({
+                'reserved_posts': {
+                    'daily_2026-10-30_news': {'buffer_status': 'scheduled'},
+                    'daily_2026-10-30_vote': {'buffer_status': 'draft'},
+                },
+                'pending_posts': {'daily_2026-10-30_player': {'send_state': 'unknown'}},
+            }))
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '123456',
+                   'GITHUB_SCHEDULE': '0 9 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
+                    patch.object(d.publisher, 'slot_for_run',
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
+                    patch('advance_reservations.main') as reserve:
+                clock.now.return_value = datetime.fromisoformat('2026-10-30T00:43:04+09:00')
+                with self.assertRaises(RuntimeError):
+                    d.main()
+                reserve.assert_not_called()
+            report = json.loads((root / 'reports/delivery-runs/123456.json').read_text())
+            self.assertEqual(report['reservation_coverage']['reserved_count'], 2)
+            self.assertEqual(report['reservation_coverage']['pending_count'], 1)
+            self.assertEqual(report['reservation_coverage']['scheduled_keys'],
+                             ['daily_2026-10-30_news'])
+            self.assertEqual(report['delivery_state'], 'no_buffer_call_due_to_schedule_guard')
+            self.assertFalse(report['x_display_verified'])
+
     def test_ci_and_manual_calls_cannot_create_evidence(self):
         with patch.dict(os.environ, {'GITHUB_RUN_ID': '123',
                                     'GITHUB_EVENT_NAME': 'pull_request'}, clear=True), \
