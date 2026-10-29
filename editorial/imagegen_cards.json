@@ -137,6 +137,29 @@
       "source_body_sha256": "3044ff9bebeee0d5914e44073d250d2b2f6ecfb0fe04067fe42bd02b69bf39f7",
       "review_note": "2026-10-29 restoration: original pixel-art infographic reviewed visually. Correct STVV and KFC Neeroeteren naming, 24 October event date, Stayen, older eight-a-side and younger four-a-side. No score, actual children, identifiable likeness, logos, stadium photograph or invented match detail. English visual text and Japanese caption cross-checked against Belgian STVV official inventory. Original image bytes registered in the same tree as this manifest; live official body SHA/date, immutable public bytes, Buffer duplicate and capacity checks must still pass before scheduling. No user approval or X publication claimed.",
       "cancellation_note": "User explicitly excluded this G-football story on 2026-10-29. Never select, reserve, or republish. Buffer post 6ae22a71c79ca14f286ed242 was manually moved to Drafts; historical reservation ledger must be reconciled read-only before state changes."
+    },
+    {
+      "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "date_jst": "2026-10-27",
+      "text": "⚽ 次戦はOHルーヴェン戦！\n📅 11月2日（月）午前0:00（日本時間）\n🏟 DAIO WASABI STAYEN\n\nホームで勝利をつかめ！STVVの熱い戦いに期待。🇯🇵\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "slots": [
+        "news"
+      ],
+      "reviewed": true,
+      "status": "ready",
+      "asset_path": "generated/ohl_match_announcement_20261102.png",
+      "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "source_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "initial",
+        "event_id": "stvv-ohl-2026-11-02"
+      },
+      "review_note": "Original ChatGPT imagegen artwork and Japanese caption approved by user in conversation; same exact PNG bytes and dimensions must pass CI transfer verification prior to merge. Fixture 1 Nov 2026 16:00 CET = 2 Nov 2026 00:00 JST corroborated STVV official article 27 Oct and OH Leuven official article 26 Oct. No player faces, uniforms, logos. This is first STVV LAB fixture announcement, not a repeat of Japan Day-only notice. Subject to current live article digest, immutable remote image, Buffer duplicate and lead-time checks by existing runner. GitHub PR only; no Buffer reservation or X publication implied."
     }
   ]
 }
