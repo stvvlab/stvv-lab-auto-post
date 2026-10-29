@@ -32,13 +32,22 @@ class ReservationPreviewTests(unittest.TestCase):
     def test_same_seven_slots_and_utc_conversion(self):
         now = datetime.fromisoformat('2026-10-26T23:20:00+09:00')
         slots = future_slots(now)
-        self.assertEqual(len(slots), 7)
+        self.assertEqual(len(slots), 11)
         self.assertEqual([s for _, s in slots],
-                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap'])
+                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap',\n                          'player', 'compare', 'data', 'analysis'])
         result = plan(self.history, now)
         self.assertEqual(result['proposals'][0]['due_utc'], '2026-10-26T23:00:00Z')
         self.assertEqual(result['proposals'][0]['due_jst'], '2026-10-27T08:00:00+09:00')
         self.assertFalse(result['can_publish'])
+
+    def test_36_hour_horizon_includes_next_day_without_changing_slot_times(self):
+        now = datetime.fromisoformat('2026-10-27T07:00:00+09:00')
+        slots = future_slots(now)
+        self.assertIn((datetime.fromisoformat('2026-10-28T18:00:00+09:00'), 'news'), slots)
+        self.assertNotIn((datetime.fromisoformat('2026-10-28T21:00:00+09:00'), 'vote'), slots)
+        self.assertTrue(all(due > now for due, _ in slots))
+        with self.assertRaises(ValueError):
+            future_slots(now, horizon_hours=37)
 
     def test_minimum_lead_and_invalid_time(self):
         slots = future_slots(datetime.fromisoformat('2026-10-27T07:31:00+09:00'))
