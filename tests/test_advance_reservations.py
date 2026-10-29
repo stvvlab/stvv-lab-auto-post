@@ -359,6 +359,25 @@ class BufferTransportTests(unittest.TestCase):
         self.assertNotIn('replyTo', args)
         self.assertEqual(len(args['assets']), 1)
 
+    def test_schedule_mutation_requests_nullable_asset_identity_fields(self):
+        # The real provider may return asset.id=None. A mutation asking only
+        # for id cannot be verified by the reservation runner after success.
+        session = Mock()
+        source = 'https://raw.githubusercontent.com/stvvlab/immutable.png'
+        session.post.return_value.json.return_value = {'data': {'createPost': {'post': {
+            'id': 'buffer-null-id', 'text': '確認済み', 'channelId': publisher.CHANNEL,
+            'status': 'scheduled', 'dueAt': DUE, 'assets': [{
+                'id': None, 'source': source, 'type': 'image', 'mimeType': 'image/png',
+                'image': {'width': 1448, 'height': 1086}}]}}}}
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'offline-fixture'}):
+            post = BufferReservations(session).schedule('確認済み', source, DUE)
+        query = session.post.call_args.kwargs['json']['query']
+        self.assertIn('source type mimeType', query)
+        self.assertIn('width height', query)
+        self.assertIsNone(post['assets'][0]['id'])
+        self.assertEqual(post['assets'][0]['source'], source)
+        self.assertEqual(session.post.call_count, 1)
+
     def test_explicit_mutation_error_has_a_distinct_rejected_state(self):
         session = Mock()
         session.post.return_value.json.return_value = {'data': {'createPost': {'message': 'denied'}}}
