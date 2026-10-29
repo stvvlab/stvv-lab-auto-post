@@ -32,7 +32,15 @@ def prepared_duplicate_reason(history, message, source, slot, now):
     from editorial_novelty import distinct_fact_reason
     base = duplicate_reason(history, message, source, now)
     card = exact_card(slot, message, source)
-    if card is None or 'editorial_fact' not in card:
+    if card is None:
+        return base
+    # Explicit editorial-purpose approval permits useful reminders and distinct
+    # coverage angles without treating a reused official URL as a duplicate.
+    # Unknown/invalid purpose metadata fails closed. Other gates remain intact.
+    if 'editorial_purpose' in card:
+        from editorial_repeat_policy import value_based_repeat_reason
+        return value_based_repeat_reason(history, card, now)
+    if 'editorial_fact' not in card:
         return base
     # Only an exact reviewed claim of a supported kind may differ from a recap.
     return distinct_fact_reason(history, card, now)
