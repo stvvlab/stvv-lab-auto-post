@@ -32,7 +32,6 @@ jobs:
         continue-on-error: true
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
-          BUFFER_CHANNEL_ID: ${{ vars.BUFFER_CHANNEL_ID }}
         run: python -m scripts.buffer_publication_monitor
       - name: Upload the evidence even if remote status failed
         if: always()
