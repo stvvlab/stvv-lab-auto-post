@@ -156,6 +156,36 @@ def probe():
             result['known_post_status_query_verified'] = True
         else:
             raise RuntimeError('No known post to verify the status query')
+        # Inspect outstanding reservations too: the last published post does
+        # not reveal whether a later scheduled post was moved to Drafts.
+        # This probe is read-only and never changes the publication ledger.
+        reservations = history.get('reserved_posts', {})
+        if not isinstance(reservations, dict):
+            raise RuntimeError('Reservation ledger is malformed')
+        result['observed_reservation_states'] = []
+        for key, record in reservations.items():
+            if not isinstance(record, dict):
+                raise RuntimeError('Reservation record is malformed')
+            if record.get('buffer_status') in {'sent', 'error', 'cancelled_by_user'}:
+                continue
+            if not all(record.get(field) for field in ('buffer_id', 'text', 'due_at')):
+                raise RuntimeError('Outstanding reservation identity is incomplete')
+            remote = client.get_post(record['buffer_id'])
+            if (str(remote.get('id', '')) != str(record['buffer_id'])
+                    or remote.get('channelId') != publisher.CHANNEL
+                    or remote.get('text') != record['text']):
+                raise RuntimeError('Outstanding reservation identity differs from ledger')
+            status = remote.get('status')
+            if status not in {'draft', 'scheduled', 'sending', 'sent', 'error'}:
+                raise RuntimeError('Outstanding reservation has an unknown status')
+            if status != 'draft':
+                from advance_reservations import verify_echo
+                verify_echo(remote, record)
+            result['observed_reservation_states'].append({
+                'key': key, 'buffer_id': record['buffer_id'],
+                'ledger_status': record['buffer_status'],
+                'remote_status': status, 'ledger_updated': False,
+                'x_display_verified': False})
         result['status'] = 'read_permission_capacity_and_status_query_verified'
     except Exception as error:
         result['error_type'] = type(error).__name__
