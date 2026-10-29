@@ -65,6 +65,35 @@ class ContentGuardTests(unittest.TestCase):
                 existing = {**history, field: value}
                 self.assertIsNotNone(duplicate_reason(existing, fixture, official, NOW))
 
+    def test_official_news_inventory_is_not_publication_history(self):
+        history = {'news': [URL], 'used_posts': [], 'publication_log': [],
+                   'pending_posts': {}, 'reserved_posts': {}}
+        self.assertIsNone(duplicate_reason(history, OLD, URL, NOW))
+
+    def test_verbatim_caption_is_blocked_even_after_seven_days(self):
+        history = self.history()
+        history['publication_log'][0]['submitted_at'] = (NOW - timedelta(days=90)).isoformat()
+        self.assertIsNotNone(duplicate_reason(history, OLD, URL, NOW))
+
+    def test_pending_unknown_result_never_expires_or_allows_new_stats(self):
+        history = self.history(pending=True)
+        history['pending_posts']['older']['submitted_at'] = (NOW - timedelta(days=90)).isoformat()
+        self.assertIn('送信待ち', duplicate_reason(history, SHOTS, URL, NOW))
+
+    def test_user_cancelled_reservation_requires_manual_decision(self):
+        reservation = {'source': URL, 'text': OLD, 'buffer_status': 'cancelled_by_user',
+                       'created_at': (NOW - timedelta(days=90)).isoformat()}
+        history = {'used_posts': [], 'publication_log': [], 'pending_posts': {},
+                   'reserved_posts': {'cancelled': reservation}}
+        self.assertIn('取消済み', duplicate_reason(history, SHOTS, URL, NOW))
+
+    def test_sent_reservation_in_publication_history_is_not_unknown_pending(self):
+        old = {'source': URL, 'text': OLD, 'buffer_status': 'sent',
+               'buffer_id': 'post-123', 'submitted_at': NOW.isoformat()}
+        history = {'used_posts': [], 'publication_log': [old],
+                   'pending_posts': {}, 'reserved_posts': {'sent': old}}
+        self.assertIsNone(duplicate_reason(history, SHOTS, URL, NOW))
+
     def test_unrelated_new_official_news_is_allowed(self):
         self.assertIsNone(duplicate_reason(self.history(), '新しい公式発表', 'https://stvv.jp/news/new-announcement/', NOW))
 
