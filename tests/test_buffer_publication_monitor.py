@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime, timezone
 from unittest.mock import patch
 
-from scripts.buffer_publication_monitor import classify, collect, needs_attention
+from scripts.buffer_publication_monitor import classify, collect, needs_attention, x_permalink_candidate
 
 
 class BufferPublicationMonitorTests(unittest.TestCase):
@@ -46,6 +46,53 @@ class BufferPublicationMonitorTests(unittest.TestCase):
         row = {"delivery_state": "buffer_reports_sent_x_unverified",
                "ledger_status": "scheduled"}
         self.assertFalse(needs_attention(row))
+
+    def test_external_link_is_only_an_unverified_own_account_locator(self):
+        good = {"externalLink": "https://twitter.com/stvvlabo/status/2114727647368331366"}
+        self.assertEqual(x_permalink_candidate(good),
+                         "https://x.com/stvvlabo/status/2114727647368331366")
+        for value in [None, "", "https://x.com/other/status/2114727647368331366",
+                      "https://evil.example/stvvlabo/status/2114727647368331366",
+                      "https://x.com/stvvlabo/status/not-an-id",
+                      "https://x.com/stvvlabo/status/2114727647368331366?redirect=1",
+                      "http://x.com/stvvlabo/status/2114727647368331366",
+                      "https://x.com:443/stvvlabo/status/2114727647368331366",
+                      "https://x.com@evil.example/stvvlabo/status/2114727647368331366"]:
+            with self.subTest(value=value):
+                self.assertIsNone(x_permalink_candidate({"externalLink": value}))
+
+    def test_sent_post_exposes_candidate_but_never_marks_x_verified(self):
+        from unittest.mock import patch
+        from stvv_post import CHANNEL
+        from buffer_reservations import BufferReservations
+        from advance_reservations import verify_echo
+        from unittest.mock import Mock
+        client = Mock(spec=BufferReservations)
+        client.get_post.return_value = {
+            "id": "buffer-fixture", "channelId": CHANNEL, "text": "approved",
+            "dueAt": self.due, "status": "sent",
+            "externalLink": "https://x.com/stvvlabo/status/2114727647368331366",
+            "assets": [{"id": "asset-1"}],
+        }
+        history = {"reserved_posts": {"fixture": {
+            "buffer_id": "buffer-fixture", "text": "approved",
+            "due_at": self.due, "image_url": "https://example.org/a.png",
+            "dimensions": [1448, 1086], "buffer_asset_ids": ["asset-1"],
+        }}}
+        rows = collect(history, client, self.now)
+        self.assertEqual(rows[0]["x_permalink_candidate"],
+                         "https://x.com/stvvlabo/status/2114727647368331366")
+        self.assertFalse(rows[0]["x_display_verified"])
+        self.assertEqual(rows[0]["delivery_state"], "buffer_reports_sent_x_unverified")
+        self.assertNotIn("x_permalink_candidate", history["reserved_posts"]["fixture"])
+
+    def test_read_only_get_post_requests_external_link(self):
+        from buffer_reservations import BufferReservations
+        from unittest.mock import Mock
+        client = BufferReservations(Mock())
+        client.query = Mock(return_value={"post": {"id": "some-post"}})
+        self.assertEqual(client.get_post("some-post")["id"], "some-post")
+        self.assertIn("externalLink", client.query.call_args.args[0])
 
     def test_unauthorized_identity_never_approved(self):
         class Client:
