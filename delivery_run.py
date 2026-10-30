@@ -138,7 +138,12 @@ def probe_overdue_reservations(history, now):
         return {'status': 'read_only_probe_not_configured', 'overdue_count': len(candidates),
                 'results': []}
 
-    client = BufferReservations()
+    try:
+        client = BufferReservations()
+    except Exception as error:
+        # A diagnostic client failure must not suppress the stale-run evidence.
+        return {'status': 'read_only_probe_unavailable', 'overdue_count': len(candidates),
+                'checked_count': 0, 'results': [], 'error_type': type(error).__name__}
     results = []
     for key, record in candidates[:5]:
         item = {'key': key, 'x_display_verified': False, 'ledger_updated': False}
