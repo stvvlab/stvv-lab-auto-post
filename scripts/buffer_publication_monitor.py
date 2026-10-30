@@ -6,6 +6,8 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import re
+from urllib.parse import urlsplit
 
 from advance_reservations import verify_echo, stamp
 from buffer_reservations import BufferReservations
@@ -57,9 +59,29 @@ def collect(history, client, now):
             "ledger_status": record.get("buffer_status"),
             "remote_status": status, "delivery_state": state,
             "x_display_verified": False,
+            "x_permalink_candidate": (x_permalink_candidate(remote)
+                                      if status == "sent" else None),
         })
     return rows
 
+
+
+def x_permalink_candidate(remote):
+    """Only expose a plausible own-account X URL; this never verifies X display."""
+    value = remote.get("externalLink")
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = urlsplit(value)
+        if (parsed.scheme != "https" or parsed.hostname not in
+                {"x.com", "www.x.com", "twitter.com", "www.twitter.com"}
+                or parsed.username or parsed.password or parsed.port is not None
+                or parsed.query or parsed.fragment):
+            return None
+    except ValueError:
+        return None
+    match = re.fullmatch(r"/stvvlabo/status/([0-9]{8,25})/?", parsed.path, re.I)
+    return "https://x.com/stvvlabo/status/" + match.group(1) if match else None
 
 def needs_attention(row):
     """A scheduled post moved to drafts is a delivery failure, not success.
