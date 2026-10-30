@@ -13,7 +13,8 @@
     "https://stvv.jp/news/2025/",
     "https://stvv.jp/news/team/20260917_1/",
     "https://stvv.jp/news/game/20261023_3/",
-    "https://stvv.jp/news/game/20261026_1/"
+    "https://stvv.jp/news/game/20261026_1/",
+    "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid"
   ],
   "used_posts": [
     "lab_2",
@@ -906,6 +907,38 @@
         "source_body_sha256": "0e1273a3a1c0dcc901d68cc9e4a2ec54fda18604ee96eb5d4a891bd795b839c0",
         "fact_id": "cf1423218edf88bf40924cf22ebfec23e69e1d8b70c2999857f22befaf07b799"
       }
+    },
+    {
+      "slot": "news",
+      "source": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "text": "⚽ 次戦はOHルーヴェン戦！\n📅 11月2日（月）午前0:00（日本時間）\n🏟 DAIO WASABI STAYEN\n\nホームで勝利をつかめ！STVVの熱い戦いに期待。🇯🇵\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid\n\n#STVV #シントトロイデン",
+      "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f84e118468e52356e327309f8b07e0e6a7bc7983/generated/ohl_match_announcement_20261102.png",
+      "asset_path": "generated/ohl_match_announcement_20261102.png",
+      "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "due_at": "2026-10-30T09:00:00Z",
+      "official_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+      "reservation_key": "d203cafdeadcf3195da292e2f0c53c91c48382354d2c21fddd887feef27addd9",
+      "created_at": "2026-10-29T23:11:04.849134+09:00",
+      "delivery_mode": "customScheduled",
+      "x_display_verified": false,
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "initial",
+        "event_id": "stvv-ohl-2026-11-02"
+      },
+      "buffer_id": "6ae353fa835dd2febef21af5",
+      "buffer_status": "sent",
+      "buffer_asset_sources": [
+        "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f84e118468e52356e327309f8b07e0e6a7bc7983/generated/ohl_match_announcement_20261102.png"
+      ],
+      "submitted_at": "2026-10-29T23:11:06.909892+09:00",
+      "status_checked_at": "2026-10-31T02:47:40.984939+09:00",
+      "key": "daily_2026-10-30_news",
+      "delivery_state": "buffer_reports_sent_x_unverified"
     }
   ],
   "pending_posts": {},
@@ -967,12 +1000,12 @@
         "event_id": "stvv-ohl-2026-11-02"
       },
       "buffer_id": "6ae353fa835dd2febef21af5",
-      "buffer_status": "scheduled",
+      "buffer_status": "sent",
       "buffer_asset_sources": [
         "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/f84e118468e52356e327309f8b07e0e6a7bc7983/generated/ohl_match_announcement_20261102.png"
       ],
       "submitted_at": "2026-10-29T23:11:06.909892+09:00",
-      "status_checked_at": "2026-10-30T16:28:54.802707+09:00"
+      "status_checked_at": "2026-10-31T02:47:40.984939+09:00"
     }
   }
 }
