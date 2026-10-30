@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-10-30T19:18:57.062958+09:00",
+  "finished_at": "2026-10-30T19:18:57.062990+09:00",
+  "slot": "data",
+  "date_jst": "2026-10-30",
+  "scheduled_at": "2026-10-30T12:30:00+09:00",
+  "start_delay_seconds": 24537,
+  "schedule_delay_diagnostic": "severe_runner_start_delay",
+  "run_id": "41039803004",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41039803004",
+  "commit": "543296d0ce635940e7963ee7a0d461a48308a38e",
+  "manual_dispatch_performed": false,
+  "status": "blocked_schedule_more_than_six_hours_late",
+  "delivery_state": "no_buffer_call_due_to_schedule_guard",
+  "delivery_mode": "advance_reservations",
+  "x_display_verified": false,
+  "new_publications": [],
+  "new_reservations": [],
+  "pending_state": "not_checked",
+  "error_type": "RuntimeError",
+  "reservation_coverage": {
+    "reserved_count": 2,
+    "pending_count": 0,
+    "scheduled_keys": [
+      "daily_2026-10-30_news"
+    ],
+    "note": "Local ledger only; Buffer and X were not queried"
+  }
+}
