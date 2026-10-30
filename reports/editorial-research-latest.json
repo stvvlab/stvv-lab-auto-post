@@ -1,13 +1,9 @@
 {
-  "checked_at": "2026-10-30T22:28:03.356955+09:00",
+  "checked_at": "2026-10-31T03:48:37.521909+09:00",
   "status": "research_drafts_available",
   "source_checks": [
     {
       "source_url": "https://stvv.jp/news/game/20261026_1/",
-      "status": "ok"
-    },
-    {
-      "source_url": "https://stvv.jp/news/game/20261023_3/",
       "status": "ok"
     }
   ],
