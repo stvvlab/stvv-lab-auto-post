@@ -20,11 +20,14 @@ class PreflightTests(unittest.TestCase):
             "source_url": "https://example.com/match"}))
         self.assertEqual(status, 0)
         self.assertTrue(result["allowed"])
+        self.assertEqual(result["decision"], "pass")
+        self.assertEqual(result["warnings"], [])
 
     def test_missing_source(self):
         status, result = self.run_post('{"type":"news","text":"試合速報"}')
         self.assertEqual(status, 1)
         self.assertIn("missing_source_reference", result["blocking"])
+        self.assertEqual(result["decision"], "block")
 
     def test_sourced_promotion_is_warning_only(self):
         status, result = self.run_post(json.dumps({
@@ -33,21 +36,32 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual(status, 0)
         self.assertIn("excluded_promotion", result["warnings"])
         self.assertEqual(result["blocking"], [])
+        self.assertEqual(result["decision"], "pass_with_warnings")
 
     def test_invalid_json(self):
         status, result = self.run_post("{bad")
         self.assertEqual(status, 1)
         self.assertFalse(result["allowed"])
+        self.assertEqual(result["decision"], "block")
 
     def test_array_input(self):
         status, result = self.run_post('[]')
         self.assertEqual(status, 1)
         self.assertFalse(result["allowed"])
+        self.assertEqual(result["decision"], "block")
 
     def test_warning_does_not_block(self):
         status, result = self.run_post('{"type":"vote","text":"ここが重要"}')
         self.assertEqual(status, 0)
         self.assertIn("generic_language_review", result["warnings"])
+        self.assertEqual(result["decision"], "pass_with_warnings")
+
+    def test_block_takes_precedence_over_warning(self):
+        status, result = self.run_post('{"type":"news","text":"ここが重要"}')
+        self.assertEqual(status, 1)
+        self.assertIn("generic_language_review", result["warnings"])
+        self.assertIn("missing_source_reference", result["blocking"])
+        self.assertEqual(result["decision"], "block")
 
 
 if __name__ == "__main__":
