@@ -94,8 +94,12 @@ def delivery_evidence(before, after, day, slot, *, advance=False):
                 result['delivery_state'] = 'buffer_reservation_state_unverified_do_not_retry'
             elif statuses & {'scheduled', 'sending'}:
                 result['delivery_state'] = 'buffer_scheduled_not_published'
-            elif statuses & {'cancelled_by_user', 'draft_no_longer_scheduled'}:
+            elif statuses <= {'cancelled_by_user', 'draft_no_longer_scheduled'}:
                 result['delivery_state'] = 'buffer_draft_not_scheduled_x_unverified'
+            elif statuses & {'cancelled_by_user', 'draft_no_longer_scheduled'}:
+                # Mixed historical states: a cancelled post must not hide a
+                # separate sent reservation, and neither was sent by this run.
+                result['delivery_state'] = 'historical_sent_and_cancelled_no_new_acceptance'
             else:
                 result['delivery_state'] = 'no_new_buffer_acceptance_recorded'
     return result

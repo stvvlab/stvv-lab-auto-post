@@ -249,6 +249,29 @@ class DeliveryRunTests(unittest.TestCase):
                 self.assertFalse(result['x_display_verified'])
                 self.assertEqual(result['new_publications'], [])
 
+    def test_mixed_sent_and_cancelled_reservations_are_not_all_drafts(self):
+        # The cancelled G-football reservation must not obscure a separately
+        # Buffer-sent OH Leuven announcement. This run made no new send.
+        for terminal in ('cancelled_by_user', 'draft_no_longer_scheduled'):
+            with self.subTest(terminal=terminal):
+                before = history()
+                after = history()
+                after['reserved_posts'] = {
+                    'daily_2026-10-29_news': {
+                        'buffer_id': 'cancelled-id', 'buffer_status': terminal,
+                        'due_at': '2026-10-29T09:00:00Z'},
+                    'daily_2026-10-30_news': {
+                        'buffer_id': 'sent-id', 'buffer_status': 'sent',
+                        'due_at': '2026-10-30T09:00:00Z'}}
+                result = d.delivery_evidence(
+                    before, after, '2026-10-30', 'recap', advance=True)
+                self.assertEqual(
+                    result['delivery_state'],
+                    'historical_sent_and_cancelled_no_new_acceptance')
+                self.assertEqual(result['new_publications'], [])
+                self.assertFalse(result['x_display_verified'])
+                self.assertEqual(len(result['reservation_states']), 2)
+
     def test_unknown_buffer_status_does_not_claim_scheduled(self):
         before = history()
         after = history()
