@@ -1,0 +1,43 @@
+{
+  "started_at": "2026-10-31T00:25:06.270500+09:00",
+  "finished_at": "2026-10-31T00:25:06.270532+09:00",
+  "slot": "news",
+  "date_jst": "2026-10-30",
+  "scheduled_at": "2026-10-30T18:00:00+09:00",
+  "start_delay_seconds": 23106,
+  "schedule_delay_diagnostic": "severe_runner_start_delay",
+  "run_id": "41080494787",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41080494787",
+  "commit": "8359d40ae7ae59480e12d729213164fd9a4c94cd",
+  "manual_dispatch_performed": false,
+  "status": "blocked_schedule_more_than_six_hours_late",
+  "delivery_state": "no_buffer_mutation_due_to_schedule_guard",
+  "delivery_mode": "advance_reservations",
+  "x_display_verified": false,
+  "new_publications": [],
+  "new_reservations": [],
+  "pending_state": "not_checked",
+  "error_type": "RuntimeError",
+  "reservation_coverage": {
+    "reserved_count": 2,
+    "pending_count": 0,
+    "scheduled_keys": [
+      "daily_2026-10-30_news"
+    ],
+    "note": "Local ledger snapshot; separate overdue probe may query Buffer read-only, never X"
+  },
+  "overdue_reservation_probe": {
+    "status": "read_only_completed",
+    "overdue_count": 1,
+    "checked_count": 1,
+    "truncated": false,
+    "results": [
+      {
+        "key": "daily_2026-10-30_news",
+        "x_display_verified": false,
+        "ledger_updated": false,
+        "remote_status": "sent"
+      }
+    ]
+  }
+}
