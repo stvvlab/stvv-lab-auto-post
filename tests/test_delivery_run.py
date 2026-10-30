@@ -101,8 +101,8 @@ class DeliveryRunTests(unittest.TestCase):
         original = json.dumps(ledger, sort_keys=True)
         remote = {'id': 'test-buffer-id', 'status': 'sent',
                   'text': 'reviewed caption', 'channelId': d.publisher.CHANNEL}
-        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \\
-                patch('buffer_reservations.BufferReservations') as client, \\
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \
+                patch('buffer_reservations.BufferReservations') as client, \
                 patch('advance_reservations.verify_echo') as verify:
             client.return_value.get_post.return_value = remote
             result = d.probe_overdue_reservations(ledger, now)
@@ -124,7 +124,7 @@ class DeliveryRunTests(unittest.TestCase):
             result = d.probe_overdue_reservations(ledger, now)
         self.assertEqual(result['status'], 'read_only_probe_not_configured')
         self.assertEqual(result['results'], [])
-        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \\
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \
                 patch('buffer_reservations.BufferReservations') as client:
             client.return_value.get_post.return_value = {
                 'id': 'test-buffer-id', 'status': 'draft',
