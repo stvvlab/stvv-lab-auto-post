@@ -17,12 +17,15 @@ def main():
             raise ValueError("Post must be a JSON object")
         findings = audit(post)
         blocking = [p for p in findings if p in CRITICAL]
-        print(json.dumps({"allowed": not blocking, "blocking": blocking,
-                          "warnings": [p for p in findings if p not in CRITICAL]},
+        warnings = [p for p in findings if p not in CRITICAL]
+        decision = "block" if blocking else ("pass_with_warnings" if warnings else "pass")
+        print(json.dumps({"allowed": not blocking, "decision": decision,
+                          "blocking": blocking, "warnings": warnings},
                          ensure_ascii=False))
         return 1 if blocking else 0
     except (ValueError, TypeError, json.JSONDecodeError) as error:
-        print(json.dumps({"allowed": False, "blocking": ["invalid_input"],
+        print(json.dumps({"allowed": False, "decision": "block",
+                          "blocking": ["invalid_input"], "warnings": [],
                           "error": str(error)}, ensure_ascii=False))
         return 1
 
