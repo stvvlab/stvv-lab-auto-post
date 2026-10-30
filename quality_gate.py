@@ -42,7 +42,9 @@ def audit(post, *, max_length=280):
         return ["missing_text"]
     if x_length(body) > 280:
         problems.append("over_280_characters")
-    if any(word in body for word in BLOCKED):
+    promotion_mentioned = any(word in body for word in BLOCKED)
+    if promotion_mentioned:
+        # Editorial topic warning, not a factual or delivery safety failure.
         problems.append("excluded_promotion")
     if any(word in body for word in GENERIC):
         problems.append("generic_language_review")
@@ -55,10 +57,16 @@ def audit(post, *, max_length=280):
         if any(k.endswith("url") and post.get(k) and not valid_source_url(post[k])
                for k in EVIDENCE):
             problems.append("malformed_source_url")
+    # A promotional claim still needs a traceable URL, even in vote/recap slots.
+    # Verified-source, image, novelty and delivery gates remain separate.
+    if promotion_mentioned and not any(
+            valid_source_url(post.get(key)) for key in ("source_url", "official_url", "source")):
+        if "missing_source_reference" not in problems:
+            problems.append("missing_source_reference")
     return problems
 
 
-CRITICAL = {"missing_text", "over_280_characters", "over_safe_x_length", "excluded_promotion",
+CRITICAL = {"missing_text", "over_280_characters", "over_safe_x_length",
             "missing_source_reference", "malformed_source_url", "not_an_object"}
 
 
