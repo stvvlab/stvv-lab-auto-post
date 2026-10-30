@@ -86,6 +86,31 @@ class BufferPublicationMonitorTests(unittest.TestCase):
         self.assertEqual(rows[0]["delivery_state"], "buffer_reports_sent_x_unverified")
         self.assertNotIn("x_permalink_candidate", history["reserved_posts"]["fixture"])
 
+    def test_capability_probe_known_post_link_is_locator_not_x_proof(self):
+        from buffer_reservations import known_post_evidence
+        from stvv_post import CHANNEL
+        record = {"buffer_id": "buffer-ohl", "text": "approved caption"}
+        remote = {"id": "buffer-ohl", "channelId": CHANNEL,
+                  "text": "approved caption", "status": "sent",
+                  "externalLink": "https://twitter.com/stvvlabo/status/2114727647368331366"}
+        evidence = known_post_evidence(remote, record)
+        self.assertEqual(evidence["x_permalink_candidate"],
+                         "https://x.com/stvvlabo/status/2114727647368331366")
+        self.assertEqual(evidence["buffer_status"], "sent")
+        self.assertFalse(evidence["x_display_verified"])
+        remote["status"] = "scheduled"
+        self.assertIsNone(known_post_evidence(remote, record)["x_permalink_candidate"])
+        remote["status"] = "sent"
+        remote["externalLink"] = "https://x.com/other/status/2114727647368331366"
+        self.assertIsNone(known_post_evidence(remote, record)["x_permalink_candidate"])
+        remote["text"] = "different caption"
+        with self.assertRaisesRegex(RuntimeError, "binding differs"):
+            known_post_evidence(remote, record)
+        remote["text"] = record["text"]
+        remote["id"] = "another-buffer-id"
+        with self.assertRaisesRegex(RuntimeError, "binding differs"):
+            known_post_evidence(remote, record)
+
     def test_read_only_get_post_requests_external_link(self):
         from buffer_reservations import BufferReservations
         from unittest.mock import Mock

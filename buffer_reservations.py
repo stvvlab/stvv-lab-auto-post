@@ -131,6 +131,21 @@ class BufferReservations:
         return post
 
 
+def known_post_evidence(post, record):
+    """Expose only a validated X locator, never a claim of public X rendering."""
+    if (not record.get('buffer_id')
+            or str(post.get('id', '')) != str(record['buffer_id'])
+            or post.get('channelId') != publisher.CHANNEL
+            or post.get('text') != record.get('text')):
+        raise RuntimeError('Read-only post binding differs from ledger')
+    from scripts.buffer_publication_monitor import x_permalink_candidate
+    status = post.get('status')
+    return {'buffer_id': record['buffer_id'], 'buffer_status': status,
+            'x_permalink_candidate': (x_permalink_candidate(post)
+                                      if status == 'sent' else None),
+            'x_display_verified': False}
+
+
 def probe():
     """Read-only capability measurement; never creates a post or accesses X API."""
     from datetime import datetime
@@ -151,8 +166,7 @@ def probe():
         known = [p for p in history['publication_log'] if p.get('buffer_id')]
         if known:
             post = client.get_post(known[-1]['buffer_id'])
-            if post.get('channelId') != publisher.CHANNEL or post.get('text') != known[-1]['text']:
-                raise RuntimeError('Read-only post binding differs from ledger')
+            result['known_post'] = known_post_evidence(post, known[-1])
             result['known_post_status_query_verified'] = True
         else:
             raise RuntimeError('No known post to verify the status query')
