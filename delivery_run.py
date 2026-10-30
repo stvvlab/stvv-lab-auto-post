@@ -113,11 +113,62 @@ def schedule_delay_diagnostic(delay_seconds):
     return 'within_15_minutes'
 
 
+
+def probe_overdue_reservations(history, now):
+    """Read only the status of due reservations after a stale schedule guard.
+
+    No mutation, retry, ledger save, X display assertion, or new publication.
+    Errors are reported by type only, without leaking provider payloads.
+    """
+    from advance_reservations import stamp, verify_echo
+    from buffer_reservations import BufferReservations
+
+    candidates = []
+    for key, record in history.get('reserved_posts', {}).items():
+        if not isinstance(record, dict) or record.get('buffer_status') not in {'scheduled', 'sending'}:
+            continue
+        try:
+            if stamp(record['due_at']).astimezone(publisher.JST) <= now:
+                candidates.append((key, record))
+        except (KeyError, TypeError, ValueError):
+            candidates.append((key, record))
+    if not candidates:
+        return {'status': 'no_overdue_reservations', 'results': []}
+    if not os.getenv('BUFFER_API_KEY'):
+        return {'status': 'read_only_probe_not_configured', 'overdue_count': len(candidates),
+                'results': []}
+
+    client = BufferReservations()
+    results = []
+    for key, record in candidates[:5]:
+        item = {'key': key, 'x_display_verified': False, 'ledger_updated': False}
+        try:
+            remote = client.get_post(record['buffer_id'])
+            status = remote.get('status')
+            if status == 'draft':
+                if (str(remote.get('id', '')) != str(record['buffer_id'])
+                        or remote.get('channelId') != publisher.CHANNEL
+                        or remote.get('text') != record['text']):
+                    raise RuntimeError('Draft identity mismatch')
+            else:
+                verify_echo(remote, record)
+            if status not in {'draft', 'scheduled', 'sending', 'sent', 'error'}:
+                raise RuntimeError('Unexpected remote status')
+            item['remote_status'] = status
+        except Exception as error:
+            item['remote_status'] = 'unverified'
+            item['error_type'] = type(error).__name__
+        results.append(item)
+    return {'status': 'read_only_completed', 'overdue_count': len(candidates),
+            'checked_count': len(results), 'truncated': len(candidates) > 5,
+            'results': results}
+
+
 def record_late_start(now, run_id, advance):
     """Persist a failed scheduled run even when the six-hour guard stops it.
 
-    No ledger is read and no Buffer operation is attempted. The report does
-    not imply that other runs have no pending posts or reservations.
+    The publisher is never run. A bounded read-only status check of overdue
+    reservations may run; it never changes the ledger or confirms X display.
     """
     cron = os.getenv('GITHUB_SCHEDULE', '').strip()
     if cron not in publisher.SLOTS:
@@ -140,7 +191,7 @@ def record_late_start(now, run_id, advance):
         'workflow_url': f'https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/{run_id}',
         'commit': os.getenv('GITHUB_SHA'), 'manual_dispatch_performed': False,
         'status': 'blocked_schedule_more_than_six_hours_late',
-        'delivery_state': 'no_buffer_call_due_to_schedule_guard',
+        'delivery_state': 'no_buffer_mutation_due_to_schedule_guard',
         'delivery_mode': 'advance_reservations' if advance else 'shareNow',
         'x_display_verified': False, 'new_publications': [], 'new_reservations': [],
         'pending_state': 'not_checked', 'error_type': 'RuntimeError',
@@ -158,8 +209,10 @@ def record_late_start(now, run_id, advance):
             'pending_count': len(pending),
             'scheduled_keys': sorted(k for k, v in reserved.items()
                                      if isinstance(v, dict) and v.get('buffer_status') == 'scheduled'),
-            'note': 'Local ledger only; Buffer and X were not queried',
+            'note': 'Local ledger snapshot; separate overdue probe may query Buffer read-only, never X',
         }
+        if advance:
+            report['overdue_reservation_probe'] = probe_overdue_reservations(history, now)
     except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as error:
         report['reservation_coverage_error'] = type(error).__name__
     directory = ROOT / 'reports/delivery-runs'
