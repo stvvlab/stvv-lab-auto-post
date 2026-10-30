@@ -104,7 +104,7 @@ class BufferReservations:
 
     def get_post(self, post_id):
         post = self.query('query { post(input: {id: ' + json.dumps(post_id) + '}) { '
-                          + POST_FIELDS + ' } }').get('post')
+                          + POST_FIELDS + ' externalLink } }').get('post')
         if not isinstance(post, dict):
             raise RuntimeError('Reservation status is unavailable; do not resend')
         return post
