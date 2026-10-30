@@ -134,6 +134,22 @@ class DeliveryRunTests(unittest.TestCase):
         self.assertEqual(result['results'][0]['error_type'], 'RuntimeError')
         self.assertEqual(ledger['reserved_posts']['due']['buffer_status'], 'scheduled')
 
+    def test_late_guard_probe_client_initialization_failure_keeps_evidence(self):
+        now = datetime.fromisoformat('2026-10-30T19:30:00+09:00')
+        ledger = {'reserved_posts': {'due': {
+            'buffer_id': 'test-buffer-id', 'buffer_status': 'scheduled',
+            'due_at': '2026-10-30T09:00:00Z', 'text': 'approved caption'}}}
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \
+                patch('buffer_reservations.BufferReservations',
+                      side_effect=RuntimeError('private provider payload')):
+            result = d.probe_overdue_reservations(ledger, now)
+        self.assertEqual(result['status'], 'read_only_probe_unavailable')
+        self.assertEqual(result['overdue_count'], 1)
+        self.assertEqual(result['checked_count'], 0)
+        self.assertEqual(result['error_type'], 'RuntimeError')
+        self.assertNotIn('private provider payload', json.dumps(result))
+        self.assertEqual(ledger['reserved_posts']['due']['buffer_status'], 'scheduled')
+
     def test_ci_and_manual_calls_cannot_create_evidence(self):
         with patch.dict(os.environ, {'GITHUB_RUN_ID': '123',
                                     'GITHUB_EVENT_NAME': 'pull_request'}, clear=True), \
