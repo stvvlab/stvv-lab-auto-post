@@ -26,6 +26,14 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertIn("missing_source_reference", result["blocking"])
 
+    def test_sourced_promotion_is_warning_only(self):
+        status, result = self.run_post(json.dumps({
+            "type": "news", "text": "公式スポンサー発表",
+            "source_url": "https://stvv.jp/news/sponsor/20261030_1/"}))
+        self.assertEqual(status, 0)
+        self.assertIn("excluded_promotion", result["warnings"])
+        self.assertEqual(result["blocking"], [])
+
     def test_invalid_json(self):
         status, result = self.run_post("{bad")
         self.assertEqual(status, 1)

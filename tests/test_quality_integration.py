@@ -68,6 +68,16 @@ class PublishQualityIntegrationTests(unittest.TestCase):
         save.assert_not_called()
         send.assert_not_called()
 
+    def test_sourced_promotion_is_advisory_only(self):
+        history = self.history()
+        with patch.object(p, "save"), patch.object(p, "send",
+                          return_value={"id": "mock-promotion", "status": "sent"}) as send:
+            result = p.publish(history, "test_sourced_promotion", "公式スポンサー発表", "news",
+                               source="https://stvv.jp/news/sponsor/20261030_1/")
+        self.assertTrue(result)
+        send.assert_called_once()
+        self.assertIn("test_sourced_promotion", history["used_posts"])
+
     def test_valid_sourced_news_reaches_send(self):
         history = self.history()
         with patch.object(p, "save"), patch.object(p, "send", return_value={"id": "test-buffer-id", "status": "sent"}) as send:
