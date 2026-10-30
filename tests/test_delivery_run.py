@@ -54,7 +54,7 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(report['status'], 'blocked_schedule_more_than_six_hours_late')
             self.assertEqual(report['scheduled_at'], '2026-10-29T18:00:00+09:00')
             self.assertEqual(report['start_delay_seconds'], 24184)
-            self.assertEqual(report['delivery_state'], 'no_buffer_call_due_to_schedule_guard')
+            self.assertEqual(report['delivery_state'], 'no_buffer_mutation_due_to_schedule_guard')
             self.assertEqual(report['pending_state'], 'not_checked')
             self.assertFalse(report['x_display_verified'])
             self.assertEqual(report['new_reservations'], [])
@@ -88,8 +88,51 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(report['reservation_coverage']['pending_count'], 1)
             self.assertEqual(report['reservation_coverage']['scheduled_keys'],
                              ['daily_2026-10-30_news'])
-            self.assertEqual(report['delivery_state'], 'no_buffer_call_due_to_schedule_guard')
+            self.assertEqual(report['delivery_state'], 'no_buffer_mutation_due_to_schedule_guard')
             self.assertFalse(report['x_display_verified'])
+
+    def test_late_guard_read_only_probe_of_overdue_reservation(self):
+        now = datetime.fromisoformat('2026-10-30T19:30:00+09:00')
+        record = {'buffer_id': 'test-buffer-id', 'buffer_status': 'scheduled',
+                  'due_at': '2026-10-30T09:00:00Z', 'text': 'reviewed caption'}
+        future = {'buffer_id': 'future-buffer-id', 'buffer_status': 'scheduled',
+                  'due_at': '2026-10-31T09:00:00Z', 'text': 'future caption'}
+        ledger = {'reserved_posts': {'due': record, 'future': future}}
+        original = json.dumps(ledger, sort_keys=True)
+        remote = {'id': 'test-buffer-id', 'status': 'sent',
+                  'text': 'reviewed caption', 'channelId': d.publisher.CHANNEL}
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \\
+                patch('buffer_reservations.BufferReservations') as client, \\
+                patch('advance_reservations.verify_echo') as verify:
+            client.return_value.get_post.return_value = remote
+            result = d.probe_overdue_reservations(ledger, now)
+            client.return_value.get_post.assert_called_once_with('test-buffer-id')
+            verify.assert_called_once_with(remote, record)
+        self.assertEqual(result['status'], 'read_only_completed')
+        self.assertEqual(result['overdue_count'], 1)
+        self.assertEqual(result['results'][0]['remote_status'], 'sent')
+        self.assertFalse(result['results'][0]['x_display_verified'])
+        self.assertFalse(result['results'][0]['ledger_updated'])
+        self.assertEqual(json.dumps(ledger, sort_keys=True), original)
+
+    def test_late_guard_probe_missing_auth_and_identity_mismatch_are_not_success(self):
+        now = datetime.fromisoformat('2026-10-30T19:30:00+09:00')
+        ledger = {'reserved_posts': {'due': {
+            'buffer_id': 'test-buffer-id', 'buffer_status': 'scheduled',
+            'due_at': '2026-10-30T09:00:00Z', 'text': 'approved caption'}}}
+        with patch.dict(os.environ, {'BUFFER_API_KEY': ''}):
+            result = d.probe_overdue_reservations(ledger, now)
+        self.assertEqual(result['status'], 'read_only_probe_not_configured')
+        self.assertEqual(result['results'], [])
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'dummy'}), \\
+                patch('buffer_reservations.BufferReservations') as client:
+            client.return_value.get_post.return_value = {
+                'id': 'test-buffer-id', 'status': 'draft',
+                'channelId': d.publisher.CHANNEL, 'text': 'wrong caption'}
+            result = d.probe_overdue_reservations(ledger, now)
+        self.assertEqual(result['results'][0]['remote_status'], 'unverified')
+        self.assertEqual(result['results'][0]['error_type'], 'RuntimeError')
+        self.assertEqual(ledger['reserved_posts']['due']['buffer_status'], 'scheduled')
 
     def test_ci_and_manual_calls_cannot_create_evidence(self):
         with patch.dict(os.environ, {'GITHUB_RUN_ID': '123',
