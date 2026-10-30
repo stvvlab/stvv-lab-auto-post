@@ -61,6 +61,20 @@ def collect(history, client, now):
     return rows
 
 
+def needs_attention(row):
+    """A scheduled post moved to drafts is a delivery failure, not success.
+
+    Previously cancelled terminal reservations remain historical and must not
+    generate a new alert or be requeued.
+    """
+    if row["delivery_state"] in {
+            "overdue_not_sent_do_not_retry", "buffer_error_not_published",
+            "unknown_buffer_status_do_not_retry"}:
+        return True
+    return (row["delivery_state"] == "moved_to_drafts_not_published"
+            and row["ledger_status"] in {"scheduled", "sending"})
+
+
 def main():
     now = datetime.now(JST)
     report = {"checked_at_jst": now.isoformat(), "mode": "read_only_no_send",
@@ -69,9 +83,7 @@ def main():
         history = json.loads((ROOT / "posted.json").read_text(encoding="utf-8"))
         report["reservations"] = collect(history, BufferReservations(), now)
         report["status"] = ("action_required" if any(
-            row["delivery_state"] in {
-                "overdue_not_sent_do_not_retry", "buffer_error_not_published",
-                "unknown_buffer_status_do_not_retry"} for row in report["reservations"])
+            needs_attention(row) for row in report["reservations"])
             else "checked")
     except Exception as error:
         report["status"] = "check_failed_do_not_retry"
