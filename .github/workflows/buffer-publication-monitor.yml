@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install existing runtime dependencies
-        run: python -m pip install requests pillow
+        run: python -m pip install requests beautifulsoup4 pillow
       - name: Run read-only classification tests
         run: python -m unittest tests.test_buffer_publication_monitor
       - name: Inspect remote Buffer status without mutation
