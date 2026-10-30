@@ -44,8 +44,13 @@ class QualityGateTests(unittest.TestCase):
     def test_generic_warning_does_not_block(self):
         self.assertTrue(can_publish({"type": "vote", "text": "ここが重要"}))
 
-    def test_excluded_promotion_blocks(self):
+    def test_promotion_requires_source_but_wording_is_warning_only(self):
         self.assertFalse(can_publish({"type": "vote", "text": "スポンサー発表"}))
+        sourced = {"type": "news", "text": "公式スポンサー発表",
+                   "source_url": "https://stvv.jp/news/sponsor/20261030_1/"}
+        self.assertTrue(can_publish(sourced))
+        self.assertIn("excluded_promotion", audit(sourced))
+        self.assertNotIn("missing_source_reference", audit(sourced))
 
     def test_news_without_source_blocks(self):
         self.assertFalse(can_publish({"type": "news", "text": "試合速報"}))
@@ -66,6 +71,8 @@ class QualityGateTests(unittest.TestCase):
         cases = [
             ("stylistic warning", {"type": "vote", "text": "ここが重要"}, ["--strict"], False),
             ("critical issue", {"type": "vote", "text": "スポンサー発表"}, ["--strict"], True),
+            ("sourced promotion warning", {"type": "news", "text": "スポンサー発表",
+             "source_url": "https://stvv.jp/news/sponsor/20261030_1/"}, ["--strict"], False),
             ("explicit all findings", {"type": "vote", "text": "ここが重要"}, ["--strict-all"], True),
             ("critical only alias", {"type": "vote", "text": "ここが重要"}, ["--enforce-critical"], False),
         ]
