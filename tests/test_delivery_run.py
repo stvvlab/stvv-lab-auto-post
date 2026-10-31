@@ -31,6 +31,20 @@ class DeliveryRunTests(unittest.TestCase):
         self.assertEqual(d.delivery_evidence(before, before, '2026-10-26', 'vote')
                          ['new_publications'], [])
 
+    def test_schedule_lag_label_does_not_blame_runner_without_job_metadata(self):
+        # The nominal slot-to-delivery delay cannot identify which GitHub
+        # scheduling stage was slow. Run/job creation timestamps are separate.
+        self.assertEqual(d.schedule_delay_diagnostic(-1), 'clock_or_schedule_mismatch')
+        self.assertEqual(d.schedule_delay_diagnostic(899), 'within_15_minutes')
+        self.assertEqual(d.schedule_delay_diagnostic(900),
+                         'schedule_to_delivery_delay_unattributed')
+        self.assertEqual(d.schedule_delay_diagnostic(3599),
+                         'schedule_to_delivery_delay_unattributed')
+        self.assertEqual(d.schedule_delay_diagnostic(3600),
+                         'severe_schedule_to_delivery_delay_unattributed')
+        self.assertEqual(d.schedule_delay_diagnostic(14857),
+                         'severe_schedule_to_delivery_delay_unattributed')
+
     def test_six_hour_late_guard_records_failure_without_buffer_or_false_pending_claim(self):
         # The 18:00 JST cron was actually started at 00:43 the next day.
         # A prior production run failed before creating any delivery evidence.
@@ -54,6 +68,8 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(report['status'], 'blocked_schedule_more_than_six_hours_late')
             self.assertEqual(report['scheduled_at'], '2026-10-29T18:00:00+09:00')
             self.assertEqual(report['start_delay_seconds'], 24184)
+            self.assertEqual(report['schedule_delay_diagnostic'],
+                             'severe_schedule_to_delivery_delay_unattributed')
             self.assertEqual(report['delivery_state'], 'no_buffer_mutation_due_to_schedule_guard')
             self.assertEqual(report['pending_state'], 'not_checked')
             self.assertFalse(report['x_display_verified'])
