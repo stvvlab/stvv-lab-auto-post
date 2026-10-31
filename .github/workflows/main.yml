@@ -5,11 +5,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 23 * * *"   # JST 08:00
-    - cron: "30 1 * * *"   # JST 10:30
-    - cron: "30 3 * * *"   # JST 12:30
-    - cron: "30 6 * * *"   # JST 15:30
     - cron: "0 9 * * *"    # JST 18:00
-    - cron: "0 12 * * *"   # JST 21:00
     - cron: "0 14 * * *"   # JST 23:00
 
 permissions:
@@ -47,7 +43,7 @@ jobs:
         run: bash scripts/install-card-font.sh
 
       # Full test suite runs in pull-request CI. Keep only publication-critical
-      # smoke tests on the seven scheduled runs to avoid unrelated test failures
+      # smoke tests on the three scheduled runs to avoid unrelated test failures
       # blocking otherwise verified, reviewed posts.
       - name: Run publication safety smoke tests
         run: |
