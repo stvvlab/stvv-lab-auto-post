@@ -16,6 +16,10 @@ from stvv_post import HASHTAGS, JST, SLOTS
 
 ROOT = Path(__file__).resolve().parent
 
+# Reduced pilot: three publication times per day. Legacy slots remain
+# identifiable for existing reservations and historical reconciliation.
+ACTIVE_RESERVATION_SLOTS = frozenset({'player', 'news', 'recap'})
+
 
 def future_slots(now, *, lead_minutes=30, horizon_hours=36):
     if now.tzinfo is None or now.utcoffset() is None:
@@ -28,6 +32,8 @@ def future_slots(now, *, lead_minutes=30, horizon_hours=36):
     slots = []
     for offset in (0, 1, 2):
         for slot, hour, minute in SLOTS.values():
+            if slot not in ACTIVE_RESERVATION_SLOTS:
+                continue
             due = (now + timedelta(days=offset)).replace(
                 hour=hour, minute=minute, second=0, microsecond=0)
             if earliest <= due <= latest:
