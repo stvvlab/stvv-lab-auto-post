@@ -2,7 +2,7 @@
 
 - PR [#112](https://github.com/stvvlab/stvv-lab-auto-post/pull/112)で公開時刻を **JST 08:00 / 18:00 / 23:00 の1日3枠** に変更。従来7枠の記述は以下の履歴節に限る。
 - 将来予約の探索範囲は36時間、30分以上先。審査済み候補がなければ予約しない。
-- PR [#113](https://github.com/stvvlab/stvv-lab-auto-post/pull/113)で、明示承認・一次情報本文SHA256一致の文章のみのBuffer予約経路を追加。現時点で文章のみのready候補は登録しておらず、実際のBuffer受付・X公開は未実証。画像付きの既存審査・重複防止・pending先行保存・再送禁止は維持。
+- PR [#113](https://github.com/stvvlab/stvv-lab-auto-post/pull/113)で、明示承認・一次情報本文SHA256一致の文章のみのBuffer予約経路を追加。PR [#114](https://github.com/stvvlab/stvv-lab-auto-post/pull/114)で、2026-11-01 18:00 JSTだけに有効なOH Leuven戦当日リマインド1件を文章のみready登録済み。Buffer受付・X公開は未実証で、時刻を逃した場合は翌枠に繰り越さない。画像付きの既存審査・重複防止・pending先行保存・再送禁止は維持。
 - GitHub Actionsの6時間超遅延時は安全停止。3枠への削減だけで起動遅延は解消しない。Buffer scheduled/sent とX実表示は区別する。
 
 ---
