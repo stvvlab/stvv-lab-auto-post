@@ -413,6 +413,17 @@ class BufferTransportTests(unittest.TestCase):
         self.assertNotIn('replyTo', args)
         self.assertEqual(len(args['assets']), 1)
 
+    def test_text_only_buffer_request_omits_assets_entirely(self):
+        session = Mock()
+        session.post.return_value.json.return_value = {
+            'data': {'createPost': {'post': {'id': 'text-fixture', 'assets': []}}}}
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'offline-fixture'}):
+            BufferReservations(session).schedule('確認済み', None, DUE)
+        session.post.assert_called_once()
+        payload = session.post.call_args.kwargs['json']['variables']['input']
+        self.assertNotIn('assets', payload)
+        self.assertEqual(payload['mode'], 'customScheduled')
+
     def test_schedule_mutation_requests_nullable_asset_identity_fields(self):
         # The real provider may return asset.id=None. A mutation asking only
         # for id cannot be verified by the reservation runner after success.
