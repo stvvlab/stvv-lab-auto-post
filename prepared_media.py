@@ -107,7 +107,7 @@ def prepared_candidates(slot, now):
         if parsed.scheme != 'https' or parsed.query or parsed.fragment:
             continue
         japanese = (parsed.netloc == 'stvv.jp'
-                    and bool(re.fullmatch(r'/news/(?:game|team|uefa-news)/\d{8}_[^/?#]+/', parsed.path)))
+                    and bool(re.fullmatch(r'/news/(?:game|team|uefa-news|event)/\d{8}_[^/?#]+/', parsed.path)))
         from club_official_inventory import approved_url
         digest = card.get('source_body_sha256')
         belgian = (approved_url(source) and isinstance(digest, str)
