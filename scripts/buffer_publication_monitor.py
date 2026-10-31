@@ -41,9 +41,13 @@ def collect(history, client, now):
     for key, record in sorted(reservations.items()):
         if not isinstance(record, dict):
             raise ValueError("Invalid reservation record")
-        for field in ("buffer_id", "text", "due_at", "image_url", "dimensions"):
+        for field in ("buffer_id", "text", "due_at"):
             if not record.get(field):
                 raise ValueError("Incomplete reservation; cannot safely confirm")
+        if record.get("media_type") != "text_only":
+            for field in ("image_url", "dimensions"):
+                if not record.get(field):
+                    raise ValueError("Incomplete image reservation; cannot safely confirm")
         remote = client.get_post(record["buffer_id"])
         if (str(remote.get("id")) != str(record["buffer_id"])
                 or remote.get("channelId") != CHANNEL
