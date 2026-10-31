@@ -146,7 +146,7 @@
         "news"
       ],
       "reviewed": true,
-      "status": "ready",
+      "status": "buffer_sent_x_unverified",
       "asset_path": "generated/ohl_match_announcement_20261102.png",
       "sha256": "81eaf83c89e1a63593fcdf8dd222b7f5fee387cf3bac7cd65a9920c8e402afa5",
       "dimensions": [
@@ -159,7 +159,15 @@
         "phase": "initial",
         "event_id": "stvv-ohl-2026-11-02"
       },
-      "review_note": "Original ChatGPT imagegen artwork and Japanese caption approved by user in conversation; same exact PNG bytes and dimensions must pass CI transfer verification prior to merge. Fixture 1 Nov 2026 16:00 CET = 2 Nov 2026 00:00 JST corroborated STVV official article 27 Oct and OH Leuven official article 26 Oct. No player faces, uniforms, logos. This is first STVV LAB fixture announcement, not a repeat of Japan Day-only notice. Subject to current live article digest, immutable remote image, Buffer duplicate and lead-time checks by existing runner. GitHub PR only; no Buffer reservation or X publication implied."
+      "review_note": "Original ChatGPT imagegen artwork and Japanese caption approved by user in conversation; same exact PNG bytes and dimensions must pass CI transfer verification prior to merge. Fixture 1 Nov 2026 16:00 CET = 2 Nov 2026 00:00 JST corroborated STVV official article 27 Oct and OH Leuven official article 26 Oct. No player faces, uniforms, logos. This is first STVV LAB fixture announcement, not a repeat of Japan Day-only notice. Subject to current live article digest, immutable remote image, Buffer duplicate and lead-time checks by existing runner. GitHub PR only; no Buffer reservation or X publication implied. Buffer now reports sent; ledger key daily_2026-10-30_news confirms the exact image SHA and caption. Retired from ready queue to prevent duplicate review/reservation. X public caption/image remains unverified; do not label as X published or resend.",
+      "publication": {
+        "buffer_id": "6ae353fa835dd2febef21af5",
+        "buffer_status": "sent",
+        "due_at_jst": "2026-10-30T18:00:00+09:00",
+        "status_checked_at": "2026-10-31T02:47:40.984939+09:00",
+        "x_display_verified": false,
+        "verification_method": "Buffer read-only status and posted.json reservation ledger; X public caption/image not independently verified"
+      }
     }
   ]
 }
