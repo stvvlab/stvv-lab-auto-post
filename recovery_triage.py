@@ -45,7 +45,8 @@ def forward_coverage(manifest, history, now=None):
             or not isinstance(history.get("used_posts"), list)
             or not isinstance(history.get("pending_posts"), dict)
             or not isinstance(history.get("reserved_posts"), dict)
-            or not isinstance(history.get("publication_log"), list)):
+            or not isinstance(history.get("publication_log"), list)
+            or any(not isinstance(key, str) for key in history["used_posts"])):
         return {"status": "ledger_unavailable", "mode": "read_only_local_ledger",
                 "checked_at_jst": now.isoformat(), "slots": [],
                 "remote_buffer_checked": False, "x_display_checked": False}
@@ -68,7 +69,8 @@ def forward_coverage(manifest, history, now=None):
                 isinstance(card, dict)
                 and card.get("status") == "ready"
                 and card.get("reviewed") is True
-                and slot in card.get("slots", [])
+                and isinstance(card.get("slots"), list)
+                and slot in card["slots"]
                 and (not card.get("publish_due_jst")
                      or card.get("publish_due_jst") == due.isoformat())
                 and (card.get("media_type") != "text_only"
