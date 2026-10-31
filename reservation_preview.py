@@ -98,12 +98,16 @@ def plan(history, now):
                 report['blocked'].append({'key': key, 'source_url': source,
                                           'reason': reason or 'ambiguous_reviewed_card'})
                 continue
+            media_identity = ('text_only:' + card['source_body_sha256']
+                              if card.get('media_type') == 'text_only'
+                              else str(card.get('sha256')))
             identity = hashlib.sha256((key + '\n' + source + '\n' + message + '\n'
-                                       + str(card.get('sha256'))).encode()).hexdigest()
+                                       + media_identity).encode()).hexdigest()
             report['proposals'].append({
                 'key': key, 'preview_key': identity, 'slot': slot,
                 'source_url': source, 'text': message,
                 'asset_path': card.get('asset_path'), 'sha256': card.get('sha256'),
+                'media_type': 'text_only' if card.get('media_type') == 'text_only' else 'image',
                 'due_jst': due.isoformat(),
                 'due_utc': due.astimezone(timezone.utc).isoformat().replace('+00:00', 'Z'),
                 'buffer_mode': 'customScheduled',

@@ -12,6 +12,15 @@ ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / 'editorial/imagegen_cards.json'
 
 
+def reviewed_text_only(card):
+    """Explicitly approved, source-bound text; never an image-failure bypass."""
+    return (card.get('media_type') == 'text_only'
+            and card.get('text_only_approved') is True
+            and isinstance(card.get('source_body_sha256'), str)
+            and bool(re.fullmatch(r'[a-f0-9]{64}', card['source_body_sha256']))
+            and not any(card.get(k) for k in ('asset_path', 'sha256', 'dimensions')))
+
+
 def exact_card(slot, message, source):
     from stvv_post import HASHTAGS
     if message.endswith(HASHTAGS):
@@ -23,7 +32,8 @@ def exact_card(slot, message, source):
         return None
     cards = [c for c in data.get('cards', []) if c.get('source_url') == source
              and c.get('text') == message and slot in c.get('slots', [])
-             and c.get('status') == 'ready' and c.get('reviewed') is True]
+             and c.get('status') == 'ready' and c.get('reviewed') is True
+             and (c.get('media_type') != 'text_only' or reviewed_text_only(c))]
     return cards[0] if len(cards) == 1 else None
 
 
@@ -101,6 +111,8 @@ def prepared_candidates(slot, now):
     for card in data['cards']:
         if (card.get('reviewed') is not True or card.get('status') != 'ready'
                 or slot not in card.get('slots', [])):
+            continue
+        if card.get('media_type') == 'text_only' and not reviewed_text_only(card):
             continue
         source = card.get('source_url', '')
         parsed = urlparse(source)

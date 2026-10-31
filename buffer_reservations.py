@@ -110,8 +110,10 @@ class BufferReservations:
         return post
 
     def schedule(self, text, image_url, due_utc):
-        if publisher.x_length(text) > 270 or not image_url:
-            raise ValueError('A valid exact caption and reviewed image are required')
+        if publisher.x_length(text) > 270 or not text.strip():
+            raise ValueError('A valid exact caption is required')
+        if image_url is not None and (not isinstance(image_url, str) or not image_url.startswith('https://')):
+            raise ValueError('Image URL must be HTTPS when present')
         # Buffer may return a null asset.id. Request the immutable image source,
         # MIME type and dimensions in the mutation echo, just as get_post does.
         # Otherwise a successful createPost becomes an unknown pending send.
@@ -120,9 +122,11 @@ class BufferReservations:
                     ' ... on PostActionSuccess { post { ' + POST_FIELDS + ' } }'
                     ' ... on MutationError { message }'
                     ' } }')
-        data = self.query(mutation, {'input': {'text': text, 'channelId': publisher.CHANNEL,
-            'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': due_utc,
-            'assets': [{'image': {'url': image_url}}]}})
+        payload = {'text': text, 'channelId': publisher.CHANNEL,
+                   'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': due_utc}
+        if image_url is not None:
+            payload['assets'] = [{'image': {'url': image_url}}]
+        data = self.query(mutation, {'input': payload})
         post = (data.get('createPost') or {}).get('post')
         if not isinstance(post, dict) or not post.get('id'):
             if (data.get('createPost') or {}).get('message'):

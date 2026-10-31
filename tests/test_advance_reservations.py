@@ -81,6 +81,60 @@ class AdvanceReservationTests(unittest.TestCase):
         self.client.schedule.assert_called_once()
         self.assertEqual(len(self.saved), 2)
 
+    def configure_reviewed_text_only(self):
+        self.card.update(media_type='text_only', text_only_approved=True,
+                         source_body_sha256=hashlib.sha256(
+                             '公式発表の確認済み本文。'.encode()).hexdigest())
+        for key in ('asset_path', 'sha256', 'dimensions'):
+            self.card.pop(key)
+        self.write_card()
+        self.client.schedule.side_effect = lambda text, image, due: {
+            'id': 'buffer-text-fixture', 'text': text, 'channelId': publisher.CHANNEL,
+            'dueAt': due, 'status': 'scheduled', 'assets': []}
+
+    def test_reviewed_text_only_reserves_once_without_assets_and_reconciles(self):
+        self.configure_reviewed_text_only()
+        result = self.run_one()
+        self.assertEqual(result['status'], 'reserved_in_buffer')
+        record = self.history['reserved_posts'][KEY]
+        self.assertEqual(record['media_type'], 'text_only')
+        self.assertIsNone(record['image_url'])
+        self.assertEqual(record['official_body_sha256'], self.card['source_body_sha256'])
+        self.assertEqual(len(self.saved), 2)
+        self.assertIn(KEY, self.saved[0]['pending_posts'])
+        self.client.schedule.assert_called_once_with(
+            self.card['text'] + publisher.HASHTAGS, None, DUE)
+        self.client.get_post.return_value = {
+            'id': record['buffer_id'], 'text': record['text'],
+            'channelId': publisher.CHANNEL, 'dueAt': DUE,
+            'status': 'scheduled', 'assets': []}
+        self.assertEqual(self.run_one()['status'], 'skipped_no_verified_content')
+        self.client.schedule.assert_called_once()
+
+    def test_text_only_requires_explicit_approval_and_unchanged_official_body(self):
+        self.configure_reviewed_text_only()
+        self.card['text_only_approved'] = False
+        self.write_card()
+        self.assertEqual(self.run_one()['status'], 'skipped_no_verified_content')
+        self.client.schedule.assert_not_called()
+        self.card['text_only_approved'] = True
+        self.card['source_body_sha256'] = 'f' * 64
+        self.write_card()
+        with self.assertRaisesRegex(RuntimeError, 'official source changed'):
+            self.run_one()
+        self.client.schedule.assert_not_called()
+
+    def test_text_only_rejects_unexpected_media_in_buffer_echo(self):
+        self.configure_reviewed_text_only()
+        self.client.schedule.side_effect = lambda text, image, due: {
+            'id': 'buffer-text-fixture', 'text': text, 'channelId': publisher.CHANNEL,
+            'dueAt': due, 'status': 'scheduled',
+            'assets': [{'id': 'unexpected-image'}]}
+        with self.assertRaisesRegex(RuntimeError, 'identity changed'):
+            self.run_one()
+        self.assertIn(KEY, self.durable['pending_posts'])
+        self.client.schedule.assert_called_once()
+
     def test_buffer_draft_does_not_attribute_cancellation_to_user_or_repost(self):
         record = self.accepted()
         self.client.schedule.reset_mock()
@@ -358,6 +412,17 @@ class BufferTransportTests(unittest.TestCase):
         self.assertEqual(args['dueAt'], DUE)
         self.assertNotIn('replyTo', args)
         self.assertEqual(len(args['assets']), 1)
+
+    def test_text_only_buffer_request_omits_assets_entirely(self):
+        session = Mock()
+        session.post.return_value.json.return_value = {
+            'data': {'createPost': {'post': {'id': 'text-fixture', 'assets': []}}}}
+        with patch.dict(os.environ, {'BUFFER_API_KEY': 'offline-fixture'}):
+            BufferReservations(session).schedule('確認済み', None, DUE)
+        session.post.assert_called_once()
+        payload = session.post.call_args.kwargs['json']['variables']['input']
+        self.assertNotIn('assets', payload)
+        self.assertEqual(payload['mode'], 'customScheduled')
 
     def test_schedule_mutation_requests_nullable_asset_identity_fields(self):
         # The real provider may return asset.id=None. A mutation asking only
