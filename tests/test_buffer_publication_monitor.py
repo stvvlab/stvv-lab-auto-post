@@ -119,6 +119,33 @@ class BufferPublicationMonitorTests(unittest.TestCase):
         self.assertEqual(client.get_post("some-post")["id"], "some-post")
         self.assertIn("externalLink", client.query.call_args.args[0])
 
+    def test_approved_text_only_reservation_is_monitored(self):
+        from unittest.mock import Mock
+        from stvv_post import CHANNEL
+        client = Mock()
+        client.get_post.return_value = {
+            "id": "text-post", "channelId": CHANNEL,
+            "text": "approved text", "dueAt": self.due,
+            "status": "scheduled", "assets": [],
+        }
+        history = {"reserved_posts": {"text-slot": {
+            "buffer_id": "text-post", "text": "approved text",
+            "due_at": self.due, "media_type": "text_only",
+            "official_body_sha256": "a" * 64,
+        }}}
+        rows = collect(history, client, datetime.fromisoformat("2026-10-30T08:50:00+00:00"))
+        self.assertEqual(rows[0]["delivery_state"], "waiting_for_due")
+        self.assertFalse(rows[0]["x_display_verified"])
+
+    def test_image_reservation_missing_image_is_still_rejected(self):
+        from unittest.mock import Mock
+        history = {"reserved_posts": {"image-slot": {
+            "buffer_id": "image-post", "text": "approved image",
+            "due_at": self.due, "media_type": "image",
+        }}}
+        with self.assertRaisesRegex(ValueError, "Incomplete image reservation"):
+            collect(history, Mock(), self.now)
+
     def test_unauthorized_identity_never_approved(self):
         class Client:
             def get_post(self, _):
