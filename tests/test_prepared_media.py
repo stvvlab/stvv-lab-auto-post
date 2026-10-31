@@ -68,6 +68,18 @@ class PreparedMediaTests(unittest.TestCase):
         self.assertEqual(self.deliver(), (True, None))
         self.session.get.assert_not_called()
 
+    def test_buffer_sent_but_x_unverified_card_is_not_requeued(self):
+        """A sent Buffer reservation is not an eligible new post, even before X verification."""
+        self.card.update(
+            status='buffer_sent_x_unverified',
+            publication={'buffer_id': 'known-buffer-post', 'buffer_status': 'sent',
+                         'x_display_verified': False})
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', datetime(2026, 10, 31)), [])
+        self.assertIsNone(media.exact_card('news', self.card['text'], self.card['source_url']))
+        self.assertEqual(self.deliver(), (True, None))
+        self.session.get.assert_not_called()
+
     def test_ambiguous_entries_are_not_delivered(self):
         self.manifest.write_text(json.dumps(dict(enabled=True, cards=[self.card, self.card])))
         self.assertEqual(self.deliver(), (True, None))
