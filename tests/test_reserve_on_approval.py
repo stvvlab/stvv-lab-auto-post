@@ -40,6 +40,7 @@ class ApprovedCardTriggerTests(unittest.TestCase):
                      "updates": [], "new_reservations": []
                  }) as run:
                 report = trigger.main()
+            self.assertEqual(report["mode"], "existing_3_slot_advance_reservations")
             self.assertEqual(report["status"], "skipped_no_verified_content")
             self.assertEqual(report["new_reservations"], [])
             self.assertEqual(report["publications_performed"], 0)
@@ -59,6 +60,7 @@ class ApprovedCardTriggerTests(unittest.TestCase):
                      "new_reservations": [{"key": "daily_test", "buffer_status": "scheduled"}]
                  }):
                 report = trigger.main()
+            self.assertEqual(report["mode"], "existing_3_slot_advance_reservations")
             self.assertEqual(len(report["new_reservations"]), 1)
             self.assertEqual(report["publications_performed"], 0)
             self.assertFalse(report["x_display_verified"])

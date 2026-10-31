@@ -1,7 +1,7 @@
 """Reserve a reviewed card promptly after its manifest reaches main.
 
 This does not publish immediately. It reuses the existing one-attempt,
-durable-pending Buffer reservation implementation and the existing seven slots.
+durable-pending Buffer reservation implementation and the currently active slots.
 Only a manifest push on main is wired to this entrypoint in Actions.
 """
 import json
@@ -12,6 +12,7 @@ from pathlib import Path
 import advance_reservations
 import stvv_post as publisher
 from buffer_reservations import BufferReservations
+from reservation_preview import ACTIVE_RESERVATION_SLOTS
 
 ROOT = Path(__file__).resolve().parent
 
@@ -31,7 +32,7 @@ def main():
     report = {
         "checked_at": now.isoformat(),
         "trigger": "approved_manifest_main_push",
-        "mode": "existing_seven_slot_advance_reservations",
+        "mode": f"existing_{len(ACTIVE_RESERVATION_SLOTS)}_slot_advance_reservations",
         "x_display_verified": False,
         "publications_performed": 0,
         "new_reservations": [],
