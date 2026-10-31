@@ -70,9 +70,23 @@ CRITICAL = {"missing_text", "over_280_characters", "over_safe_x_length",
             "missing_source_reference", "malformed_source_url", "not_an_object"}
 
 
+def classify(post, *, max_length=280):
+    """Three publication decisions: pass, pass_with_warning, or block.
+
+    This audit does not replace official-source, duplicate, image or Buffer
+    identity checks. Those remain independent hard safety gates.
+    """
+    findings = audit(post, max_length=max_length)
+    blocking = [reason for reason in findings if reason in CRITICAL]
+    warnings = [reason for reason in findings if reason not in CRITICAL]
+    status = ("block" if blocking else
+              "pass_with_warning" if warnings else "pass")
+    return {"status": status, "blocking": blocking, "warnings": warnings}
+
+
 def can_publish(post):
     """Fail closed on critical issues; stylistic warnings remain nonblocking."""
-    return not any(problem in CRITICAL for problem in audit(post))
+    return classify(post)["status"] != "block"
 
 
 def main():
@@ -92,12 +106,16 @@ def main():
     flagged = 0
     critical_count = 0
     for idx, post in enumerate(posts):
-        problems = audit(post) if isinstance(post, dict) else ["not_an_object"]
+        decision = classify(post)
+        problems = decision["blocking"] + decision["warnings"]
         if problems:
             flagged += 1
-            if any(p in CRITICAL for p in problems):
+            if decision["status"] == "block":
                 critical_count += 1
-            print(f"POST {idx}: {', '.join(problems)}")
+        label = {"pass": "通過", "pass_with_warning": "警告のみで通過",
+                 "block": "停止"}[decision["status"]]
+        print(f"POST {idx}: {label}" +
+              (f" / {', '.join(problems)}" if problems else ""))
     print(f"Audited {len(posts)} posts; flagged {flagged}; "
           f"publish-blocking {critical_count}.")
     if (args.enforce_critical or args.strict) and critical_count:

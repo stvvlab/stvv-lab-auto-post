@@ -11,6 +11,40 @@ from quality_gate import audit, can_publish
 
 
 class QualityGateTests(unittest.TestCase):
+    def test_three_level_decisions(self):
+        cases = [
+            ({"type": "news", "text": "STVV公式の次戦案内",
+              "source_url": "https://stvv.jp/news/game/20261030_1/"},
+             "pass", [], []),
+            ({"type": "vote", "text": "このプレーが重要"},
+             "pass_with_warning", [], ["generic_language_review"]),
+            ({"type": "news", "text": "短い公式告知"},
+             "block", ["missing_source_reference"], []),
+            ({"type": "news", "text": "公式発表が重要"},
+             "block", ["missing_source_reference"], ["generic_language_review"]),
+        ]
+        for post, status, blocking, warnings in cases:
+            with self.subTest(status=status, post=post):
+                decision = quality_gate.classify(post)
+                self.assertEqual(status, decision["status"])
+                self.assertEqual(blocking, decision["blocking"])
+                self.assertEqual(warnings, decision["warnings"])
+                self.assertEqual(status != "block", can_publish(post))
+
+    def test_three_level_decision_cli_prints_clean_and_warning(self):
+        posts = [{"type": "vote", "text": "短い告知"},
+                 {"type": "vote", "text": "このプレーが重要"},
+                 {"type": "news", "text": "出典なし"}]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "posts.json"
+            path.write_text(json.dumps(posts, ensure_ascii=False), encoding="utf-8")
+            output = io.StringIO()
+            with patch("sys.argv", ["quality_gate.py", "--posts", str(path)]), redirect_stdout(output):
+                quality_gate.main()
+            self.assertIn("POST 0: 通過", output.getvalue())
+            self.assertIn("POST 1: 警告のみで通過", output.getvalue())
+            self.assertIn("POST 2: 停止", output.getvalue())
+
     def test_non_object_fails_closed(self):
         for value in [None, [], "text"]:
             self.assertFalse(can_publish(value))
