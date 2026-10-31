@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-31T18:55:27.857132+09:00",
+  "checked_at": "2026-11-01T00:51:20.948006+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
@@ -52,7 +52,7 @@
       "reason": "Source already published, pending or registered"
     }
   ],
-  "ready_cards": 0,
+  "ready_cards": 1,
   "pending_posts": 0,
   "publication_performed": false,
   "image_generation_performed": false,
