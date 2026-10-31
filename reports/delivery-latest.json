@@ -1,31 +1,55 @@
 {
-  "started_at": "2026-10-31T18:51:30.791713+09:00",
-  "finished_at": "2026-10-31T18:51:30.791745+09:00",
-  "slot": "data",
+  "started_at": "2026-10-31T23:53:24.742962+09:00",
+  "slot": "news",
   "date_jst": "2026-10-31",
-  "scheduled_at": "2026-10-31T12:30:00+09:00",
-  "start_delay_seconds": 22890,
+  "scheduled_at": "2026-10-31T18:00:00+09:00",
+  "start_delay_seconds": 21204,
   "schedule_delay_diagnostic": "severe_runner_start_delay",
-  "run_id": "41190370315",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41190370315",
-  "commit": "aa5aff2ccab7d0ff4f0c42e34a450f947b7214f1",
+  "run_id": "41212206036",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41212206036",
+  "commit": "5a883099bc7b5f1870e0cc62c617728cba69778a",
   "manual_dispatch_performed": false,
-  "status": "blocked_schedule_more_than_six_hours_late",
-  "delivery_state": "no_buffer_mutation_due_to_schedule_guard",
-  "delivery_mode": "advance_reservations",
+  "status": "skipped_no_verified_content",
   "x_display_verified": false,
-  "new_publications": [],
-  "new_reservations": [],
-  "pending_state": "not_checked",
-  "error_type": "RuntimeError",
-  "reservation_coverage": {
-    "reserved_count": 2,
-    "pending_count": 0,
-    "scheduled_keys": [],
-    "note": "Local ledger snapshot; separate overdue probe may query Buffer read-only, never X"
+  "delivery_mode": "advance_reservations",
+  "queue_before": {
+    "ready_cards": 1,
+    "candidates": [
+      {
+        "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+        "asset_path": null,
+        "slots": [
+          "news"
+        ],
+        "selection_block": "identical_caption_already_sent_or_pending"
+      }
+    ],
+    "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
   },
-  "overdue_reservation_probe": {
-    "status": "no_overdue_reservations",
-    "results": []
-  }
+  "finished_at": "2026-10-31T23:53:26.202548+09:00",
+  "new_publications": [],
+  "pending_key": null,
+  "delivery_state": "buffer_scheduled_not_published",
+  "new_reservations": [],
+  "reservation_states": [
+    {
+      "key": "daily_2026-10-29_news",
+      "buffer_status": "cancelled_by_user",
+      "due_at": "2026-10-29T09:00:00Z",
+      "x_display_verified": false
+    },
+    {
+      "key": "daily_2026-10-30_news",
+      "buffer_status": "sent",
+      "due_at": "2026-10-30T09:00:00Z",
+      "x_display_verified": false
+    },
+    {
+      "key": "daily_2026-11-01_news",
+      "buffer_status": "scheduled",
+      "due_at": "2026-11-01T09:00:00Z",
+      "x_display_verified": false
+    }
+  ],
+  "pending_reservation_keys": []
 }
