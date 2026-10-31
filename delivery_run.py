@@ -107,13 +107,18 @@ def delivery_evidence(before, after, day, slot, *, advance=False):
 
 
 def schedule_delay_diagnostic(delay_seconds):
-    """Explain lateness without pretending to know GitHub's queue cause."""
+    """Classify nominal cron-to-delivery lag without attributing its cause.
+
+    This process sees the nominal slot and its own start time, not GitHub's
+    workflow-run creation or job-start timestamps. Those must be correlated
+    separately before attributing any delay to scheduling or runner queues.
+    """
     if delay_seconds < 0:
         return 'clock_or_schedule_mismatch'
     if delay_seconds >= 3600:
-        return 'severe_runner_start_delay'
+        return 'severe_schedule_to_delivery_delay_unattributed'
     if delay_seconds >= 900:
-        return 'runner_start_delay'
+        return 'schedule_to_delivery_delay_unattributed'
     return 'within_15_minutes'
 
 
