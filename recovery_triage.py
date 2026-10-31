@@ -3,7 +3,9 @@ Never publishes, alters history, or infers an X post from an Action's success.
 """
 import argparse
 import json
+from datetime import datetime, timedelta, time
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 
 def outstanding_x_verifications(history):
@@ -24,6 +26,84 @@ def outstanding_x_verifications(history):
             records[key] = record
     return sorted(key for key, record in records.items()
                   if record.get("x_display_verified") is not True)
+
+
+
+JST = ZoneInfo("Asia/Tokyo")
+# Mirrors the three active public slots in .github/workflows/main.yml.
+# This is an observation tool, not a scheduler or an approval mechanism.
+COVERAGE_SLOTS = (("player", 8), ("news", 18), ("recap", 23))
+
+
+def forward_coverage(manifest, history, now=None):
+    """Inspect the next 36h from local files only. Never contact or mutate Buffer."""
+    now = now or datetime.now(JST)
+    if now.tzinfo is None or now.utcoffset() is None:
+        raise ValueError("Timezone-aware now required")
+    now = now.astimezone(JST)
+    if (not isinstance(history, dict)
+            or not isinstance(history.get("used_posts"), list)
+            or not isinstance(history.get("pending_posts"), dict)
+            or not isinstance(history.get("reserved_posts"), dict)
+            or not isinstance(history.get("publication_log"), list)
+            or any(not isinstance(key, str) for key in history["used_posts"])):
+        return {"status": "ledger_unavailable", "mode": "read_only_local_ledger",
+                "checked_at_jst": now.isoformat(), "slots": [],
+                "remote_buffer_checked": False, "x_display_checked": False}
+    cards = manifest.get("cards", []) if isinstance(manifest, dict) else []
+    if not isinstance(cards, list):
+        cards = []
+    occupied = set(history["used_posts"])
+    occupied.update(p.get("key") for p in history["publication_log"]
+                    if isinstance(p, dict) and isinstance(p.get("key"), str))
+    slots = []
+    for offset in range(3):
+        day = (now + timedelta(days=offset)).date()
+        for slot, hour in COVERAGE_SLOTS:
+            due = datetime.combine(day, time(hour), tzinfo=JST)
+            if not now <= due <= now + timedelta(hours=36):
+                continue
+            key = f"daily_{day.isoformat()}_{slot}"
+            record = history["reserved_posts"].get(key)
+            candidate_count = sum(
+                isinstance(card, dict)
+                and card.get("status") == "ready"
+                and card.get("reviewed") is True
+                and isinstance(card.get("slots"), list)
+                and slot in card["slots"]
+                and (not card.get("publish_due_jst")
+                     or card.get("publish_due_jst") == due.isoformat())
+                and (card.get("media_type") != "text_only"
+                     or card.get("text_only_approved") is True)
+                for card in cards)
+            if key in history["pending_posts"]:
+                state = "pending_outcome_unknown_do_not_retry"
+            elif isinstance(record, dict):
+                remote_state = record.get("buffer_status", "unknown")
+                if remote_state == "scheduled":
+                    state = "scheduled_in_ledger_remote_unverified"
+                elif remote_state == "sent":
+                    state = ("x_verified_in_ledger" if record.get("x_display_verified") is True
+                             else "buffer_sent_in_ledger_x_unverified")
+                else:
+                    state = "reservation_not_active_or_unknown_do_not_retry"
+            elif key in occupied:
+                state = "already_processed_in_ledger_do_not_retry"
+            elif candidate_count:
+                state = "reviewed_candidate_requires_live_checks"
+            else:
+                state = "no_reviewed_candidate"
+            slots.append({"key": key, "due_jst": due.isoformat(),
+                          "state": state, "potential_reviewed_cards": candidate_count,
+                          "buffer_status": record.get("buffer_status") if isinstance(record, dict)
+                                           else None})
+    counts = {state: sum(s["state"] == state for s in slots)
+              for state in sorted(set(s["state"] for s in slots))}
+    return {"status": "local_coverage_inspected", "mode": "read_only_local_ledger",
+            "checked_at_jst": now.isoformat(), "horizon_hours": 36,
+            "remote_buffer_checked": False, "x_display_checked": False,
+            "candidate_counts_are_not_publication_approval": True,
+            "summary": counts, "slots": sorted(slots, key=lambda s: s["due_jst"])}
 
 
 def diagnose(manifest, preparation, delivery, history=None):
@@ -106,6 +186,7 @@ def diagnose(manifest, preparation, delivery, history=None):
         "next_fix": next_fix,
         "automatic_code_generation_enabled": False,
         "publishing_attempted": False,
+        "forward_coverage": forward_coverage(manifest, history),
     }
 
 
