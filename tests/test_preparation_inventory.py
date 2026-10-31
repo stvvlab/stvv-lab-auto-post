@@ -19,7 +19,7 @@ class InventoryTests(unittest.TestCase):
         session.get.side_effect = [requests.Timeout('timeout'), Mock(text=LINK), Mock(text=LINK), Mock(text=LINK), Mock(text=LINK)]
         found, checks = posting.scan_articles(NOW, session)
         self.assertEqual(len(found), 1)
-        self.assertEqual([c['status'] for c in checks], ['error', 'ok', 'ok', 'ok'])
+        self.assertEqual([c['status'] for c in checks], ['error', 'ok', 'ok', 'ok', 'ok'])
         self.assertIn('/team/2026/', session.get.call_args_list[2].args[0])
         self.assertIn('/uefa-news/2026/', session.get.call_args_list[-2].args[0])
         self.assertIn('/event/2026/', session.get.call_args_list[-1].args[0])
