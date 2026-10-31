@@ -1,40 +1,31 @@
 {
-  "started_at": "2026-10-31T16:17:18.551209+09:00",
-  "slot": "compare",
+  "started_at": "2026-10-31T18:51:30.791713+09:00",
+  "finished_at": "2026-10-31T18:51:30.791745+09:00",
+  "slot": "data",
   "date_jst": "2026-10-31",
-  "scheduled_at": "2026-10-31T10:30:00+09:00",
-  "start_delay_seconds": 20838,
+  "scheduled_at": "2026-10-31T12:30:00+09:00",
+  "start_delay_seconds": 22890,
   "schedule_delay_diagnostic": "severe_runner_start_delay",
-  "run_id": "41179990732",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41179990732",
-  "commit": "fee0dc7079187dfb4e0e8f1508e70389f0d73da0",
+  "run_id": "41190370315",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41190370315",
+  "commit": "aa5aff2ccab7d0ff4f0c42e34a450f947b7214f1",
   "manual_dispatch_performed": false,
-  "status": "skipped_no_verified_content",
-  "x_display_verified": false,
+  "status": "blocked_schedule_more_than_six_hours_late",
+  "delivery_state": "no_buffer_mutation_due_to_schedule_guard",
   "delivery_mode": "advance_reservations",
-  "queue_before": {
-    "ready_cards": 0,
-    "candidates": [],
-    "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
-  },
-  "finished_at": "2026-10-31T16:17:18.567219+09:00",
+  "x_display_verified": false,
   "new_publications": [],
-  "pending_key": null,
-  "delivery_state": "historical_sent_and_cancelled_no_new_acceptance",
   "new_reservations": [],
-  "reservation_states": [
-    {
-      "key": "daily_2026-10-29_news",
-      "buffer_status": "cancelled_by_user",
-      "due_at": "2026-10-29T09:00:00Z",
-      "x_display_verified": false
-    },
-    {
-      "key": "daily_2026-10-30_news",
-      "buffer_status": "sent",
-      "due_at": "2026-10-30T09:00:00Z",
-      "x_display_verified": false
-    }
-  ],
-  "pending_reservation_keys": []
+  "pending_state": "not_checked",
+  "error_type": "RuntimeError",
+  "reservation_coverage": {
+    "reserved_count": 2,
+    "pending_count": 0,
+    "scheduled_keys": [],
+    "note": "Local ledger snapshot; separate overdue probe may query Buffer read-only, never X"
+  },
+  "overdue_reservation_probe": {
+    "status": "no_overdue_reservations",
+    "results": []
+  }
 }
