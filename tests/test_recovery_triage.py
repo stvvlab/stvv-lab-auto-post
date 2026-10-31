@@ -1,5 +1,7 @@
 import unittest
-from recovery_triage import diagnose
+import copy
+from datetime import datetime
+from recovery_triage import diagnose, forward_coverage
 
 
 class RecoveryTriageTests(unittest.TestCase):
@@ -133,3 +135,62 @@ class RecoveryTriageTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ForwardCoverageTests(unittest.TestCase):
+    def setUp(self):
+        self.now = datetime.fromisoformat("2026-11-01T04:00:00+09:00")
+        self.history = {"used_posts": [], "pending_posts": {}, "reserved_posts": {},
+                        "publication_log": []}
+        self.manifest = {"cards": []}
+
+    def test_only_three_active_slots_and_36_hour_horizon(self):
+        report = forward_coverage(self.manifest, self.history, self.now)
+        self.assertEqual([s["key"] for s in report["slots"]], [
+            "daily_2026-11-01_player", "daily_2026-11-01_news",
+            "daily_2026-11-01_recap", "daily_2026-11-02_player"])
+        self.assertTrue(all(s["state"] == "no_reviewed_candidate"
+                            for s in report["slots"]))
+        self.assertFalse(report["remote_buffer_checked"])
+        self.assertFalse(report["x_display_checked"])
+
+    def test_existing_reservation_is_not_claimed_published(self):
+        self.history["reserved_posts"]["daily_2026-11-01_news"] = {
+            "buffer_id": "existing", "buffer_status": "scheduled",
+            "due_at": "2026-11-01T09:00:00Z"}
+        original = copy.deepcopy(self.history)
+        report = forward_coverage(self.manifest, self.history, self.now)
+        news = next(s for s in report["slots"] if s["key"].endswith("_news"))
+        self.assertEqual(news["state"], "scheduled_in_ledger_remote_unverified")
+        self.assertEqual(self.history, original)
+
+    def test_pending_overrides_reservation_and_never_retries(self):
+        key = "daily_2026-11-01_news"
+        self.history["pending_posts"][key] = {"send_state": "unknown"}
+        self.history["reserved_posts"][key] = {"buffer_status": "scheduled"}
+        report = forward_coverage(self.manifest, self.history, self.now)
+        self.assertEqual(next(s for s in report["slots"] if s["key"] == key)["state"],
+                         "pending_outcome_unknown_do_not_retry")
+
+    def test_ready_card_only_a_candidate_and_exact_due_time(self):
+        self.manifest["cards"] = [
+            {"status": "ready", "reviewed": True, "slots": ["news"],
+             "media_type": "text_only", "text_only_approved": True,
+             "publish_due_jst": "2026-11-01T18:00:00+09:00"},
+            {"status": "ready", "reviewed": True, "slots": ["news"],
+             "media_type": "text_only", "text_only_approved": False},
+            {"status": "published", "reviewed": True, "slots": ["news"]},
+            {"status": "ready", "reviewed": True, "slots": ["recap"],
+             "publish_due_jst": "2026-11-03T23:00:00+09:00"}]
+        report = forward_coverage(self.manifest, self.history, self.now)
+        news = next(s for s in report["slots"] if s["key"].endswith("_news"))
+        recap = next(s for s in report["slots"] if s["key"].endswith("_recap"))
+        self.assertEqual(news["state"], "reviewed_candidate_requires_live_checks")
+        self.assertEqual(news["potential_reviewed_cards"], 1)
+        self.assertEqual(recap["state"], "no_reviewed_candidate")
+        self.assertTrue(report["candidate_counts_are_not_publication_approval"])
+
+    def test_invalid_ledger_fails_closed(self):
+        report = forward_coverage(self.manifest, {"reserved_posts": {}}, self.now)
+        self.assertEqual(report["status"], "ledger_unavailable")
+        self.assertEqual(report["slots"], [])
