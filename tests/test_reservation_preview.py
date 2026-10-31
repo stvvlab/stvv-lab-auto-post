@@ -29,13 +29,12 @@ class ReservationPreviewTests(unittest.TestCase):
     def write_card(self):
         self.manifest.write_text(json.dumps({'enabled': True, 'cards': [self.card]}))
 
-    def test_same_seven_slots_and_utc_conversion(self):
+    def test_reduced_three_slots_and_utc_conversion(self):
         now = datetime.fromisoformat('2026-10-26T23:20:00+09:00')
         slots = future_slots(now)
-        self.assertEqual(len(slots), 9)
+        self.assertEqual(len(slots), 4)
         self.assertEqual([s for _, s in slots],
-                         ['player', 'compare', 'data', 'analysis', 'news', 'vote', 'recap',
-                          'player', 'compare'])
+                         ['player', 'news', 'recap', 'player'])
         result = plan(self.history, now)
         self.assertEqual(result['proposals'][0]['due_utc'], '2026-10-26T23:00:00Z')
         self.assertEqual(result['proposals'][0]['due_jst'], '2026-10-27T08:00:00+09:00')
@@ -52,7 +51,7 @@ class ReservationPreviewTests(unittest.TestCase):
 
     def test_minimum_lead_and_invalid_time(self):
         slots = future_slots(datetime.fromisoformat('2026-10-27T07:31:00+09:00'))
-        self.assertEqual(slots[0][1], 'compare')
+        self.assertEqual(slots[0][1], 'news')
         with self.assertRaises(ValueError):
             future_slots(datetime(2026, 10, 27))
         with self.assertRaises(ValueError):
