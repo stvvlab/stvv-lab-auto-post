@@ -133,8 +133,6 @@ class RecoveryTriageTests(unittest.TestCase):
         self.assertEqual(data["new_x_publications_verified"], 1)
 
 
-if __name__ == "__main__":
-    unittest.main()
 
 
 class ForwardCoverageTests(unittest.TestCase):
@@ -194,3 +192,5 @@ class ForwardCoverageTests(unittest.TestCase):
         report = forward_coverage(self.manifest, {"reserved_posts": {}}, self.now)
         self.assertEqual(report["status"], "ledger_unavailable")
         self.assertEqual(report["slots"], [])
+if __name__ == "__main__":
+    unittest.main()
