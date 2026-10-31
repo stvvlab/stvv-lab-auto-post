@@ -15,7 +15,7 @@ from buffer_reservations import BufferReservations, ReservationRejected
 from content_guard import canonical_source, plain
 from editorial_novelty import fact_metadata
 from preparation_inventory import read_body
-from prepared_media import exact_card, prepared_media, prepared_duplicate_reason, reviewed_official_body
+from prepared_media import exact_card, prepared_media, prepared_duplicate_reason, reviewed_official_body, reviewed_text_only
 from urllib.parse import urlparse
 from reservation_preview import plan, future_slots
 
@@ -33,9 +33,14 @@ def verify_echo(post, record):
             or not post.get('id') or post.get('text') != record['text']
             or post.get('channelId') != publisher.CHANNEL
             or stamp(post.get('dueAt', '')) != stamp(record['due_at'])
-            or not isinstance(post.get('assets'), list) or len(post['assets']) != 1
-            or not isinstance(post['assets'][0], dict)):
+            or not isinstance(post.get('assets'), list)
+            or (len(post['assets']) != 0 if record.get('media_type') == 'text_only'
+                else len(post['assets']) != 1 or not isinstance(post['assets'][0], dict))):
         raise RuntimeError('Buffer reservation identity changed; do not resend')
+    if record.get('media_type') == 'text_only':
+        if post['assets'] != [] or record.get('image_url'):
+            raise RuntimeError('Text-only reservation unexpectedly has media; do not resend')
+        return
     asset = post['assets'][0]
     aid = asset.get('id')
     id_ok = isinstance(aid, str) and bool(aid)
@@ -120,14 +125,21 @@ def run(history, now, client, save, session):
         raise ValueError('Reservation ledger is malformed')
     for key, record in reservations.items():
         if (not isinstance(record, dict) or not all(record.get(k) for k in
-                ('buffer_id', 'due_at', 'text', 'source', 'slot', 'image_url', 'buffer_status'))
+                ('buffer_id', 'due_at', 'text', 'source', 'slot', 'buffer_status'))
                 or key not in history['used_posts']
-                or not ((isinstance(record.get('buffer_asset_ids'), list)
-                          and len(record['buffer_asset_ids']) == 1
-                          and isinstance(record['buffer_asset_ids'][0], str)
-                          and bool(record['buffer_asset_ids'][0]))
-                         or (isinstance(record.get('buffer_asset_sources'), list)
-                             and record['buffer_asset_sources'] == [record.get('image_url')]))):
+                or (record.get('media_type') == 'text_only'
+                    and (record.get('image_url') is not None
+                         or not isinstance(record.get('official_body_sha256'), str)
+                         or not re.fullmatch(r'[a-f0-9]{64}', record['official_body_sha256'])
+                         or record.get('buffer_asset_ids') or record.get('buffer_asset_sources')))
+                or (record.get('media_type') != 'text_only'
+                    and (not record.get('image_url')
+                         or not ((isinstance(record.get('buffer_asset_ids'), list)
+                                  and len(record['buffer_asset_ids']) == 1
+                                  and isinstance(record['buffer_asset_ids'][0], str)
+                                  and bool(record['buffer_asset_ids'][0]))
+                                 or (isinstance(record.get('buffer_asset_sources'), list)
+                                     and record['buffer_asset_sources'] == [record.get('image_url')]))))):
             raise ValueError('Reservation ledger is incomplete; do not resend')
     updates = reconcile(history, client, now, save)
     if history['pending_posts']:
@@ -160,9 +172,16 @@ def run(history, now, client, save, session):
         raise RuntimeError('Reviewed official fact changed')
     if prepared_duplicate_reason(history, message, source, slot, due):
         raise RuntimeError('Publication duplicate detected')
-    enabled, image = prepared_media(session, slot, card['text'], source)
-    if not enabled or not image:
-        raise RuntimeError('Reviewed immutable public image could not be verified')
+    text_only = card.get('media_type') == 'text_only'
+    if text_only:
+        if (not reviewed_text_only(card)
+                or hashlib.sha256(body.encode()).hexdigest() != card['source_body_sha256']):
+            raise RuntimeError('Reviewed text-only official source changed')
+        image = None
+    else:
+        enabled, image = prepared_media(session, slot, card['text'], source)
+        if not enabled or not image:
+            raise RuntimeError('Reviewed immutable public image could not be verified')
     if fact:
         proposal['editorial_fact'] = fact
     if 'editorial_purpose' in card:
@@ -177,8 +196,9 @@ def run(history, now, client, save, session):
         return {'status': 'skipped_reservation_lead_expired', 'updates': updates}
     key = proposal['key']
     record = {'slot': slot, 'source': source, 'text': message, 'image_url': image,
-              'asset_path': card['asset_path'], 'sha256': card['sha256'],
-              'dimensions': card['dimensions'], 'due_at': proposal['due_utc'],
+              'media_type': 'text_only' if text_only else 'image',
+              'asset_path': card.get('asset_path'), 'sha256': card.get('sha256'),
+              'dimensions': card.get('dimensions'), 'due_at': proposal['due_utc'],
               'official_body_sha256': hashlib.sha256(body.encode()).hexdigest(),
               'reservation_key': proposal['preview_key'], 'created_at': current.isoformat(),
               'delivery_mode': 'customScheduled', 'x_display_verified': False}
@@ -199,10 +219,13 @@ def run(history, now, client, save, session):
     verify_echo(post, record)
     if post.get('status') != 'scheduled':
         raise RuntimeError('Reservation was not confirmed scheduled; do not resend')
-    asset = post['assets'][0]
-    identity = ({'buffer_asset_ids': [asset['id']]}
-                if isinstance(asset.get('id'), str) and asset['id']
-                else {'buffer_asset_sources': [asset['source']]})
+    if text_only:
+        identity = {}
+    else:
+        asset = post['assets'][0]
+        identity = ({'buffer_asset_ids': [asset['id']]}
+                    if isinstance(asset.get('id'), str) and asset['id']
+                    else {'buffer_asset_sources': [asset['source']]})
     record.update(buffer_id=str(post['id']), buffer_status='scheduled',
                   **identity, submitted_at=datetime.now(publisher.JST).isoformat())
     reservations[key] = record
