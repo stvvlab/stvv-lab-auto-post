@@ -1,0 +1,27 @@
+name: Test Buffer publication monitor
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/buffer_publication_monitor.py'
+      - 'tests/test_buffer_publication_monitor.py'
+      - '.github/workflows/test-buffer-publication-monitor.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install requests beautifulsoup4 pillow
+      - name: Run Buffer monitor regression tests
+        run: python -m unittest tests.test_buffer_publication_monitor -v
