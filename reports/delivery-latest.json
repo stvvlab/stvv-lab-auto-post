@@ -1,13 +1,13 @@
 {
-  "started_at": "2026-10-31T23:53:24.742962+09:00",
-  "slot": "news",
+  "started_at": "2026-11-01T03:07:37.995814+09:00",
+  "slot": "recap",
   "date_jst": "2026-10-31",
-  "scheduled_at": "2026-10-31T18:00:00+09:00",
-  "start_delay_seconds": 21204,
+  "scheduled_at": "2026-10-31T23:00:00+09:00",
+  "start_delay_seconds": 14857,
   "schedule_delay_diagnostic": "severe_runner_start_delay",
-  "run_id": "41212206036",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41212206036",
-  "commit": "5a883099bc7b5f1870e0cc62c617728cba69778a",
+  "run_id": "41227841725",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41227841725",
+  "commit": "85e857c4040098e5d9140e2a614ee85f1fcfe60e",
   "manual_dispatch_performed": false,
   "status": "skipped_no_verified_content",
   "x_display_verified": false,
@@ -21,12 +21,12 @@
         "slots": [
           "news"
         ],
-        "selection_block": "identical_caption_already_sent_or_pending"
+        "selection_block": "different_slot"
       }
     ],
     "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
   },
-  "finished_at": "2026-10-31T23:53:26.202548+09:00",
+  "finished_at": "2026-11-01T03:07:39.651235+09:00",
   "new_publications": [],
   "pending_key": null,
   "delivery_state": "buffer_scheduled_not_published",
