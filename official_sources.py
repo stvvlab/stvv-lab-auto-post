@@ -29,7 +29,8 @@ def scan_articles(now, session):
     sources = [f'https://stvv.jp/news/{year}/',
                f'https://stvv.jp/news/game/{year}/',
                f'https://stvv.jp/news/team/{year}/',
-               f'https://stvv.jp/news/uefa-news/{year}/']
+               f'https://stvv.jp/news/uefa-news/{year}/',
+               f'https://stvv.jp/news/event/{year}/']
     found, checks = {}, []
     for url in sources:
         try:
@@ -65,7 +66,7 @@ def parse_articles(markup, now):
         path = parsed.path.rstrip("/") + "/"
 
         match = re.fullmatch(
-            r"/news/(game|team|uefa-news)/(20\d{6}[^/]*)/",
+            r"/news/(game|team|uefa-news|event)/(20\d{6}[^/]*)/",
             path,
             re.I,
         )
@@ -99,11 +100,20 @@ def parse_articles(markup, now):
             ).get_text(" ", strip=True),
         ).strip()
 
-        if (
-            len(title) < 8
-            or any(word in html.unescape(anchor.get_text(" ", strip=True)) for word in SPONSORS)
-            or not any(word in title for word in WORDS)
-        ):
+        # Fan watch parties are football community news, not a sales quota.
+        # Prize-draw details in an excerpt must not hide a real viewing event;
+        # merchandise/sponsorship headlines still remain excluded.
+        is_event = match.group(1).lower() == "event"
+        watch_party = is_event and "観戦会" in title
+        sales_headline = any(word in title for word in
+                             ("スポンサー", "協賛", "パートナー契約", "販売", "グッズ"))
+        promotional_excerpt = any(word in html.unescape(anchor.get_text(" ", strip=True))
+                                  for word in SPONSORS)
+        if (len(title) < 8
+                or (is_event and not watch_party)
+                or (watch_party and sales_headline)
+                or (not watch_party and (promotional_excerpt
+                                         or not any(word in title for word in WORDS)))):
             continue
 
         found["https://stvv.jp" + path] = (day, title)

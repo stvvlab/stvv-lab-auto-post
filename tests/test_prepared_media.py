@@ -111,6 +111,18 @@ class PreparedMediaTests(unittest.TestCase):
             self.assertIsNone(posting.content_card_media('news', '2026-10-24', '別の情報', self.card['source_url']))
             render.assert_not_called()
 
+    def test_reviewed_official_watch_party_candidate_uses_existing_image_gate(self):
+        source = 'https://stvv.jp/news/event/20261030_2/'
+        self.card.update(source_url=source, date_jst='2026-10-30',
+                         text='ゲンク戦観戦会の公式案内 ' + source)
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', datetime(2026, 10, 31)),
+                         [(self.card['text'], source)])
+        self.assertEqual(media.prepared_candidates('news', datetime(2026, 11, 8)), [])
+        self.card['reviewed'] = False
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', datetime(2026, 10, 31)), [])
+
     def test_belgian_source_needs_exact_date_digest_and_public_image(self):
         source = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
         body = 'STVV official article with verified event details'
