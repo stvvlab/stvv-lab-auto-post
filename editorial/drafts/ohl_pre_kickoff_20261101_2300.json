@@ -1,0 +1,18 @@
+{
+  "status": "awaiting_media_registration",
+  "approved_by_user": true,
+  "channel": "@stvvlabo",
+  "publish_due_jst": "2026-11-01T23:00:00+09:00",
+  "kickoff_jst": "2026-11-02T00:00:00+09:00",
+  "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "source_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+  "editorial_purpose": {
+    "kind": "fixture",
+    "phase": "reminder",
+    "event_id": "stvv-ohl-2026-11-02"
+  },
+  "text": "🔥 KICK OFFまであと1時間！｜STVV vs OH Leuven\n\nスタイエンに響く黄色と青の声援。\nホームで譲れない90分が始まる。💛💙\n\n🇯🇵 ルーベンには山田新、荻原拓也が所属。日本人対決の行方にも注目。\n\nこの熱狂を、勝ち点3へ。\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+  "image_local_reference": "wide_dramatic_stadium_scene_from_the_stands_a_vi.png",
+  "image_registration": "not_uploaded_to_github",
+  "review_note": "Draft only. Must verify opponent player claim against official current roster, register exact image bytes and hash, then review and add manifest card. This draft does not trigger reservation. Never silently post text-only."
+}
