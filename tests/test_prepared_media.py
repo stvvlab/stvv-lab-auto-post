@@ -149,6 +149,28 @@ class PreparedMediaTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.deliver()
 
+    def test_text_only_matchday_reminder_cannot_move_to_another_slot(self):
+        source = 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid'
+        due = datetime.fromisoformat('2026-11-01T18:00:00+09:00')
+        self.card.update(
+            source_url=source, date_jst='2026-10-27',
+            text='試合当日の確認済み告知 ' + source,
+            media_type='text_only', text_only_approved=True,
+            source_body_sha256='a' * 64,
+            publish_due_jst=due.isoformat())
+        for key in ('asset_path', 'sha256', 'dimensions'):
+            self.card.pop(key, None)
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', due),
+                         [(self.card['text'], source)])
+        self.assertEqual(media.prepared_candidates(
+            'news', datetime.fromisoformat('2026-11-02T18:00:00+09:00')), [])
+        self.assertEqual(media.prepared_candidates(
+            'news', datetime.fromisoformat('2026-11-01T23:00:00+09:00')), [])
+        self.card['text_only_approved'] = False
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', due), [])
+
     def test_candidates_require_fresh_date_official_source_and_visible_citation(self):
         now = datetime(2026, 10, 24)
         self.card.update(date_jst='2026-10-23', text='結果\n' + self.card['source_url'])

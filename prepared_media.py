@@ -114,6 +114,10 @@ def prepared_candidates(slot, now):
             continue
         if card.get('media_type') == 'text_only' and not reviewed_text_only(card):
             continue
+        # Time-sensitive copy must never slide to a later slot if a cron run is missed.
+        if (card.get('publish_due_jst') is not None
+                and card['publish_due_jst'] != now.isoformat()):
+            continue
         source = card.get('source_url', '')
         parsed = urlparse(source)
         if parsed.scheme != 'https' or parsed.query or parsed.fragment:

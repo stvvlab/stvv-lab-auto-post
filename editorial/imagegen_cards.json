@@ -168,6 +168,26 @@
         "x_display_verified": false,
         "verification_method": "Buffer read-only status and posted.json reservation ledger; X public caption/image not independently verified"
       }
+    },
+    {
+      "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "date_jst": "2026-10-27",
+      "text": "⚽ いよいよ今夜、STVVのホームゲーム！\n🆚 OHルーヴェン\n🕛 11月2日（月）午前0:00キックオフ（日本時間）\n\nホームで勝利をつかもう！💛\nみんなは誰のプレーに注目してる？\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "slots": [
+        "news"
+      ],
+      "reviewed": true,
+      "status": "ready",
+      "media_type": "text_only",
+      "text_only_approved": true,
+      "source_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+      "publish_due_jst": "2026-11-01T18:00:00+09:00",
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "matchday",
+        "event_id": "stvv-ohl-2026-11-02"
+      },
+      "review_note": "Time-sensitive matchday reminder only at 2026-11-01 18:00 JST; no image. Official STVV 2026-10-27 article and OH Leuven official 2026-10-30 article independently confirm 2026-11-01 16:00 CET (2026-11-02 00:00 JST). Same fixture's initial announcement already Buffer-sent; matchday reminder has a distinct approved editorial phase. Source body SHA256 reused from previously verified initial announcement and must be revalidated live before reservation. No new result, lineup, ticket claim or invented statistic. Do not reschedule to another time, repost after kickoff or bypass duplicate/pending checks."
     }
   ]
 }
