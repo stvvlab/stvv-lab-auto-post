@@ -85,7 +85,9 @@ def plan(history, now):
             continue
         # Reuse the publisher's exact reviewed caption and strict fact policy.
         # Freshness is evaluated at publication time, not preparation time.
-        for text, source in prepared_candidates(slot, due):
+        from matchday_priority import prioritize
+        candidates = prioritize(prepared_candidates(slot, due), slot, due, exact_card)
+        for text, source in candidates:
             message = text + HASHTAGS
             problems = set(audit({'type': 'news', 'text': message,
                                   'source_url': source}, max_length=270)) & CRITICAL
@@ -110,6 +112,7 @@ def plan(history, now):
                 'media_type': 'text_only' if card.get('media_type') == 'text_only' else 'image',
                 'due_jst': due.isoformat(),
                 'due_utc': due.astimezone(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                'matchday_priority': __import__('matchday_priority').is_matchday_card(card, due),
                 'buffer_mode': 'customScheduled',
                 'asset_and_official_body_recheck_required': True})
             return report  # At most one proposal, never fill empty slots.
