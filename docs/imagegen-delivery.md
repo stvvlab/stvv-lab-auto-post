@@ -16,7 +16,7 @@ in Actions; the artifact provides separate evidence. It never changes posted.jso
 CI mocks and manual checks cannot create production records. A workflow which
 has not started cannot emit an outcome: absence of a new report is not success,
 not a quality rejection, and not proof a scheduled event will eventually start.
-The seven schedules, all prerequisite tests and image gates are unchanged.
+The active publishing schedule has three JST slots (08:00, 18:00, 23:00); prerequisite tests and image gates remain in force.
 
 ### Concurrent report writers
 
@@ -44,8 +44,8 @@ news-slot delivery and actual X image display were also verified; see
 `reports/imagegen-capability.json` for asset hashes and evidence.
 
 The preparer commits reviewed image bytes and `editorial/imagegen_cards.json`
-together. The existing seven scheduled runs reserve a reviewed ready entry for one of the
-next seven publication times, at least 30 minutes ahead and at most 24 hours ahead.
+together. The three scheduled runs reserve an approved ready entry for an eligible future
+08:00, 18:00 or 23:00 JST publication time, subject to lead-time and duplicate checks.
 No manual pilot or extra post is triggered by queue preparation.
 
 ## Manifest
@@ -126,7 +126,7 @@ listings independently. A failed listing does not hide another listing's results
 all failures, partial coverage and zero eligible candidates have separate statuses.
 The existing Discovery Brief workflow collects this inventory hourly and retains
 `reports/preparation-latest.json` on main and as an Actions artifact. It never calls
-Buffer, a paid image API, or a manual pilot. The seven publishing schedules are unchanged.
+Buffer, a paid image API, or a manual pilot. The active three publishing schedules remain unchanged.
 
 Published, pending and registered source URLs are removed before downloading up to
 three new article bodies. Fresh candidates carry the exact official heading, body,
