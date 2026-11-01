@@ -17,6 +17,37 @@ class RecoveryTriageTests(unittest.TestCase):
         self.assertNotIn("image_verification_blocked", data["problems"])
         self.assertFalse(data["publishing_attempted"])
 
+    def test_text_only_card_already_reserved_is_not_available_new_content(self):
+        card = {"status": "ready", "reviewed": True, "media_type": "text_only",
+                "text_only_approved": True, "source_url": "https://stvv.com/example",
+                "text": "Matchday reminder",
+                "editorial_purpose": {"kind": "fixture", "phase": "matchday"}}
+        history = {"reserved_posts": {"daily_2026-11-01_news": {
+            "source": "https://stvv.com/example",
+            "text": "Matchday reminder\n\n#STVV",
+            "buffer_status": "scheduled",
+            "editorial_purpose": {"kind": "fixture", "phase": "matchday"}}},
+            "publication_log": [], "pending_posts": {}, "used_posts": []}
+        data = diagnose({"cards": [card]}, {"status": "has_candidates"},
+                        {"status": "skipped_no_verified_content"}, history)
+        self.assertEqual(data["ready_reviewed_cards"], 1)
+        self.assertEqual(data["ready_reviewed_images"], 0)
+        self.assertEqual(data["ready_reviewed_text_only"], 1)
+        self.assertEqual(data["ready_already_reserved"], 1)
+        self.assertEqual(data["ready_not_reserved"], 0)
+        self.assertTrue(data["ready_counts_are_local_diagnostics_only"])
+
+    def test_distinct_unreserved_ready_card_stays_available_in_diagnostic(self):
+        card = {"status": "ready", "reviewed": True, "media_type": "image",
+                "source_url": "https://stvv.com/new", "text": "New fact"}
+        data = diagnose({"cards": [card]}, {"status": "has_candidates"},
+                        {"status": "skipped_no_verified_content"},
+                        {"reserved_posts": {"other": {
+                            "source": "https://stvv.com/old", "text": "Old fact"}}})
+        self.assertEqual(data["ready_reviewed_images"], 1)
+        self.assertEqual(data["ready_already_reserved"], 0)
+        self.assertEqual(data["ready_not_reserved"], 1)
+
     def test_image_verification_skip_is_a_real_blocker(self):
         data = diagnose({"cards": [{"status": "ready", "reviewed": True}]},
                         {"status": "has_candidates"},
