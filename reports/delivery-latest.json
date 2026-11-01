@@ -1,55 +1,43 @@
 {
-  "started_at": "2026-11-01T10:44:07.728120+09:00",
-  "slot": "player",
+  "started_at": "2026-11-02T00:33:17.229658+09:00",
+  "finished_at": "2026-11-02T00:33:17.229708+09:00",
+  "slot": "news",
   "date_jst": "2026-11-01",
-  "scheduled_at": "2026-11-01T08:00:00+09:00",
-  "start_delay_seconds": 9847,
+  "scheduled_at": "2026-11-01T18:00:00+09:00",
+  "start_delay_seconds": 23597,
   "schedule_delay_diagnostic": "severe_schedule_to_delivery_delay_unattributed",
-  "run_id": "41262291994",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41262291994",
-  "commit": "f2ca502eb720e3aca0ac439bba89bd94f7e6242e",
+  "run_id": "41321793518",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41321793518",
+  "commit": "5b00ada91a373559e54c667685ff49ca21558ec1",
   "manual_dispatch_performed": false,
-  "status": "skipped_no_verified_content",
-  "x_display_verified": false,
+  "status": "blocked_schedule_more_than_six_hours_late",
+  "delivery_state": "no_buffer_mutation_due_to_schedule_guard",
   "delivery_mode": "advance_reservations",
-  "queue_before": {
-    "ready_cards": 1,
-    "candidates": [
-      {
-        "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
-        "asset_path": null,
-        "slots": [
-          "news"
-        ],
-        "selection_block": "different_slot"
-      }
-    ],
-    "note": "Selection diagnosis only; official body and public image bytes are checked by the publisher before sending."
-  },
-  "finished_at": "2026-11-01T10:44:09.351894+09:00",
+  "x_display_verified": false,
   "new_publications": [],
-  "pending_key": null,
-  "delivery_state": "buffer_scheduled_not_published",
   "new_reservations": [],
-  "reservation_states": [
-    {
-      "key": "daily_2026-10-29_news",
-      "buffer_status": "cancelled_by_user",
-      "due_at": "2026-10-29T09:00:00Z",
-      "x_display_verified": false
-    },
-    {
-      "key": "daily_2026-10-30_news",
-      "buffer_status": "sent",
-      "due_at": "2026-10-30T09:00:00Z",
-      "x_display_verified": false
-    },
-    {
-      "key": "daily_2026-11-01_news",
-      "buffer_status": "scheduled",
-      "due_at": "2026-11-01T09:00:00Z",
-      "x_display_verified": false
-    }
-  ],
-  "pending_reservation_keys": []
+  "pending_state": "not_checked",
+  "error_type": "RuntimeError",
+  "reservation_coverage": {
+    "reserved_count": 3,
+    "pending_count": 0,
+    "scheduled_keys": [
+      "daily_2026-11-01_news"
+    ],
+    "note": "Local ledger snapshot; separate overdue probe may query Buffer read-only, never X"
+  },
+  "overdue_reservation_probe": {
+    "status": "read_only_completed",
+    "overdue_count": 1,
+    "checked_count": 1,
+    "truncated": false,
+    "results": [
+      {
+        "key": "daily_2026-11-01_news",
+        "x_display_verified": false,
+        "ledger_updated": false,
+        "remote_status": "sent"
+      }
+    ]
+  }
 }
