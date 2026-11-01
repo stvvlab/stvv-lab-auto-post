@@ -131,6 +131,60 @@ class DeliveryRunTests(unittest.TestCase):
         self.assertFalse(result['results'][0]['ledger_updated'])
         self.assertEqual(json.dumps(ledger, sort_keys=True), original)
 
+    def test_late_reserved_slot_confirmed_sent_is_non_error_without_reposting(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            key = 'daily_2026-11-01_news'
+            ledger = {'reserved_posts': {key: {
+                'buffer_id': 'original-reservation', 'buffer_status': 'scheduled',
+                'due_at': '2026-11-01T09:00:00Z', 'text': 'approved text'}},
+                'pending_posts': {}}
+            (root / 'posted.json').write_text(json.dumps(ledger))
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '41321793518',
+                   'GITHUB_SCHEDULE': '0 9 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
+                    patch.object(d.publisher, 'slot_for_run',
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
+                    patch.object(d, 'probe_overdue_reservations', return_value={
+                        'status': 'read_only_completed', 'results': [
+                            {'key': key, 'remote_status': 'sent',
+                             'x_display_verified': False, 'ledger_updated': False}]}), \
+                    patch('advance_reservations.main') as reserve:
+                clock.now.return_value = datetime.fromisoformat('2026-11-02T00:33:17+09:00')
+                self.assertEqual(d.main(),
+                                 'late_existing_reservation_buffer_sent_x_unverified')
+                reserve.assert_not_called()
+            report = json.loads((root / 'reports/delivery-latest.json').read_text())
+            self.assertEqual(report['delivery_state'],
+                             'buffer_reports_sent_x_unverified_no_new_send')
+            self.assertFalse(report['x_display_verified'])
+            self.assertEqual(report['new_publications'], [])
+            self.assertEqual(json.loads((root / 'posted.json').read_text()), ledger)
+
+    def test_late_other_reservation_sent_does_not_hide_missing_target(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'posted.json').write_text(json.dumps({
+                'reserved_posts': {'daily_2026-10-31_news': {
+                    'buffer_status': 'scheduled'}}, 'pending_posts': {}}))
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '41321793519',
+                   'GITHUB_SCHEDULE': '0 9 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
+                    patch.object(d.publisher, 'slot_for_run',
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
+                    patch.object(d, 'probe_overdue_reservations', return_value={
+                        'status': 'read_only_completed', 'results': [
+                            {'key': 'daily_2026-10-31_news', 'remote_status': 'sent'}]}):
+                clock.now.return_value = datetime.fromisoformat('2026-11-02T00:33:17+09:00')
+                with self.assertRaises(RuntimeError):
+                    d.main()
+            report = json.loads((root / 'reports/delivery-latest.json').read_text())
+            self.assertEqual(report['status'], 'blocked_schedule_more_than_six_hours_late')
+
     def test_late_guard_probe_missing_auth_and_identity_mismatch_are_not_success(self):
         now = datetime.fromisoformat('2026-10-30T19:30:00+09:00')
         ledger = {'reserved_posts': {'due': {

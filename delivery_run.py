@@ -227,6 +227,22 @@ def record_late_start(now, run_id, advance):
         }
         if advance:
             report['overdue_reservation_probe'] = probe_overdue_reservations(history, now)
+            # Only an exact, previously reserved slot confirmed as sent by
+            # Buffer can turn a stale runner into a non-error observation.
+            # Never infer X visibility, retry, or mutate publication history.
+            key = f'daily_{scheduled.date().isoformat()}_{slot}'
+            record = reserved.get(key)
+            probe = report['overdue_reservation_probe']
+            matches = [item for item in probe.get('results', [])
+                       if item.get('key') == key]
+            if (isinstance(record, dict)
+                    and record.get('buffer_status') in {'scheduled', 'sending', 'sent'}
+                    and key not in pending
+                    and probe.get('status') == 'read_only_completed'
+                    and len(matches) == 1
+                    and matches[0].get('remote_status') == 'sent'):
+                report['status'] = 'late_existing_reservation_buffer_sent_x_unverified'
+                report['delivery_state'] = 'buffer_reports_sent_x_unverified_no_new_send'
     except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError) as error:
         report['reservation_coverage_error'] = type(error).__name__
     directory = ROOT / 'reports/delivery-runs'
@@ -252,7 +268,11 @@ def main():
     try:
         slot, day = publisher.slot_for_run(now)
     except RuntimeError:
-        record_late_start(now, run_id, advance)
+        if record_late_start(now, run_id, advance):
+            report = json.loads((ROOT / 'reports/delivery-latest.json').read_text(encoding='utf-8'))
+            if report.get('status') == 'late_existing_reservation_buffer_sent_x_unverified':
+                print('Existing Buffer reservation confirmed sent; no new publication attempted')
+                return report['status']
         raise
     _, hour, minute = publisher.SLOTS[os.environ['GITHUB_SCHEDULE']]
     scheduled = datetime.fromisoformat(day).replace(
