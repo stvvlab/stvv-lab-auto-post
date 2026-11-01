@@ -1,0 +1,35 @@
+name: STVV Matchday Discovery (read-only)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 22 * * *" # JST 07:00; provisional fixture discovery only
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stvv-matchday-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests beautifulsoup4 pillow
+      - name: Test read-only matchday logic
+        run: python -m unittest -q tests.test_matchday_detection tests.test_matchday_priority
+      - name: Discover provisional fixtures
+        run: python matchday_detection.py
+      - name: Preserve evidence only
+        uses: actions/upload-artifact@v4
+        with:
+          name: matchday-discovery-${{ github.run_id }}
+          path: reports/matchday-detection-latest.json
+          if-no-files-found: error
+          retention-days: 14
