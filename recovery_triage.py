@@ -108,8 +108,33 @@ def forward_coverage(manifest, history, now=None):
 
 def diagnose(manifest, preparation, delivery, history=None):
     cards = manifest.get("cards", [])
-    ready = sum(isinstance(c, dict) and c.get("status") == "ready"
-                and c.get("reviewed") is True for c in cards)
+    ready_cards = [c for c in cards if isinstance(c, dict)
+                   and c.get("status") == "ready" and c.get("reviewed") is True]
+    ready = len(ready_cards)
+    ready_images = sum(c.get("media_type") != "text_only" for c in ready_cards)
+    ready_text_only = sum(c.get("media_type") == "text_only"
+                          and c.get("text_only_approved") is True
+                          for c in ready_cards)
+    reservations = (history or {}).get("reserved_posts", {})
+    if not isinstance(reservations, dict):
+        reservations = {}
+
+    def already_reserved(card):
+        # Local diagnosis only: not a publication gate. The publisher adds hashtags.
+        source, caption = card.get("source_url"), card.get("text")
+        if not isinstance(source, str) or not isinstance(caption, str) or not caption:
+            return False
+        return any(
+            isinstance(record, dict)
+            and record.get("source") == source
+            and isinstance(record.get("text"), str)
+            and (record["text"] == caption or record["text"].startswith(caption + "\n"))
+            and (not card.get("editorial_purpose")
+                 or record.get("editorial_purpose") == card["editorial_purpose"])
+            for record in reservations.values()
+        )
+
+    ready_reserved = sum(already_reserved(c) for c in ready_cards)
     problems = []
     if ready == 0:
         problems.append("approved_ready_assets_zero")
@@ -173,6 +198,11 @@ def diagnose(manifest, preparation, delivery, history=None):
         "status": "needs_recovery" if problems else "no_detected_blocker",
         "problems": problems,
         "ready_reviewed_cards": ready,
+        "ready_reviewed_images": ready_images,
+        "ready_reviewed_text_only": ready_text_only,
+        "ready_already_reserved": ready_reserved,
+        "ready_not_reserved": ready - ready_reserved,
+        "ready_counts_are_local_diagnostics_only": True,
         "last_delivery_status": delivery.get("status", "unknown"),
         "last_delivery_state": delivery.get("delivery_state", "unknown"),
         "delivery_run_id": delivery.get("run_id"),
