@@ -10,16 +10,16 @@
 3. `editorial_research.py`：掲載済み記事の未使用記述を検討用下書きにする。
 4. ChatGPT内蔵imagegenで画像を作成し、本文・事実・画像を目視審査。
 5. 画像と`editorial/imagegen_cards.json`を同じコミットで登録。
-6. `stvv_post.py`が既存7枠で審査済み候補を選び、チェック後にBufferへ送信。
+6. 通常スケジュールの`delivery_run.py`が、審査済み候補と予約済み台帳を照合し、未来の既存公開枠へBuffer予約を最大1件登録。既存の独立した安全チェックを必ず通します。
 
-投稿枠（JST）：08:00／10:30／12:30／15:30／18:00／21:00／23:00。
-情報・画像が不足する枠は見送ります。枠数は投稿数の保証ではありません。
+投稿枠（JST）：**08:00（選手）／18:00（ニュース・試合告知）／23:00（振り返り）**。2026-10-31以降は3枠です。
+情報・画像が不足する枠は見送ります。文章のみのバックアップは、本文が明示審査済みで一次情報本文のSHA256が一致する場合だけ許可します。枠数は投稿数の保証ではありません。
 
 ## コードの役割
 
 | 分類 | ファイル | 責務 |
 | --- | --- | --- |
-| 本番入口 | `stvv_post.py` | 枠の選択、候補の組み立て、pending保存、Buffer送信、履歴更新 |
+| 本番入口 | `delivery_run.py`, `stvv_post.py` | 3枠の実行記録、候補選択、pending永続化、Buffer未来時刻予約、履歴更新 |
 | 取得 | `official_sources.py` | 公式一覧の取得、見出し・日付・対象記事の解析。送信しない |
 | 準備 | `preparation_inventory.py`, `editorial_research.py`, `design_brief.py` | 新出典・未使用記述・構図の候補。審査や画像生成の代用ではない |
 | 本番の安全確認 | `quality_gate.py`, `content_guard.py`, `editorial_novelty.py`, `text_metrics.py` | 出典・文字数・重複・限定的な新事実の検査 |
@@ -36,7 +36,7 @@
 
 | 用途 | ワークフロー | 外部への影響 |
 | --- | --- | --- |
-| 通常の本番投稿 | `main.yml` | 既存7枠でのみBufferへ送信 |
+| 通常の本番投稿 | `main.yml` | 既存3枠の審査済み候補のみ、未来時刻のBuffer予約を許可 |
 | 候補収集 | `discovery-brief.yml` | 証拠・候補レポートを保存。投稿しない |
 | 品質・動作検証 | `quality-audit.yml`, `auto-feedback-tests.yml`, `visual-tests.yml` | テスト・監査・プレビュー。実投稿と区別する |
 | 評価の運用 | `auto-feedback.yml`, `feedback.yml` | 評価・レポートを書き込む |
@@ -76,4 +76,4 @@ python -m unittest discover -s tests -v
 - [データベース同期](docs/database-sync.md)
 - [自動フィードバック](docs/auto-feedback.md)
 
-有料画像APIへは切り替えません。送信結果不明時はpendingを保持し、再送しません。
+有料画像APIへは切り替えません。送信結果不明時はpendingを保持し、再送しません。Bufferの`scheduled`・`sent`と、Xの本文・画像の実表示確認は別の段階です。GitHub Actionsのテスト成功だけで公開成功とは判断しません。既存予約を無断で削除・変更・再送しません。
