@@ -11,6 +11,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from prepared_media import prepared_candidates, prepared_duplicate_reason, exact_card
+from matchday_priority import prioritize, is_matchday_card
 from quality_gate import audit, CRITICAL
 from stvv_post import HASHTAGS, JST, SLOTS
 
@@ -85,7 +86,6 @@ def plan(history, now):
             continue
         # Reuse the publisher's exact reviewed caption and strict fact policy.
         # Freshness is evaluated at publication time, not preparation time.
-        from matchday_priority import prioritize
         candidates = prioritize(prepared_candidates(slot, due), slot, due, exact_card)
         for text, source in candidates:
             message = text + HASHTAGS
@@ -112,7 +112,7 @@ def plan(history, now):
                 'media_type': 'text_only' if card.get('media_type') == 'text_only' else 'image',
                 'due_jst': due.isoformat(),
                 'due_utc': due.astimezone(timezone.utc).isoformat().replace('+00:00', 'Z'),
-                'matchday_priority': __import__('matchday_priority').is_matchday_card(card, due),
+                'matchday_priority': is_matchday_card(card, due),
                 'buffer_mode': 'customScheduled',
                 'asset_and_official_body_recheck_required': True})
             return report  # At most one proposal, never fill empty slots.
