@@ -940,6 +940,33 @@
       "status_checked_at": "2026-10-31T02:47:40.984939+09:00",
       "key": "daily_2026-10-30_news",
       "delivery_state": "buffer_reports_sent_x_unverified"
+    },
+    {
+      "slot": "news",
+      "source": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+      "text": "⚽ いよいよ今夜、STVVのホームゲーム！\n🆚 OHルーヴェン\n🕛 11月2日（月）午前0:00キックオフ（日本時間）\n\nホームで勝利をつかもう！💛\nみんなは誰のプレーに注目してる？\n\n公式：https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid\n\n#STVV #シントトロイデン",
+      "image_url": null,
+      "media_type": "text_only",
+      "asset_path": null,
+      "sha256": null,
+      "dimensions": null,
+      "due_at": "2026-11-01T09:00:00Z",
+      "official_body_sha256": "47da9e748099f4fa18f3ee9097257f590fb5bf55058fcfd3423ae45f533a04c4",
+      "reservation_key": "f490775a816cac0841709c2057984585f1a0d8efa8ffcabcd34fafb6f8413162",
+      "created_at": "2026-10-31T22:05:10.385398+09:00",
+      "delivery_mode": "customScheduled",
+      "x_display_verified": false,
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "matchday",
+        "event_id": "stvv-ohl-2026-11-02"
+      },
+      "buffer_id": "6ae5e787406ab8a018bc9c24",
+      "buffer_status": "sent",
+      "submitted_at": "2026-10-31T22:05:11.800123+09:00",
+      "status_checked_at": "2026-11-02T03:43:06.103333+09:00",
+      "key": "daily_2026-11-01_news",
+      "delivery_state": "buffer_reports_sent_x_unverified"
     }
   ],
   "pending_posts": {},
@@ -1029,9 +1056,9 @@
         "event_id": "stvv-ohl-2026-11-02"
       },
       "buffer_id": "6ae5e787406ab8a018bc9c24",
-      "buffer_status": "scheduled",
+      "buffer_status": "sent",
       "submitted_at": "2026-10-31T22:05:11.800123+09:00",
-      "status_checked_at": "2026-11-01T10:44:07.743733+09:00"
+      "status_checked_at": "2026-11-02T03:43:06.103333+09:00"
     }
   }
 }
