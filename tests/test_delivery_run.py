@@ -15,6 +15,39 @@ def history():
 
 
 class DeliveryRunTests(unittest.TestCase):
+    def test_queue_diagnostic_marks_missed_fixed_due_before_slot_mismatch(self):
+        # The reviewed OH Leuven matchday copy was only approved for Nov 1.
+        # A later scheduled run must not report it as available content.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['player'],
+                    'source_url': 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid',
+                    'publish_due_jst': '2026-11-01T18:00:00+09:00'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            ledger = history()
+            result = d.queue_snapshot(
+                root, ledger, datetime.fromisoformat('2026-11-03T05:00:00+09:00'), 'news')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['candidates'][0]['selection_block'],
+                             'fixed_publish_due_missed')
+            self.assertEqual(ledger, history())
+
+    def test_queue_diagnostic_rejects_unzoned_fixed_due(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'publish_due_jst': '2026-11-01T18:00:00'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T05:00:00+09:00'),
+                'news')
+            self.assertEqual(result['candidates'][0]['selection_block'],
+                             'invalid_fixed_publish_due')
+
     def test_buffer_acceptance_is_not_x_display(self):
         before = history()
         after = history()
