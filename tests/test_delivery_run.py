@@ -194,10 +194,10 @@ class DeliveryRunTests(unittest.TestCase):
             env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '41538316518',
                    'GITHUB_SCHEDULE': '0 14 * * *', 'GITHUB_EVENT_NAME': 'schedule',
                    'STVV_ADVANCE_RESERVATIONS': 'true'}
-            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \\
-                    patch.object(d, 'datetime', wraps=datetime) as clock, \\
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
                     patch.object(d.publisher, 'slot_for_run',
-                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \\
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
                     patch('advance_reservations.main') as reserve:
                 clock.now.return_value = datetime.fromisoformat('2026-11-03T07:34:01+09:00')
                 with self.assertRaises(RuntimeError):
