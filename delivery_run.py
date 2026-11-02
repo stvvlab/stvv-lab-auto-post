@@ -28,9 +28,22 @@ def queue_snapshot(root, history, now, slot):
         reason = None
         if card.get('reviewed') is not True:
             reason = 'not_reviewed'
-        elif slot not in card.get('slots', []):
+        elif card.get('publish_due_jst') is not None:
+            # A one-time matchday reminder must not appear available after its
+            # exact reviewed slot has passed. This is diagnostic only: the
+            # publisher's own strict due-time gate remains unchanged.
+            try:
+                fixed_due = datetime.fromisoformat(card['publish_due_jst'])
+                if (fixed_due.tzinfo is None or fixed_due.utcoffset() is None
+                        or now.tzinfo is None or now.utcoffset() is None):
+                    reason = 'invalid_fixed_publish_due'
+                elif fixed_due < now:
+                    reason = 'fixed_publish_due_missed'
+            except (TypeError, ValueError):
+                reason = 'invalid_fixed_publish_due'
+        if reason is None and slot not in card.get('slots', []):
             reason = 'different_slot'
-        else:
+        if reason is None:
             try:
                 day = datetime.fromisoformat(card['date_jst']).date()
                 if not 0 <= (now.date() - day).days <= 7:
