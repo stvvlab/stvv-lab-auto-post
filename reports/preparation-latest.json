@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-02T17:12:13.431160+09:00",
+  "checked_at": "2026-11-03T03:47:34.274882+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
@@ -10,12 +10,12 @@
     {
       "url": "https://stvv.jp/news/game/2026/",
       "status": "ok",
-      "eligible_items": 1
+      "eligible_items": 0
     },
     {
       "url": "https://stvv.jp/news/team/2026/",
       "status": "ok",
-      "eligible_items": 0
+      "eligible_items": 1
     },
     {
       "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -29,6 +29,22 @@
     }
   ],
   "candidates": [
+    {
+      "source_url": "https://stvv.jp/news/team/20261102_2/",
+      "date_jst": "2026-11-02",
+      "official_heading": "【お知らせ】フレデリック・デ・メイヤー監督 契約解除について",
+      "status": "needs_editorial_review",
+      "reviewed": false,
+      "remaining": [
+        "verify facts and novelty from body",
+        "write concise sourced caption",
+        "built-in imagegen",
+        "visual review",
+        "register reviewed asset"
+      ],
+      "source_body": "この度、2026-2027シーズン開幕より指揮をとっておりましたフレデリック・デ・メイヤー（Frédéric De Meyer）監督との契約を解除いたしましたので、お知らせいたします。\nなお、本日11月3日のトレーニングより、アシスタントコーチのセップ・デ・ルーファ（Sepp De Roover）が暫定的にチームの指揮を執ります。\n新監督については、決定次第公式お知らせいたします。\n【シント=トロイデンVV CEO 立石敬之 コメント】\n「フレデリック・デ・メイヤー監督は、アシスタントコーチ時代から数年間にわたり、その温かい人柄と情熱でクラブのために全力を尽くしてくれました。今シーズンより彼にトップチームの監督を託し、素晴らしいサッカーを展開した試合もありましたが、プロの世界では最終的に結果が求められます。リーグ戦5連敗という現状を重く受け止め、苦渋の決断ではありますが、新体制へ移行することといたしました。これまでのクラブへの多大なる貢献に深く感謝し、彼の今後の成功を心から願っています。\n我々は今シーズン、競争力のあるチームを築くために積極的な投資を行ってきました。現在の順位は選手たちが本来持っている実力を反映したものではなく、今のチームには複数の大会を十分に戦い抜く力があると確信しています。\n代表ウィークに入るまでに、まだ重要な2試合が控えています。STVVを応援してくださっている全てのファン・サポーターの皆様の力をお借りし、この2試合を勝利への軌道を取り戻す確かなきっかけにしたいと考えています」",
+      "body_sha256": "7497be12b326b8c7204077710e78e112ac5a1ab60b04dcf0f297a3995f79f3a1"
+    },
     {
       "source_url": "https://stvv.jp/news/event/20261030_2/",
       "date_jst": "2026-10-30",
@@ -46,12 +62,7 @@
       "body_sha256": "6a18642e3fb3dad897bab478dc0ae48de470a901ec339d9ab502d27f60c41620"
     }
   ],
-  "skipped": [
-    {
-      "source_url": "https://stvv.jp/news/game/20261026_1/",
-      "reason": "Source already published, pending or registered"
-    }
-  ],
+  "skipped": [],
   "ready_cards": 1,
   "pending_posts": 0,
   "publication_performed": false,
