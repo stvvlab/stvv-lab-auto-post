@@ -177,6 +177,41 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(report['delivery_state'], 'no_buffer_mutation_due_to_schedule_guard')
             self.assertFalse(report['x_display_verified'])
 
+    def test_late_guard_reports_expired_queue_without_sending(self):
+        # A delayed 23:00 recap run should report the real content shortage
+        # even though the six-hour safety guard prevents all publication.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'editorial').mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example',
+                    'publish_due_jst': '2026-11-01T18:00:00+09:00'}
+            (root / 'editorial/imagegen_cards.json').write_text(
+                json.dumps({'cards': [card]}))
+            ledger = {'reserved_posts': {}, 'pending_posts': {},
+                      'publication_log': []}
+            (root / 'posted.json').write_text(json.dumps(ledger))
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '41538316518',
+                   'GITHUB_SCHEDULE': '0 14 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \\
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \\
+                    patch.object(d.publisher, 'slot_for_run',
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \\
+                    patch('advance_reservations.main') as reserve:
+                clock.now.return_value = datetime.fromisoformat('2026-11-03T07:34:01+09:00')
+                with self.assertRaises(RuntimeError):
+                    d.main()
+                reserve.assert_not_called()
+            report = json.loads((root / 'reports/delivery-latest.json').read_text())
+            self.assertEqual(report['status'], 'blocked_schedule_more_than_six_hours_late')
+            self.assertEqual(report['queue_before']['ready_cards'], 1)
+            self.assertEqual(report['queue_before']['eligible_now_cards'], 0)
+            self.assertEqual(report['queue_before']['blocked_by_reason'],
+                             {'fixed_publish_due_missed': 1})
+            self.assertEqual(json.loads((root / 'posted.json').read_text()), ledger)
+            self.assertEqual(report['new_reservations'], [])
+
     def test_late_guard_read_only_probe_of_overdue_reservation(self):
         now = datetime.fromisoformat('2026-10-30T19:30:00+09:00')
         record = {'buffer_id': 'test-buffer-id', 'buffer_status': 'scheduled',
