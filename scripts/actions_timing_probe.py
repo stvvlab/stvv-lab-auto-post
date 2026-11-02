@@ -39,19 +39,29 @@ def summarize(run, jobs, report):
         "job_created_at": job_created,
         "job_started_at": job_started,
         "cron_to_workflow_creation_seconds": elapsed(report.get("scheduled_at"), created),
+        "workflow_creation_to_job_creation_seconds": elapsed(created, job_created),
         "workflow_creation_to_job_start_seconds": elapsed(created, job_started),
         "job_queue_seconds": elapsed(job_created, job_started),
         "job_start_to_delivery_start_seconds": elapsed(job_started, delivery_started),
         "note": "Timing segments are observations, not proof of GitHub's internal delay cause.",
     }
-    if result["cron_to_workflow_creation_seconds"] is not None and result["cron_to_workflow_creation_seconds"] >= 900:
-        result["largest_known_stage"] = "workflow_created_late"
-    elif result["workflow_creation_to_job_start_seconds"] is not None and result["workflow_creation_to_job_start_seconds"] >= 900:
-        result["largest_known_stage"] = "workflow_to_job_start_delayed"
-    elif result["job_start_to_delivery_start_seconds"] is not None and result["job_start_to_delivery_start_seconds"] >= 900:
-        result["largest_known_stage"] = "job_setup_delayed"
+    # Compare non-overlapping stages. The combined workflow-to-job-start
+    # duration is only a fallback when GitHub omits job creation time.
+    stages = {
+        "workflow_created_late": result["cron_to_workflow_creation_seconds"],
+        "workflow_to_job_created_delayed": result["workflow_creation_to_job_creation_seconds"],
+        "job_queue_delayed": result["job_queue_seconds"],
+        "job_setup_delayed": result["job_start_to_delivery_start_seconds"],
+    }
+    if job_created is None:
+        stages["workflow_to_job_start_delayed"] = result["workflow_creation_to_job_start_seconds"]
+    observed = {name: seconds for name, seconds in stages.items() if seconds is not None}
+    if observed:
+        name, seconds = max(observed.items(), key=lambda item: item[1])
+        result["largest_known_stage"] = name if seconds >= 900 else "no_observed_stage_over_15_minutes"
+        result["largest_known_stage_seconds"] = seconds
     else:
-        result["largest_known_stage"] = "no_observed_stage_over_15_minutes"
+        result["largest_known_stage"] = "unavailable"
     return result
 
 
