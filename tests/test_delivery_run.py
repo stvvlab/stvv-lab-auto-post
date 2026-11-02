@@ -32,6 +32,9 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(result['ready_cards'], 1)
             self.assertEqual(result['candidates'][0]['selection_block'],
                              'fixed_publish_due_missed')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'], {'fixed_publish_due_missed': 1})
             self.assertEqual(ledger, history())
 
     def test_queue_diagnostic_rejects_unzoned_fixed_due(self):
@@ -47,6 +50,40 @@ class DeliveryRunTests(unittest.TestCase):
                 'news')
             self.assertEqual(result['candidates'][0]['selection_block'],
                              'invalid_fixed_publish_due')
+
+    def test_queue_diagnostic_future_fixed_due_is_not_eligible_for_current_slot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example',
+                    'publish_due_jst': '2026-11-04T18:00:00+09:00'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                'news')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'],
+                             {'fixed_publish_due_not_reached': 1})
+
+    def test_queue_diagnostic_counts_currently_eligible_cards(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example', 'date_jst': '2026-11-03',
+                    'text': 'Verified content'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            with patch('prepared_media.prepared_duplicate_reason', return_value=None):
+                result = d.queue_snapshot(
+                    root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                    'news')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['eligible_now_cards'], 1)
+            self.assertEqual(result['blocked_by_reason'], {})
 
     def test_buffer_acceptance_is_not_x_display(self):
         before = history()
