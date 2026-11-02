@@ -34,7 +34,7 @@ class ActionsTimingProbeTests(unittest.TestCase):
                  "started_at": "2026-11-02T01:59:48Z"}]
         result = summarize(run, jobs, self.report)
         self.assertEqual(result["cron_to_workflow_creation_seconds"], 2)
-        self.assertEqual(result["largest_known_stage"], "workflow_to_job_start_delayed")
+        self.assertEqual(result["largest_known_stage"], "job_queue_delayed")
 
     def test_longest_stage_is_chosen_even_if_an_earlier_stage_is_late(self):
         run = {"created_at": "2026-11-01T23:30:00Z"}
