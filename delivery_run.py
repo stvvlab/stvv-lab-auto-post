@@ -250,6 +250,13 @@ def record_late_start(now, run_id, advance):
                                      if isinstance(v, dict) and v.get('buffer_status') == 'scheduled'),
             'note': 'Local ledger snapshot; separate overdue probe may query Buffer read-only, never X',
         }
+        # The six-hour guard skips the normal queue snapshot. Diagnose the
+        # missed slot's reviewed inventory without selecting or sending it.
+        # Queue failures must never suppress the reservation coverage above.
+        try:
+            report['queue_before'] = queue_snapshot(ROOT, history, now, slot)
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            report['queue_diagnosis_error'] = type(error).__name__
         if advance:
             report['overdue_reservation_probe'] = probe_overdue_reservations(history, now)
             # Only an exact, previously reserved slot confirmed as sent by
