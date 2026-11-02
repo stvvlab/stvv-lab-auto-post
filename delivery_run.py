@@ -39,6 +39,8 @@ def queue_snapshot(root, history, now, slot):
                     reason = 'invalid_fixed_publish_due'
                 elif fixed_due < now:
                     reason = 'fixed_publish_due_missed'
+                elif fixed_due > now:
+                    reason = 'fixed_publish_due_not_reached'
             except (TypeError, ValueError):
                 reason = 'invalid_fixed_publish_due'
         if reason is None and slot not in card.get('slots', []):
@@ -59,9 +61,19 @@ def queue_snapshot(root, history, now, slot):
                            'asset_path': card.get('asset_path'),
                            'slots': card.get('slots', []),
                            'selection_block': reason})
-    return {'ready_cards': len(candidates), 'candidates': candidates,
-            'note': 'Selection diagnosis only; official body and public image bytes '
-                    'are checked by the publisher before sending.'}
+    # Manifest-ready does not mean currently selectable: an expired reviewed
+    # matchday reminder must not inflate the usable queue count.
+    eligible = sum(item['selection_block'] is None for item in candidates)
+    blocked = {}
+    for item in candidates:
+        reason = item['selection_block']
+        if reason is not None:
+            blocked[reason] = blocked.get(reason, 0) + 1
+    return {'ready_cards': len(candidates), 'eligible_now_cards': eligible,
+            'blocked_by_reason': blocked, 'candidates': candidates,
+            'note': 'Selection diagnosis for the current slot only, not future '
+                    'reservations. Official body and public image bytes are '
+                    'checked by the publisher before sending.'}
 
 
 def delivery_evidence(before, after, day, slot, *, advance=False):
