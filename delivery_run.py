@@ -21,6 +21,11 @@ def read_ledger(path):
 def queue_snapshot(root, history, now, slot):
     from prepared_media import prepared_duplicate_reason
     manifest = json.loads((root / 'editorial/imagegen_cards.json').read_text())
+    # Disabled manifests cannot supply posts, regardless of ready flags.
+    if manifest.get('enabled') is not True:
+        return {'ready_cards': 0, 'eligible_now_cards': 0,
+                'blocked_by_reason': {'manifest_disabled': 1}, 'candidates': [],
+                'note': 'Reviewed card manifest is disabled; no candidate can be selected.'}
     candidates = []
     for card in manifest.get('cards', []):
         if card.get('status') != 'ready':
