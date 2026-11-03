@@ -101,6 +101,22 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(result['eligible_now_cards'], 0)
             self.assertEqual(result['blocked_by_reason'], {'missing_approved_image': 1})
 
+    def test_disabled_manifest_never_counts_ready_inventory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            (folder / 'imagegen_cards.json').write_text(json.dumps({
+                'enabled': False, 'cards': [{'status': 'ready', 'reviewed': True,
+                'slots': ['news'], 'date_jst': '2026-11-03',
+                'source_url': 'https://stvv.com/example', 'text': 'Verified content'}]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                'news')
+            self.assertEqual(result['ready_cards'], 0)
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'], {'manifest_disabled': 1})
+
     def test_buffer_acceptance_is_not_x_display(self):
         before = history()
         after = history()
