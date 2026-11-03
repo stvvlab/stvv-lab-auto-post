@@ -75,7 +75,8 @@ class DeliveryRunTests(unittest.TestCase):
             folder.mkdir()
             card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
                     'source_url': 'https://stvv.com/example', 'date_jst': '2026-11-03',
-                    'text': 'Verified content'}
+                    'text': 'Verified content', 'media_type': 'text_only',
+                    'text_only_approved': True, 'source_body_sha256': 'a' * 64}
             (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
             with patch('prepared_media.prepared_duplicate_reason', return_value=None):
                 result = d.queue_snapshot(
@@ -84,6 +85,21 @@ class DeliveryRunTests(unittest.TestCase):
             self.assertEqual(result['ready_cards'], 1)
             self.assertEqual(result['eligible_now_cards'], 1)
             self.assertEqual(result['blocked_by_reason'], {})
+
+    def test_queue_diagnostic_reports_missing_image_without_sending(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example',
+                    'date_jst': '2026-11-03', 'text': 'Verified content'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                'news')
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'], {'missing_approved_image': 1})
 
     def test_buffer_acceptance_is_not_x_display(self):
         before = history()
