@@ -43,6 +43,13 @@ def queue_snapshot(root, history, now, slot):
                     reason = 'fixed_publish_due_not_reached'
             except (TypeError, ValueError):
                 reason = 'invalid_fixed_publish_due'
+        if reason is None:
+            from prepared_media import reviewed_text_only
+            if card.get('media_type') == 'text_only':
+                if not reviewed_text_only(card):
+                    reason = 'invalid_text_only_approval'
+            elif not card.get('asset_path'):
+                reason = 'missing_approved_image'
         if reason is None and slot not in card.get('slots', []):
             reason = 'different_slot'
         if reason is None:
