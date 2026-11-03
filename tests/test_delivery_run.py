@@ -25,7 +25,7 @@ class DeliveryRunTests(unittest.TestCase):
             card = {'status': 'ready', 'reviewed': True, 'slots': ['player'],
                     'source_url': 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid',
                     'publish_due_jst': '2026-11-01T18:00:00+09:00'}
-            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
             ledger = history()
             result = d.queue_snapshot(
                 root, ledger, datetime.fromisoformat('2026-11-03T05:00:00+09:00'), 'news')
@@ -44,7 +44,7 @@ class DeliveryRunTests(unittest.TestCase):
             folder.mkdir()
             card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
                     'publish_due_jst': '2026-11-01T18:00:00'}
-            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
             result = d.queue_snapshot(
                 root, history(), datetime.fromisoformat('2026-11-03T05:00:00+09:00'),
                 'news')
@@ -59,7 +59,7 @@ class DeliveryRunTests(unittest.TestCase):
             card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
                     'source_url': 'https://stvv.com/example',
                     'publish_due_jst': '2026-11-04T18:00:00+09:00'}
-            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
             result = d.queue_snapshot(
                 root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
                 'news')
@@ -77,7 +77,7 @@ class DeliveryRunTests(unittest.TestCase):
                     'source_url': 'https://stvv.com/example', 'date_jst': '2026-11-03',
                     'text': 'Verified content', 'media_type': 'text_only',
                     'text_only_approved': True, 'source_body_sha256': 'a' * 64}
-            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
             with patch('prepared_media.prepared_duplicate_reason', return_value=None):
                 result = d.queue_snapshot(
                     root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
@@ -94,7 +94,7 @@ class DeliveryRunTests(unittest.TestCase):
             card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
                     'source_url': 'https://stvv.com/example',
                     'date_jst': '2026-11-03', 'text': 'Verified content'}
-            (folder / 'imagegen_cards.json').write_text(json.dumps({'cards': [card]}))
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
             result = d.queue_snapshot(
                 root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
                 'news')
@@ -219,7 +219,7 @@ class DeliveryRunTests(unittest.TestCase):
                     'source_url': 'https://stvv.com/example',
                     'publish_due_jst': '2026-11-01T18:00:00+09:00'}
             (root / 'editorial/imagegen_cards.json').write_text(
-                json.dumps({'cards': [card]}))
+                json.dumps({'enabled': True, 'cards': [card]}))
             ledger = {'reserved_posts': {}, 'pending_posts': {},
                       'publication_log': []}
             (root / 'posted.json').write_text(json.dumps(ledger))
