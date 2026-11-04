@@ -8,6 +8,9 @@ def main():
         schema=c.query(q)
         fields=schema.get("__type",{}).get("inputFields",[]) if schema.get("__type") else []
         print("CREATE_POST_SCHEMA "+json.dumps([{"name":f["name"],"type":f["type"]} for f in fields],ensure_ascii=False))
+        for name in ("ShareMode", "SchedulingType"):
+            item = c.query('query { __type(name: "'+name+'") { name enumValues { name } } }').get("__type")
+            print("DRAFT_ENUM_"+name+" "+json.dumps(item,ensure_ascii=False))
     except Exception as err:
         print("SCHEMA_INSPECTION_UNAVAILABLE "+type(err).__name__+": "+str(err))
 if __name__=="__main__":
