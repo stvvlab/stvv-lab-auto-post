@@ -6,9 +6,9 @@
   "text": "🚨STVVがフレデリック・デ・メイヤー監督との契約解除を発表。リーグ戦5連敗を受けた決断で、11月3日からセップ・デ・ルーファ氏が暫定指揮を執ります。新監督は決定次第発表予定。\n\n新体制でSTVVは立て直せるか？皆さんの意見を聞かせてください。",
   "image_status": "existing_asset_needs_link",
   "image_path": null,
-  "desired_publish_at_jst": null,
-  "status": "draft_for_manual_review",
+  "desired_publish_at_jst": "2026-11-04T18:00:00+09:00",
+  "status": "approved_content_pending_image_and_reservation",
   "buffer_reservation_status": "not_submitted",
   "auto_publish": false,
-  "note": "Manual review record only. Not registered in editorial/imagegen_cards.json; does not trigger Buffer or X."
+  "note": "User approved text and 18:00 JST on 2026-11-04. Manual review record only; not yet wired to publisher, does not trigger Buffer/X."
 }
