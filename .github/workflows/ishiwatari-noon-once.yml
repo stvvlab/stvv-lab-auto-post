@@ -1,0 +1,50 @@
+name: Ishiwatari approved noon reservation
+on:
+  push:
+    branches: [main]
+    paths:
+      - editorial/reservation_requests/2026-11-05_ishiwatari_noon.json
+permissions:
+  contents: write
+concurrency:
+  group: buffer-approved-queue
+  cancel-in-progress: false
+jobs:
+  reserve:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Import exact approved image
+        env:
+          IMAGE_URL: https://at.adobe.com/tfufxX1keCD74rXa
+          IMAGE_SHA: 4972bb74eef3f3756657d7bacf9ae8223540e289b435671a1ab08bc2acceafb7
+        run: |
+          python - <<'PY'
+          import os,requests,hashlib,pathlib
+          response=requests.get(os.environ["IMAGE_URL"],timeout=30)
+          response.raise_for_status()
+          data=response.content
+          if hashlib.sha256(data).hexdigest()!=os.environ["IMAGE_SHA"] or not data.startswith(bytes.fromhex("89504e470d0a1a0a")):
+              raise SystemExit("Approved image mismatch")
+          dest=pathlib.Path("generated/2026-11-05_ishiwatari_spotlight.png")
+          dest.parent.mkdir(exist_ok=True)
+          if dest.exists() and dest.read_bytes()!=data: raise SystemExit("Existing image mismatch")
+          dest.write_bytes(data)
+          print("APPROVED_IMAGE_VERIFIED")
+          PY
+      - name: Commit approved image
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add generated/2026-11-05_ishiwatari_spotlight.png
+          git diff --cached --quiet || (git commit -m 'Register approved Ishiwatari spotlight image' && git push)
+      - name: Reserve exact noon post
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python -m editorial.manual_reservation.enqueue_ishiwatari_noon
