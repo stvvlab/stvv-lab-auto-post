@@ -1,0 +1,34 @@
+name: Diagnose Kokubo Buffer channel
+on:
+  push:
+    branches: [main]
+    paths:
+      - editorial/manual_reservation/kokubo_channel_diagnostic_trigger.txt
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 pillow
+      - name: Read-only channel identity diagnosis
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          from buffer_reservations import BufferReservations
+          import stvv_post
+          c=BufferReservations()
+          account=c.query('query { account { organizations { id } } }')['account']
+          print('EXPECTED_CHANNEL_ID',stvv_post.CHANNEL)
+          for org in account['organizations']:
+              channels=c.query('query { channels(input: {organizationId: '+json.dumps(org['id'])+'}) { id name service externalLink isDisconnected isLocked isQueuePaused allowedActions } }')['channels']
+              for x in channels:
+                  print('CHANNEL',json.dumps(x,ensure_ascii=False))
+          PY
