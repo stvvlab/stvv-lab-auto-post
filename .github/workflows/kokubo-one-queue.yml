@@ -1,0 +1,34 @@
+name: One-off Kokubo verified Buffer queue
+on:
+  push:
+    branches: [main]
+    paths:
+      - editorial/reservation_requests/2026-11-05_kokubo_national_team_pending.json
+permissions:
+  contents: read
+concurrency:
+  group: kokubo-one-off-queue
+  cancel-in-progress: false
+jobs:
+  enqueue:
+    if: github.actor != 'github-actions[bot]' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4 pillow
+      - name: Verify image and enqueue once
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+        run: python -m editorial.manual_reservation.enqueue_kokubo_once
+      - name: Save receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kokubo-buffer-queue-receipt
+          path: kokubo_queue_receipt.json
+          retention-days: 14
