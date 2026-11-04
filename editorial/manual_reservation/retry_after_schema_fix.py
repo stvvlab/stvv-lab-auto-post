@@ -16,7 +16,7 @@ import stvv_post
 
 BRANCH = "fix/de-meyer-exact-image-transfer-20261104"
 INTENT = Path("editorial/manual_reservation/de_meyer_draft_send_intent.json")
-RETRY = Path("editorial/manual_reservation/de_meyer_schema_fix_retry.json")
+RETRY = Path("editorial/manual_reservation/de_meyer_retry_v2_ledger.json")
 EXPECTED = "40c97a3f63667cd930c3d803c7448eebf7b347f5043572927dfcaa65b51843a7"
 
 def git(*args):
@@ -45,8 +45,11 @@ def audit(client, caption):
 def main():
     if os.getenv("GITHUB_REF_NAME") != BRANCH or os.getenv("STVV_ONE_OFF_RETRY_AUTHORIZED") != "RETRY_AFTER_SCHEMA_VALIDATION_ERROR_ONCE":
         raise RuntimeError("Retry authorization or branch missing")
-    if RETRY.exists():
-        raise RuntimeError("Retry ledger already exists; never send twice")
+    if not RETRY.exists():
+        raise RuntimeError("Server-side pre-send ledger is missing; refuse")
+    ledger = json.loads(RETRY.read_text(encoding="utf-8"))
+    if ledger.get("state") != "pre_send_reservation_held_no_auto_retry":
+        raise RuntimeError("Pre-send ledger not in approved single-use state")
     previous = json.loads(INTENT.read_text(encoding="utf-8"))
     request = validate_request()
     verified = verify_asset()
@@ -59,22 +62,12 @@ def main():
     client = BufferReservations()
     client.preflight()
     audit(client, request["text"])
-    record = {
-        "request_id": request["id"],
-        "prior_attempt": "Buffer GraphQL rejected invalid ShareMode=draft (schema-confirmed)",
-        "reason": "Use saveToDraft=true; needsApproval=false; valid ShareMode=addToQueue",
-        "state": "retry_pending_unknown_do_not_retry",
-        "image_url": previous["image_url"],
-        "image_sha256": EXPECTED
-    }
-    # Remote durable intent must exist before the single Buffer mutation.
-    fd = os.open(str(RETRY), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-    with os.fdopen(fd, "w") as f:
-        json.dump(record, f, ensure_ascii=False, indent=2)
-        f.write("\n")
-        f.flush()
-        os.fsync(f.fileno())
-    commit_ledger()
+    # The pre-send ledger has already been committed using the GitHub connector.
+    # No unreliable GitHub Actions git push is needed before calling Buffer.
+    record = dict(ledger)
+    record["state"] = "attempt_outcome_unknown_no_auto_retry"
+    record["image_url"] = previous["image_url"]
+    record["image_sha256"] = EXPECTED
     post = client.create_draft(request["text"], previous["image_url"])
     record["buffer_post_id"] = post["id"]
     remote = client.get_post(post["id"])
