@@ -69,7 +69,7 @@ def main():
     post = client.create_draft(request["text"], image_url)
     record["state"] = "draft_created"
     record["buffer_post_id"] = post["id"]
-    INTENT.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    INTENT.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     subprocess.run(["git", "add", str(INTENT)], check=True)
     subprocess.run(["git", "commit", "-m", "Record one-off Buffer draft receipt"], check=True)
     subprocess.run(["git", "push", "origin", "HEAD:main"], check=True)
