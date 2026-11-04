@@ -1,8 +1,8 @@
 """One manual-approved retry after invalid GraphQL Draft mode, never publishing.
 
 The first createPost was rejected at GraphQL validation; a read-only audit then
-found zero matching posts. This module rechecks immediately and persists its
-single-use attempt in Git before submitting the corrected mutation.
+found zero matching posts. An already-committed remote hold protects this one
+corrected attempt. Read-back is required before reporting success.
 """
 import hashlib
 import json
@@ -79,10 +79,11 @@ def main():
         raise RuntimeError("Draft read-back incomplete; never retry blindly")
     record["state"] = "draft_created_verified"
     RETRY.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print("DRAFT_RETRY_RESULT " + json.dumps({"state": "draft_created_verified", "id": post["id"]}), flush=True)
+    # The workflow also uploads the receipt as an artifact if branch push fails.
     git("add", "--", str(RETRY))
     git("commit", "-m", "Confirm single corrected Buffer Draft and image")
     git("push", "origin", "HEAD:" + BRANCH)
-    print("DRAFT_RETRY_RESULT " + json.dumps({"state": "draft_created_verified", "id": post["id"]}))
 
 if __name__ == "__main__":
     main()
