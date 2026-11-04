@@ -17,6 +17,8 @@ def main():
         raise ValueError("Missing verified image URL and SHA256")
     img=requests.get(url,timeout=30)
     img.raise_for_status()
+    if not img.content.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+        raise ValueError("Image URL did not return PNG bytes; abort before Buffer mutation")
     if hashlib.sha256(img.content).hexdigest()!=sha:
         raise ValueError("Approved image bytes do not match SHA256")
     client=BufferReservations()
