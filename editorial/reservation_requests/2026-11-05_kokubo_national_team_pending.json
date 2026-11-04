@@ -4,9 +4,11 @@
   "text": "🇯🇵🧤 小久保玲央ブライアン、日本代表選出！🔥\nSTVVの守護神が日本代表の舞台へ！\nベルギーで磨いた実力を代表でも見せてほしい！💪\nみんなも小久保選手への応援コメントを届けよう！📣🇯🇵\n#STVV #小久保玲央ブライアン #サッカー日本代表",
   "approved_image_local_name": "kokubo_B_no_label.png",
   "image_public_url": null,
-  "official_source_verified": false,
-  "image_fixture_dates_verified": false,
+  "official_source_verified": true,
+  "image_fixture_dates_verified": true,
   "buffer_reservation_status": "not_submitted",
   "auto_publish": false,
-  "notes": "Staging only. Must verify national-team announcement and image fixture dates; upload approved B crop to HTTPS and invoke dedicated one-off reservation workflow. Do not use De Meyer workflow."
+  "notes": "Official STVV and JFA sources confirm Kokubo selection and image fixture dates. Buffer draft/scheduling still not submitted. Approved B image must be uploaded to reachable HTTPS and exact image verified. Do not invoke De Meyer-specific workflow.",
+  "official_source_url": "https://stvv.jp/news/team/20261104_1/",
+  "jfa_source_url": "https://www.jfa.jp/national_team_2026/news/00036974/"
 }
