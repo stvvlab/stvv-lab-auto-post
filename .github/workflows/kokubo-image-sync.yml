@@ -1,0 +1,9 @@
+name: Verify approved Kokubo image
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo 'Image registration requires verified source bytes'
