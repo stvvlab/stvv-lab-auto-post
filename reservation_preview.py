@@ -75,6 +75,21 @@ def plan(history, now):
             report['fixture_draft'] = {'status': 'blocked',
                                       'reason': 'invalid_fixture_draft',
                                       'included_in_proposals': False}
+    # Read-only coverage: show which upcoming slots lack a durable reservation.
+    # A proposal is not a booking, and this diagnostic never contacts Buffer.
+    covered = set(history['used_posts']) | set(history['pending_posts'])
+    covered.update(history.get('reserved_posts', {}))
+    covered.update(p.get('key') for p in history['publication_log'])
+    report['reservation_coverage'] = {
+        'future_slots': len(slots),
+        'covered_in_local_ledger': sum(
+            f'daily_{due.date()}_{slot}' in covered for due, slot in slots),
+        'uncovered_slots': [
+            {'key': f'daily_{due.date()}_{slot}', 'due_jst': due.isoformat()}
+            for due, slot in slots
+            if f'daily_{due.date()}_{slot}' not in covered],
+        'remote_buffer_verified': False,
+    }
     occupied = (set(history['used_posts']) | set(history['pending_posts'])
                 | set(history.get('reserved_posts', {})))
     occupied.update(p.get('key') for p in history['publication_log'])
