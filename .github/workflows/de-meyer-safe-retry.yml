@@ -4,7 +4,7 @@ on:
     branches:
       - fix/de-meyer-exact-image-transfer-20261104
     paths:
-      - 'editorial/manual_reservation/de_meyer_retry_trigger.json'
+      - 'editorial/manual_reservation/de_meyer_retry_v2_trigger.json'
 permissions:
   contents: write
 concurrency:
@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   one_corrected_draft:
-    if: github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]' && github.run_attempt == 1
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -28,3 +28,10 @@ jobs:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           STVV_ONE_OFF_RETRY_AUTHORIZED: RETRY_AFTER_SCHEMA_VALIDATION_ERROR_ONCE
         run: python -m editorial.manual_reservation.retry_after_schema_fix
+      - name: Preserve receipt as CI artifact even if branch push fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: de-meyer-one-shot-buffer-draft-receipt
+          path: editorial/manual_reservation/de_meyer_retry_v2_ledger.json
+          retention-days: 14
