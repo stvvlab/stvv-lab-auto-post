@@ -1,4 +1,4 @@
-"""Rename only the exact approved De Meyer PNG on its isolated upload branch."""
+"""Rename only the exact approved De Meyer JPEG on its isolated upload branch."""
 import hashlib
 import json
 from pathlib import Path
