@@ -113,6 +113,25 @@ class ReservationPreviewTests(unittest.TestCase):
         self.assertFalse(coverage['remote_buffer_verified'])
         self.assertEqual(self.history, before)
 
+    def test_content_readiness_does_not_count_unapproved_or_expired_cards(self):
+        now = datetime.fromisoformat('2026-10-27T00:00:00+09:00')
+        self.card['status'] = 'draft_unapproved'
+        self.card['reviewed'] = False
+        self.write_card()
+        before = self.manifest.read_bytes()
+        report = plan(self.history, now)
+        self.assertEqual(report['content_readiness']['approved_ready_cards'], 0)
+        self.assertEqual(report['content_readiness']['future_slots_with_candidate'], 0)
+        self.assertTrue(report['content_readiness']['drafts_are_not_publishable'])
+        self.assertEqual(self.manifest.read_bytes(), before)
+        self.card['status'] = 'ready'
+        self.card['reviewed'] = True
+        self.card['publish_due_jst'] = '2026-10-26T18:00:00+09:00'
+        self.write_card()
+        report = plan(self.history, now)
+        self.assertEqual(report['content_readiness']['approved_ready_cards'], 1)
+        self.assertEqual(report['content_readiness']['future_slots_with_candidate'], 0)
+
     def test_invalid_history_does_not_assume_empty(self):
         with self.assertRaises(ValueError):
             plan({}, datetime.fromisoformat('2026-10-26T00:00:00+09:00'))
