@@ -92,8 +92,8 @@ def plan(history, now):
     }
     # Read-only supply diagnostic: distinguish empty approved inventory from
     # missing reservations. Never treat drafts as approved or publishable.
-    from prepared_media import MANIFEST
-    manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
+    import prepared_media
+    manifest = json.loads(prepared_media.MANIFEST.read_text(encoding='utf-8'))
     if not isinstance(manifest.get('cards'), list):
         raise ValueError('Reviewed card manifest must contain a cards list')
     cards = manifest['cards']
