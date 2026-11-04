@@ -135,6 +135,40 @@ class BufferReservations:
         return post
 
 
+
+    def create_draft(self, text, image_url=None):
+        """Create one Buffer draft; caller must persist a one-shot intent first.
+
+        Never retries internally. The returned post must be checked by caller.
+        This does not schedule or publish the post.
+        """
+        if not isinstance(text, str) or not text.strip() or publisher.x_length(text) > 270:
+            raise ValueError('A valid exact caption is required')
+        if image_url is not None and (not isinstance(image_url, str) or
+                                      not image_url.startswith('https://')):
+            raise ValueError('Image URL must be HTTPS')
+        mutation = ('mutation CreateDraft($input: CreatePostInput!) {'
+                    ' createPost(input: $input) {'
+                    ' ... on PostActionSuccess { post { ' + POST_FIELDS + ' } }'
+                    ' ... on MutationError { message }'
+                    ' } }')
+        payload = {'text': text, 'channelId': publisher.CHANNEL,
+                   'schedulingType': 'automatic', 'mode': 'draft'}
+        if image_url:
+            payload['assets'] = [{'image': {'url': image_url}}]
+        data = self.query(mutation, {'input': payload})
+        result = data.get('createPost') or {}
+        post = result.get('post')
+        if not isinstance(post, dict) or not post.get('id'):
+            if result.get('message'):
+                raise ReservationRejected('Buffer rejected draft creation; do not retry automatically')
+            raise RuntimeError('Buffer draft creation outcome unknown; do not retry')
+        if (post.get('status') != 'draft' or post.get('channelId') != publisher.CHANNEL
+                or post.get('text') != text):
+            raise RuntimeError('Buffer draft response identity mismatch; do not retry')
+        return post
+
+
 def known_post_evidence(post, record):
     """Expose only a validated X locator, never a claim of public X rendering."""
     if (not record.get('buffer_id')
