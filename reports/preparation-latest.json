@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-11-04T12:13:15.773943+09:00",
+  "checked_at": "2026-11-04T20:30:35.098377+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
       "url": "https://stvv.jp/news/2026/",
       "status": "ok",
-      "eligible_items": 2
+      "eligible_items": 3
     },
     {
       "url": "https://stvv.jp/news/game/2026/",
@@ -15,7 +15,7 @@
     {
       "url": "https://stvv.jp/news/team/2026/",
       "status": "ok",
-      "eligible_items": 1
+      "eligible_items": 2
     },
     {
       "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -28,7 +28,53 @@
       "eligible_items": 1
     }
   ],
+  "unapproved_draft_suggestions": [
+    {
+      "status": "draft_unapproved",
+      "reviewed": false,
+      "auto_publish": false,
+      "source_url": "https://stvv.jp/news/team/20261102_2/",
+      "source_body_sha256": "7497be12b326b8c7204077710e78e112ac5a1ab60b04dcf0f297a3995f79f3a1",
+      "text": "📢 STVV公式発表：フレデリック・デ・メイヤー（Frédéric De Meyer）監督との契約を解除した。\n\n公式：https://stvv.jp/news/team/20261102_2/",
+      "requires": [
+        "editorial_fact_check",
+        "duplicate_check",
+        "visual_review",
+        "explicit_approval"
+      ]
+    },
+    {
+      "status": "draft_unapproved",
+      "reviewed": false,
+      "auto_publish": false,
+      "source_url": "https://stvv.jp/news/event/20261030_2/",
+      "source_body_sha256": "6a18642e3fb3dad897bab478dc0ae48de470a901ec339d9ab502d27f60c41620",
+      "text": "📣 STVV公式観戦会が11月29日（日）に開催予定！ゲンク戦を日本から応援。参加費は無料です。\n\n公式：https://stvv.jp/news/event/20261030_2/",
+      "requires": [
+        "editorial_fact_check",
+        "duplicate_check",
+        "visual_review",
+        "explicit_approval"
+      ]
+    }
+  ],
   "candidates": [
+    {
+      "source_url": "https://stvv.jp/news/team/20261104_1/",
+      "date_jst": "2026-11-04",
+      "official_heading": "【日本代表】GK小久保玲央ブライアン選手がSAMURAI BLUE メンバーに選出",
+      "status": "needs_editorial_review",
+      "reviewed": false,
+      "remaining": [
+        "verify facts and novelty from body",
+        "write concise sourced caption",
+        "built-in imagegen",
+        "visual review",
+        "register reviewed asset"
+      ],
+      "source_body": "STVVは、本日、公益財団法人日本サッカー協会から発表されましたMIZUHO BLUE CHALLENGE THE KALLANG FOOTBALL SERIES SINGAPORE (11/14 ブラジル戦、11/17 パラグアイ戦)に臨むSAMURAI BLUE（日本代表）メンバーに、GK小久保玲央ブライアン選手が選出されましたので、お知らせいたします。\n【試合日程】\n■MIZUHO BLUE CHALLENGE THE KALLANG FOOTBALL SERIES SINGAPORE\n2026年11月14日(土)\n19:15キックオフ（予定）※日本時間\nvs ブラジル代表　／シンガポールナショナルスタジアム(シンガポール)\n2026年11月17日(火) 22:10キックオフ（予定）※日本時間\nvs パラグアイ代表　／シンガポールナショナルスタジアム(シンガポール)\n【プロフィール】\n■小久保玲央ブライアン（こくぼ れお ぶらいあん）\n生年月日：2001年01月23日\nポジション：GK\n出身：千葉県\n身長・体重：193 cm・93kg",
+      "body_sha256": "a9354dbc7ac21670727b1211e5c91520a6ba98f2cb1fe96808be2f0c14da9b54"
+    },
     {
       "source_url": "https://stvv.jp/news/team/20261102_2/",
       "date_jst": "2026-11-02",
