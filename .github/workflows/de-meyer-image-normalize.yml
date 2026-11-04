@@ -1,11 +1,10 @@
 name: Verify approved De Meyer image and create ONE Buffer Draft
-
 on:
   push:
     branches:
       - fix/de-meyer-exact-image-transfer-20261104
     paths:
-      - 'generated/de_meyer_departure_20261104.jpg'
+      - 'generated/**'
 
 permissions:
   contents: write
@@ -18,7 +17,7 @@ jobs:
   one_draft:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,9 +27,20 @@ jobs:
           python-version: '3.12'
       - name: Install verification and Buffer transport dependencies
         run: python -m pip install requests beautifulsoup4 pillow
-      - name: Verify the exact original image on the branch
+      - name: Identify exact approved bytes and normalize upload filename
+        run: python scripts/normalize_de_meyer_upload.py
+      - name: Preserve original image bytes on this branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- generated/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Normalize approved De Meyer image filename'
+            git push origin HEAD:fix/de-meyer-exact-image-transfer-20261104
+          fi
+      - name: Verify exact original and canonical filename
         run: python scripts/verify_de_meyer_image.py
-      - name: Submit to Buffer Drafts only after durable duplicate checks
+      - name: Submit ONE Buffer Draft with durable intent, duplicate and receipt checks
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           STVV_ONE_OFF_DRAFT_SEND: I_APPROVE_ONE_DRAFT
