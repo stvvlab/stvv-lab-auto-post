@@ -6,6 +6,7 @@ createPost outcome. Requires explicit verified image URL and operator opt-in.
 import hashlib
 import json
 import os
+import subprocess
 from pathlib import Path
 
 from buffer_reservations import BufferReservations
@@ -58,9 +59,22 @@ def main():
         request["text"].encode()).hexdigest(), "image_url": image_url,
         "image_sha256": image_sha, "state": "pending_unknown_do_not_retry"}
     write_once(INTENT, record)
-    # The pending file MUST be persisted to a durable shared ledger before
-    # live sending. A local runner alone cannot guarantee this on ephemeral CI.
-    raise RuntimeError("SAFE STOP: persist pending intent to durable shared ledger before sending")
+    # Persist pending intent remotely before sending, even on ephemeral runners.
+    subprocess.run(["git", "config", "user.name", "stvv-lab-bot"], check=True)
+    subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
+    subprocess.run(["git", "add", str(INTENT)], check=True)
+    subprocess.run(["git", "commit", "-m", "Record pending one-off Buffer draft intent"], check=True)
+    subprocess.run(["git", "push", "origin", "HEAD:main"], check=True)
+    # Unknown outcome leaves pending intent in Git; never retry automatically.
+    post = client.create_draft(request["text"], image_url)
+    record["state"] = "draft_created"
+    record["buffer_post_id"] = post["id"]
+    INTENT.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    subprocess.run(["git", "add", str(INTENT)], check=True)
+    subprocess.run(["git", "commit", "-m", "Record one-off Buffer draft receipt"], check=True)
+    subprocess.run(["git", "push", "origin", "HEAD:main"], check=True)
+    print(json.dumps({"draft_created": True, "buffer_post_id": post["id"]}))
+
 
 
 if __name__ == "__main__":
