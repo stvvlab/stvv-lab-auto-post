@@ -90,6 +90,26 @@ def plan(history, now):
             if f'daily_{due.date()}_{slot}' not in covered],
         'remote_buffer_verified': False,
     }
+    # Read-only supply diagnostic: distinguish empty approved inventory from
+    # missing reservations. Never treat drafts as approved or publishable.
+    from prepared_media import MANIFEST
+    manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))
+    if not isinstance(manifest.get('cards'), list):
+        raise ValueError('Reviewed card manifest must contain a cards list')
+    cards = manifest['cards']
+    ready = [card for card in cards if card.get('status') == 'ready'
+             and card.get('reviewed') is True]
+    eligible_keys = [f'daily_{due.date()}_{slot}' for due, slot in slots
+                     if prepared_candidates(slot, due)]
+    report['content_readiness'] = {
+        'manifest_enabled': manifest.get('enabled') is True,
+        'approved_ready_cards': len(ready),
+        'future_slots_with_candidate': len(eligible_keys),
+        'candidate_slot_keys': eligible_keys,
+        'drafts_are_not_publishable': True,
+        'note': 'Candidate count is preflight only; official-body, media, '
+                'duplicate and Buffer checks remain mandatory.',
+    }
     occupied = (set(history['used_posts']) | set(history['pending_posts'])
                 | set(history.get('reserved_posts', {})))
     occupied.update(p.get('key') for p in history['publication_log'])
