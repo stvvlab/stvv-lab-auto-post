@@ -75,7 +75,9 @@ def build_inventory(history, manifest, now, session=SESSION, max_bodies=3):
         status = 'no_candidate_partial_scan'
     else:
         status = 'no_unposted_candidate_in_scanned_lists'
+    from editorial_draft_suggestions import suggestions
     return {'checked_at': now.isoformat(), 'status': status, 'source_checks': checks,
+            'unapproved_draft_suggestions': suggestions({'candidates': candidates}),
             'candidates': candidates, 'skipped': skipped,
             'ready_cards': sum(c.get('reviewed') is True and c.get('status') == 'ready'
                                for c in manifest.get('cards', [])),
