@@ -15,6 +15,108 @@ def history():
 
 
 class DeliveryRunTests(unittest.TestCase):
+    def test_queue_diagnostic_marks_missed_fixed_due_before_slot_mismatch(self):
+        # The reviewed OH Leuven matchday copy was only approved for Nov 1.
+        # A later scheduled run must not report it as available content.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['player'],
+                    'source_url': 'https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid',
+                    'publish_due_jst': '2026-11-01T18:00:00+09:00'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
+            ledger = history()
+            result = d.queue_snapshot(
+                root, ledger, datetime.fromisoformat('2026-11-03T05:00:00+09:00'), 'news')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['candidates'][0]['selection_block'],
+                             'fixed_publish_due_missed')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'], {'fixed_publish_due_missed': 1})
+            self.assertEqual(ledger, history())
+
+    def test_queue_diagnostic_rejects_unzoned_fixed_due(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'publish_due_jst': '2026-11-01T18:00:00'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T05:00:00+09:00'),
+                'news')
+            self.assertEqual(result['candidates'][0]['selection_block'],
+                             'invalid_fixed_publish_due')
+
+    def test_queue_diagnostic_future_fixed_due_is_not_eligible_for_current_slot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example',
+                    'publish_due_jst': '2026-11-04T18:00:00+09:00'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                'news')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'],
+                             {'fixed_publish_due_not_reached': 1})
+
+    def test_queue_diagnostic_counts_currently_eligible_cards(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example', 'date_jst': '2026-11-03',
+                    'text': 'Verified content', 'media_type': 'text_only',
+                    'text_only_approved': True, 'source_body_sha256': 'a' * 64}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
+            with patch('prepared_media.prepared_duplicate_reason', return_value=None):
+                result = d.queue_snapshot(
+                    root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                    'news')
+            self.assertEqual(result['ready_cards'], 1)
+            self.assertEqual(result['eligible_now_cards'], 1)
+            self.assertEqual(result['blocked_by_reason'], {})
+
+    def test_queue_diagnostic_reports_missing_image_without_sending(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example',
+                    'date_jst': '2026-11-03', 'text': 'Verified content'}
+            (folder / 'imagegen_cards.json').write_text(json.dumps({'enabled': True, 'cards': [card]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                'news')
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'], {'missing_approved_image': 1})
+
+    def test_disabled_manifest_never_counts_ready_inventory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / 'editorial'
+            folder.mkdir()
+            (folder / 'imagegen_cards.json').write_text(json.dumps({
+                'enabled': False, 'cards': [{'status': 'ready', 'reviewed': True,
+                'slots': ['news'], 'date_jst': '2026-11-03',
+                'source_url': 'https://stvv.com/example', 'text': 'Verified content'}]}))
+            result = d.queue_snapshot(
+                root, history(), datetime.fromisoformat('2026-11-03T18:00:00+09:00'),
+                'news')
+            self.assertEqual(result['ready_cards'], 0)
+            self.assertEqual(result['eligible_now_cards'], 0)
+            self.assertEqual(result['blocked_by_reason'], {'manifest_disabled': 1})
+
     def test_buffer_acceptance_is_not_x_display(self):
         before = history()
         after = history()
@@ -106,6 +208,41 @@ class DeliveryRunTests(unittest.TestCase):
                              ['daily_2026-10-30_news'])
             self.assertEqual(report['delivery_state'], 'no_buffer_mutation_due_to_schedule_guard')
             self.assertFalse(report['x_display_verified'])
+
+    def test_late_guard_reports_expired_queue_without_sending(self):
+        # A delayed 23:00 recap run should report the real content shortage
+        # even though the six-hour safety guard prevents all publication.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'editorial').mkdir()
+            card = {'status': 'ready', 'reviewed': True, 'slots': ['news'],
+                    'source_url': 'https://stvv.com/example',
+                    'publish_due_jst': '2026-11-01T18:00:00+09:00'}
+            (root / 'editorial/imagegen_cards.json').write_text(
+                json.dumps({'enabled': True, 'cards': [card]}))
+            ledger = {'reserved_posts': {}, 'pending_posts': {},
+                      'publication_log': []}
+            (root / 'posted.json').write_text(json.dumps(ledger))
+            env = {'STVV_DELIVERY_RECORD': 'true', 'GITHUB_RUN_ID': '41538316518',
+                   'GITHUB_SCHEDULE': '0 14 * * *', 'GITHUB_EVENT_NAME': 'schedule',
+                   'STVV_ADVANCE_RESERVATIONS': 'true'}
+            with patch.dict(os.environ, env, clear=True), patch.object(d, 'ROOT', root), \
+                    patch.object(d, 'datetime', wraps=datetime) as clock, \
+                    patch.object(d.publisher, 'slot_for_run',
+                                 side_effect=RuntimeError('実行が6時間以上遅れたため安全停止')), \
+                    patch('advance_reservations.main') as reserve:
+                clock.now.return_value = datetime.fromisoformat('2026-11-03T07:34:01+09:00')
+                with self.assertRaises(RuntimeError):
+                    d.main()
+                reserve.assert_not_called()
+            report = json.loads((root / 'reports/delivery-latest.json').read_text())
+            self.assertEqual(report['status'], 'blocked_schedule_more_than_six_hours_late')
+            self.assertEqual(report['queue_before']['ready_cards'], 1)
+            self.assertEqual(report['queue_before']['eligible_now_cards'], 0)
+            self.assertEqual(report['queue_before']['blocked_by_reason'],
+                             {'fixed_publish_due_missed': 1})
+            self.assertEqual(json.loads((root / 'posted.json').read_text()), ledger)
+            self.assertEqual(report['new_reservations'], [])
 
     def test_late_guard_read_only_probe_of_overdue_reservation(self):
         now = datetime.fromisoformat('2026-10-30T19:30:00+09:00')

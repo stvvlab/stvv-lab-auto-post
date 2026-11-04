@@ -9,6 +9,7 @@ on:
     - cron: "0 14 * * *"   # JST 23:00
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -70,6 +71,14 @@ jobs:
           STVV_DELIVERY_RECORD: "true"
           STVV_ADVANCE_RESERVATIONS: "true" # Future existing slots; never shareNow
         run: python delivery_run.py
+
+      # Read-only GitHub API probe. No Buffer/X calls or publication changes.
+      # Record run creation vs runner queue vs setup timing separately.
+      - name: Diagnose GitHub Actions scheduling delay
+        if: always() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/actions_timing_probe.py
 
       - name: Preserve actual delivery evidence even after a send error
         if: always() && github.event_name == 'schedule'

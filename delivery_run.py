@@ -21,6 +21,11 @@ def read_ledger(path):
 def queue_snapshot(root, history, now, slot):
     from prepared_media import prepared_duplicate_reason
     manifest = json.loads((root / 'editorial/imagegen_cards.json').read_text())
+    # Disabled manifests cannot supply posts, regardless of ready flags.
+    if manifest.get('enabled') is not True:
+        return {'ready_cards': 0, 'eligible_now_cards': 0,
+                'blocked_by_reason': {'manifest_disabled': 1}, 'candidates': [],
+                'note': 'Reviewed card manifest is disabled; no candidate can be selected.'}
     candidates = []
     for card in manifest.get('cards', []):
         if card.get('status') != 'ready':
@@ -28,9 +33,31 @@ def queue_snapshot(root, history, now, slot):
         reason = None
         if card.get('reviewed') is not True:
             reason = 'not_reviewed'
-        elif slot not in card.get('slots', []):
+        elif card.get('publish_due_jst') is not None:
+            # A one-time matchday reminder must not appear available after its
+            # exact reviewed slot has passed. This is diagnostic only: the
+            # publisher's own strict due-time gate remains unchanged.
+            try:
+                fixed_due = datetime.fromisoformat(card['publish_due_jst'])
+                if (fixed_due.tzinfo is None or fixed_due.utcoffset() is None
+                        or now.tzinfo is None or now.utcoffset() is None):
+                    reason = 'invalid_fixed_publish_due'
+                elif fixed_due < now:
+                    reason = 'fixed_publish_due_missed'
+                elif fixed_due > now:
+                    reason = 'fixed_publish_due_not_reached'
+            except (TypeError, ValueError):
+                reason = 'invalid_fixed_publish_due'
+        if reason is None:
+            from prepared_media import reviewed_text_only
+            if card.get('media_type') == 'text_only':
+                if not reviewed_text_only(card):
+                    reason = 'invalid_text_only_approval'
+            elif not card.get('asset_path'):
+                reason = 'missing_approved_image'
+        if reason is None and slot not in card.get('slots', []):
             reason = 'different_slot'
-        else:
+        if reason is None:
             try:
                 day = datetime.fromisoformat(card['date_jst']).date()
                 if not 0 <= (now.date() - day).days <= 7:
@@ -46,9 +73,19 @@ def queue_snapshot(root, history, now, slot):
                            'asset_path': card.get('asset_path'),
                            'slots': card.get('slots', []),
                            'selection_block': reason})
-    return {'ready_cards': len(candidates), 'candidates': candidates,
-            'note': 'Selection diagnosis only; official body and public image bytes '
-                    'are checked by the publisher before sending.'}
+    # Manifest-ready does not mean currently selectable: an expired reviewed
+    # matchday reminder must not inflate the usable queue count.
+    eligible = sum(item['selection_block'] is None for item in candidates)
+    blocked = {}
+    for item in candidates:
+        reason = item['selection_block']
+        if reason is not None:
+            blocked[reason] = blocked.get(reason, 0) + 1
+    return {'ready_cards': len(candidates), 'eligible_now_cards': eligible,
+            'blocked_by_reason': blocked, 'candidates': candidates,
+            'note': 'Selection diagnosis for the current slot only, not future '
+                    'reservations. Official body and public image bytes are '
+                    'checked by the publisher before sending.'}
 
 
 def delivery_evidence(before, after, day, slot, *, advance=False):
@@ -225,6 +262,13 @@ def record_late_start(now, run_id, advance):
                                      if isinstance(v, dict) and v.get('buffer_status') == 'scheduled'),
             'note': 'Local ledger snapshot; separate overdue probe may query Buffer read-only, never X',
         }
+        # The six-hour guard skips the normal queue snapshot. Diagnose the
+        # missed slot's reviewed inventory without selecting or sending it.
+        # Queue failures must never suppress the reservation coverage above.
+        try:
+            report['queue_before'] = queue_snapshot(ROOT, history, now, slot)
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            report['queue_diagnosis_error'] = type(error).__name__
         if advance:
             report['overdue_reservation_probe'] = probe_overdue_reservations(history, now)
             # Only an exact, previously reserved slot confirmed as sent by
