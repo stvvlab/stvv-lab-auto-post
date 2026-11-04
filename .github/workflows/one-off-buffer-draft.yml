@@ -1,0 +1,29 @@
+name: One-off STVV Buffer Draft
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: stvv-one-off-buffer-draft
+  cancel-in-progress: false
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Prepare isolated draft
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+          STVV_ONE_OFF_DRAFT_SEND: I_APPROVE_ONE_DRAFT
+          STVV_APPROVED_IMAGE_URL: ${{ vars.STVV_APPROVED_IMAGE_URL }}
+          STVV_APPROVED_IMAGE_SHA256: ${{ vars.STVV_APPROVED_IMAGE_SHA256 }}
+        run: |
+          python -m editorial.manual_reservation.one_off_draft
