@@ -8,6 +8,7 @@ import json
 import os
 import re
 import subprocess
+import time
 from pathlib import Path
 
 import requests
@@ -39,7 +40,14 @@ def persist_intent():
     git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
     git("add", "--", str(INTENT))
     git("commit", "-m", "Record single-use pending Buffer Draft request")
-    git("push", "origin", "HEAD:" + BRANCH)
+    for attempt in range(3):
+        try:
+            git("push", "origin", "HEAD:" + BRANCH)
+            break
+        except subprocess.CalledProcessError:
+            if attempt == 2:
+                raise
+            time.sleep(3 * (attempt + 1))
 
 
 def main():
