@@ -1,5 +1,6 @@
 {
   "url": "https://at.adobe.com/NIzs65XLAtar6ilj",
   "expected_sha256": "40c97a3f63667cd930c3d803c7448eebf7b347f5043572927dfcaa65b51843a7",
-  "purpose": "single approved Buffer Draft image transfer"
+  "purpose": "single approved Buffer Draft image transfer",
+  "retry_reason": "Previous run aborted before any Buffer mutation: GitHub returned HTTP 500 while persisting intent; one bounded pre-send retry"
 }
