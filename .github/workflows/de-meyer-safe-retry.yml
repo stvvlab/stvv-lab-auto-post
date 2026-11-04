@@ -1,0 +1,30 @@
+name: One corrected De Meyer Buffer Draft retry
+on:
+  push:
+    branches:
+      - fix/de-meyer-exact-image-transfer-20261104
+    paths:
+      - 'editorial/manual_reservation/de_meyer_retry_trigger.json'
+permissions:
+  contents: write
+concurrency:
+  group: de-meyer-single-draft-send
+  cancel-in-progress: false
+jobs:
+  one_corrected_draft:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Recheck duplicate, commit single-use receipt, send one corrected Draft
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          STVV_ONE_OFF_RETRY_AUTHORIZED: RETRY_AFTER_SCHEMA_VALIDATION_ERROR_ONCE
+        run: python -m editorial.manual_reservation.retry_after_schema_fix
