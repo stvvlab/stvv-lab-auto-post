@@ -7,7 +7,6 @@ corrected attempt. Read-back is required before reporting success.
 import hashlib
 import json
 import os
-import subprocess
 from pathlib import Path
 from buffer_reservations import BufferReservations
 from editorial.manual_reservation.draft_preflight import validate_request
@@ -18,16 +17,6 @@ BRANCH = "fix/de-meyer-exact-image-transfer-20261104"
 INTENT = Path("editorial/manual_reservation/de_meyer_draft_send_intent.json")
 RETRY = Path("editorial/manual_reservation/de_meyer_retry_v2_ledger.json")
 EXPECTED = "40c97a3f63667cd930c3d803c7448eebf7b347f5043572927dfcaa65b51843a7"
-
-def git(*args):
-    subprocess.run(["git", *args], check=True, capture_output=True, text=True)
-
-def commit_ledger():
-    git("config", "user.name", "github-actions[bot]")
-    git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
-    git("add", "--", str(RETRY))
-    git("commit", "-m", "Record single-use corrected Buffer Draft attempt")
-    git("push", "origin", "HEAD:" + BRANCH)
 
 def audit(client, caption):
     account = client.query("query { account { organizations { id } } }").get("account") or {}
@@ -80,10 +69,9 @@ def main():
     record["state"] = "draft_created_verified"
     RETRY.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("DRAFT_RETRY_RESULT " + json.dumps({"state": "draft_created_verified", "id": post["id"]}), flush=True)
-    # The workflow also uploads the receipt as an artifact if branch push fails.
-    git("add", "--", str(RETRY))
-    git("commit", "-m", "Confirm single corrected Buffer Draft and image")
-    git("push", "origin", "HEAD:" + BRANCH)
+    # GitHub Actions must NOT commit/push after a successful Buffer mutation.
+    # The workflow's upload-artifact step persists this local receipt.
+    # A separate GitHub connector update can mirror the verified receipt.
 
 if __name__ == "__main__":
     main()
