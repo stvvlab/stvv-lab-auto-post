@@ -22,7 +22,7 @@ def import_asset():
     dest = ROOT / ASSET
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists():
-        raise ValueError("Destination already exists; do not overwrite")
+        return verify_asset(ROOT)  # no re-encoding or overwrite
     dest.write_bytes(raw)
     return verify_asset(ROOT)
 
