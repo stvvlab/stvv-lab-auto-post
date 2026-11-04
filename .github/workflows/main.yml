@@ -105,3 +105,34 @@ jobs:
               git push origin HEAD:main
             fi
           fi
+
+      # Prepare next-run editorial suggestions after delivery. This is strictly
+      # read-only with respect to Buffer/X, approval manifest and posting ledger.
+      # Source failures are diagnostic and must never retry a publication.
+      - name: Prepare official-source editorial drafts (offline)
+        if: always() && github.event_name == 'schedule'
+        continue-on-error: true
+        run: python preparation_inventory.py
+
+      - name: Preserve editorial preparation evidence
+        if: always() && github.event_name == 'schedule'
+        uses: actions/upload-artifact@v4
+        with:
+          name: editorial-preparation-${{ github.run_id }}
+          path: reports/preparation-latest.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Save editorial preparation report without changing posting state
+        if: always() && github.event_name == 'schedule'
+        run: |
+          if [ -f reports/preparation-latest.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add reports/preparation-latest.json
+            if ! git diff --cached --quiet; then
+              git commit -m "Record offline editorial preparation diagnostics"
+              git pull --rebase origin main
+              git push origin HEAD:main
+            fi
+          fi
