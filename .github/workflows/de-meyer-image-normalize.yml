@@ -5,6 +5,7 @@ on:
       - fix/de-meyer-exact-image-transfer-20261104
     paths:
       - 'generated/**'
+      - 'editorial/manual_reservation/de_meyer_image_source.json'
 
 permissions:
   contents: write
@@ -27,8 +28,14 @@ jobs:
           python-version: '3.12'
       - name: Install verification and Buffer transport dependencies
         run: python -m pip install requests beautifulsoup4 pillow
-      - name: Identify exact approved bytes and normalize upload filename
-        run: python scripts/normalize_de_meyer_upload.py
+      - name: Retrieve exact image from Adobe handoff (only when supplied)
+        shell: bash
+        run: |
+          if [ -f editorial/manual_reservation/de_meyer_image_source.json ]; then
+            python -m scripts.import_de_meyer_asset
+          else
+            python scripts/normalize_de_meyer_upload.py
+          fi
       - name: Preserve original image bytes on this branch
         run: |
           git config user.name 'github-actions[bot]'
