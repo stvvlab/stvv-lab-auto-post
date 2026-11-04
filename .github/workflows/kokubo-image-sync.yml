@@ -1,9 +1,24 @@
 name: Verify approved Kokubo image
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - editorial/manual_reservation/kokubo_image_registration_notes.txt
+permissions:
+  contents: write
 jobs:
   verify:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo 'Image registration requires verified source bytes'
+      - name: Import exact PNG
+        run: |
+          curl -fL --retry 2 -o /tmp/kokubo.png 'https://at.adobe.com/5uFXLK0SCrbuIxEi'
+          echo '0fc543e6dd60cbe5c925f2f1611938155d974701b13ec5067cb64062dd006d49  /tmp/kokubo.png' | sha256sum -c -
+          mkdir -p generated
+          cp /tmp/kokubo.png generated/kokubo_B_no_label.png
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add generated/kokubo_B_no_label.png
+          git diff --cached --quiet || (git commit -m 'Register approved Kokubo B image' && git push)
