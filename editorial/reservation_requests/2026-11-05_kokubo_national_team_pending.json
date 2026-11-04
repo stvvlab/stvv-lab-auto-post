@@ -8,7 +8,7 @@
   "image_fixture_dates_verified": true,
   "buffer_reservation_status": "ready_to_submit_once",
   "auto_publish": false,
-  "notes": "Approved exact caption and image. Submit once only; inspect Buffer on uncertain outcome; never retry blindly.",
+  "notes": "Approved exact caption and image. Previous attempt stopped at Buffer channel preflight before submission; retry once after removing channel secret override. Inspect Buffer on uncertain outcome; never retry blindly.",
   "official_source_url": "https://stvv.jp/news/team/20261104_1/",
   "jfa_source_url": "https://www.jfa.jp/national_team_2026/news/00036974/",
   "image_sha256": "0fc543e6dd60cbe5c925f2f1611938155d974701b13ec5067cb64062dd006d49"
