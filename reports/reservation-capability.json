@@ -1,16 +1,16 @@
 {
-  "checked_at": "2026-10-31T20:57:45.655278+09:00",
+  "checked_at": "2026-11-04T18:01:38.587624+09:00",
   "status": "read_permission_capacity_and_status_query_verified",
   "mutations_attempted": 0,
   "paid_api_or_contract_change": false,
-  "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41198989360",
-  "probe_commit": "ab74c912f91ad0b8cda187175ea8d28f60e777db",
+  "workflow_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41804029089",
+  "probe_commit": "e9f7408b4fc03a76b78f6519d24c1c539a747dca",
   "channel_id": "6ab8fce4ea19ca0bde027d80",
   "scheduled_limit": 10,
   "active_count": 0,
   "remaining_capacity": 10,
   "known_post": {
-    "buffer_id": "6ae353fa835dd2febef21af5",
+    "buffer_id": "6ae5e787406ab8a018bc9c24",
     "buffer_status": "sent",
     "x_permalink_candidate": null,
     "x_display_verified": false
