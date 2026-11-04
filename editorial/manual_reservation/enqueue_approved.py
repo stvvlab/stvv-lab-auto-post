@@ -5,7 +5,8 @@ from buffer_reservations import BufferReservations,POST_FIELDS
 
 def main():
     path=Path(os.environ["REQUEST_PATH"])
-    if not str(path).startswith("editorial/reservation_requests/") or path.suffix!=".json":
+    root=Path("editorial/reservation_requests").resolve()
+    if path.suffix!=".json" or not path.resolve().is_relative_to(root):
         raise ValueError("Request must be an editorial JSON file")
     req=json.loads(path.read_text(encoding="utf-8"))
     if req.get("approval_status")!="approved":
@@ -17,7 +18,7 @@ def main():
         raise ValueError("Missing verified image URL and SHA256")
     img=requests.get(url,timeout=30)
     img.raise_for_status()
-    if not img.content.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+    if not img.content.startswith(bytes.fromhex("89504e470d0a1a0a")):
         raise ValueError("Image URL did not return PNG bytes; abort before Buffer mutation")
     if hashlib.sha256(img.content).hexdigest()!=sha:
         raise ValueError("Approved image bytes do not match SHA256")
@@ -26,7 +27,12 @@ def main():
     if snap["remaining_capacity"]<1:
         raise ValueError("Buffer queue capacity exhausted")
     if any(p.get("text")==caption for p in snap["posts"]):
-        raise ValueError("Duplicate post found; no action")
+        raise ValueError("Duplicate queued or sent post found; no action")
+    # Drafts are not included in preflight posts; reject matching drafts as well.
+    organizations=client.query("query { account { organizations { id } } }")["account"]["organizations"]
+    for org in organizations:
+        if any(p.get("text")==caption for p in client.posts(org["id"],["draft"],channel=snap["channel_id"])):
+            raise ValueError("Matching Buffer draft found; no action")
     query=("mutation Queue($input: CreatePostInput!) { createPost(input:$input) { ... on PostActionSuccess { post { "+POST_FIELDS+" } } ... on MutationError { message } } }")
     payload={"text":caption,"channelId":snap["channel_id"],"assets":[{"image":{"url":url}}],"schedulingType":"automatic","mode":"addToQueue","needsApproval":False,"saveToDraft":False}
     # No automatic retries: ambiguous provider outcomes require manual inspection.
