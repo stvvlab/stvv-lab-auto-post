@@ -8,5 +8,12 @@
   "mode": "addToQueue",
   "shareNow": false,
   "saveToDraft": false,
-  "state": "precommitted_one_shot_queue_intent"
+  "state": "scheduled_verified",
+  "buffer_post_id": "6aeb2801fec7ad8c91a17ebd",
+  "due_at_utc": "2026-11-05T00:29:00.000Z",
+  "due_at_jst": "2026-11-05T09:29:00+09:00",
+  "remote_status": "scheduled",
+  "draft_preserved": true,
+  "verification_run": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41831445615",
+  "retries_prohibited": true
 }
