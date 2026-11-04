@@ -1,0 +1,66 @@
+name: Import approved editorial PNG
+on:
+  workflow_dispatch:
+    inputs:
+      image_url:
+        description: Public HTTPS URL of the exact approved PNG
+        required: true
+        type: string
+      image_sha256:
+        description: SHA-256 of approved image (64 lowercase hex characters)
+        required: true
+        type: string
+      destination:
+        description: Repository path under generated/
+        required: true
+        type: string
+permissions:
+  contents: write
+concurrency:
+  group: approved-image-import
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate and import exact approved image
+        env:
+          IMAGE_URL: ${{ inputs.image_url }}
+          IMAGE_SHA256: ${{ inputs.image_sha256 }}
+          DESTINATION: ${{ inputs.destination }}
+        run: |
+          python - <<'PY'
+          import os,re,pathlib,hashlib,urllib.request
+          url=os.environ["IMAGE_URL"]
+          sha=os.environ["IMAGE_SHA256"]
+          dest=os.environ["DESTINATION"]
+          if not url.startswith("https://") or not re.fullmatch(r"[0-9a-f]{64}",sha):
+              raise SystemExit("Invalid HTTPS URL or SHA256")
+          if not re.fullmatch(r"generated/[A-Za-z0-9_./-]+\.png",dest) or ".." in pathlib.PurePosixPath(dest).parts:
+              raise SystemExit("Invalid destination")
+          with urllib.request.urlopen(url,timeout=30) as response:
+              data=response.read(15_000_001)
+          if len(data)>15_000_000 or not data.startswith(bytes.fromhex("89504e470d0a1a0a")):
+              raise SystemExit("Not a valid-sized PNG")
+          if hashlib.sha256(data).hexdigest()!=sha:
+              raise SystemExit("Approved image hash mismatch")
+          path=pathlib.Path(dest)
+          if path.exists():
+              if path.read_bytes()!=data:
+                  raise SystemExit("Destination exists with different bytes")
+              print("ALREADY_REGISTERED "+dest)
+          else:
+              path.parent.mkdir(parents=True,exist_ok=True)
+              path.write_bytes(data)
+              print("IMPORTED_VERIFIED "+dest)
+          PY
+      - name: Commit only the verified image
+        env:
+          DESTINATION: ${{ inputs.destination }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "$DESTINATION"
+          git diff --cached --quiet || (git commit -m "Register approved editorial PNG" && git push)
