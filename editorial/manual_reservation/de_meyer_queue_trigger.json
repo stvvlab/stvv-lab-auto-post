@@ -1,0 +1,7 @@
+{
+  "request_id": "stvv-2026-11-02-de-meyer-departure",
+  "action": "add_one_to_buffer_queue",
+  "allow_duplicate_of_existing_draft": true,
+  "share_now": false,
+  "one_shot": true
+}
