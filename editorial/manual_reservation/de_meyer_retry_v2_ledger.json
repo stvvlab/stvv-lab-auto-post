@@ -1,0 +1,6 @@
+{
+  "request_id": "stvv-2026-11-02-de-meyer-departure",
+  "state": "pre_send_reservation_held_no_auto_retry",
+  "image_sha256": "40c97a3f63667cd930c3d803c7448eebf7b347f5043572927dfcaa65b51843a7",
+  "note": "Provider retry not initiated; hold to require explicit verified single-shot invocation"
+}
