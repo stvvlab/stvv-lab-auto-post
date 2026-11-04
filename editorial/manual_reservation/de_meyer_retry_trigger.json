@@ -1,0 +1,5 @@
+{
+  "request_id": "stvv-2026-11-02-de-meyer-departure",
+  "reason": "Original GraphQL mutation rejected as invalid ShareMode=draft and missing required needsApproval; 0 matches in read-only Buffer audit",
+  "action": "one corrected Buffer Draft only, never schedule/publish"
+}
