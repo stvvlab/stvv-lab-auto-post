@@ -97,6 +97,22 @@ class ReservationPreviewTests(unittest.TestCase):
         self.assertEqual(self.manifest.read_bytes(), original)
         self.assertFalse(result['live_transport_changed'])
 
+    def test_coverage_diagnostic_is_read_only_and_distinguishes_pending(self):
+        now = datetime.fromisoformat('2026-10-27T00:00:00+09:00')
+        slots = future_slots(now)
+        first_due, first_slot = slots[0]
+        key = f'daily_{first_due.date()}_{first_slot}'
+        self.history['pending_posts'][key] = {'send_state': 'unknown'}
+        before = copy.deepcopy(self.history)
+        result = plan(self.history, now)
+        coverage = result['reservation_coverage']
+        self.assertEqual(coverage['future_slots'], len(slots))
+        self.assertEqual(coverage['covered_in_local_ledger'], 1)
+        self.assertEqual(len(coverage['uncovered_slots']), len(slots) - 1)
+        self.assertNotIn(key, [item['key'] for item in coverage['uncovered_slots']])
+        self.assertFalse(coverage['remote_buffer_verified'])
+        self.assertEqual(self.history, before)
+
     def test_invalid_history_does_not_assume_empty(self):
         with self.assertRaises(ValueError):
             plan({}, datetime.fromisoformat('2026-10-26T00:00:00+09:00'))
