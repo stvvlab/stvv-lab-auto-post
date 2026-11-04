@@ -1,1 +1,5 @@
-{"purpose":"verify createPost schema","read_only":true}
+{
+  "purpose": "verify createPost enums",
+  "read_only": true,
+  "revision": 2
+}
