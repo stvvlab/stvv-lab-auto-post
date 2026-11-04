@@ -6,7 +6,7 @@ on:
     paths:
       - 'editorial/manual_reservation/de_meyer_retry_v2_trigger.json'
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: de-meyer-single-draft-send
   cancel-in-progress: false
@@ -23,12 +23,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install requests beautifulsoup4 pillow
-      - name: Recheck duplicate, commit single-use receipt, send one corrected Draft
+      - name: Recheck duplicates and send only if single-use ledger is unspent
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           STVV_ONE_OFF_RETRY_AUTHORIZED: RETRY_AFTER_SCHEMA_VALIDATION_ERROR_ONCE
         run: python -m editorial.manual_reservation.retry_after_schema_fix
-      - name: Preserve receipt as CI artifact even if branch push fails
+      - name: Preserve local verification receipt as CI artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
