@@ -45,6 +45,8 @@ def audit(client, caption):
 def main():
     if os.getenv("GITHUB_REF_NAME") != BRANCH or os.getenv("STVV_ONE_OFF_RETRY_AUTHORIZED") != "RETRY_AFTER_SCHEMA_VALIDATION_ERROR_ONCE":
         raise RuntimeError("Retry authorization or branch missing")
+    if os.getenv("GITHUB_RUN_ATTEMPT") != "1":
+        raise RuntimeError("Re-run is prohibited to avoid duplicate Drafts")
     if not RETRY.exists():
         raise RuntimeError("Server-side pre-send ledger is missing; refuse")
     ledger = json.loads(RETRY.read_text(encoding="utf-8"))
