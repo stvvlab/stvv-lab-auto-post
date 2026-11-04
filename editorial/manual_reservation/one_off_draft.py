@@ -85,14 +85,31 @@ def main():
     }
     write_once(INTENT, record)
     persist_intent()  # durable remote ledger before the only Buffer mutation
+    # Exactly one provider mutation. The intent remains pending if any
+    # response is incomplete; do not risk a blind duplicate retry.
     post = client.create_draft(request["text"], image_url)
-    record["state"] = "draft_created"
     record["buffer_post_id"] = post["id"]
+    remote = client.get_post(post["id"])
+    if (remote.get("id") != post["id"] or
+            remote.get("channelId") != snapshot["channel_id"] or
+            remote.get("text") != request["text"] or
+            remote.get("status") != "draft"):
+        raise RuntimeError("Buffer Draft read-back identity mismatch; pending intent prevents retry")
+    assets = remote.get("assets")
+    if not isinstance(assets, list) or not any(
+            isinstance(asset, dict) and
+            (asset.get("source") == image_url or
+             (asset.get("type") == "image" and asset.get("source")))
+            for asset in assets):
+        raise RuntimeError("Buffer Draft read-back has no confirmed image asset; do not retry")
+    record["state"] = "draft_created"
+    record["remote_readback_verified"] = True
     INTENT.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     git("add", "--", str(INTENT))
-    git("commit", "-m", "Record Buffer Draft receipt")
+    git("commit", "-m", "Record verified Buffer Draft read-back")
     git("push", "origin", "HEAD:" + BRANCH)
-    print(json.dumps({"status": "draft_created", "buffer_post_id": post["id"]}))
+    print(json.dumps({"status": "draft_created", "buffer_post_id": post["id"],
+                      "remote_readback_verified": True}))
 
 
 if __name__ == "__main__":
