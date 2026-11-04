@@ -1,0 +1,3 @@
+Approved asset: kokubo_B_no_label.png
+SHA256: 0fc543e6dd60cbe5c925f2f1611938155d974701b13ec5067cb64062dd006d49
+Status: binary image not yet registered
