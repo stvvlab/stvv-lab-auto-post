@@ -1,0 +1,74 @@
+{
+  "started_at": "2026-11-05T11:59:10.708969+09:00",
+  "slot": "player",
+  "date_jst": "2026-11-05",
+  "scheduled_at": "2026-11-05T08:00:00+09:00",
+  "start_delay_seconds": 14350,
+  "schedule_delay_diagnostic": "severe_schedule_to_delivery_delay_unattributed",
+  "run_id": "41958662742",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41958662742",
+  "commit": "aba276f69dc218ad1ce4b7fa7bd474f2d6feefa9",
+  "manual_dispatch_performed": false,
+  "status": "skipped_no_verified_content",
+  "x_display_verified": false,
+  "delivery_mode": "advance_reservations",
+  "queue_before": {
+    "ready_cards": 1,
+    "eligible_now_cards": 0,
+    "blocked_by_reason": {
+      "fixed_publish_due_missed": 1
+    },
+    "candidates": [
+      {
+        "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+        "asset_path": null,
+        "slots": [
+          "news"
+        ],
+        "selection_block": "fixed_publish_due_missed"
+      }
+    ],
+    "note": "Selection diagnosis for the current slot only, not future reservations. Official body and public image bytes are checked by the publisher before sending."
+  },
+  "finished_at": "2026-11-05T11:59:10.724112+09:00",
+  "new_publications": [],
+  "pending_key": null,
+  "delivery_state": "historical_sent_and_cancelled_no_new_acceptance",
+  "new_reservations": [],
+  "reservation_states": [
+    {
+      "key": "daily_2026-10-29_news",
+      "buffer_status": "cancelled_by_user",
+      "due_at": "2026-10-29T09:00:00Z",
+      "x_display_verified": false
+    },
+    {
+      "key": "daily_2026-10-30_news",
+      "buffer_status": "sent",
+      "due_at": "2026-10-30T09:00:00Z",
+      "x_display_verified": false
+    },
+    {
+      "key": "daily_2026-11-01_news",
+      "buffer_status": "sent",
+      "due_at": "2026-11-01T09:00:00Z",
+      "x_display_verified": false
+    }
+  ],
+  "pending_reservation_keys": [],
+  "actions_timing": {
+    "status": "ok",
+    "workflow_created_at": "2026-11-05T02:58:59Z",
+    "workflow_started_at": "2026-11-05T02:58:59Z",
+    "job_created_at": "2026-11-05T02:59:00Z",
+    "job_started_at": "2026-11-05T02:59:02Z",
+    "cron_to_workflow_creation_seconds": 14339,
+    "workflow_creation_to_job_creation_seconds": 1,
+    "workflow_creation_to_job_start_seconds": 3,
+    "job_queue_seconds": 2,
+    "job_start_to_delivery_start_seconds": 8,
+    "note": "Timing segments are observations, not proof of GitHub's internal delay cause.",
+    "largest_known_stage": "workflow_created_late",
+    "largest_known_stage_seconds": 14339
+  }
+}
