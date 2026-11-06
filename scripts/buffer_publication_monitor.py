@@ -10,10 +10,22 @@ import re
 from urllib.parse import urlsplit
 
 from advance_reservations import verify_echo, stamp
-from buffer_reservations import BufferReservations
+from buffer_reservations import BufferReservations, POST_FIELDS
 from stvv_post import CHANNEL, JST
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class ReadOnlyMonitorClient(BufferReservations):
+    """Query only fields needed to verify delivery; never mutate Buffer."""
+
+    def get_post(self, post_id):
+        post = self.query('query MonitorPost($input: PostInput!) { post(input: $input) { '
+                          + POST_FIELDS + ' } }', {'input': {'id': post_id}}).get('post')
+        if not isinstance(post, dict):
+            raise RuntimeError('Reservation status is unavailable; do not resend')
+        return post
+
 
 
 def classify(status, due_at, now, grace_minutes=15):
@@ -107,7 +119,7 @@ def main():
               "x_display_verified": False, "reservations": []}
     try:
         history = json.loads((ROOT / "posted.json").read_text(encoding="utf-8"))
-        report["reservations"] = collect(history, BufferReservations(), now)
+        report["reservations"] = collect(history, ReadOnlyMonitorClient(), now)
         report["status"] = ("action_required" if any(
             needs_attention(row) for row in report["reservations"])
             else "checked")
