@@ -20,8 +20,8 @@ class ReadOnlyMonitorClient(BufferReservations):
     """Query only fields needed to verify delivery; never mutate Buffer."""
 
     def get_post(self, post_id):
-        post = self.query('query MonitorPost($input: PostInput!) { post(input: $input) { '
-                          + POST_FIELDS + ' } }', {'input': {'id': post_id}}).get('post')
+        post = self.query('query { post(input: {id: ' + json.dumps(post_id)
+                          + '}) { ' + POST_FIELDS + ' } }').get('post')
         if not isinstance(post, dict):
             raise RuntimeError('Reservation status is unavailable; do not resend')
         return post
