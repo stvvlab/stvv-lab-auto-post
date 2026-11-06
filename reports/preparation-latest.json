@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-06T12:00:26.841598+09:00",
+  "checked_at": "2026-11-07T01:27:41.389253+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
@@ -15,7 +15,7 @@
     {
       "url": "https://stvv.jp/news/team/2026/",
       "status": "ok",
-      "eligible_items": 2
+      "eligible_items": 3
     },
     {
       "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -25,26 +25,27 @@
     {
       "url": "https://stvv.jp/news/event/2026/",
       "status": "ok",
-      "eligible_items": 1
+      "eligible_items": 0
     }
   ],
-  "unapproved_draft_suggestions": [
-    {
-      "status": "draft_unapproved",
-      "reviewed": false,
-      "auto_publish": false,
-      "source_url": "https://stvv.jp/news/team/20261102_2/",
-      "source_body_sha256": "7497be12b326b8c7204077710e78e112ac5a1ab60b04dcf0f297a3995f79f3a1",
-      "text": "📢 STVV公式発表：フレデリック・デ・メイヤー（Frédéric De Meyer）監督との契約を解除した。\n\n公式：https://stvv.jp/news/team/20261102_2/",
-      "requires": [
-        "editorial_fact_check",
-        "duplicate_check",
-        "visual_review",
-        "explicit_approval"
-      ]
-    }
-  ],
+  "unapproved_draft_suggestions": [],
   "candidates": [
+    {
+      "source_url": "https://stvv.jp/news/team/20261106_3/",
+      "date_jst": "2026-11-06",
+      "official_heading": "【お知らせ】ヨナス・デ・ロック氏の新監督就任について",
+      "status": "needs_editorial_review",
+      "reviewed": false,
+      "remaining": [
+        "verify facts and novelty from body",
+        "write concise sourced caption",
+        "built-in imagegen",
+        "visual review",
+        "register reviewed asset"
+      ],
+      "source_body": "シント=トロイデンVV（以下、STVV）は、ヨナス・デ・ロック（Jonas De Roeck）氏がトップチームの監督に就任することが決定いたしましたのでお知らせいたします。\nコーチ陣の体制に関しては決まり次第、発表いたします。\n【立石敬之 CEO コメント】\n「ヨナス・デ・ロックは2017-2018年にSTVVに在籍していた頃から、高く評価されていました。その後も交流を続ける中で、指導者としてさらなる成長を感じてきました。\n彼はウェステルローを昇格に導き、アントワープをプレーオフ1に進出させました。また、ヴァンサン・コンパニのような一流の指導者とともに経験を重ね、クラブ・ブルージュではユースリーグ決勝進出を果たしています。\nヨナスは当クラブへの理解も深く、対話を重ねる中で、我々のフィロソフィーをピッチ上で体現できる監督だと確信しました。ともに、一日でも早く順位を上げていきたいと考えています」\n■プロフィール\n生年月日：1979年12月20日\n国籍：ベルギー\n【経歴】\n2015-2016: K. Lyra-Lierse 監督\n2016-2017: Berchem Sport 監督\n2017-2018: シント＝トロイデンVV 監督\n2018-2019: アンデルレヒト U19 監督\n2018-2019.6: アンデルレヒト U21 監督\n2018-2021: アンデルレヒト　アシスタントコーチ\n2021-2023.12: ウェステルロー 監督\n2024-2025.3: アントワープ 監督\n2025-2026：クラブ・ブルージュ U19監督\n2025-2026: クラブNXT 監督",
+      "body_sha256": "35894731cd2d3576a2bbee019e921dba628569643b4853cc54339972c19966f3"
+    },
     {
       "source_url": "https://stvv.jp/news/game/20261106_1/",
       "date_jst": "2026-11-06",
@@ -81,22 +82,6 @@
       "source_url": "https://stvv.jp/news/team/20261102_2/",
       "date_jst": "2026-11-02",
       "official_heading": "【お知らせ】フレデリック・デ・メイヤー監督 契約解除について",
-      "status": "needs_editorial_review",
-      "reviewed": false,
-      "remaining": [
-        "verify facts and novelty from body",
-        "write concise sourced caption",
-        "built-in imagegen",
-        "visual review",
-        "register reviewed asset"
-      ],
-      "source_body": "この度、2026-2027シーズン開幕より指揮をとっておりましたフレデリック・デ・メイヤー（Frédéric De Meyer）監督との契約を解除いたしましたので、お知らせいたします。\nなお、本日11月3日のトレーニングより、アシスタントコーチのセップ・デ・ルーファ（Sepp De Roover）が暫定的にチームの指揮を執ります。\n新監督については、決定次第公式お知らせいたします。\n【シント=トロイデンVV CEO 立石敬之 コメント】\n「フレデリック・デ・メイヤー監督は、アシスタントコーチ時代から数年間にわたり、その温かい人柄と情熱でクラブのために全力を尽くしてくれました。今シーズンより彼にトップチームの監督を託し、素晴らしいサッカーを展開した試合もありましたが、プロの世界では最終的に結果が求められます。リーグ戦5連敗という現状を重く受け止め、苦渋の決断ではありますが、新体制へ移行することといたしました。これまでのクラブへの多大なる貢献に深く感謝し、彼の今後の成功を心から願っています。\n我々は今シーズン、競争力のあるチームを築くために積極的な投資を行ってきました。現在の順位は選手たちが本来持っている実力を反映したものではなく、今のチームには複数の大会を十分に戦い抜く力があると確信しています。\n代表ウィークに入るまでに、まだ重要な2試合が控えています。STVVを応援してくださっている全てのファン・サポーターの皆様の力をお借りし、この2試合を勝利への軌道を取り戻す確かなきっかけにしたいと考えています」",
-      "body_sha256": "7497be12b326b8c7204077710e78e112ac5a1ab60b04dcf0f297a3995f79f3a1"
-    },
-    {
-      "source_url": "https://stvv.jp/news/event/20261030_2/",
-      "date_jst": "2026-10-30",
-      "official_heading": "【今シーズンも開催！】11月29日(日)ゲンクとのダービーマッチで観戦会開催が決定！",
       "status": "needs_body_fetch",
       "reviewed": false,
       "remaining": [
