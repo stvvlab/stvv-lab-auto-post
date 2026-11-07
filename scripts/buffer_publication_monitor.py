@@ -19,6 +19,43 @@ ROOT = Path(__file__).resolve().parents[1]
 class ReadOnlyMonitorClient(BufferReservations):
     """Query only fields needed to verify delivery; never mutate Buffer."""
 
+    def query(self, query, variables=None):
+        """Diagnose read-only API failures without exposing tokens or response bodies."""
+        key = os.getenv("BUFFER_API_KEY")
+        if not key:
+            raise RuntimeError("monitor_config_missing_api_key")
+        try:
+            response = self.session.post(
+                __import__("stvv_post").BUFFER,
+                json={"query": query, "variables": variables or {}},
+                timeout=25,
+                headers={"Authorization": "Bearer " + key,
+                         "Content-Type": "application/json"})
+        except __import__("requests").exceptions.Timeout:
+            raise RuntimeError("monitor_api_timeout") from None
+        except __import__("requests").exceptions.RequestException:
+            raise RuntimeError("monitor_api_network_error") from None
+        code = response.status_code
+        if code in (401, 403):
+            raise RuntimeError("monitor_api_auth_or_permission_" + str(code))
+        if code == 429:
+            raise RuntimeError("monitor_api_rate_limited")
+        if code >= 500:
+            raise RuntimeError("monitor_api_server_error_" + str(code))
+        if code >= 400:
+            raise RuntimeError("monitor_api_http_error_" + str(code))
+        try:
+            payload = response.json()
+        except ValueError:
+            raise RuntimeError("monitor_api_non_json_response") from None
+        if not isinstance(payload, dict):
+            raise RuntimeError("monitor_api_invalid_response")
+        if payload.get("errors"):
+            raise RuntimeError("monitor_api_graphql_errors")
+        if not isinstance(payload.get("data"), dict):
+            raise RuntimeError("monitor_api_missing_data")
+        return payload["data"]
+
     def get_post(self, post_id):
         post = self.query('query { post(input: {id: ' + json.dumps(post_id)
                           + '}) { ' + POST_FIELDS + ' } }').get('post')
@@ -126,6 +163,7 @@ def main():
     except Exception as error:
         report["status"] = "check_failed_do_not_retry"
         report["error_type"] = type(error).__name__
+        report["diagnostic"] = str(error) if str(error).startswith("monitor_") else "monitor_other_error"
         raise
     finally:
         path = ROOT / "reports/buffer-publication-monitor.json"
