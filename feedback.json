@@ -29,8 +29,8 @@
       "slot": "recap",
       "buffer_id": "6adbeb4e8b3d437ddc8df023",
       "submitted_at": "2026-10-24T08:18:41.033017+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
-      "metrics_updated_at": "2026-11-05T18:32:20.732Z",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
+      "metrics_updated_at": "2026-11-07T16:32:37.453Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -46,8 +46,8 @@
       "slot": "recap",
       "buffer_id": "6ad7b75025c4beedd139fd70",
       "submitted_at": "2026-10-21T03:47:47.055840+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
-      "metrics_updated_at": "2026-11-05T18:32:20.732Z",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
+      "metrics_updated_at": "2026-11-07T16:32:37.453Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1151,7 +1151,7 @@
       "slot": "recap",
       "buffer_id": "6ad6294ea9028f90356860e7",
       "submitted_at": "2026-10-19T23:29:36.471125+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
       "metrics_updated_at": "2026-10-20T11:29:27.675Z",
       "status": "sent",
       "values": {
@@ -1304,8 +1304,8 @@
       "slot": "data",
       "buffer_id": "6ad838f1a9967de049732ff2",
       "submitted_at": "2026-10-21T13:00:52.217513+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
-      "metrics_updated_at": "2026-11-05T18:32:20.732Z",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
+      "metrics_updated_at": "2026-11-07T16:32:37.453Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1355,8 +1355,8 @@
       "slot": "player",
       "buffer_id": "6ade8cf66887a2efc12c271d",
       "submitted_at": "2026-10-26T08:12:56.682729+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
-      "metrics_updated_at": "2026-11-05T18:32:20.732Z",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
+      "metrics_updated_at": "2026-11-07T16:32:37.453Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1372,8 +1372,8 @@
       "slot": "vote",
       "buffer_id": "6adf65368e6c1ef513f120ff",
       "submitted_at": "2026-10-26T23:35:36.622617+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
-      "metrics_updated_at": "2026-11-05T18:32:20.732Z",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
+      "metrics_updated_at": "2026-11-07T16:32:37.453Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1389,8 +1389,8 @@
       "slot": "news",
       "buffer_id": "6ae353fa835dd2febef21af5",
       "submitted_at": "2026-10-29T23:11:06.909892+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
-      "metrics_updated_at": "2026-11-05T18:32:20.732Z",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
+      "metrics_updated_at": "2026-11-07T16:32:37.453Z",
       "status": "sent",
       "values": {
         "reactions": 1.0,
@@ -1423,7 +1423,7 @@
       "slot": "recap",
       "buffer_id": "6ad7b55559e93798fafb6b38",
       "submitted_at": "2026-10-21T03:39:19.326364+09:00",
-      "checked_at": "2026-11-06T08:28:38.618153+09:00",
+      "checked_at": "2026-11-08T06:38:20.511841+09:00",
       "metrics_updated_at": "2026-10-20T18:40:33.613Z",
       "status": "sent",
       "values": {
@@ -1451,92 +1451,11 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-11-07T07:54:30.253342+09:00",
-    "eligible": 30,
-    "checked": 30,
+    "checked_at": "2026-11-08T06:38:20.511841+09:00",
+    "eligible": 8,
+    "checked": 8,
     "status": "ok",
     "error_class": null
   },
-  "automatic_feedback": [
-    {
-      "post_key": "approved_stadium_review_lommel_20261019_v1",
-      "slot": "recap",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-17_vote",
-      "slot": "vote",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-18_recap",
-      "slot": "recap",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-18_vote",
-      "slot": "vote",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-21_data",
-      "slot": "data",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-22_vote",
-      "slot": "vote",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-24_news",
-      "slot": "news",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-26_player",
-      "slot": "player",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-26_vote",
-      "slot": "vote",
-      "rating": 3,
-      "engagement_rate": 0.0,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    },
-    {
-      "post_key": "daily_2026-10-30_news",
-      "slot": "news",
-      "rating": 5,
-      "engagement_rate": 0.042553,
-      "basis": "relative_engagement_rate_21d",
-      "updated_at": "2026-11-07T07:54:30.253342+09:00"
-    }
-  ]
+  "automatic_feedback": []
 }
