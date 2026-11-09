@@ -170,6 +170,22 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(reports, [])
         self.assertEqual(issues[0]['reason'], 'TimeoutError')
 
+    def test_new_goal_rows_idempotent_and_capacity_checked(self):
+        before = snapshot()
+        before.sheets[TABS[1]] = {k:v for k,v in before.sheets[TABS[1]].items() if k[0] == 0}
+        report = parse_report(HTML, match(), URL)
+        changes, info = enrich(before, [report])
+        self.assertEqual(info['planned_added_rows'], 2)
+        after = copy.deepcopy(before)
+        for c in changes:
+            after.sheets[c.tab].setdefault((c.row,c.col), {})[c.field] = (
+                cell(c.after)['userEnteredValue'] if c.field == 'userEnteredValue' else c.after)
+        self.assertEqual(enrich(after, [report])[0], [])
+        before.props[TABS[1]]['gridProperties']['rowCount'] = 2
+        changes, info = enrich(before, [report])
+        self.assertFalse(any(c.reason == 'new_official_goal' for c in changes))
+        self.assertTrue(any(p['reason'] == 'goal_grid_capacity' for p in info['report_pending']))
+
     def test_inventory_excludes_unplayed_matches(self):
         result = inventory(snapshot())
         self.assertEqual(result['finished_matches'], 1)
