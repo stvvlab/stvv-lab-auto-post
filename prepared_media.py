@@ -114,9 +114,10 @@ def prepared_candidates(slot, now):
             continue
         if card.get('media_type') == 'text_only' and not reviewed_text_only(card):
             continue
-        # Time-sensitive copy must never slide to a later slot if a cron run is missed.
-        if (card.get('publish_due_jst') is not None
-                and card['publish_due_jst'] != now.isoformat()):
+        # Existing exact-time approval stays exact. A separately reviewed,
+        # bounded window may permit a late GitHub scheduled run.
+        from publication_window import due_block_reason
+        if due_block_reason(card, now) is not None:
             continue
         source = card.get('source_url', '')
         parsed = urlparse(source)
