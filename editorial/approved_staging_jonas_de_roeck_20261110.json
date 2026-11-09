@@ -1,0 +1,18 @@
+{
+  "project": "STVV LAB",
+  "status": "user_approved_staged_not_scheduled",
+  "approved_by_user": true,
+  "source_url": "https://stvv.jp/news/team/20261106_3/",
+  "source_date": "2026-11-06",
+  "caption_exact": "🚨💛 STVV、新監督が決定！\n\n🇧🇪 ヨナス・デ・ロック監督が就任！\n\n2017-18シーズン以来、STVVの指揮官に復帰。\n\n立石CEOもクラブへの理解と戦術面を高く評価。\n\nリーグ戦の立て直しと欧州での挑戦。\n新体制のSTVVに注目！🔥\n\n💬 新監督に何を期待する？\n\n#STVV #シントトロイデン",
+  "image": {
+    "filename": "a_bold_sports_news_graphic_banner_social_media_t.png",
+    "adobe_asset_id": "urn:aaid:sc:AP:1161c32b-0f0e-4ed6-ae43-fd3056c2d3db",
+    "adobe_asset_url": "https://at.adobe.com/cd9yngO4DlkjPXH6",
+    "github_binary_committed": false
+  },
+  "buffer": {
+    "reservation_created": false
+  },
+  "note": "Approved text and image reference only. Not in editorial/imagegen_cards.json; must not auto-publish. Needs immutable image bytes, sha256, dimensions, manifest and safe Buffer reservation. Do not modify approved caption."
+}
