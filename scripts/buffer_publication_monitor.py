@@ -51,7 +51,29 @@ class ReadOnlyMonitorClient(BufferReservations):
         if not isinstance(payload, dict):
             raise RuntimeError("monitor_api_invalid_response")
         if payload.get("errors"):
-            raise RuntimeError("monitor_api_graphql_errors")
+            # Only record bounded, preapproved diagnostic categories, never raw
+            # provider messages, user content, credentials, or identifiers.
+            errors = payload["errors"]
+            categories = set()
+            if isinstance(errors, list):
+                for item in errors[:10]:
+                    if not isinstance(item, dict):
+                        continue
+                    message = str(item.get("message", "")).lower()
+                    if "cannot query field" in message or "unknown field" in message:
+                        categories.add("unknown_field")
+                    elif "unknown argument" in message or "unknown type" in message:
+                        categories.add("schema_mismatch")
+                    elif "not authorized" in message or "permission" in message or "forbidden" in message:
+                        categories.add("permission")
+                    elif "not found" in message:
+                        categories.add("not_found")
+                    elif "invalid" in message or "validation" in message:
+                        categories.add("validation")
+                    else:
+                        categories.add("other")
+            raise RuntimeError("monitor_api_graphql_errors:" +
+                               ",".join(sorted(categories or {"unclassified"})))
         if not isinstance(payload.get("data"), dict):
             raise RuntimeError("monitor_api_missing_data")
         return payload["data"]
