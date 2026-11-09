@@ -1,16 +1,16 @@
 {
-  "checked_at": "2026-11-09T03:37:08.067411+09:00",
+  "checked_at": "2026-11-09T11:16:36.396290+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
       "url": "https://stvv.jp/news/2026/",
       "status": "ok",
-      "eligible_items": 4
+      "eligible_items": 5
     },
     {
       "url": "https://stvv.jp/news/game/2026/",
       "status": "ok",
-      "eligible_items": 1
+      "eligible_items": 2
     },
     {
       "url": "https://stvv.jp/news/team/2026/",
@@ -30,6 +30,22 @@
   ],
   "unapproved_draft_suggestions": [],
   "candidates": [
+    {
+      "source_url": "https://stvv.jp/news/game/20261109_1/",
+      "date_jst": "2026-11-09",
+      "official_heading": "新川・石渡・松澤の日本人3選手がゴール！新監督の初陣を6試合ぶりの白星で飾る！【ベルギーリーグ第11節 ズルテ・ワレヘム戦】",
+      "status": "needs_editorial_review",
+      "reviewed": false,
+      "remaining": [
+        "verify facts and novelty from body",
+        "write concise sourced caption",
+        "built-in imagegen",
+        "visual review",
+        "register reviewed asset"
+      ],
+      "source_body": "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\n11月9日（月）3時15分\n結果：4-1\n得点：新川（7分）、石渡（12分）、セヴァウィ（64分・PK）、松澤（66分）\nアトロック（14分）\n出場日本人選手：谷口彰悟​​、小久保玲央ブライアン、石渡ネルソン、新川志音、松澤海斗、畑大雅\n【先発】\nGK/小久保\nDF/ピュペ、ムスリウ、谷口、ヴァンウェセマール（81分 畑）\nMF/石渡、新川（65分 ムヤ）、シサコ\nFW/セヴァウイ（85分 メルラン）、バジュダル（65分 ソエル・ソエル）、ムブク（65分 松澤）\nハイライト\nComing soon\n松澤海斗選手 試合後インタビュー\n新川志音選手 試合後インタビュー\nトピック\n◆前節カンファレンスリーグから中2日で迎えたリーグ戦第11節。ヨナス・デ・ロック新監督の初陣となる今節は、リーグ戦5連敗からなんとか脱却したい重要な一戦となった。\n◆スタメンは前節から1名を変更。ソエル・ソエル選手に代わり、バジュダル選手が名を連ねた。\n◆前半7分、STVVが幸先良く先制する。ヴァンウェセマール選手のパスを受けた新川選手が右足でグラウンダーのシュートを放ち、ゴール左下へと流し込んだ。新川選手にとっては嬉しいリーグ戦初ゴールとなった。\nさらに前半12分、右サイドのヴァンウェセマール選手がクロスを上げると、ファーサイドに走り込んだ石渡選手がヘディングで合わせ、見事に追加点を奪う。\n©︎BELGA\n◆しかし直後の14分、ズルテ・ワレヘムがゴール前の競り合いからシュートを打たれ、1点を返される。その後スコアは動かず、2-1のまま後半へと折り返した。\n◆後半は自陣に攻め込まれる時間が増える。しかし、焦らず耐え凌ぐと62分、ペナルティエリア内でムブク選手がファウルを誘いPKを獲得。64分、これをセヴァウィ選手が右足で冷静にゴール右下へ沈め、3-1とリードを広げた。\n◆突き放したSTVVは65分に3枚替えを敢行。ムブク選手に代わって松澤選手が投入されると、この采配が即座に的中する。直後の66分、シサコ選手からのパスに抜け出した松澤選手が、右足で絶妙なループシュートを放ちゴールネットを揺らした。\n©︎BELGA\n◆さらに75分には、松澤選手に対する激しいファウルでズルテ・ワレヘムのムボジ選手がレッドカードを受け一発退場。そのまま4-1で試合が終了し、6試合ぶりの勝利となった。\n©︎BELGA\n©︎BELGA\nNEXT MATCH\nジュピラー・プロ・リーグ 第12節 シャルルロワ戦（A）\n11月22日（日）0時00分",
+      "body_sha256": "87383fd8c7b8306065645206d0dd51c30c2712881cf739a1096b856417faaba6"
+    },
     {
       "source_url": "https://stvv.jp/news/team/20261106_3/",
       "date_jst": "2026-11-06",
@@ -66,7 +82,7 @@
       "source_url": "https://stvv.jp/news/team/20261104_1/",
       "date_jst": "2026-11-04",
       "official_heading": "【日本代表】GK小久保玲央ブライアン選手がSAMURAI BLUE メンバーに選出",
-      "status": "needs_editorial_review",
+      "status": "needs_body_fetch",
       "reviewed": false,
       "remaining": [
         "verify facts and novelty from body",
@@ -74,9 +90,7 @@
         "built-in imagegen",
         "visual review",
         "register reviewed asset"
-      ],
-      "source_body": "STVVは、本日、公益財団法人日本サッカー協会から発表されましたMIZUHO BLUE CHALLENGE THE KALLANG FOOTBALL SERIES SINGAPORE (11/14 ブラジル戦、11/17 パラグアイ戦)に臨むSAMURAI BLUE（日本代表）メンバーに、GK小久保玲央ブライアン選手が選出されましたので、お知らせいたします。\n【試合日程】\n■MIZUHO BLUE CHALLENGE THE KALLANG FOOTBALL SERIES SINGAPORE\n2026年11月14日(土)\n19:15キックオフ（予定）※日本時間\nvs ブラジル代表　／シンガポールナショナルスタジアム(シンガポール)\n2026年11月17日(火) 22:10キックオフ（予定）※日本時間\nvs パラグアイ代表　／シンガポールナショナルスタジアム(シンガポール)\n【プロフィール】\n■小久保玲央ブライアン（こくぼ れお ぶらいあん）\n生年月日：2001年01月23日\nポジション：GK\n出身：千葉県\n身長・体重：193 cm・93kg",
-      "body_sha256": "a9354dbc7ac21670727b1211e5c91520a6ba98f2cb1fe96808be2f0c14da9b54"
+      ]
     },
     {
       "source_url": "https://stvv.jp/news/team/20261102_2/",
