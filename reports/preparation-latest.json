@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-11-09T11:16:36.396290+09:00",
+  "checked_at": "2026-11-10T04:18:22.750740+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
       "url": "https://stvv.jp/news/2026/",
       "status": "ok",
-      "eligible_items": 5
+      "eligible_items": 4
     },
     {
       "url": "https://stvv.jp/news/game/2026/",
@@ -15,7 +15,7 @@
     {
       "url": "https://stvv.jp/news/team/2026/",
       "status": "ok",
-      "eligible_items": 3
+      "eligible_items": 2
     },
     {
       "url": "https://stvv.jp/news/uefa-news/2026/",
@@ -82,20 +82,6 @@
       "source_url": "https://stvv.jp/news/team/20261104_1/",
       "date_jst": "2026-11-04",
       "official_heading": "【日本代表】GK小久保玲央ブライアン選手がSAMURAI BLUE メンバーに選出",
-      "status": "needs_body_fetch",
-      "reviewed": false,
-      "remaining": [
-        "verify facts and novelty from body",
-        "write concise sourced caption",
-        "built-in imagegen",
-        "visual review",
-        "register reviewed asset"
-      ]
-    },
-    {
-      "source_url": "https://stvv.jp/news/team/20261102_2/",
-      "date_jst": "2026-11-02",
-      "official_heading": "【お知らせ】フレデリック・デ・メイヤー監督 契約解除について",
       "status": "needs_body_fetch",
       "reviewed": false,
       "remaining": [
