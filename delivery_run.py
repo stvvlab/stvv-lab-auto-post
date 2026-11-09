@@ -33,21 +33,9 @@ def queue_snapshot(root, history, now, slot):
         reason = None
         if card.get('reviewed') is not True:
             reason = 'not_reviewed'
-        elif card.get('publish_due_jst') is not None:
-            # A one-time matchday reminder must not appear available after its
-            # exact reviewed slot has passed. This is diagnostic only: the
-            # publisher's own strict due-time gate remains unchanged.
-            try:
-                fixed_due = datetime.fromisoformat(card['publish_due_jst'])
-                if (fixed_due.tzinfo is None or fixed_due.utcoffset() is None
-                        or now.tzinfo is None or now.utcoffset() is None):
-                    reason = 'invalid_fixed_publish_due'
-                elif fixed_due < now:
-                    reason = 'fixed_publish_due_missed'
-                elif fixed_due > now:
-                    reason = 'fixed_publish_due_not_reached'
-            except (TypeError, ValueError):
-                reason = 'invalid_fixed_publish_due'
+        else:
+            from publication_window import due_block_reason
+            reason = due_block_reason(card, now)
         if reason is None:
             from prepared_media import reviewed_text_only
             if card.get('media_type') == 'text_only':
