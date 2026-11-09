@@ -1,19 +1,8 @@
 name: Read-only Buffer publication monitor
 
+# Optional diagnostic only. Never auto-trigger or block publishing.
 on:
-  schedule:
-    # Daily 18:20 and 19:00 JST. GitHub schedule can run late.
-    - cron: '20 9 * * *'
-    - cron: '0 10 * * *'
   workflow_dispatch:
-  # Independent completion events reduce reliance on delayed scheduled monitors.
-  # These existing workflows cannot publish from this monitor.
-  workflow_run:
-    workflows:
-      - STVV Auto Post
-      - Buffer Metrics Read-Only Probe
-    types: [completed]
-    branches: [main]
 
 permissions:
   contents: read
