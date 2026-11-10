@@ -1,0 +1,39 @@
+name: Repair existing De Roeck Buffer image once
+on:
+  push:
+    branches: [main]
+    paths: [editorial/diagnostics/repair_existing_de_roeck_20261110.txt]
+permissions:
+  contents: read
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Edit existing Buffer post image only and verify
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json,requests,hashlib
+          from buffer_reservations import BufferReservations,POST_FIELDS
+          c=BufferReservations()
+          post_id='6af22812391eeaff3324668d'
+          url='https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/main/generated/2026-11-10_de_roeck_approved.png'
+          expected='83e793643ee7af1d4c5b98947c354e06cece75feda9693c5170cb7a49d04fc56'
+          p=c.get_post(post_id)
+          if not p['text'].startswith('🚨💛 STVV、新監督が決定！'): raise RuntimeError('Caption identity mismatch')
+          if p['status'] not in ('error','draft','scheduled'): raise RuntimeError('Post not editable in expected state: '+str(p['status']))
+          img=requests.get(url,timeout=25);img.raise_for_status()
+          if hashlib.sha256(img.content).hexdigest()!=expected: raise RuntimeError('Approved image mismatch')
+          if p.get('assets') and p['assets'][0].get('source')==url:
+            print('ALREADY_UPDATED',p['status'])
+          else:
+            q='mutation Repair($input:EditPostInput!){editPost(input:$input){... on PostActionSuccess {post{'+POST_FIELDS+'}} ... on MutationError{message}}}'
+            result=c.query(q,{'input':{'id':post_id,'assets':[{'image':{'url':url}}]}})
+            print('EDIT_RESPONSE',json.dumps(result.get('editPost'),ensure_ascii=False)[:1200])
+          p2=c.get_post(post_id)
+          print('POST_AFTER',json.dumps({'id':p2['id'],'status':p2['status'],'dueAt':p2.get('dueAt'),'assets':p2.get('assets'),'caption_unchanged':p2['text']==p['text']},ensure_ascii=False))
+          if not p2.get('assets') or p2['assets'][0].get('source')!=url: raise RuntimeError('Buffer image URL not changed')
+          PY
