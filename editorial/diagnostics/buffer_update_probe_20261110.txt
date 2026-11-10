@@ -1,2 +1,3 @@
 Inspect existing post only; no mutation.
 Retry with dependencies.
+Inspect EditPostInput.
