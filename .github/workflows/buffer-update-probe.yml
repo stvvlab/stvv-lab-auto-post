@@ -1,0 +1,32 @@
+name: Inspect Buffer existing post update capability
+on:
+  push:
+    branches: [main]
+    paths: [editorial/diagnostics/buffer_update_probe_20261110.txt]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install requests
+      - name: Inspect current post and mutation schema without changes
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          from buffer_reservations import BufferReservations
+          c=BufferReservations()
+          try:
+            p=c.get_post('6af22812391eeaff3324668d')
+            print('EXISTING_POST',{'id':p.get('id'),'status':p.get('status'),'dueAt':p.get('dueAt'),'assets':p.get('assets'),'text_match':p.get('text','').startswith('🚨💛 STVV、新監督が決定！')})
+          except Exception as e:
+            print('POST_QUERY_ERROR',type(e).__name__,str(e)[:180])
+          q='query { __schema { mutationType { fields { name args { name type { kind name ofType { kind name ofType { kind name } } } } } } } }'
+          try:
+            fields=c.query(q)['__schema']['mutationType']['fields']
+            print('UPDATE_MUTATIONS',[f for f in fields if any(s in f['name'].lower() for s in ('updatepost','editpost','asset','upload'))])
+          except Exception as e:
+            print('SCHEMA_ERROR',type(e).__name__,str(e)[:180])
+          PY
