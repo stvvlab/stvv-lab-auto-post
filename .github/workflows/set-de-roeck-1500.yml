@@ -1,0 +1,36 @@
+name: Set existing De Roeck Buffer post to Nov 10 15 JST
+on:
+  push:
+    branches: [main]
+    paths: [editorial/diagnostics/set_de_roeck_1500_20261110.txt]
+permissions:
+  contents: read
+jobs:
+  reschedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Change dueAt only and verify existing post
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          from buffer_reservations import BufferReservations,POST_FIELDS
+          c=BufferReservations()
+          pid='6af22812391eeaff3324668d'
+          target='2026-11-10T06:00:00.000Z'
+          image='https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/main/generated/2026-11-10_de_roeck_approved.png'
+          before=c.get_post(pid)
+          if before['status']!='scheduled': raise RuntimeError('Unexpected status '+str(before['status']))
+          if not before['text'].startswith('🚨💛 STVV、新監督が決定！'): raise RuntimeError('Wrong post')
+          if len(before.get('assets') or [])!=1 or before['assets'][0].get('source')!=image: raise RuntimeError('Approved image mismatch')
+          if before.get('dueAt')!=target:
+            q='mutation Reschedule($input:EditPostInput!){editPost(input:$input){... on PostActionSuccess{post{'+POST_FIELDS+'}} ... on MutationError{message}}}'
+            result=c.query(q,{'input':{'id':pid,'dueAt':target,'schedulingType':'automatic','mode':'customScheduled'}})
+            print('EDIT_RESULT',{'status':(result.get('editPost') or {}).get('post',{}).get('status'),'message':(result.get('editPost') or {}).get('message')})
+          after=c.get_post(pid)
+          print('VERIFIED',{'id':after.get('id'),'status':after.get('status'),'dueAt':after.get('dueAt'),'same_text':after.get('text')==before.get('text'),'same_image':after.get('assets')==before.get('assets')})
+          if after.get('dueAt')!=target or after.get('status')!='scheduled' or after.get('text')!=before.get('text') or after.get('assets')!=before.get('assets'): raise RuntimeError('Post changed unexpectedly or date not applied')
+          PY
