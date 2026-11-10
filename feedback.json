@@ -1451,10 +1451,10 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-11-10T10:22:01.475718+09:00",
-    "eligible": 16,
-    "checked": 16,
-    "status": "ok",
+    "checked_at": "2026-11-11T08:02:01.633234+09:00",
+    "eligible": 0,
+    "checked": 0,
+    "status": "no_eligible_posts",
     "error_class": null
   },
   "automatic_feedback": []
