@@ -28,7 +28,7 @@ jobs:
           if len(before.get('assets') or [])!=1 or before['assets'][0].get('source')!=image: raise RuntimeError('Approved image mismatch')
           if before.get('dueAt')!=target:
             q='mutation Reschedule($input:EditPostInput!){editPost(input:$input){... on PostActionSuccess{post{'+POST_FIELDS+'}} ... on MutationError{message}}}'
-            result=c.query(q,{'input':{'id':pid,'dueAt':target,'schedulingType':'automatic','mode':'customScheduled'}})
+            result=c.query(q,{'input':{'id':pid,'text':before['text'],'assets':[{'image':{'url':image}}],'dueAt':target,'schedulingType':'automatic','mode':'customScheduled'}})
             print('EDIT_RESULT',{'status':(result.get('editPost') or {}).get('post',{}).get('status'),'message':(result.get('editPost') or {}).get('message')})
           after=c.get_post(pid)
           print('VERIFIED',{'id':after.get('id'),'status':after.get('status'),'dueAt':after.get('dueAt'),'same_text':after.get('text')==before.get('text'),'same_image':after.get('assets')==before.get('assets')})
