@@ -32,19 +32,19 @@ jobs:
           from stvv_post import CHANNEL
           c=BufferReservations()
           caption='''🇯🇵🔥 日本人3選手がゴール！
-
-🇧🇪 STVVがズルテ・ワレヘムに4-1で快勝！
-
-⚽ 新川志音｜先制ゴール
-⚽ 石渡ネルソン｜追加点
-⚽ セヴァウィ｜PK成功
-⚽ 松澤海斗｜途中出場からゴール
-
-新監督デ・ロックの初陣で、リーグ戦6試合ぶりの勝利！💛
-
-💬 この試合、最も印象に残った選手は？
-
-#STVV #シントトロイデン'''
+          
+          🇧🇪 STVVがズルテ・ワレヘムに4-1で快勝！
+          
+          ⚽ 新川志音｜先制ゴール
+          ⚽ 石渡ネルソン｜追加点
+          ⚽ セヴァウィ｜PK成功
+          ⚽ 松澤海斗｜途中出場からゴール
+          
+          新監督デ・ロックの初陣で、リーグ戦6試合ぶりの勝利！💛
+          
+          💬 この試合、最も印象に残った選手は？
+          
+          #STVV #シントトロイデン'''
           url='https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/main/generated/2026-11-09_zulte_4_1_japanese_three.png'
           snapshot=c.preflight()
           same=[p for p in snapshot['posts'] if p.get('channelId')==CHANNEL and p.get('text')==caption]
