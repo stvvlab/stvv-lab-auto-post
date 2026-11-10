@@ -29,4 +29,8 @@ jobs:
             print('UPDATE_MUTATIONS',[f for f in fields if any(s in f['name'].lower() for s in ('updatepost','editpost','asset','upload'))])
           except Exception as e:
             print('SCHEMA_ERROR',type(e).__name__,str(e)[:180])
+          try:
+            q2='query { __type(name:"EditPostInput") { inputFields { name type { kind name ofType { kind name ofType { kind name } } } } } }'
+            print('EDIT_INPUT',c.query(q2)['__type']['inputFields'])
+          except Exception as e: print('EDIT_SCHEMA_ERROR',type(e).__name__,str(e)[:180])
           PY
