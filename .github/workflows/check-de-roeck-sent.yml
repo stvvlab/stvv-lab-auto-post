@@ -1,0 +1,23 @@
+name: Check De Roeck publication 20261110
+on:
+  push:
+    branches: [main]
+    paths: [editorial/diagnostics/check_de_roeck_sent_20261110.txt]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Read Buffer post without modifying it
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          from buffer_reservations import BufferReservations
+          p=BufferReservations().get_post('6af22812391eeaff3324668d')
+          print('DE_ROECK_STATUS '+json.dumps({'id':p['id'],'status':p['status'],'dueAt':p['dueAt'],'externalLink':p.get('externalLink'),'imageSource':(p.get('assets') or [{}])[0].get('source'),'text':p['text']},ensure_ascii=False))
+          PY
