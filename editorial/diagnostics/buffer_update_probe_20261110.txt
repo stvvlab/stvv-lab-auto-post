@@ -1,0 +1,1 @@
+Inspect existing post only; no mutation.
