@@ -4,5 +4,5 @@
   "date_jst": "2026-11-11 12:30",
   "source": "https://stvv.jp/news/game/20261109_1/",
   "image": "generated/2026-11-09_zulte_4_1_japanese_three.png",
-  "workflow_retry": "yaml indentation fix"
+  "workflow_retry": "caption weighted-length correction"
 }
