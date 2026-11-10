@@ -1,0 +1,50 @@
+name: Reserve STVV Kokubo callup once
+on:
+  push:
+    branches: [main]
+    paths: [editorial/reservation_requests/2026-11-12_kokubo_approved.json]
+permissions:
+  contents: write
+jobs:
+  reserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install pillow requests beautifulsoup4
+      - name: Render PNG
+        run: python editorial/manual_reservation/draw_kokubo_callup.py
+      - name: Commit image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/2026-11-12_kokubo_japan_callup.png
+          git diff --cached --quiet || (git commit -m "Add Kokubo Japan callup graphic" && git push)
+      - name: Reserve and verify
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: |
+          python - <<'PY'
+          from buffer_reservations import BufferReservations
+          from stvv_post import CHANNEL, x_length
+          import requests
+          c=BufferReservations()
+          caption="🇯🇵🧤 小久保玲央ブライアン、日本代表選出！\n\nSTVVの守護神が11月の代表メンバー入り！💛\n\n🇯🇵 日本代表の試合予定\n⚽ 11/14(土) 19:15 vs ブラジル\n⚽ 11/17(火) 22:10 vs パラグアイ\n※日本時間\n\n💬 小久保選手に期待するプレーは？\n\n#STVV #シントトロイデン #SAMURAIBLUE"
+          url='https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/main/generated/2026-11-12_kokubo_japan_callup.png'
+          print('X_LENGTH',x_length(caption))
+          if x_length(caption)>270: raise RuntimeError('Caption too long')
+          snapshot=c.preflight()
+          same=[p for p in snapshot['posts'] if p.get('channelId')==CHANNEL and p.get('text')==caption]
+          if same:
+            print('EXISTING_MATCH',[(p['id'],p['status']) for p in same])
+            raise SystemExit(0)
+          response=requests.get(url,timeout=25);response.raise_for_status()
+          if not response.content.startswith(bytes.fromhex('89504e470d0a1a0a')): raise RuntimeError('Image URL is not PNG')
+          post=c.schedule(caption,url,'2026-11-12T03:30:00.000Z')
+          q=c.get_post(post['id'])
+          print('RESERVATION',{'id':q['id'],'status':q['status'],'dueAt':q['dueAt'],'image':q.get('assets',[{}])[0].get('source'),'same_text':q['text']==caption})
+          if q['status']!='scheduled' or q['dueAt']!='2026-11-12T03:30:00.000Z' or q['text']!=caption or not q.get('assets') or q['assets'][0]['source']!=url: raise RuntimeError('Reservation verification failed')
+          PY
