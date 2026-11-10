@@ -1,0 +1,1 @@
+Verify public PNG endpoints for approved De Roeck image. No Buffer mutation.
