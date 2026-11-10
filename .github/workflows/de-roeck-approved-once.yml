@@ -1,9 +1,6 @@
 name: Approved De Roeck announcement - one-time queue
 on:
-  push:
-    branches: [main]
-    paths:
-      - editorial/reservation_requests/2026-11-10_de_roeck_approved.json
+  workflow_dispatch:
 permissions:
   contents: write
 concurrency:
