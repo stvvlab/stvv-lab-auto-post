@@ -1,1 +1,2 @@
 Set existing Buffer post 6af22812391eeaff3324668d to 2026-11-10 15:00 JST only.
+Retry preserving caption and image in edit payload.
