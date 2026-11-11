@@ -1,0 +1,5 @@
+{
+  "purpose": "Read-only check after Buffer GraphQL createPost returned errors",
+  "may_mutate_buffer": false,
+  "request_id": "stvv-2026-11-02-de-meyer-departure"
+}

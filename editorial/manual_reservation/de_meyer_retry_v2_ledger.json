@@ -1,0 +1,10 @@
+{
+  "request_id": "stvv-2026-11-02-de-meyer-departure",
+  "state": "draft_created_verified",
+  "image_sha256": "40c97a3f63667cd930c3d803c7448eebf7b347f5043572927dfcaa65b51843a7",
+  "note": "Single corrected createPost succeeded; image-bound Buffer Draft verified by provider read-back. No publish/schedule action.",
+  "buffer_post_id": "6aeb18489074318735744e49",
+  "verification": "Buffer createPost and read-back matched id, status draft, channel, text and nonempty assets, as logged in GitHub Actions run 41821989300",
+  "evidence_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/41821989300",
+  "retries_prohibited": true
+}

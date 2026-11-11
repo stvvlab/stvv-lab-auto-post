@@ -1,0 +1,6 @@
+{
+  "request_id": "stvv-2026-11-02-de-meyer-departure",
+  "action": "ONE corrected Buffer Draft only",
+  "precommitted_ledger": "editorial/manual_reservation/de_meyer_retry_v2_ledger.json",
+  "auto_publish": false
+}
