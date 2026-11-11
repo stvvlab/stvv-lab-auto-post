@@ -3,9 +3,31 @@
 Never sends, approves assets, or treats a shared season URL as a unique fact.
 Live publishing integration requires separate reviewed identity and evidence checks.
 """
+import re
+import unicodedata
 from datetime import date, timedelta
 from urllib.parse import urlsplit
 from content_guard import canonical_source, plain
+
+
+# Time claims require exact reviewed evidence; a checked boolean alone cannot
+# override conflicting official schedules. NFKC catches full-width clock text.
+_TIME = re.compile(
+    r'(?<!\d)(?:[01]?\d|2[0-3]):[0-5]\d(?!\d)'
+    r'|(?:午前|午後)\s*(?:[01]?\d|2[0-3])\s*時(?:[0-5]?\d\s*分)?'
+    r'|(?<!\d)(?:[01]?\d|2[0-3])\s*時(?:[0-5]?\d\s*分)?'
+)
+
+
+def _times(text):
+    return set(_TIME.findall(unicodedata.normalize('NFKC', text)))
+
+
+def _mentions_kickoff(text):
+    normalized = unicodedata.normalize('NFKC', text)
+    return bool(_times(text)) or any(
+        term in normalized for term in ('キックオフ', '開始時刻', '試合開始')
+    )
 
 
 def review_fixture_candidate(card, now, history, official_text=None):
@@ -31,10 +53,19 @@ def review_fixture_candidate(card, now, history, official_text=None):
         return "invalid_caption"
     if opponent not in caption or source not in caption or "STVV" not in caption:
         return "unverified_caption"
-    if card.get("kickoff_verified") is not True and any(x in caption for x in ("キックオフ", "開始時刻", "午前5時", "午前6時")):
-        return "unverified_kickoff"
     if not isinstance(official_text, str):
         return "official_schedule_unverified"
+    if _mentions_kickoff(caption):
+        if card.get("kickoff_conflict") is True:
+            return "conflicting_kickoff_sources"
+        if card.get("kickoff_verified") is not True:
+            return "unverified_kickoff"
+        evidence = card.get("kickoff_evidence_excerpt")
+        if (not isinstance(evidence, str) or not evidence
+                or evidence not in official_text
+                or not _times(caption)
+                or not _times(caption).issubset(_times(evidence))):
+            return "kickoff_evidence_missing"
     # Reject a season listing where opponent and date only occur in unrelated rows.
     # Evidence must be a reviewed, contiguous match-specific excerpt.
     excerpt = card.get("schedule_evidence_excerpt")
@@ -43,6 +74,10 @@ def review_fixture_candidate(card, now, history, official_text=None):
             opponent not in excerpt or date_label not in excerpt or
             excerpt not in official_text):
         return "match_specific_schedule_evidence_missing"
+    # The clock proof must belong to this same reviewed fixture row.
+    # A matching clock elsewhere on the season page is not sufficient.
+    if _mentions_kickoff(caption) and evidence not in excerpt:
+        return "kickoff_evidence_not_match_specific"
     identity = f"fixture:{match_day.isoformat()}:{plain(opponent)}"
     if card.get("fixture_identity") != identity:
         return "missing_unique_fixture_identity"
