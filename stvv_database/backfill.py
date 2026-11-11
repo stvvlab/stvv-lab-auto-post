@@ -25,6 +25,12 @@ def enrich(snapshot, reports):
     for report in reports:
         grouped[report.key].append(report)
     planned, pending, matched = {}, [], 0
+    added = 0
+    goal_tab = TABS[1]
+    occupied = [row for (row, col), c in snapshot.sheets[goal_tab].items()
+                if any(k in c for k in ('userEnteredValue', 'note', 'chipRuns'))]
+    next_row = max(occupied, default=0) + 1
+    known_ids = {r[0] for _, r in snapshot.rows(goal_tab)}
 
     def change(tab, row, col, field, after, reason):
         key = tab, row, col, field
@@ -66,7 +72,33 @@ def enrich(snapshot, reports):
             continue
         matched += 1
         rows = [(row, r) for row, r in snapshot.rows(TABS[1]) if r[1] == match_id]
-        for side, tm, scorer in report.goals:
+        if not rows and report.goals:
+            ordered = sorted(report.goals, key=lambda g: minute(g[1]) or 0)
+            if any(minute(g[1]) is None or not g[2] for g in ordered):
+                pending.append({'match_id': match_id, 'reason': 'invalid_goal_record'})
+                continue
+            counters, records = defaultdict(int), []
+            for side, tm, scorer in ordered:
+                counters[side] += 1
+                eid = f"{match_id}-{'GF' if side == '得点' else 'GA'}{counters[side]:02d}"
+                records.append({0: eid, 1: match_id, 2: master[2], 3: master[4],
+                                4: tm, 5: scorer, 13: report.url, 15: side})
+            if any(r[0] in known_ids for r in records):
+                pending.append({'match_id': match_id, 'reason': 'event_id_collision'})
+                continue
+            if next_row + len(records) > snapshot.props[goal_tab]['gridProperties']['rowCount']:
+                pending.append({'match_id': match_id, 'reason': 'goal_grid_capacity'})
+                continue
+            # Use existing unused grid rows; never insert or shift formula references.
+            for record in records:
+                for col, val in record.items():
+                    change(goal_tab, next_row, col, 'userEnteredValue', val, 'new_official_goal')
+                evidence(goal_tab, next_row, 5, report)
+                known_ids.add(record[0])
+                next_row += 1
+                added += 1
+            pending.append({'match_id': match_id, 'reason': 'appended_goal_rows_need_date_sort'})
+        for side, tm, scorer in (() if not rows else report.goals):
             possible = [(row, r) for row, r in rows if r[15] == side and minute(r[4]) == minute(tm)]
             # A repeated same-minute score cannot be assigned to one row safely.
             if len(possible) != 1 or sum(g[0] == side and minute(g[1]) == minute(tm)
@@ -102,4 +134,4 @@ def enrich(snapshot, reports):
                 if report.url not in urls and not linked:
                     change(TABS[3], row, 5, 'userEnteredValue', '\n'.join(urls+[report.url]), 'source_url')
                 evidence(TABS[3], row, 6, report)
-    return list(planned.values()), {'report_matches': matched, 'report_pending': pending}
+    return list(planned.values()), {'report_matches': matched, 'report_pending': pending, 'planned_added_rows': added}
