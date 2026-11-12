@@ -29,15 +29,15 @@
       "slot": "recap",
       "buffer_id": "6adbeb4e8b3d437ddc8df023",
       "submitted_at": "2026-10-24T08:18:41.033017+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.121Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 19.0,
+        "impressions": 20.0,
         "clicks": 0.0
       }
     },
@@ -1321,15 +1321,15 @@
       "slot": "vote",
       "buffer_id": "6ada03cee8cca8cdcc503081",
       "submitted_at": "2026-10-22T21:38:40.351962+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.121Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 24.0,
+        "impressions": 25.0,
         "clicks": 0.0
       }
     },
@@ -1338,15 +1338,15 @@
       "slot": "news",
       "buffer_id": "6adc77250b5343d07074efd5",
       "submitted_at": "2026-10-24T18:15:19.752698+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.121Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 36.0,
+        "impressions": 37.0,
         "clicks": 0.0
       }
     },
@@ -1355,15 +1355,15 @@
       "slot": "player",
       "buffer_id": "6ade8cf66887a2efc12c271d",
       "submitted_at": "2026-10-26T08:12:56.682729+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.120Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 48.0,
+        "impressions": 49.0,
         "clicks": 0.0
       }
     },
@@ -1372,15 +1372,15 @@
       "slot": "vote",
       "buffer_id": "6adf65368e6c1ef513f120ff",
       "submitted_at": "2026-10-26T23:35:36.622617+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.120Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 55.0,
+        "impressions": 56.0,
         "clicks": 0.0
       }
     },
@@ -1389,15 +1389,15 @@
       "slot": "news",
       "buffer_id": "6ae353fa835dd2febef21af5",
       "submitted_at": "2026-10-29T23:11:06.909892+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.120Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 1.0,
         "comments": 0.0,
-        "engagementRate": 4.0,
+        "engagementRate": 3.85,
         "reposts": 1.0,
-        "impressions": 50.0,
+        "impressions": 52.0,
         "clicks": 0.0
       }
     },
@@ -1406,15 +1406,15 @@
       "slot": "news",
       "buffer_id": "6ae5e787406ab8a018bc9c24",
       "submitted_at": "2026-10-31T22:05:11.800123+09:00",
-      "checked_at": "2026-11-10T10:22:01.475718+09:00",
-      "metrics_updated_at": "2026-11-09T14:32:57.120Z",
+      "checked_at": "2026-11-12T09:19:33.089649+09:00",
+      "metrics_updated_at": "2026-11-11T12:33:19.127Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
         "comments": 0.0,
         "engagementRate": 0.0,
         "reposts": 0.0,
-        "impressions": 20.0,
+        "impressions": 21.0,
         "clicks": 0.0
       }
     },
@@ -1451,10 +1451,10 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-11-11T08:02:01.633234+09:00",
-    "eligible": 0,
-    "checked": 0,
-    "status": "no_eligible_posts",
+    "checked_at": "2026-11-12T09:19:33.089649+09:00",
+    "eligible": 7,
+    "checked": 7,
+    "status": "ok",
     "error_class": null
   },
   "automatic_feedback": []
