@@ -12,7 +12,7 @@ def suggest(item):
     body, url = item.get('source_body'), item.get('source_url')
     if not isinstance(body, str) or not isinstance(url, str):
         return None
-    if not re.fullmatch(r'https://stvv\.jp/news/(?:team|event)/[0-9]{8}_[^/?#]+/', url):
+    if not re.fullmatch(r'https://stvv\.jp/news/(?:team|event|game)/[0-9]{8}_[^/?#]+/', url):
         return None
     if hashlib.sha256(body.encode()).hexdigest() != item.get('body_sha256'):
         return None
@@ -23,6 +23,20 @@ def suggest(item):
         m = re.search(r'(フレデリック・デ・メイヤー[^。]{0,100}監督との契約を解除いたしました)', body)
         if m:
             text = '📢 STVV公式発表：' + m.group(1).replace('いたしました', 'した') + '。'
+    elif '/game/' in url:
+        # Score and opponent must be explicitly present in the verified body.
+        # Never infer a result from a headline or an unverified source.
+        score = re.search(r'結果[：:]\\s*([0-9]{1,2})-([0-9]{1,2})', body)
+        opponent = re.search(r'(?:ベルギーリーグ|UEFA カンファレンスリーグ)[^\\n]{0,90}?([\\u30a0-\\u30ff・＝=]{2,35})戦[（(]', body)
+        if score and opponent:
+            home, away = map(int, score.groups())
+            if home > away:
+                outcome = '勝利'
+            elif home == away:
+                outcome = '引き分け'
+            else:
+                outcome = '敗戦'
+            text = f'⚽ STVV試合結果：{opponent.group(1)}戦は{home}-{away}で{outcome}。'
     elif '/event/' in url:
         if all(term in body for term in ('観戦会', 'ゲンク', '2026年11月29日（日）', '無料')):
             text = '📣 STVV公式観戦会が11月29日（日）に開催予定！ゲンク戦を日本から応援。参加費は無料です。'
