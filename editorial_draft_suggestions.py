@@ -26,8 +26,8 @@ def suggest(item):
     elif '/game/' in url:
         # Score and opponent must be explicitly present in the verified body.
         # Never infer a result from a headline or an unverified source.
-        score = re.search(r'結果[：:]\\s*([0-9]{1,2})-([0-9]{1,2})', body)
-        opponent = re.search(r'(?:ベルギーリーグ|UEFA カンファレンスリーグ)[^\\n]{0,90}?([\\u30a0-\\u30ff・＝=]{2,35})戦[（(]', body)
+        score = re.search(r'結果[：:]\s*([0-9]{1,2})-([0-9]{1,2})', body)
+        opponent = re.search(r'(?:ベルギーリーグ|UEFA カンファレンスリーグ)[^\n]{0,90}?([\u30a0-\u30ff・＝=]{2,35})戦[（(]', body)
         if score and opponent:
             home, away = map(int, score.groups())
             if home > away:
