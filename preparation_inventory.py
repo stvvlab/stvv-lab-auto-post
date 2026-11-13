@@ -46,6 +46,20 @@ def build_inventory(history, manifest, now, session=SESSION, max_bodies=3):
                  for p in history.get('pending_posts', {}).values() if isinstance(p, dict))
     known.update(canonical_source(c.get('source_url')) for c in manifest.get('cards', [])
                  if c.get('status') in {'ready', 'published'} or c.get('reviewed') is True)
+    # Editorially confirmed external publications can be reconciled here without
+    # pretending that the local posting ledger or remote X API was updated.
+    external_path = ROOT / 'editorial/external_publications.json'
+    if external_path.exists():
+        external = json.loads(external_path.read_text(encoding='utf-8'))
+        if not isinstance(external, dict) or not isinstance(external.get('items'), list):
+            raise ValueError('External publication registry is malformed')
+        for entry in external['items']:
+            if (not isinstance(entry, dict) or
+                    entry.get('status') != 'confirmed_external_publication' or
+                    not isinstance(entry.get('source_url'), str) or
+                    not entry.get('evidence_note')):
+                raise ValueError('External publication entry is invalid')
+            known.add(canonical_source(entry['source_url']))
     candidates, skipped, fetched = [], [], 0
     for url, (day, title) in articles:
         reason = ('Source already published, pending or registered'
