@@ -60,6 +60,14 @@ def build_inventory(history, manifest, now, session=SESSION, max_bodies=3):
                     not entry.get('evidence_note')):
                 raise ValueError('External publication entry is invalid')
             known.add(canonical_source(entry['source_url']))
+            # Explicit aliases cover the same published topic at different
+            # official URLs; never infer a match from vague headline similarity.
+            aliases = entry.get('related_source_urls', [])
+            if not isinstance(aliases, list) or any(
+                    not isinstance(url, str) or not url.startswith('https://stvv.jp/news/')
+                    for url in aliases):
+                raise ValueError('External publication aliases are invalid')
+            known.update(canonical_source(url) for url in aliases)
     candidates, skipped, fetched = [], [], 0
     for url, (day, title) in articles:
         reason = ('Source already published, pending or registered'
