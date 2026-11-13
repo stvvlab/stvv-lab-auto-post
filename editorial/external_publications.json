@@ -6,6 +6,12 @@
       "status": "confirmed_external_publication",
       "evidence_note": "User-provided screenshot of already published X post covering STVV 4-1 Zulte Waregem and three Japanese scorers; X post ID and remote API reconciliation not yet verified",
       "remote_post_id": null
+    },
+    {
+      "source_url": "https://stvv.jp/news/team/20261106_3/",
+      "status": "confirmed_external_publication",
+      "evidence_note": "User-provided X screenshot showed a published Jonas De Roeck appointment post; X post ID and remote API reconciliation not yet verified",
+      "remote_post_id": null
     }
   ]
 }
