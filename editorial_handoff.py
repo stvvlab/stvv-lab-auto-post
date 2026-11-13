@@ -3,6 +3,7 @@
 A handoff is not approval and never queues Buffer/X publication.
 """
 import json
+from editorial_draft_suggestions import suggest
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -24,9 +25,7 @@ def build_handoff(preparation, *, now=None):
               if isinstance(d, dict) and d.get("status") == "draft_unapproved"}
     queue = []
     for item in eligible:
-        draft = by_url.get(item.get("source_url"))
-        if draft and draft.get("source_body_sha256") != item.get("body_sha256"):
-            draft = None
+        # Recompute from the verified body when the inventory has no suggestion.\n        # This keeps stage 03 -> 04 moving without granting approval.\n        draft = by_url.get(item.get("source_url"))\n        if draft and draft.get("source_body_sha256") != item.get("body_sha256"):\n            draft = None\n        if draft is None:\n            draft = suggest(item)
         queue.append({
             "source_url": item["source_url"],
             "official_heading": item.get("official_heading"),
