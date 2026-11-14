@@ -38,7 +38,10 @@ def build_handoff(preparation, *, now=None):
         # Recompute from the verified body when the inventory has no suggestion.
         # This keeps stage 03 -> 04 moving without granting approval.
         draft = by_url.get(item.get("source_url"))
-        if draft and draft.get("source_body_sha256") != item.get("body_sha256"):
+        if draft and (draft.get("source_body_sha256") != item.get("body_sha256")
+                      or not isinstance(draft.get("text"), str)
+                      or not draft["text"].strip()
+                      or len(draft["text"]) > 270):
             draft = None
         if draft is None:
             draft = suggest(item)
