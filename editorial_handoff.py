@@ -26,12 +26,15 @@ def build_handoff(preparation, *, now=None):
     by_url = {d.get("source_url"): d for d in drafts
               if isinstance(d, dict) and isinstance(d.get("source_url"), str)
               and d.get("status") == "draft_unapproved"}
+    # Preparation may mark a source as already used or rejected. Never requeue it.
+    skipped_urls = {entry.get("source_url") for entry in preparation.get("skipped", [])
+                    if isinstance(entry, dict) and isinstance(entry.get("source_url"), str)}
     queue = []
     seen_urls = set()
     for item in eligible:
         url = item.get("source_url")
         body = item["source_body"]
-        if not isinstance(url, str) or url in seen_urls:
+        if not isinstance(url, str) or url in seen_urls or url in skipped_urls:
             continue
         # Reject stale or tampered source bodies even when a cached draft exists.
         if hashlib.sha256(body.encode("utf-8")).hexdigest() != item["body_sha256"]:
