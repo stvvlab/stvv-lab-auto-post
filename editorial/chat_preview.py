@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def build_preview(handoff):
+    if not isinstance(handoff, dict):
+        raise ValueError("Handoff must be an object")
     items = handoff.get("items", [])
     if not isinstance(items, list):
         raise ValueError("Handoff items must be a list")
@@ -26,6 +28,10 @@ def build_preview(handoff):
                 or len(caption) > 270
                 or not isinstance(digest, str) or len(digest) != 64
                 or any(ch not in "0123456789abcdef" for ch in digest)
+                or not isinstance(item.get("official_heading"), str)
+                or not item["official_heading"].strip()
+                or not isinstance(item.get("date_jst"), str)
+                or not __import__("re").fullmatch(r"\d{4}-\d{2}-\d{2}", item["date_jst"])
                 or url in seen):
             continue
         seen.add(url)
