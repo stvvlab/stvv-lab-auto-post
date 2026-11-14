@@ -50,6 +50,15 @@ class ChatPreviewTests(unittest.TestCase):
         self.assertEqual(len(result["previews"]), 1)
         self.assertFalse(result["previews"][0]["ready_for_buffer"])
 
+    def test_calendar_invalid_dates_are_skipped(self):
+        result = build_preview({"items": [
+            self.item(date_jst="2026-02-30"),
+            self.item(date_jst="2026-13-01"),
+            self.item(date_jst="2026-11-14"),
+        ]})
+        self.assertEqual(len(result["previews"]), 1)
+        self.assertEqual(result["previews"][0]["date_jst"], "2026-11-14")
+
     def test_invalid_inventory_rejected(self):
         with self.assertRaises(ValueError):
             build_preview({"items": {}})
