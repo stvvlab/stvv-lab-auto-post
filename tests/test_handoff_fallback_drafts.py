@@ -45,6 +45,22 @@ class HandoffFallbackTests(unittest.TestCase):
         })
         self.assertEqual(report["items"], [])
 
+    def test_blank_cached_draft_falls_back_to_verified_source(self):
+        body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\\n結果：4-1"
+        item = candidate(body)
+        report = build_handoff({
+            "candidates": [item],
+            "unapproved_draft_suggestions": [{
+                "source_url": item["source_url"],
+                "source_body_sha256": item["body_sha256"],
+                "status": "draft_unapproved",
+                "text": "",
+            }],
+            "skipped": [],
+        })
+        self.assertEqual(report["items"][0]["status"], "draft_needs_review")
+        self.assertIn("4-1", report["items"][0]["caption"])
+
     def test_duplicate_url_produces_one_review_item(self):
         body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\\n結果：4-1"
         item = candidate(body)
