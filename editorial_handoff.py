@@ -19,11 +19,13 @@ def build_handoff(preparation, *, now=None):
     if not isinstance(candidates, list) or not isinstance(drafts, list):
         raise ValueError("Malformed preparation inventory")
     eligible = [c for c in candidates
-                if c.get("status") == "needs_editorial_review"
+                if isinstance(c, dict)
+                and c.get("status") == "needs_editorial_review"
                 and isinstance(c.get("source_body"), str)
                 and c.get("body_sha256")]
     by_url = {d.get("source_url"): d for d in drafts
-              if isinstance(d, dict) and d.get("status") == "draft_unapproved"}
+              if isinstance(d, dict) and isinstance(d.get("source_url"), str)
+              and d.get("status") == "draft_unapproved"}
     queue = []
     seen_urls = set()
     for item in eligible:
