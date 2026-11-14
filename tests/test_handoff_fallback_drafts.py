@@ -27,8 +27,34 @@ class HandoffFallbackTests(unittest.TestCase):
         body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\n結果：4-1"
         report = build_handoff({"candidates": [candidate(body, "invalid")],
                                 "unapproved_draft_suggestions": [], "skipped": []})
-        self.assertIsNone(report["items"][0]["caption"])
-        self.assertEqual(report["items"][0]["status"], "caption_needed")
+        self.assertEqual(report["items"], [])
+        self.assertEqual(report["status"], "no_verified_candidates")
+
+    def test_cached_draft_cannot_bypass_body_integrity(self):
+        body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\\n結果：4-1"
+        item = candidate(body, "invalid")
+        report = build_handoff({
+            "candidates": [item],
+            "unapproved_draft_suggestions": [{
+                "source_url": item["source_url"],
+                "source_body_sha256": "invalid",
+                "status": "draft_unapproved",
+                "text": "STALE CAPTION",
+            }],
+            "skipped": [],
+        })
+        self.assertEqual(report["items"], [])
+
+    def test_duplicate_url_produces_one_review_item(self):
+        body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\\n結果：4-1"
+        item = candidate(body)
+        report = build_handoff({
+            "candidates": [item, dict(item)],
+            "unapproved_draft_suggestions": [],
+            "skipped": [],
+        })
+        self.assertEqual(len(report["items"]), 1)
+        self.assertFalse(report["items"][0]["approved"])
 
 
 if __name__ == "__main__":
