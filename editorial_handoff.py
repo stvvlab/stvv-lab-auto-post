@@ -27,7 +27,10 @@ def build_handoff(preparation, *, now=None):
               if isinstance(d, dict) and isinstance(d.get("source_url"), str)
               and d.get("status") == "draft_unapproved"}
     # Preparation may mark a source as already used or rejected. Never requeue it.
-    skipped_urls = {entry.get("source_url") for entry in preparation.get("skipped", [])
+    skipped = preparation.get("skipped", [])
+    if not isinstance(skipped, list):
+        skipped = []
+    skipped_urls = {entry.get("source_url") for entry in skipped
                     if isinstance(entry, dict) and isinstance(entry.get("source_url"), str)}
     queue = []
     seen_urls = set()
@@ -66,7 +69,7 @@ def build_handoff(preparation, *, now=None):
         "checked_at": now.isoformat(),
         "status": "review_required" if queue else "no_verified_candidates",
         "items": queue,
-        "skipped_count": len(preparation.get("skipped", [])),
+        "skipped_count": len(skipped),
         "publication_performed": False,
         "approval_performed": False,
     }
