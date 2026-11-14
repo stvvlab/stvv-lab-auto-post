@@ -1,4 +1,5 @@
 import unittest
+import hashlib
 from editorial_handoff import build_handoff
 
 
@@ -9,12 +10,12 @@ class EditorialHandoffTests(unittest.TestCase):
             "candidates": [
                 {"source_url": "https://stvv.jp/news/event/new/",
                  "status": "needs_editorial_review", "source_body": "verified",
-                 "body_sha256": "abc", "official_heading": "New event"},
+                 "body_sha256": hashlib.sha256(b"verified").hexdigest(), "official_heading": "New event"},
                 {"source_url": "https://stvv.jp/news/team/unavailable/",
                  "status": "source_unavailable"}],
             "unapproved_draft_suggestions": [
                 {"source_url": "https://stvv.jp/news/event/new/",
-                 "status": "draft_unapproved", "source_body_sha256": "abc",
+                 "status": "draft_unapproved", "source_body_sha256": hashlib.sha256(b"verified").hexdigest(),
                  "text": "Proposed caption"}]}
         result = build_handoff(inventory)
         self.assertEqual(len(result["items"]), 1)
@@ -27,7 +28,7 @@ class EditorialHandoffTests(unittest.TestCase):
         inventory = {
             "candidates": [{"source_url": "https://stvv.jp/news/team/new/",
                             "status": "needs_editorial_review",
-                            "source_body": "verified", "body_sha256": "new"}],
+                            "source_body": "verified", "body_sha256": hashlib.sha256(b"verified").hexdigest()}],
             "unapproved_draft_suggestions": [
                 {"source_url": "https://stvv.jp/news/team/new/",
                  "status": "draft_unapproved", "source_body_sha256": "old",
