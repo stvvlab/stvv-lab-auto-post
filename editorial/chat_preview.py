@@ -3,9 +3,21 @@
 Never turns a draft into approval, image creation, Buffer reservation or X post.
 """
 import json
+from datetime import date
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def valid_iso_date(value):
+    if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        return False
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
 
 
 def build_preview(handoff):
@@ -30,8 +42,7 @@ def build_preview(handoff):
                 or any(ch not in "0123456789abcdef" for ch in digest)
                 or not isinstance(item.get("official_heading"), str)
                 or not item["official_heading"].strip()
-                or not isinstance(item.get("date_jst"), str)
-                or not __import__("re").fullmatch(r"\d{4}-\d{2}-\d{2}", item["date_jst"])
+                or not valid_iso_date(item.get("date_jst"))
                 or url in seen):
             continue
         seen.add(url)
