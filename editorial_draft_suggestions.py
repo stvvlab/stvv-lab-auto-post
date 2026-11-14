@@ -28,7 +28,10 @@ def suggest(item):
         # Never infer a result from a headline or an unverified source.
         score = re.search(r'結果[：:]\s*([0-9]{1,2})-([0-9]{1,2})', body)
         opponent = re.search(r'(?:ベルギーリーグ|UEFA カンファレンスリーグ)[^\n]{0,90}?([A-Za-z\u30a0-\u30ff・＝= ]{2,35})戦[（(]', body)
-        if score and opponent:
+        # The score is assumed to be home-away. Without an explicit home
+        # marker, the STVV result cannot safely be inferred.
+        home_marker = re.search(r'戦[（(]H[）)]', body)
+        if score and opponent and home_marker:
             home, away = map(int, score.groups())
             if home > away:
                 outcome = '勝利'
