@@ -28,6 +28,11 @@ class GameCaptionTests(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIn("1-1で引き分け", result["text"])
 
+    def test_away_score_without_stvv_perspective_is_not_misreported(self):
+        body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（A）\\n結果：4-1"
+        self.assertIsNone(suggest(candidate(
+            "https://stvv.jp/news/game/20261109_1/", body)))
+
     def test_reject_modified_body_and_missing_score(self):
         body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\n結果：4-1"
         item = candidate("https://stvv.jp/news/game/20261109_1/", body)
