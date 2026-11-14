@@ -1,29 +1,17 @@
 {
-  "started_at": "2026-11-14T05:44:04.396210+09:00",
-  "finished_at": "2026-11-14T05:44:04.396232+09:00",
-  "slot": "recap",
-  "date_jst": "2026-11-13",
-  "scheduled_at": "2026-11-13T23:00:00+09:00",
-  "start_delay_seconds": 24244,
+  "started_at": "2026-11-14T11:49:47.588646+09:00",
+  "slot": "player",
+  "date_jst": "2026-11-14",
+  "scheduled_at": "2026-11-14T08:00:00+09:00",
+  "start_delay_seconds": 13787,
   "schedule_delay_diagnostic": "severe_schedule_to_delivery_delay_unattributed",
-  "run_id": "43504217010",
-  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/43504217010",
-  "commit": "2d56da6fd12ce5e560831a870b019460930181ba",
+  "run_id": "43548401747",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/43548401747",
+  "commit": "7b24508ce960de045075c6e0f6f931764014bf9c",
   "manual_dispatch_performed": false,
-  "status": "blocked_schedule_more_than_six_hours_late",
-  "delivery_state": "no_buffer_mutation_due_to_schedule_guard",
-  "delivery_mode": "advance_reservations",
+  "status": "skipped_no_verified_content",
   "x_display_verified": false,
-  "new_publications": [],
-  "new_reservations": [],
-  "pending_state": "not_checked",
-  "error_type": "RuntimeError",
-  "reservation_coverage": {
-    "reserved_count": 3,
-    "pending_count": 0,
-    "scheduled_keys": [],
-    "note": "Local ledger snapshot; separate overdue probe may query Buffer read-only, never X"
-  },
+  "delivery_mode": "advance_reservations",
   "queue_before": {
     "ready_cards": 1,
     "eligible_now_cards": 0,
@@ -42,23 +30,45 @@
     ],
     "note": "Selection diagnosis for the current slot only, not future reservations. Official body and public image bytes are checked by the publisher before sending."
   },
-  "overdue_reservation_probe": {
-    "status": "no_overdue_reservations",
-    "results": []
-  },
+  "finished_at": "2026-11-14T11:49:47.605015+09:00",
+  "new_publications": [],
+  "pending_key": null,
+  "delivery_state": "historical_sent_and_cancelled_no_new_acceptance",
+  "new_reservations": [],
+  "reservation_states": [
+    {
+      "key": "daily_2026-10-29_news",
+      "buffer_status": "cancelled_by_user",
+      "due_at": "2026-10-29T09:00:00Z",
+      "x_display_verified": false
+    },
+    {
+      "key": "daily_2026-10-30_news",
+      "buffer_status": "sent",
+      "due_at": "2026-10-30T09:00:00Z",
+      "x_display_verified": false
+    },
+    {
+      "key": "daily_2026-11-01_news",
+      "buffer_status": "sent",
+      "due_at": "2026-11-01T09:00:00Z",
+      "x_display_verified": false
+    }
+  ],
+  "pending_reservation_keys": [],
   "actions_timing": {
     "status": "ok",
-    "workflow_created_at": "2026-11-13T20:43:45Z",
-    "workflow_started_at": "2026-11-13T20:43:45Z",
-    "job_created_at": "2026-11-13T20:43:46Z",
-    "job_started_at": "2026-11-13T20:43:47Z",
-    "cron_to_workflow_creation_seconds": 24225,
-    "workflow_creation_to_job_creation_seconds": 1,
+    "workflow_created_at": "2026-11-14T02:49:36Z",
+    "workflow_started_at": "2026-11-14T02:49:36Z",
+    "job_created_at": "2026-11-14T02:49:36Z",
+    "job_started_at": "2026-11-14T02:49:38Z",
+    "cron_to_workflow_creation_seconds": 13776,
+    "workflow_creation_to_job_creation_seconds": 0,
     "workflow_creation_to_job_start_seconds": 2,
-    "job_queue_seconds": 1,
-    "job_start_to_delivery_start_seconds": 17,
+    "job_queue_seconds": 2,
+    "job_start_to_delivery_start_seconds": 9,
     "note": "Timing segments are observations, not proof of GitHub's internal delay cause.",
     "largest_known_stage": "workflow_created_late",
-    "largest_known_stage_seconds": 24225
+    "largest_known_stage_seconds": 13776
   }
 }
