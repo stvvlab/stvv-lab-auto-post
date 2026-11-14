@@ -73,6 +73,14 @@ class HandoffFallbackTests(unittest.TestCase):
         self.assertFalse(report["items"][0]["approved"])
 
 
+    def test_previously_skipped_url_is_not_requeued(self):
+        body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\n結果：4-1"
+        item = candidate(body)
+        report = build_handoff({"candidates": [item], "skipped": [
+            {"source_url": item["source_url"], "reason": "already_published"}]})
+        self.assertEqual(report["items"], [])
+        self.assertFalse(report["publication_performed"])
+
     def test_malformed_candidate_is_skipped_without_blocking_valid_candidate(self):
         body = "ベルギーリーグ第11節 ズルテ・ワレヘム戦（H）\n結果：4-1"
         valid = candidate(body)
