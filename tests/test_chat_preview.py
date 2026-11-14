@@ -34,6 +34,22 @@ class ChatPreviewTests(unittest.TestCase):
         ]})
         self.assertEqual(len(result["previews"]), 1)
 
+    def test_invalid_envelope_rejected(self):
+        for value in (None, [], "invalid"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                build_preview(value)
+
+    def test_missing_source_metadata_skipped(self):
+        result = build_preview({"items": [
+            self.item(official_heading=None),
+            self.item(official_heading=" "),
+            self.item(date_jst=None),
+            self.item(date_jst="unknown"),
+            self.item(),
+        ]})
+        self.assertEqual(len(result["previews"]), 1)
+        self.assertFalse(result["previews"][0]["ready_for_buffer"])
+
     def test_invalid_inventory_rejected(self):
         with self.assertRaises(ValueError):
             build_preview({"items": {}})
