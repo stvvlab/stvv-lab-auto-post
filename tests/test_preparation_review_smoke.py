@@ -39,5 +39,29 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertFalse(result["x_published"])
 
 
+    def test_confirmed_digest_skips_relocated_story(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            body = "Previously published official body"
+            digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
+            prep = root / "preparation.json"
+            prep.write_text(json.dumps({"candidates": [{
+                "source_url": "https://stvv.jp/news/relocated/",
+                "status": "needs_editorial_review",
+                "source_body": body, "body_sha256": digest,
+                "date_jst": "2026-11-15", "official_heading": "Relocated story"
+            }], "unapproved_draft_suggestions": []}), encoding="utf-8")
+            external = root / "external.json"
+            external.write_text(json.dumps({"items": [{
+                "source_url": "https://stvv.jp/news/original/",
+                "source_body_sha256": digest,
+                "status": "confirmed_external_publication"
+            }]}), encoding="utf-8")
+            result = run_preparation(prep, external, root / "output")
+            self.assertEqual(result["confirmed_external_skipped"], 1)
+            self.assertEqual(result["candidate_count"], 0)
+            self.assertEqual(result["images"], [])
+            self.assertFalse(result["buffer_sent"])
+
 if __name__ == "__main__":
     unittest.main()
