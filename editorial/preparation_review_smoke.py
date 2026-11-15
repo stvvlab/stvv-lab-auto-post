@@ -5,6 +5,7 @@ No Buffer, X, approval or ChatGPT delivery. Requires explicit output directory.
 import argparse
 import json
 import re
+import unicodedata
 from pathlib import Path
 
 from editorial_handoff import build_handoff
@@ -33,8 +34,11 @@ def run_preparation(preparation_path, external_path, output_dir):
         body = candidate.get("source_body", "")
         if not isinstance(heading, str) or not isinstance(body, str):
             return False
-        headline_round = re.search(r"第([0-9]+)節", heading)
-        body_round = re.search(r"第([0-9]+)節", body[:200])
+        # Japanese source pages may mix ASCII and full-width round numbers.
+        heading = unicodedata.normalize("NFKC", heading)
+        body = unicodedata.normalize("NFKC", body[:1000])
+        headline_round = re.search(r"第\s*([0-9]+)\s*節", heading)
+        body_round = re.search(r"第\s*([0-9]+)\s*節", body)
         return bool(headline_round and body_round and
                     headline_round.group(1) != body_round.group(1))
 
