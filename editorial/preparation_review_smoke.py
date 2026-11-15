@@ -4,6 +4,7 @@ No Buffer, X, approval or ChatGPT delivery. Requires explicit output directory.
 """
 import argparse
 import json
+import re
 from pathlib import Path
 
 from editorial_handoff import build_handoff
@@ -26,10 +27,23 @@ def run_preparation(preparation_path, external_path, output_dir):
     candidates = preparation.get("candidates")
     if not isinstance(candidates, list):
         raise ValueError("Invalid preparation candidates")
+    def conflicting_round(candidate):
+        """Do not render a headline that contradicts the source body round."""
+        heading = candidate.get("official_heading", "")
+        body = candidate.get("source_body", "")
+        if not isinstance(heading, str) or not isinstance(body, str):
+            return False
+        headline_round = re.search(r"第([0-9]+)節", heading)
+        body_round = re.search(r"第([0-9]+)節", body[:200])
+        return bool(headline_round and body_round and
+                    headline_round.group(1) != body_round.group(1))
+
+    unpublished = [c for c in candidates if isinstance(c, dict)
+                   and c.get("source_url") not in used
+                   and c.get("body_sha256") not in used_digests]
+    conflicts = [c for c in unpublished if conflicting_round(c)]
     filtered = dict(preparation)
-    filtered["candidates"] = [c for c in candidates
-                              if isinstance(c, dict) and c.get("source_url") not in used
-                              and c.get("body_sha256") not in used_digests]
+    filtered["candidates"] = [c for c in unpublished if not conflicting_round(c)]
     handoff = build_handoff(filtered)
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
@@ -38,7 +52,8 @@ def run_preparation(preparation_path, external_path, output_dir):
         json.dump(handoff, target, ensure_ascii=False, indent=2)
         target.write("\n")
     result = run(handoff_path, output / "review")
-    result["confirmed_external_skipped"] = len(candidates) - len(filtered["candidates"])
+    result["confirmed_external_skipped"] = len(candidates) - len(unpublished)
+    result["conflicting_round_skipped"] = len(conflicts)
     result["handoff_path"] = str(handoff_path)
     return result
 
