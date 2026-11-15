@@ -13,12 +13,13 @@ def run(handoff_path, output_dir):
     # Refuse to replace any prior review bundle or image.
     if (output / "review-bundle.json").exists():
         raise FileExistsError(output / "review-bundle.json")
-    images = render_bundle(bundle, output / "images")
+    # Persist the bundle first: a failed JSON write must not leave orphaned images.
     output.mkdir(parents=True, exist_ok=True)
     bundle_path = output / "review-bundle.json"
     with bundle_path.open("x", encoding="utf-8") as target:
         json.dump(bundle, target, ensure_ascii=False, indent=2)
         target.write("\n")
+    images = render_bundle(bundle, output / "images")
     return {"bundle_path": str(bundle_path), "candidate_count": len(bundle["items"]),
             "images": images["images"], "chat_delivery_performed": False,
             "approval_performed": False, "buffer_sent": False, "x_published": False}
