@@ -29,6 +29,25 @@ class RenderReviewSvgTests(unittest.TestCase):
             result = render_bundle({"status":"review_required","items":[bad,item("Good","b"*64)]}, tmp)
             self.assertEqual([x["status"] for x in result["images"]], ["skipped","rendered_unapproved"])
 
+    def test_duplicate_digest_different_urls_does_not_overwrite(self):
+        first = item("First", "d"*64)
+        second = item("Second", "d"*64)
+        second["preview"]["source_url"] = "https://stvv.jp/news/second"
+        second["image_brief"]["source_url"] = "https://stvv.jp/news/second"
+        with tempfile.TemporaryDirectory() as tmp:
+            result = render_bundle({"status": "review_required", "items": [first, second]}, tmp)
+            self.assertEqual([r["status"] for r in result["images"]], ["rendered_unapproved", "skipped"])
+            self.assertIn("First", next(Path(tmp).glob("*.svg")).read_text())
+            self.assertNotIn("Second", next(Path(tmp).glob("*.svg")).read_text())
+
+    def test_existing_svg_is_preserved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / ("review-" + "a"*64 + ".svg")
+            path.write_text("existing approved asset", encoding="utf-8")
+            result = render_bundle({"status": "review_required", "items": [item()]}, tmp)
+            self.assertEqual(result["images"][0]["status"], "skipped")
+            self.assertEqual(path.read_text(encoding="utf-8"), "existing approved asset")
+
     def test_no_approved_image_or_clipped_headline(self):
         approved = item()
         approved["preview"]["approval_status"] = "approved"
