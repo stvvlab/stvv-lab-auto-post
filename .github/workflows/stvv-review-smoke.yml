@@ -1,5 +1,15 @@
 name: STVV Unapproved Review Smoke
 on:
+  push:
+    branches:
+      - feature/chat-review-buffer-flow-01
+    paths:
+      - 'editorial/**'
+      - 'editorial_handoff.py'
+      - 'editorial_draft_suggestions.py'
+      - 'tests/test_preparation_review_smoke.py'
+      - 'reports/preparation-latest.json'
+      - '.github/workflows/stvv-review-smoke.yml'
   pull_request:
     paths:
       - 'editorial/**'
