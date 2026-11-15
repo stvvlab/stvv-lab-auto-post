@@ -15,14 +15,21 @@ def run_preparation(preparation_path, external_path, output_dir):
     external = json.loads(Path(external_path).read_text(encoding="utf-8"))
     if not isinstance(external, dict) or not isinstance(external.get("items"), list):
         raise ValueError("Invalid external publication ledger")
-    used = {item.get("source_url") for item in external["items"]
-            if isinstance(item, dict) and item.get("status") == "confirmed_external_publication"}
+    confirmed = [item for item in external["items"] if isinstance(item, dict)
+                 and item.get("status") == "confirmed_external_publication"]
+    used = {item.get("source_url") for item in confirmed if isinstance(item.get("source_url"), str)}
+    used_digests = {item.get("source_body_sha256") for item in confirmed
+                    if isinstance(item.get("source_body_sha256"), str)
+                    and len(item["source_body_sha256"]) == 64}
+    # A previously published story may have moved to a different official URL.
+    # Only exact verified body hashes count; absent hashes never cause a skip.
     candidates = preparation.get("candidates")
     if not isinstance(candidates, list):
         raise ValueError("Invalid preparation candidates")
     filtered = dict(preparation)
     filtered["candidates"] = [c for c in candidates
-                              if isinstance(c, dict) and c.get("source_url") not in used]
+                              if isinstance(c, dict) and c.get("source_url") not in used
+                              and c.get("body_sha256") not in used_digests]
     handoff = build_handoff(filtered)
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
