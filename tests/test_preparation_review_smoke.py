@@ -91,6 +91,27 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertEqual(result["images"][0]["status"], "rendered_unapproved")
             self.assertFalse(result["buffer_sent"])
 
+    def test_odawara_event_generates_unapproved_caption_and_image(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            body = ("2026年11月21日(土)、小田原市で少年少女サッカー大会。"
+                    "STVVが特別協賛。小学4年生以下の男女計20チームが参加予定。")
+            digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
+            url = "https://stvv.jp/news/event/20261114_1/"
+            prep = root / "preparation.json"
+            prep.write_text(json.dumps({"candidates": [{
+                "source_url": url, "status": "needs_editorial_review",
+                "source_body": body, "body_sha256": digest,
+                "date_jst": "2026-11-14", "official_heading": "少年サッカー大会"
+            }], "unapproved_draft_suggestions": []}, ensure_ascii=False), encoding="utf-8")
+            external = root / "external.json"
+            external.write_text('{"items":[]}', encoding="utf-8")
+            result = run_preparation(prep, external, root / "review")
+            self.assertEqual(result["candidate_count"], 1)
+            self.assertEqual(result["images"][0]["status"], "rendered_unapproved")
+            self.assertFalse(result["buffer_sent"])
+            self.assertFalse(result["x_published"])
+
     def test_three_candidate_fixture_skips_two_published_and_conflicting_round(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
