@@ -5,6 +5,7 @@ on:
       - 'editorial/**'
       - 'editorial_handoff.py'
       - 'editorial_draft_suggestions.py'
+      - 'tests/test_preparation_review_smoke.py'
       - 'reports/preparation-latest.json'
       - '.github/workflows/stvv-review-smoke.yml'
   workflow_dispatch:
@@ -18,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Run preparation review regression tests
+        run: python -m unittest discover -s tests -p 'test_preparation_review_smoke.py'
       - name: Generate review artifacts from tracked verified inventory (no posting)
         run: |
           python -m editorial.preparation_review_smoke \
@@ -37,7 +40,7 @@ jobs:
           if not bundle['items']:
               summary.append('- No publishable preview: refresh verified official inventory; no Buffer/X action taken')
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
-              out.write('\\n'.join(summary)+'\\n')
+              out.write('\n'.join(summary)+'\n')
           assert bundle['approval_performed'] is False
           assert bundle['buffer_sent'] is False
           assert bundle['x_published'] is False
