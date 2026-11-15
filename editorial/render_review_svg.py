@@ -42,6 +42,7 @@ def render_bundle(bundle, output_dir):
         raise ValueError("Invalid review bundle")
     output_dir = Path(output_dir)
     results = []
+    seen_digests = set()
     for item in bundle["items"]:
         try:
             svg = render_svg(item)
@@ -49,9 +50,18 @@ def render_bundle(bundle, output_dir):
             results.append({"status": "skipped", "reason": str(exc)})
             continue
         digest = item["preview"]["source_body_sha256"]
+        if digest in seen_digests:
+            results.append({"status": "skipped", "reason": "Duplicate source digest"})
+            continue
+        seen_digests.add(digest)
         path = output_dir / f"review-{digest}.svg"
         output_dir.mkdir(parents=True, exist_ok=True)
-        path.write_text(svg, encoding="utf-8")
+        try:
+            with path.open("x", encoding="utf-8") as target:
+                target.write(svg)
+        except FileExistsError:
+            results.append({"status": "skipped", "reason": "Review image already exists", "path": str(path)})
+            continue
         results.append({"status": "rendered_unapproved", "path": str(path), "source_url": item["preview"]["source_url"]})
     return {"images": results, "approval_performed": False, "buffer_sent": False, "x_published": False}
 
