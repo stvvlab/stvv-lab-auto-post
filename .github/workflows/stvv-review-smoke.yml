@@ -1,0 +1,43 @@
+name: STVV Unapproved Review Smoke
+on:
+  pull_request:
+    paths:
+      - 'editorial/**'
+      - 'editorial_handoff.py'
+      - 'editorial_draft_suggestions.py'
+      - 'reports/preparation-latest.json'
+      - '.github/workflows/stvv-review-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate review artifacts from tracked verified inventory (no posting)
+        run: |
+          python -m editorial.preparation_review_smoke \
+            --preparation reports/preparation-latest.json \
+            --external-publications editorial/external_publications.json \
+            --output-dir /tmp/stvv-review-smoke
+          python - <<'PY'
+          import json, pathlib
+          root=pathlib.Path('/tmp/stvv-review-smoke')
+          handoff=json.loads((root/'editorial-handoff.json').read_text())
+          bundle=json.loads((root/'review/review-bundle.json').read_text())
+          print('Handoff items:',len(handoff['items']),'Review items:',len(bundle['items']))
+          assert bundle['approval_performed'] is False
+          assert bundle['buffer_sent'] is False
+          assert bundle['x_published'] is False
+          PY
+      - name: Upload read-only preview artifacts for manual chat review
+        uses: actions/upload-artifact@v4
+        with:
+          name: stvv-unapproved-review
+          path: /tmp/stvv-review-smoke/
+          if-no-files-found: error
+          retention-days: 7
