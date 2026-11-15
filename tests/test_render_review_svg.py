@@ -42,9 +42,9 @@ class RenderReviewSvgTests(unittest.TestCase):
 
     def test_xml_forbidden_control_characters_are_removed(self):
         import xml.etree.ElementTree as ET
-        svg = render_svg(item("Official\\x00 & <Update>"))
+        svg = render_svg(item("Official\x00 & <Update>"))
         ET.fromstring(svg)
-        self.assertNotIn("\\x00", svg)
+        self.assertNotIn("\x00", svg)
         self.assertIn("Official &amp; &lt;Update&gt;", svg)
 
     def test_existing_svg_is_preserved(self):
