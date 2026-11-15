@@ -43,6 +43,8 @@ def suggest(item):
     elif '/event/' in url:
         if all(term in body for term in ('観戦会', 'ゲンク', '2026年11月29日（日）', '無料')):
             text = '📣 STVV公式観戦会が11月29日（日）に開催予定！ゲンク戦を日本から応援。参加費は無料です。'
+        elif all(term in body for term in ('2026年11月21日(土)', '小田原市', '少年少女サッカー大会', '特別協賛', '20チーム')):
+            text = '📣 STVVが11月21日、小田原市開催予定の少年少女サッカー大会に特別協賛。小学4年生以下の男女計20チームが参加予定です。'
     if text is None:
         return None
     text += '\n\n公式：' + url
