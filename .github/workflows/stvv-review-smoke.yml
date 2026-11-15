@@ -23,15 +23,17 @@ jobs:
           python -m editorial.preparation_review_smoke \
             --preparation reports/preparation-latest.json \
             --external-publications editorial/external_publications.json \
-            --output-dir /tmp/stvv-review-smoke
+            --output-dir /tmp/stvv-review-smoke > /tmp/stvv-review-result.json
+          cat /tmp/stvv-review-result.json
           python - <<'PY'
           import json, pathlib
           root=pathlib.Path('/tmp/stvv-review-smoke')
           handoff=json.loads((root/'editorial-handoff.json').read_text())
           bundle=json.loads((root/'review/review-bundle.json').read_text())
+          result=json.loads(pathlib.Path('/tmp/stvv-review-result.json').read_text())
           import os
           print('Handoff items:',len(handoff['items']),'Review items:',len(bundle['items']))
-          summary=['## STVV review smoke',f'- Handoff: {len(handoff["items"])}',f'- Review: {len(bundle["items"])}']
+          summary=['## STVV review smoke',f'- Handoff: {len(handoff["items"])}',f'- Review: {len(bundle["items"])}',f'- Confirmed external publications excluded: {result["confirmed_external_skipped"]}',f'- Conflicting round labels excluded: {result["conflicting_round_skipped"]}']
           if not bundle['items']:
               summary.append('- No publishable preview: refresh verified official inventory; no Buffer/X action taken')
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
