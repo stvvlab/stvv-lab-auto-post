@@ -1355,8 +1355,8 @@
       "slot": "player",
       "buffer_id": "6ade8cf66887a2efc12c271d",
       "submitted_at": "2026-10-26T08:12:56.682729+09:00",
-      "checked_at": "2026-11-14T08:24:45.932404+09:00",
-      "metrics_updated_at": "2026-11-13T10:33:36.136Z",
+      "checked_at": "2026-11-16T07:40:01.000049+09:00",
+      "metrics_updated_at": "2026-11-14T09:33:45.732Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1372,8 +1372,8 @@
       "slot": "vote",
       "buffer_id": "6adf65368e6c1ef513f120ff",
       "submitted_at": "2026-10-26T23:35:36.622617+09:00",
-      "checked_at": "2026-11-14T08:24:45.932404+09:00",
-      "metrics_updated_at": "2026-11-13T10:33:36.136Z",
+      "checked_at": "2026-11-16T07:40:01.000049+09:00",
+      "metrics_updated_at": "2026-11-15T08:33:55.527Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1389,8 +1389,8 @@
       "slot": "news",
       "buffer_id": "6ae353fa835dd2febef21af5",
       "submitted_at": "2026-10-29T23:11:06.909892+09:00",
-      "checked_at": "2026-11-14T08:24:45.932404+09:00",
-      "metrics_updated_at": "2026-11-13T10:33:36.136Z",
+      "checked_at": "2026-11-16T07:40:01.000049+09:00",
+      "metrics_updated_at": "2026-11-15T08:33:55.527Z",
       "status": "sent",
       "values": {
         "reactions": 1.0,
@@ -1406,8 +1406,8 @@
       "slot": "news",
       "buffer_id": "6ae5e787406ab8a018bc9c24",
       "submitted_at": "2026-10-31T22:05:11.800123+09:00",
-      "checked_at": "2026-11-14T08:24:45.932404+09:00",
-      "metrics_updated_at": "2026-11-13T10:33:36.136Z",
+      "checked_at": "2026-11-16T07:40:01.000049+09:00",
+      "metrics_updated_at": "2026-11-15T08:33:55.527Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1451,10 +1451,10 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-11-15T07:10:06.198745+09:00",
-    "eligible": 0,
-    "checked": 0,
-    "status": "no_eligible_posts",
+    "checked_at": "2026-11-16T07:40:01.000049+09:00",
+    "eligible": 4,
+    "checked": 4,
+    "status": "ok",
     "error_class": null
   },
   "automatic_feedback": []
