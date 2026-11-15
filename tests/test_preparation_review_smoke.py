@@ -63,13 +63,29 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertEqual(result["images"], [])
             self.assertFalse(result["buffer_sent"])
 
-    def test_repository_inventory_skips_published_and_conflicting_round(self):
-        root = Path(__file__).resolve().parent.parent
+    def test_three_candidate_fixture_skips_two_published_and_conflicting_round(self):
         with tempfile.TemporaryDirectory() as temp:
-            result = run_preparation(
-                root / "reports/preparation-latest.json",
-                root / "editorial/external_publications.json",
-                Path(temp) / "review")
+            root = Path(temp)
+            def candidate(url, heading, body):
+                return {"source_url": url, "status": "needs_editorial_review",
+                        "source_body": body,
+                        "body_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+                        "date_jst": "2026-11-15", "official_heading": heading}
+            posted_a = "https://stvv.jp/news/game/posted/"
+            posted_b = "https://stvv.jp/news/team/posted/"
+            conflict = "https://stvv.jp/news/game/conflicting/"
+            preparation = root / "preparation.json"
+            preparation.write_text(json.dumps({"candidates": [
+                candidate(posted_a, "Match", "Verified match report"),
+                candidate(posted_b, "Coach", "Verified coach announcement"),
+                candidate(conflict, "第2節 SKブラン戦", "第3節 SKブラン戦")
+            ], "unapproved_draft_suggestions": []}), encoding="utf-8")
+            external = root / "external.json"
+            external.write_text(json.dumps({"items": [
+                {"source_url": posted_a, "status": "confirmed_external_publication"},
+                {"source_url": posted_b, "status": "confirmed_external_publication"}
+            ]}), encoding="utf-8")
+            result = run_preparation(preparation, external, root / "review")
             self.assertEqual(result["confirmed_external_skipped"], 2)
             self.assertEqual(result["conflicting_round_skipped"], 1)
             self.assertEqual(result["candidate_count"], 0)
