@@ -29,7 +29,13 @@ jobs:
           root=pathlib.Path('/tmp/stvv-review-smoke')
           handoff=json.loads((root/'editorial-handoff.json').read_text())
           bundle=json.loads((root/'review/review-bundle.json').read_text())
+          import os
           print('Handoff items:',len(handoff['items']),'Review items:',len(bundle['items']))
+          summary=['## STVV review smoke',f'- Handoff: {len(handoff["items"])}',f'- Review: {len(bundle["items"])}']
+          if not bundle['items']:
+              summary.append('- No publishable preview: refresh verified official inventory; no Buffer/X action taken')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
+              out.write('\\n'.join(summary)+'\\n')
           assert bundle['approval_performed'] is False
           assert bundle['buffer_sent'] is False
           assert bundle['x_published'] is False
