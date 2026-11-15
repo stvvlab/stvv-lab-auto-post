@@ -77,7 +77,12 @@ class PreparationReviewSmokeTests(unittest.TestCase):
                           "第２節 試合情報", "試合の概要 " + "説明" * 110 + " 第３節 の試合"),
                 candidate("https://stvv.jp/news/next-candidate/",
                           "クラブからのお知らせ", "クラブからの公式案内")
-            ], "unapproved_draft_suggestions": []}, ensure_ascii=False), encoding="utf-8")
+            ], "unapproved_draft_suggestions": [{
+                "source_url": "https://stvv.jp/news/next-candidate/",
+                "status": "draft_unapproved",
+                "source_body_sha256": hashlib.sha256("クラブからの公式案内".encode("utf-8")).hexdigest(),
+                "text": "クラブからの公式案内です。"
+            }]}, ensure_ascii=False), encoding="utf-8")
             external = root / "external.json"
             external.write_text('{"items":[]}', encoding="utf-8")
             result = run_preparation(preparation, external, root / "output")
