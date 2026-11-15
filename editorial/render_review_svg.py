@@ -5,6 +5,12 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 
+def xml_text(value):
+    """Strip XML 1.0 forbidden codepoints before escaping text."""
+    clean = "".join(ch for ch in value if ch in "\t\n\r" or 0x20 <= ord(ch) <= 0xD7FF or 0xE000 <= ord(ch) <= 0xFFFD or 0x10000 <= ord(ch) <= 0x10FFFF)
+    return escape(clean)
+
+
 def render_svg(item):
     if not isinstance(item, dict) or not isinstance(item.get("preview"), dict) or not isinstance(item.get("image_brief"), dict):
         raise ValueError("Malformed review item")
@@ -24,7 +30,7 @@ def render_svg(item):
             or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)):
         raise ValueError("Invalid provenance or headline too long")
     lines = [title[i:i+24] for i in range(0, len(title), 24)]
-    nodes = "\n".join(f'<text x="90" y="{295+i*70}" font-size="51" font-weight="700" fill="#FFFFFF">{escape(line)}</text>' for i, line in enumerate(lines))
+    nodes = "\n".join(f'<text x="90" y="{295+i*70}" font-size="51" font-weight="700" fill="#FFFFFF">{xml_text(line)}</text>' for i, line in enumerate(lines))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <rect width="1200" height="675" fill="#091B37"/>
 <path d="M 860 0 L 1200 0 L 1200 675 L 1040 675 Z" fill="#122C4F"/>
@@ -32,7 +38,7 @@ def render_svg(item):
 <text x="90" y="176" font-family="sans-serif" font-size="28" letter-spacing="4" fill="#F4D334">STVV LAB</text>
 {nodes}
 <rect x="90" y="554" width="1020" height="1" fill="#61718A"/>
-<text x="90" y="607" font-family="sans-serif" font-size="22" fill="#D7DFEA">OFFICIAL SOURCE  |  {escape(date)}</text>
+<text x="90" y="607" font-family="sans-serif" font-size="22" fill="#D7DFEA">OFFICIAL SOURCE  |  {xml_text(date)}</text>
 <text x="1110" y="607" text-anchor="end" font-family="sans-serif" font-size="18" fill="#F4D334">REVIEW ONLY</text>
 </svg>'''
 
