@@ -63,5 +63,20 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertEqual(result["images"], [])
             self.assertFalse(result["buffer_sent"])
 
+    def test_repository_inventory_skips_published_and_conflicting_round(self):
+        root = Path(__file__).resolve().parent.parent
+        with tempfile.TemporaryDirectory() as temp:
+            result = run_preparation(
+                root / "reports/preparation-latest.json",
+                root / "editorial/external_publications.json",
+                Path(temp) / "review")
+            self.assertEqual(result["confirmed_external_skipped"], 2)
+            self.assertEqual(result["conflicting_round_skipped"], 1)
+            self.assertEqual(result["candidate_count"], 0)
+            self.assertEqual(result["images"], [])
+            self.assertFalse(result["buffer_sent"])
+            self.assertFalse(result["x_published"])
+
+
 if __name__ == "__main__":
     unittest.main()
