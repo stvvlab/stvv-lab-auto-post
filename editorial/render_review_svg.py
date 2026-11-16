@@ -76,6 +76,8 @@ def render_bundle(bundle, output_dir):
     results = []
     seen_digests = set()
     seen_urls = set()
+    seen_phases = set()
+    unphased_urls = set()
     for item in bundle["items"]:
         try:
             svg = render_svg(item)
@@ -84,14 +86,25 @@ def render_bundle(bundle, output_dir):
             continue
         digest = item["preview"]["source_body_sha256"]
         source_url = item["preview"]["source_url"]
-        if source_url in seen_urls:
-            results.append({"status": "skipped", "reason": "Duplicate source URL"})
+        # A source can support distinct editorial phases (preview, lineup,
+        # result, analysis). Require an explicit phase on BOTH items; otherwise
+        # retain the conservative URL-only duplicate rule.
+        purpose = item["preview"].get("editorial_purpose")
+        phase = purpose.get("phase") if isinstance(purpose, dict) else None
+        phase = phase.strip() if isinstance(phase, str) else None
+        phase_key = (source_url, phase) if phase else None
+        if source_url in seen_urls and (not phase_key or phase_key in seen_phases or source_url in unphased_urls):
+            results.append({"status": "skipped", "reason": "Duplicate source URL/phase"})
             continue
         if digest in seen_digests:
             results.append({"status": "skipped", "reason": "Duplicate source digest"})
             continue
         seen_digests.add(digest)
         seen_urls.add(source_url)
+        if phase_key:
+            seen_phases.add(phase_key)
+        else:
+            unphased_urls.add(source_url)
         path = output_dir / f"review-{digest}.svg"
         output_dir.mkdir(parents=True, exist_ok=True)
         try:
