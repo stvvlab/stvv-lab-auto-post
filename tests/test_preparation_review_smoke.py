@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from editorial.preparation_review_smoke import run_preparation
-from editorial.render_review_svg import render_svg
+from editorial.render_review_svg import render_svg, render_bundle
 
 
 class PreparationReviewSmokeTests(unittest.TestCase):
@@ -200,6 +200,35 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertEqual(result["conflicting_round_skipped"], 1)
             self.assertEqual(result["candidate_count"], 0)
             self.assertEqual(result["images"], [])
+            self.assertFalse(result["buffer_sent"])
+            self.assertFalse(result["x_published"])
+
+
+    def test_same_official_url_different_digest_renders_once(self):
+        with tempfile.TemporaryDirectory() as temp:
+            def item(digest):
+                source = {
+                    "source_url": "https://stvv.jp/news/event/same-story/",
+                    "official_heading": "Official event",
+                    "date_jst": "2026-11-16",
+                    "caption": "Official event",
+                    "source_body_sha256": digest,
+                }
+                return {
+                    "preview": dict(source, approval_status="not_approved",
+                                    ready_for_buffer=False, image_status="not_generated"),
+                    "image_brief": dict(source, approval_status="not_approved",
+                                        ready_for_buffer=False, image_status="brief_only",
+                                        image_path=None),
+                }
+            result = render_bundle({
+                "status": "review_required",
+                "items": [item("a" * 64), item("b" * 64)],
+            }, Path(temp))
+            self.assertEqual([x["status"] for x in result["images"]],
+                             ["rendered_unapproved", "skipped"])
+            self.assertEqual(result["images"][1]["reason"], "Duplicate source URL")
+            self.assertEqual(len(list(Path(temp).glob("*.svg"))), 1)
             self.assertFalse(result["buffer_sent"])
             self.assertFalse(result["x_published"])
 
