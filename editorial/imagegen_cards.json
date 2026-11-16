@@ -191,20 +191,20 @@
       "expiration_note": "Fixed publish due 2026-11-01 18:00 JST missed; retired from posting queue on 2026-11-17. Preserve approval and historical record; never reschedule or publish."
     },
     {
-      "source_url": "https://stvv.jp/game/2026-2027/",
+      "source_url": "https://www.proleague.be/wedstrijden/seizoen-2026-2027-jupiler-pro-league-12-sporting-charleroi-vs-stvv-702",
       "date_jst": "2026-11-17",
-      "text": "⚽ STVV、次戦はシャルルロワとのアウェーゲーム！\n\n📅 11月22日（日）午前0:00（日本時間）\n🏟 Stade du Pays de Charleroi\n\n新監督のもと、次の一戦へ。\nSTVVの戦いに注目！💛💙\n\n公式：https://stvv.jp/game/2026-2027/\n\n#STVV #シントトロイデン",
+      "text": "⚽ STVV、次戦はシャルルロワとのアウェーゲーム！\n\n📅 11月21日（土）23:00（日本時間）\n🏟 Stade du Pays de Charleroi\n\n次の一戦、STVVの戦いに注目！💛💙\n\n公式：https://www.proleague.be/wedstrijden/seizoen-2026-2027-jupiler-pro-league-12-sporting-charleroi-vs-stvv-702\n\n#STVV #シントトロイデン",
       "slots": [
         "news"
       ],
-      "reviewed": true,
-      "status": "draft_needs_asset",
+      "reviewed": false,
+      "status": "draft_needs_asset_and_reapproval",
       "editorial_purpose": {
         "kind": "fixture",
         "phase": "initial",
         "event_id": "stvv-charleroi-2026-11-22"
       },
-      "review_note": "User asked to proceed with reservation after reviewing caption and image in chat. Draft registered only. Image generated in chat has not been transferred into immutable GitHub media; no asset_path or SHA. Must not reserve or publish until asset bytes, official fact revalidation, and booking checks are complete. Sponsorship stories excluded."
+      "review_note": "2026-11-17 correction: Belgian club and Pro League show 21 Nov 15:00 local = 21 Nov 23:00 JST, while Japanese STVV site lists 22 Nov 00:00 JST. Avoid publishing the old 00:00 graphic. Updated caption needs reapproval, image replacement and integration with official-source whitelist; not Buffer-reserved."
     }
   ]
 }
