@@ -110,6 +110,24 @@ class PreparationReviewSmokeTests(unittest.TestCase):
         self.assertIn("小田原市の少年少女サッカー大会", svg)
         self.assertNotIn("小田原市少年サッカー大会" * 9, svg)
 
+    def test_multiline_caption_does_not_render_second_line_as_title(self):
+        digest = "b" * 64
+        source = {
+            "source_url": "https://stvv.jp/news/event/20261114_1/",
+            "official_heading": "小田原市少年サッカー大会" * 9,
+            "date_jst": "2026-11-14",
+            "caption": "📣 STVVが小田原市の大会に協賛。\n詳細は公式サイトへ。",
+            "source_body_sha256": digest,
+        }
+        preview = dict(source, approval_status="not_approved",
+                       ready_for_buffer=False, image_status="not_generated")
+        brief = dict(source, approval_status="not_approved",
+                     ready_for_buffer=False, image_status="brief_only",
+                     image_path=None)
+        svg = render_svg({"preview": preview, "image_brief": brief})
+        self.assertIn("小田原市の大会に協賛", svg)
+        self.assertNotIn("詳細は公式サイトへ", svg)
+
     def test_odawara_event_generates_unapproved_caption_and_image(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
