@@ -38,6 +38,14 @@ def snapshot(root=ROOT, now=None):
                                "cancelled", "expired")
     }
     historical_sources.discard(None)
+    # Include both the legacy used-URL ledger and recorded Buffer publications.
+    # A manifest-only check can mistakenly classify already-sent stories as fresh.
+    if isinstance(history, dict):
+        historical_sources.update(url for url in history.get("news", []) if isinstance(url, str))
+        historical_sources.update(
+            entry.get("source") for entry in history.get("publication_log", [])
+            if isinstance(entry, dict) and isinstance(entry.get("source"), str)
+        )
     fresh_candidates = [
         c for c in candidates
         if isinstance(c, dict) and c.get("source_url") not in historical_sources
@@ -73,6 +81,7 @@ def snapshot(root=ROOT, now=None):
             "local_publication_records": len(history.get("publication_log", [])),
         },
         "blocked_drafts": blocked_drafts,
+        "fresh_candidate_sources": [c.get("source_url") for c in fresh_candidates],
         "next_action": (
             "Review locally fresh candidates against remote Buffer/X history; "
             "skip duplicate topics, then prepare a review bundle"
