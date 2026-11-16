@@ -189,6 +189,22 @@
       },
       "review_note": "Time-sensitive matchday reminder only at 2026-11-01 18:00 JST; no image. Official STVV 2026-10-27 article and OH Leuven official 2026-10-30 article independently confirm 2026-11-01 16:00 CET (2026-11-02 00:00 JST). Same fixture's initial announcement already Buffer-sent; matchday reminder has a distinct approved editorial phase. Source body SHA256 reused from previously verified initial announcement and must be revalidated live before reservation. No new result, lineup, ticket claim or invented statistic. Do not reschedule to another time, repost after kickoff or bypass duplicate/pending checks.",
       "expiration_note": "Fixed publish due 2026-11-01 18:00 JST missed; retired from posting queue on 2026-11-17. Preserve approval and historical record; never reschedule or publish."
+    },
+    {
+      "source_url": "https://stvv.jp/game/2026-2027/",
+      "date_jst": "2026-11-17",
+      "text": "⚽ STVV、次戦はシャルルロワとのアウェーゲーム！\n\n📅 11月22日（日）午前0:00（日本時間）\n🏟 Stade du Pays de Charleroi\n\n新監督のもと、次の一戦へ。\nSTVVの戦いに注目！💛💙\n\n公式：https://stvv.jp/game/2026-2027/\n\n#STVV #シントトロイデン",
+      "slots": [
+        "news"
+      ],
+      "reviewed": true,
+      "status": "draft_needs_asset",
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "initial",
+        "event_id": "stvv-charleroi-2026-11-22"
+      },
+      "review_note": "User asked to proceed with reservation after reviewing caption and image in chat. Draft registered only. Image generated in chat has not been transferred into immutable GitHub media; no asset_path or SHA. Must not reserve or publish until asset bytes, official fact revalidation, and booking checks are complete. Sponsorship stories excluded."
     }
   ]
 }
