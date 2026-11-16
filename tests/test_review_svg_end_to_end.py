@@ -52,6 +52,35 @@ class ReviewSvgEndToEndTests(unittest.TestCase):
                     "buffer_sent", "x_published"):
             self.assertIs(bundle[key], False)
 
+    def test_same_url_distinct_phases_can_render(self):
+        def item(digest, phase):
+            fields = {
+                "source_url": "https://stvv.jp/news/game/example",
+                "official_heading": "STVV match update",
+                "date_jst": "2026-11-17",
+                "caption": "STVV match update",
+                "source_body_sha256": digest,
+                "approval_status": "not_approved",
+                "ready_for_buffer": False,
+                "editorial_purpose": {"phase": phase},
+            }
+            return {
+                "preview": {**fields, "image_status": "not_generated"},
+                "image_brief": {**fields, "image_status": "brief_only", "image_path": None},
+            }
+        bundle = {"status": "review_required", "items": [
+            item("a" * 64, "preview"),
+            item("b" * 64, "result"),
+            item("c" * 64, "result"),
+        ]}
+        with tempfile.TemporaryDirectory() as tmp:
+            result = render_bundle(bundle, tmp)
+            self.assertEqual([i["status"] for i in result["images"]],
+                             ["rendered_unapproved", "rendered_unapproved", "skipped"])
+            self.assertEqual(len(list(Path(tmp).glob("*.svg"))), 2)
+            self.assertFalse(result["buffer_sent"])
+            self.assertFalse(result["x_published"])
+
     def test_no_candidates_does_not_create_images(self):
         bundle = prepare_review_bundle({"items": []})
         with tempfile.TemporaryDirectory() as tmp:
