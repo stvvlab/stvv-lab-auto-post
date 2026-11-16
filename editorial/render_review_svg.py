@@ -94,7 +94,7 @@ def render_bundle(bundle, output_dir):
         phase = phase.strip() if isinstance(phase, str) else None
         phase_key = (source_url, phase) if phase else None
         if source_url in seen_urls and (not phase_key or phase_key in seen_phases or source_url in unphased_urls):
-            results.append({"status": "skipped", "reason": "Duplicate source URL/phase"})
+            results.append({"status": "skipped", "reason": "Duplicate source URL/phase" if phase_key else "Duplicate source URL"})
             continue
         if digest in seen_digests:
             results.append({"status": "skipped", "reason": "Duplicate source digest"})
