@@ -75,6 +75,7 @@ def render_bundle(bundle, output_dir):
     output_dir = Path(output_dir)
     results = []
     seen_digests = set()
+    seen_urls = set()
     for item in bundle["items"]:
         try:
             svg = render_svg(item)
@@ -82,10 +83,15 @@ def render_bundle(bundle, output_dir):
             results.append({"status": "skipped", "reason": str(exc)})
             continue
         digest = item["preview"]["source_body_sha256"]
+        source_url = item["preview"]["source_url"]
+        if source_url in seen_urls:
+            results.append({"status": "skipped", "reason": "Duplicate source URL"})
+            continue
         if digest in seen_digests:
             results.append({"status": "skipped", "reason": "Duplicate source digest"})
             continue
         seen_digests.add(digest)
+        seen_urls.add(source_url)
         path = output_dir / f"review-{digest}.svg"
         output_dir.mkdir(parents=True, exist_ok=True)
         try:
