@@ -39,8 +39,24 @@ def render_svg(item):
         display_title = caption.split("\n", 1)[0].lstrip("📣📢⚽ ").strip()
         if len(display_title) > 64:
             display_title = display_title[:63] + "…"
-    lines = [display_title[i:i+24] for i in range(0, len(display_title), 24)]
-    nodes = "\n".join(f'<text x="90" y="{295+i*70}" font-size="51" font-weight="700" fill="#FFFFFF">{xml_text(line)}</text>' for i, line in enumerate(lines))
+    # Japanese glyphs are much wider than Latin characters: 24 glyphs at 51px
+    # overflow a 1200px canvas. Use a conservative display-width budget.
+    # Keep source title and full caption unchanged in the review bundle.
+    def display_width(text):
+        import unicodedata
+        return sum(2 if unicodedata.east_asian_width(ch) in ("F", "W") else 1 for ch in text)
+    lines, line = [], ""
+    for char in display_title:
+        if line and display_width(line + char) > 36:
+            lines.append(line)
+            line = ""
+        line += char
+    if line:
+        lines.append(line)
+    if len(lines) > 3:
+        lines = lines[:3]
+        lines[-1] = lines[-1].rstrip("…")[:max(0, len(lines[-1])-1)] + "…"
+    nodes = "\n".join(f'<text x="90" y="{295+i*70}" font-family="Noto Sans CJK JP, sans-serif" font-size="51" font-weight="700" fill="#FFFFFF">{xml_text(line)}</text>' for i, line in enumerate(lines))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <rect width="1200" height="675" fill="#091B37"/>
 <path d="M 860 0 L 1200 0 L 1200 675 L 1040 675 Z" fill="#122C4F"/>
