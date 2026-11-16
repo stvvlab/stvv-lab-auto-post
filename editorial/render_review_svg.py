@@ -36,7 +36,7 @@ def render_svg(item):
         caption = preview.get("caption")
         if not isinstance(caption, str) or not caption.strip():
             raise ValueError("Long headline without review caption")
-        display_title = caption.split("\\n", 1)[0].lstrip("📣📢⚽ ").strip()
+        display_title = caption.split("\n", 1)[0].lstrip("📣📢⚽ ").strip()
         if len(display_title) > 64:
             display_title = display_title[:63] + "…"
     lines = [display_title[i:i+24] for i in range(0, len(display_title), 24)]
