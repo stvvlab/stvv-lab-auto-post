@@ -32,12 +32,29 @@ def snapshot(root=ROOT, now=None):
     if not isinstance(candidates, list):
         candidates = []
     approved = [c for c in cards if c.get("status") == "ready" and c.get("reviewed") is True]
+    historical_sources = {
+        c.get("source_url") for c in cards
+        if c.get("status") in ("published", "buffer_sent_x_unverified",
+                               "cancelled", "expired")
+    }
+    historical_sources.discard(None)
+    fresh_candidates = [
+        c for c in candidates
+        if isinstance(c, dict) and c.get("source_url") not in historical_sources
+    ]
+    duplicate_source_candidates = len(candidates) - len(fresh_candidates)
+    blocked_drafts = [
+        {"source_url": c.get("source_url"), "status": c.get("status")}
+        for c in cards
+        if c.get("status") in ("draft_needs_asset_and_reapproval",
+                               "draft_needs_review")
+    ]
     return {
         "checked_at": now.isoformat(),
         "stages": {
             "01_source_collection": preparation.get("status", "unknown"),
             "02_duplicate_check": "local_history_only_remote_x_unverified",
-            "03_candidate_selection": "needs_review" if candidates else "no_candidate",
+            "03_candidate_selection": "needs_review" if fresh_candidates else "no_new_candidate",
             "04_caption": "requires_editorial_review",
             "05_image": "not_generated" if not preparation.get("image_generation_performed") else "generated",
             "06_chat_preview": "not_integrated",
@@ -48,13 +65,19 @@ def snapshot(root=ROOT, now=None):
         },
         "counts": {
             "candidates": len(candidates),
+            "fresh_local_candidates": len(fresh_candidates),
+            "duplicate_source_candidates": duplicate_source_candidates,
+            "blocked_manifest_drafts": len(blocked_drafts),
             "approved_ready_cards": len(approved),
             "new_reservations": len(delivery.get("new_reservations", [])),
             "local_publication_records": len(history.get("publication_log", [])),
         },
+        "blocked_drafts": blocked_drafts,
         "next_action": (
-            "Reconcile candidate topics with X posts before drafting; "
-            "skip duplicates and continue scanning"
+            "Review locally fresh candidates against remote Buffer/X history; "
+            "skip duplicate topics, then prepare a review bundle"
+            if fresh_candidates else
+            "Refresh official sources and seek a new nonduplicate candidate"
         ),
         "remote_x_checked": False,
         "buffer_checked": False,
