@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from editorial.preparation_review_smoke import run_preparation
+from editorial.render_review_svg import render_svg
 
 
 class PreparationReviewSmokeTests(unittest.TestCase):
@@ -90,6 +91,24 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertEqual(result["candidate_count"], 1)
             self.assertEqual(result["images"][0]["status"], "rendered_unapproved")
             self.assertFalse(result["buffer_sent"])
+
+    def test_long_official_headline_uses_caption_on_svg(self):
+        digest = "a" * 64
+        source = {
+            "source_url": "https://stvv.jp/news/event/20261114_1/",
+            "official_heading": "小田原市少年サッカー大会" * 9,
+            "date_jst": "2026-11-14",
+            "caption": "📣 STVVが小田原市の少年少女サッカー大会に特別協賛。",
+            "source_body_sha256": digest,
+        }
+        preview = dict(source, approval_status="not_approved",
+                       ready_for_buffer=False, image_status="not_generated")
+        brief = dict(source, approval_status="not_approved",
+                     ready_for_buffer=False, image_status="brief_only",
+                     image_path=None)
+        svg = render_svg({"preview": preview, "image_brief": brief})
+        self.assertIn("小田原市の少年少女サッカー大会", svg)
+        self.assertNotIn("小田原市少年サッカー大会" * 9, svg)
 
     def test_odawara_event_generates_unapproved_caption_and_image(self):
         with tempfile.TemporaryDirectory() as temp:
