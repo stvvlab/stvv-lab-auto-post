@@ -24,12 +24,22 @@ def render_svg(item):
             or brief.get("image_path") is not None):
         raise ValueError("Not an unapproved image brief")
     title, date, url, digest = (preview.get(k) for k in ("official_heading", "date_jst", "source_url", "source_body_sha256"))
-    if (not isinstance(title, str) or not title.strip() or len(title) > 64
+    if (not isinstance(title, str) or not title.strip()
             or not isinstance(date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date)
             or not isinstance(url, str) or not url.startswith("https://stvv.jp/")
             or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)):
-        raise ValueError("Invalid provenance or headline too long")
-    lines = [title[i:i+24] for i in range(0, len(title), 24)]
+        raise ValueError("Invalid provenance")
+    # Long official headlines must not silently discard a valid review candidate.
+    # Keep the full source headline in the bundle; shorten only image display.
+    display_title = title
+    if len(title) > 64:
+        caption = preview.get("caption")
+        if not isinstance(caption, str) or not caption.strip():
+            raise ValueError("Long headline without review caption")
+        display_title = caption.split("\\n", 1)[0].lstrip("📣📢⚽ ").strip()
+        if len(display_title) > 64:
+            display_title = display_title[:63] + "…"
+    lines = [display_title[i:i+24] for i in range(0, len(display_title), 24)]
     nodes = "\n".join(f'<text x="90" y="{295+i*70}" font-size="51" font-weight="700" fill="#FFFFFF">{xml_text(line)}</text>' for i, line in enumerate(lines))
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <rect width="1200" height="675" fill="#091B37"/>
