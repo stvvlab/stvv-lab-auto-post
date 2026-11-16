@@ -44,6 +44,35 @@ class PipelineProgressTests(unittest.TestCase):
             self.assertFalse(result["posting_performed"])
             self.assertEqual(before, {p: (root / p).read_bytes() for p in data})
 
+    def test_legacy_news_and_publication_log_are_excluded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "reports").mkdir()
+            (root / "editorial").mkdir()
+            fixtures = {
+                "reports/preparation-latest.json": {
+                    "status": "candidates_need_review",
+                    "candidates": [
+                        {"source_url": "https://stvv.jp/legacy"},
+                        {"source_url": "https://stvv.jp/sent"},
+                        {"source_url": "https://stvv.jp/fresh"},
+                    ],
+                },
+                "reports/delivery-latest.json": {"new_reservations": []},
+                "editorial/imagegen_cards.json": {"cards": []},
+                "posted.json": {
+                    "news": ["https://stvv.jp/legacy"],
+                    "publication_log": [{"source": "https://stvv.jp/sent"}],
+                },
+            }
+            for path, value in fixtures.items():
+                (root / path).write_text(json.dumps(value), encoding="utf-8")
+            result = snapshot(root)
+            self.assertEqual(result["counts"]["duplicate_source_candidates"], 2)
+            self.assertEqual(result["counts"]["fresh_local_candidates"], 1)
+            self.assertEqual(result["fresh_candidate_sources"], ["https://stvv.jp/fresh"])
+            self.assertFalse(result["posting_performed"])
+
     def test_missing_files_do_not_produce_false_success(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = snapshot(Path(tmp))
