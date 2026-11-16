@@ -36,6 +36,14 @@ class PreparationReviewSmokeTests(unittest.TestCase):
             self.assertEqual(result["confirmed_external_skipped"], 1)
             self.assertEqual(result["candidate_count"], 1)
             self.assertEqual(result["images"][0]["status"], "rendered_unapproved")
+            saved = json.loads(Path(result["bundle_path"]).read_text(encoding="utf-8"))
+            self.assertTrue(saved["image_generation_performed"])
+            self.assertEqual(saved["items"][0]["preview"]["image_status"], "generated_unapproved")
+            self.assertTrue(Path(saved["items"][0]["preview"]["image_path"]).is_file())
+            self.assertEqual(saved["items"][0]["preview"]["approval_status"], "not_approved")
+            self.assertFalse(saved["items"][0]["preview"]["ready_for_buffer"])
+            self.assertFalse(saved["buffer_sent"])
+
             self.assertFalse(result["buffer_sent"])
             self.assertFalse(result["x_published"])
 
