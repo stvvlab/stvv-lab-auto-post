@@ -128,6 +128,30 @@ class PreparationReviewSmokeTests(unittest.TestCase):
         self.assertIn("小田原市の大会に協賛", svg)
         self.assertNotIn("詳細は公式サイトへ", svg)
 
+    def test_japanese_svg_title_lines_fit_canvas(self):
+        import re
+        import unicodedata
+        digest = "c" * 64
+        source = {
+            "source_url": "https://stvv.jp/news/event/20261114_1/",
+            "official_heading": "小田原市少年サッカー大会" * 9,
+            "date_jst": "2026-11-14",
+            "caption": "📣 STVVが11月21日、小田原市開催予定の少年少女サッカー大会に特別協賛。小学4年生以下の男女計20チームが参加予定です。",
+            "source_body_sha256": digest,
+        }
+        preview = dict(source, approval_status="not_approved",
+                       ready_for_buffer=False, image_status="not_generated")
+        brief = dict(source, approval_status="not_approved",
+                     ready_for_buffer=False, image_status="brief_only", image_path=None)
+        svg = render_svg({"preview": preview, "image_brief": brief})
+        title_lines = re.findall(r'<text x="90" y="(?:295|365|435)"[^>]*>([^<]*)</text>', svg)
+        self.assertGreater(len(title_lines), 0)
+        self.assertLessEqual(len(title_lines), 3)
+        for line in title_lines:
+            units = sum(2 if unicodedata.east_asian_width(ch) in ("F", "W") else 1 for ch in line)
+            self.assertLessEqual(units, 36)
+        self.assertIn('font-family="Noto Sans CJK JP, sans-serif"', svg)
+
     def test_odawara_event_generates_unapproved_caption_and_image(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
