@@ -66,6 +66,16 @@ class ReservationPreviewTests(unittest.TestCase):
         self.assertEqual(result['proposals'][0]['text'], self.card['text'])
         self.assertFalse(result['proposals'][0]['text'].endswith(HASHTAGS + HASHTAGS))
 
+    def test_exact_approved_caption_with_hashtags_matches_manifest(self):
+        from stvv_post import HASHTAGS
+        from prepared_media import exact_card
+        self.card['text'] += HASHTAGS
+        self.write_card()
+        self.assertEqual(exact_card('news', self.card['text'], self.card['source_url']), self.card)
+        result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
+        self.assertEqual(len(result['proposals']), 1)
+        self.assertEqual(result['proposals'][0]['text'], self.card['text'])
+
     def test_occupied_and_pending_slots_are_not_proposed(self):
         self.history['pending_posts']['daily_2026-10-27_player'] = {}
         result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
