@@ -125,6 +125,37 @@ class PipelineProgressTests(unittest.TestCase):
             self.assertEqual(result["counts"]["local_publication_records"], 0)
             self.assertFalse(result["posting_performed"])
 
+    def test_malformed_historical_urls_are_ignored_and_whitespace_normalized(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "reports").mkdir()
+            (root / "editorial").mkdir()
+            fixtures = {
+                "reports/preparation-latest.json": {
+                    "candidates": [
+                        {"source_url": "https://stvv.jp/already"},
+                        {"source_url": "https://stvv.jp/new"},
+                    ]
+                },
+                "reports/delivery-latest.json": {},
+                "editorial/imagegen_cards.json": {
+                    "cards": [
+                        {"status": "published", "source_url": ["bad"]},
+                        {"status": "published", "source_url": " https://stvv.jp/already "},
+                    ]
+                },
+                "posted.json": {
+                    "news": [None, {"invalid": "entry"}],
+                    "publication_log": [{"source": ["bad"]}],
+                },
+            }
+            for path, value in fixtures.items():
+                (root / path).write_text(json.dumps(value), encoding="utf-8")
+            result = snapshot(root)
+            self.assertEqual(result["fresh_candidate_sources"], ["https://stvv.jp/new"])
+            self.assertEqual(result["counts"]["duplicate_source_candidates"], 1)
+            self.assertFalse(result["posting_performed"])
+
     def test_missing_files_do_not_produce_false_success(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = snapshot(Path(tmp))
