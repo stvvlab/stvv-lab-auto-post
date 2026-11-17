@@ -13,7 +13,9 @@ on:
   pull_request:
     paths:
       - 'editorial/pipeline_progress.py'
+      - 'editorial/review_queue.py'
       - 'tests/test_pipeline_progress.py'
+      - 'tests/test_review_queue.py'
       - '.github/workflows/pipeline-progress-tests.yml'
   workflow_dispatch:
 
