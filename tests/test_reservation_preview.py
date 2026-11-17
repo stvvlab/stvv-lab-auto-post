@@ -151,6 +151,25 @@ class ReservationPreviewTests(unittest.TestCase):
         self.assertEqual(report['content_readiness']['approved_ready_cards'], 1)
         self.assertEqual(report['content_readiness']['future_slots_with_candidate'], 0)
 
+    def test_official_fixture_index_requires_reviewed_time_locked_purpose(self):
+        from prepared_media import prepared_candidates
+        self.card['source_url'] = 'https://stvv.jp/game/2026-2027/'
+        self.card['text'] = 'Fixture official: https://stvv.jp/game/2026-2027/'
+        self.card['date_jst'] = '2026-10-27'
+        self.card['publish_due_jst'] = '2026-10-27T18:00:00+09:00'
+        self.card['editorial_purpose'] = {
+            'kind': 'fixture', 'event_id': 'stvv-fixture-2026-10-30'}
+        self.write_card()
+        due = datetime.fromisoformat('2026-10-27T18:00:00+09:00')
+        self.assertEqual(len(prepared_candidates('news', due)), 1)
+        self.card['editorial_purpose']['kind'] = 'other'
+        self.write_card()
+        self.assertEqual(prepared_candidates('news', due), [])
+        self.card['editorial_purpose']['kind'] = 'fixture'
+        self.card['status'] = 'asset_pending'
+        self.write_card()
+        self.assertEqual(prepared_candidates('news', due), [])
+
     def test_invalid_history_does_not_assume_empty(self):
         with self.assertRaises(ValueError):
             plan({}, datetime.fromisoformat('2026-10-26T00:00:00+09:00'))
