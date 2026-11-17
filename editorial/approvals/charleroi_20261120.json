@@ -1,0 +1,14 @@
+{
+  "project": "STVV LAB 投稿フロー実装 01",
+  "status": "user_approved_asset_transfer_pending",
+  "approved_at_date": "2026-11-18",
+  "target_due_jst": "2026-11-20T18:00:00+09:00",
+  "event_id": "stvv-charleroi-2026-11-22",
+  "source_url": "https://stvv.jp/game/2026-2027/",
+  "text": "⚽ STVV NEXT MATCH 🇧🇪\n\n次節はアウェーでシャルルロワと対戦！\n\n前節はズルテ・ワレヘムに4-1で勝利。\n新川志音、石渡ネルソン、松澤海斗の日本人3選手がゴールを決めました🔥\n\nこの勢いを次の一戦につなげられるか！\n\n📅 11月22日（日）0:00 日本時間\n🆚 シャルルロワ vs STVV\n\n公式：https://stvv.jp/game/2026-2027/\n\n#STVV #シントトロイデン",
+  "image_source": "conversation-generated approved match graphic",
+  "image_registered_in_repo": false,
+  "buffer_reservation_id": null,
+  "buffer_status": "not_scheduled",
+  "notes": "Approval record only; do not treat as publishable manifest. Preserve original image bytes and caption. No automatic reservation until asset registration, official source validation, and authorized execution."
+}
