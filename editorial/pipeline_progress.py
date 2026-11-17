@@ -25,12 +25,21 @@ def snapshot(root=ROOT, now=None):
     delivery = load_json(root / "reports/delivery-latest.json")
     manifest = load_json(root / "editorial/imagegen_cards.json")
     history = load_json(root / "posted.json")
+    if not isinstance(manifest, dict):
+        manifest = {}
+    if not isinstance(preparation, dict):
+        preparation = {}
+    if not isinstance(delivery, dict):
+        delivery = {}
+    if not isinstance(history, dict):
+        history = {}
     cards = manifest.get("cards", [])
     candidates = preparation.get("candidates", [])
     if not isinstance(cards, list):
         cards = []
     if not isinstance(candidates, list):
         candidates = []
+    cards = [c for c in cards if isinstance(c, dict)]
     approved = [c for c in cards if c.get("status") == "ready" and c.get("reviewed") is True]
     historical_sources = {
         c.get("source_url") for c in cards
@@ -41,9 +50,14 @@ def snapshot(root=ROOT, now=None):
     # Include both the legacy used-URL ledger and recorded Buffer publications.
     # A manifest-only check can mistakenly classify already-sent stories as fresh.
     if isinstance(history, dict):
-        historical_sources.update(url for url in history.get("news", []) if isinstance(url, str))
+        news = history.get("news", [])
+        if isinstance(news, list):
+            historical_sources.update(url for url in news if isinstance(url, str))
+        publication_log = history.get("publication_log", [])
+        if not isinstance(publication_log, list):
+            publication_log = []
         historical_sources.update(
-            entry.get("source") for entry in history.get("publication_log", [])
+            entry.get("source") for entry in publication_log
             if isinstance(entry, dict) and isinstance(entry.get("source"), str)
         )
     # Reject repeated URLs within the same batch as well as historical posts.
@@ -68,6 +82,12 @@ def snapshot(root=ROOT, now=None):
         if c.get("status") in ("draft_needs_asset_and_reapproval",
                                "draft_needs_review")
     ]
+    reservations = delivery.get("new_reservations", [])
+    if not isinstance(reservations, list):
+        reservations = []
+    publication_log = history.get("publication_log", [])
+    if not isinstance(publication_log, list):
+        publication_log = []
     return {
         "checked_at": now.isoformat(),
         "stages": {
@@ -88,8 +108,8 @@ def snapshot(root=ROOT, now=None):
             "duplicate_source_candidates": duplicate_source_candidates,
             "blocked_manifest_drafts": len(blocked_drafts),
             "approved_ready_cards": len(approved),
-            "new_reservations": len(delivery.get("new_reservations", [])),
-            "local_publication_records": len(history.get("publication_log", [])),
+            "new_reservations": len(reservations),
+            "local_publication_records": len(publication_log),
         },
         "blocked_drafts": blocked_drafts,
         "fresh_candidate_sources": [c.get("source_url") for c in fresh_candidates],
