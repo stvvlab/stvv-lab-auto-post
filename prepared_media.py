@@ -132,7 +132,17 @@ def prepared_candidates(slot, now):
         belgian = (approved_url(source) and isinstance(digest, str)
                    and bool(re.fullmatch(r'[a-f0-9]{64}', digest))
                    and 'editorial_fact' not in card)
-        if not japanese and not belgian:
+        # Fixture index is an official source, but only for a specifically
+        # reviewed, time-locked fixture card. Never admit arbitrary index copy.
+        purpose = card.get('editorial_purpose')
+        fixture = (parsed.netloc == 'stvv.jp'
+                   and parsed.path == '/game/2026-2027/'
+                   and isinstance(purpose, dict)
+                   and purpose.get('kind') == 'fixture'
+                   and isinstance(purpose.get('event_id'), str)
+                   and purpose['event_id'].startswith('stvv-')
+                   and isinstance(card.get('publish_due_jst'), str))
+        if not japanese and not belgian and not fixture:
             continue
         try:
             day = date.fromisoformat(card['date_jst'])
