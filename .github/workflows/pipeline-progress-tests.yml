@@ -6,7 +6,9 @@ on:
       - 'feature/chat-review-buffer-flow-01'
     paths:
       - 'editorial/pipeline_progress.py'
+      - 'editorial/review_queue.py'
       - 'tests/test_pipeline_progress.py'
+      - 'tests/test_review_queue.py'
       - '.github/workflows/pipeline-progress-tests.yml'
   pull_request:
     paths:
@@ -28,4 +30,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Run isolated read-only regression tests
-        run: python -m unittest discover -s tests -p 'test_pipeline_progress.py' -v
+        run: python -m unittest discover -s tests -p 'test_*queue.py' -v && python -m unittest discover -s tests -p 'test_pipeline_progress.py' -v
