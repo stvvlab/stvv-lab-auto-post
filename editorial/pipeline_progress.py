@@ -46,10 +46,21 @@ def snapshot(root=ROOT, now=None):
             entry.get("source") for entry in history.get("publication_log", [])
             if isinstance(entry, dict) and isinstance(entry.get("source"), str)
         )
-    fresh_candidates = [
-        c for c in candidates
-        if isinstance(c, dict) and c.get("source_url") not in historical_sources
-    ]
+    # Reject repeated URLs within the same batch as well as historical posts.
+    # Missing source URLs must never be classified as fresh publishable stories.
+    seen_sources = set(historical_sources)
+    fresh_candidates = []
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        source = candidate.get("source_url")
+        if not isinstance(source, str) or not source.strip():
+            continue
+        source = source.strip()
+        if source in seen_sources:
+            continue
+        seen_sources.add(source)
+        fresh_candidates.append(candidate)
     duplicate_source_candidates = len(candidates) - len(fresh_candidates)
     blocked_drafts = [
         {"source_url": c.get("source_url"), "status": c.get("status")}
