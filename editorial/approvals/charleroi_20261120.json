@@ -10,5 +10,13 @@
   "image_registered_in_repo": false,
   "buffer_reservation_id": null,
   "buffer_status": "not_scheduled",
-  "notes": "Approval record only; do not treat as publishable manifest. Preserve original image bytes and caption. No automatic reservation until asset registration, official source validation, and authorized execution."
+  "notes": "Approval record only; do not treat as publishable manifest. Preserve original image bytes and caption. No automatic reservation until asset registration, official source validation, and authorized execution.",
+  "image_asset": {
+    "filename": "charleroi_next_match_20261120.png",
+    "width": 1448,
+    "height": 1086,
+    "sha256": "d2416e0c5bba352b9c0558551447cffec1553b41c7fc26ff7465f2c115662b9b",
+    "source_file": "a_bold_sports_graphic_poster_thumbnail_a_dramatic.png",
+    "registered_in_repo": false
+  }
 }
