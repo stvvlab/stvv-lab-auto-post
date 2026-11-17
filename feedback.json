@@ -1389,8 +1389,8 @@
       "slot": "news",
       "buffer_id": "6ae353fa835dd2febef21af5",
       "submitted_at": "2026-10-29T23:11:06.909892+09:00",
-      "checked_at": "2026-11-16T07:40:01.000049+09:00",
-      "metrics_updated_at": "2026-11-15T08:33:55.527Z",
+      "checked_at": "2026-11-17T10:45:58.000503+09:00",
+      "metrics_updated_at": "2026-11-16T07:34:07.877Z",
       "status": "sent",
       "values": {
         "reactions": 1.0,
@@ -1406,8 +1406,8 @@
       "slot": "news",
       "buffer_id": "6ae5e787406ab8a018bc9c24",
       "submitted_at": "2026-10-31T22:05:11.800123+09:00",
-      "checked_at": "2026-11-16T07:40:01.000049+09:00",
-      "metrics_updated_at": "2026-11-15T08:33:55.527Z",
+      "checked_at": "2026-11-17T10:45:58.000503+09:00",
+      "metrics_updated_at": "2026-11-16T07:34:07.877Z",
       "status": "sent",
       "values": {
         "reactions": 0.0,
@@ -1451,9 +1451,9 @@
     ]
   },
   "last_collection": {
-    "checked_at": "2026-11-16T07:40:01.000049+09:00",
-    "eligible": 4,
-    "checked": 4,
+    "checked_at": "2026-11-17T10:45:58.000503+09:00",
+    "eligible": 2,
+    "checked": 2,
     "status": "ok",
     "error_class": null
   },
