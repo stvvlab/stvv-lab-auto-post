@@ -102,6 +102,29 @@ class PipelineProgressTests(unittest.TestCase):
             ])
             self.assertFalse(result["posting_performed"])
 
+    def test_malformed_report_collections_do_not_crash_snapshot(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "reports").mkdir()
+            (root / "editorial").mkdir()
+            fixtures = {
+                "reports/preparation-latest.json": {
+                    "status": "candidates_need_review",
+                    "candidates": [None, {"source_url": "https://stvv.jp/fresh"}],
+                },
+                "reports/delivery-latest.json": {"new_reservations": None},
+                "editorial/imagegen_cards.json": {"cards": [None, {"status": "ready", "reviewed": True}]},
+                "posted.json": {"news": None, "publication_log": None},
+            }
+            for path, value in fixtures.items():
+                (root / path).write_text(json.dumps(value), encoding="utf-8")
+            result = snapshot(root)
+            self.assertEqual(result["counts"]["fresh_local_candidates"], 1)
+            self.assertEqual(result["counts"]["approved_ready_cards"], 1)
+            self.assertEqual(result["counts"]["new_reservations"], 0)
+            self.assertEqual(result["counts"]["local_publication_records"], 0)
+            self.assertFalse(result["posting_performed"])
+
     def test_missing_files_do_not_produce_false_success(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = snapshot(Path(tmp))
