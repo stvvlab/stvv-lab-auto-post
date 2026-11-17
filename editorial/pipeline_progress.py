@@ -42,9 +42,11 @@ def snapshot(root=ROOT, now=None):
     cards = [c for c in cards if isinstance(c, dict)]
     approved = [c for c in cards if c.get("status") == "ready" and c.get("reviewed") is True]
     historical_sources = {
-        c.get("source_url") for c in cards
+        c.get("source_url").strip() for c in cards
         if c.get("status") in ("published", "buffer_sent_x_unverified",
                                "cancelled", "expired")
+        and isinstance(c.get("source_url"), str)
+        and c.get("source_url").strip()
     }
     historical_sources.discard(None)
     # Include both the legacy used-URL ledger and recorded Buffer publications.
@@ -52,13 +54,14 @@ def snapshot(root=ROOT, now=None):
     if isinstance(history, dict):
         news = history.get("news", [])
         if isinstance(news, list):
-            historical_sources.update(url for url in news if isinstance(url, str))
+            historical_sources.update(url.strip() for url in news if isinstance(url, str) and url.strip())
         publication_log = history.get("publication_log", [])
         if not isinstance(publication_log, list):
             publication_log = []
         historical_sources.update(
-            entry.get("source") for entry in publication_log
+            entry.get("source").strip() for entry in publication_log
             if isinstance(entry, dict) and isinstance(entry.get("source"), str)
+            and entry.get("source").strip()
         )
     # Reject repeated URLs within the same batch as well as historical posts.
     # Missing source URLs must never be classified as fresh publishable stories.
