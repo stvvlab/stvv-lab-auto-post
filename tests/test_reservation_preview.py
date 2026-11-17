@@ -57,6 +57,15 @@ class ReservationPreviewTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             future_slots(datetime.fromisoformat('2026-10-27T07:00:00+09:00'), lead_minutes=0)
 
+    def test_reviewed_caption_with_hashtags_is_not_doubled(self):
+        from stvv_post import HASHTAGS
+        self.card['text'] += HASHTAGS
+        self.write_card()
+        result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
+        self.assertEqual(len(result['proposals']), 1)
+        self.assertEqual(result['proposals'][0]['text'], self.card['text'])
+        self.assertFalse(result['proposals'][0]['text'].endswith(HASHTAGS + HASHTAGS))
+
     def test_occupied_and_pending_slots_are_not_proposed(self):
         self.history['pending_posts']['daily_2026-10-27_player'] = {}
         result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
