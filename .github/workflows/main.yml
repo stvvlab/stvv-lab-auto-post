@@ -3,12 +3,6 @@ name: STVV Auto Post
 
 on:
   workflow_dispatch:
-    inputs:
-      reservation_only:
-        description: 'Run existing reviewed-content Buffer reservation path only'
-        required: true
-        type: boolean
-        default: false
   schedule:
     - cron: "0 23 * * *"   # JST 08:00
     - cron: "0 9 * * *"    # JST 18:00
@@ -68,15 +62,14 @@ jobs:
             tests.test_editorial_novelty
 
       - name: Run STVV auto post
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.reservation_only == true)
+        if: github.event_name == 'schedule'
         env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           STVV_AI_ART_ENABLED: "false"  # Built-in imagegen preparation only; no paid API
-          GITHUB_SCHEDULE: ${{ github.event.schedule || '0 9 * * *' }}
+          GITHUB_SCHEDULE: ${{ github.event.schedule }}
           STVV_DELIVERY_RECORD: "true"
           STVV_ADVANCE_RESERVATIONS: "true" # Future existing slots; never shareNow
-          STVV_MANUAL_RESERVATION_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.reservation_only == true }}
         run: python delivery_run.py
 
       # Read-only GitHub API probe. No Buffer/X calls or publication changes.
