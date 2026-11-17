@@ -188,6 +188,29 @@
         "event_id": "stvv-ohl-2026-11-02"
       },
       "review_note": "Time-sensitive matchday reminder only at 2026-11-01 18:00 JST; no image. Official STVV 2026-10-27 article and OH Leuven official 2026-10-30 article independently confirm 2026-11-01 16:00 CET (2026-11-02 00:00 JST). Same fixture's initial announcement already Buffer-sent; matchday reminder has a distinct approved editorial phase. Source body SHA256 reused from previously verified initial announcement and must be revalidated live before reservation. No new result, lineup, ticket claim or invented statistic. Do not reschedule to another time, repost after kickoff or bypass duplicate/pending checks."
+    },
+    {
+      "source_url": "https://stvv.jp/game/2026-2027/",
+      "date_jst": "2026-11-18",
+      "text": "⚽ STVV NEXT MATCH 🇧🇪\n\n次節はアウェーでシャルルロワと対戦！\n\n前節はズルテ・ワレヘムに4-1で勝利。\n新川志音、石渡ネルソン、松澤海斗の日本人3選手がゴールを決めました🔥\n\nこの勢いを次の一戦につなげられるか！\n\n📅 11月22日（日）0:00 日本時間\n🆚 シャルルロワ vs STVV\n\n公式：https://stvv.jp/game/2026-2027/\n\n#STVV #シントトロイデン",
+      "slots": [
+        "news"
+      ],
+      "reviewed": true,
+      "status": "asset_pending",
+      "asset_path": "generated/approved_charleroi_20261120.png",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "sha256": "d2416e0c5bba352b9c0558551447cffec1553b41c7fc26ff7465f2c115662b9b",
+      "publish_due_jst": "2026-11-20T18:00:00+09:00",
+      "editorial_purpose": {
+        "kind": "fixture",
+        "phase": "initial",
+        "event_id": "stvv-charleroi-2026-11-22"
+      },
+      "review_note": "User-approved copy and exact image identity staged. Not ready for automatic delivery until original binary is uploaded and official-source validation is compatible. Do not publish while asset_pending."
     }
   ]
 }
