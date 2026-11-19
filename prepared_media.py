@@ -129,7 +129,13 @@ def prepared_candidates(slot, now):
         belgian = (approved_url(source) and isinstance(digest, str)
                    and bool(re.fullmatch(r'[a-f0-9]{64}', digest))
                    and 'editorial_fact' not in card)
-        if not japanese and not belgian:
+        # The user-approved fixture card uses STVV Japan's official season schedule,
+        # not a dated /news/ article. Allow only this exact URL for a reviewed
+        # fixture purpose; keep all other source and approval gates unchanged.
+        fixture_schedule = (source == 'https://stvv.jp/game/2026-2027/'
+                            and card.get('editorial_purpose', {}).get('kind') == 'fixture'
+                            and bool(card.get('editorial_purpose', {}).get('event_id')))
+        if not japanese and not belgian and not fixture_schedule:
             continue
         try:
             day = date.fromisoformat(card['date_jst'])

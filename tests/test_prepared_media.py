@@ -171,6 +171,29 @@ class PreparedMediaTests(unittest.TestCase):
         self.write()
         self.assertEqual(media.prepared_candidates('news', due), [])
 
+    def test_exact_user_approved_fixture_schedule_is_candidate_only_when_ready(self):
+        source = 'https://stvv.jp/game/2026-2027/'
+        due = datetime.fromisoformat('2026-11-20T18:00:00+09:00')
+        self.card.update(
+            source_url=source, date_jst='2026-11-18',
+            text='承認済みシャルルロワ戦告知 ' + source,
+            publish_due_jst=due.isoformat(),
+            editorial_purpose={'kind': 'fixture', 'phase': 'initial',
+                               'event_id': 'stvv-charleroi-2026-11-22'},
+            status='asset_pending')
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', due), [])
+        self.card['status'] = 'ready'
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', due),
+                         [(self.card['text'], source)])
+        self.assertEqual(media.prepared_candidates(
+            'news', datetime.fromisoformat('2026-11-20T21:00:00+09:00')), [])
+        self.card['source_url'] = 'https://stvv.jp/game/other/'
+        self.card['text'] = '未承認のスケジュール https://stvv.jp/game/other/'
+        self.write()
+        self.assertEqual(media.prepared_candidates('news', due), [])
+
     def test_candidates_require_fresh_date_official_source_and_visible_citation(self):
         now = datetime(2026, 10, 24)
         self.card.update(date_jst='2026-10-23', text='結果\n' + self.card['source_url'])
