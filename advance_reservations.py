@@ -149,10 +149,24 @@ def run(history, now, client, save, session):
                 'pending_keys': list(history['pending_posts'])}
     if any(r.get('buffer_status') == 'error' for r in reservations.values()):
         return {'status': 'blocked_reservation_error', 'updates': updates}
-    preview = plan(history, now)
-    if not preview['proposals']:
-        return {'status': 'skipped_no_verified_content', 'updates': updates, 'new_reservations': []}
-    proposal = preview['proposals'][0]
+    # Check remote conflicts before expensive media/source verification. If a
+    # reviewed candidate conflicts, try another; never loosen the remote gate.
+    excluded = set()
+    snapshot = None
+    while True:
+        preview = plan(history, now, excluded_preview_keys=excluded)
+        if not preview['proposals']:
+            return {'status': ('skipped_remote_conflicts' if excluded
+                               else 'skipped_no_verified_content'),
+                    'updates': updates, 'new_reservations': [],
+                    'remote_conflict_candidates': len(excluded)}
+        proposal = preview['proposals'][0]
+        if snapshot is None:
+            snapshot = client.preflight()
+        reason = remote_block(snapshot, proposal, history)
+        if not reason:
+            break
+        excluded.add(proposal['preview_key'])
     slot, message, source = proposal['slot'], proposal['text'], proposal['source_url']
     card = exact_card(slot, message, source)
     due = stamp(proposal['due_utc']).astimezone(publisher.JST)
@@ -186,10 +200,6 @@ def run(history, now, client, save, session):
         proposal['editorial_fact'] = fact
     if 'editorial_purpose' in card:
         proposal['editorial_purpose'] = copy.deepcopy(card['editorial_purpose'])
-    snapshot = client.preflight()
-    reason = remote_block(snapshot, proposal, history)
-    if reason:
-        return {'status': 'blocked_' + reason, 'updates': updates}
     # Recheck actual wall time after potentially slow preflight network reads.
     current = datetime.now(publisher.JST)
     if current > due - timedelta(minutes=30):

@@ -41,7 +41,9 @@ def future_slots(now, *, lead_minutes=30, horizon_hours=36):
     return sorted(slots)
 
 
-def plan(history, now):
+def plan(history, now, *, excluded_preview_keys=None):
+    # A remotely blocked candidate must not prevent trying the next reviewed card.
+    excluded_preview_keys = set(excluded_preview_keys or ())
     # Fail closed on unreadable/malformed state, rather than assuming no sends.
     if (not isinstance(history, dict)
             or not isinstance(history.get('used_posts'), list)
@@ -138,6 +140,10 @@ def plan(history, now):
                               else str(card.get('sha256')))
             identity = hashlib.sha256((key + '\n' + source + '\n' + message + '\n'
                                        + media_identity).encode()).hexdigest()
+            if identity in excluded_preview_keys:
+                report['blocked'].append({'key': key, 'source_url': source,
+                                          'reason': 'excluded_after_remote_preflight'})
+                continue
             report['proposals'].append({
                 'key': key, 'preview_key': identity, 'slot': slot,
                 'source_url': source, 'text': message,
