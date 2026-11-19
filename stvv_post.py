@@ -1024,6 +1024,7 @@ def main():
     if (
         daily in history["used_posts"]
         or daily in history["pending_posts"]
+        or daily in history.get("reserved_posts", {})
     ):
         log(f"{day} {slot} は処理済み／確認待ちです")
         return run_result("skipped_duplicate", f"{day} {slot} は処理済み／確認待ち")
