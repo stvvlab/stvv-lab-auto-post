@@ -107,7 +107,8 @@ def main(argv=None):
                     after = client.read()
                     verify(before, after, changes)
                 report['modified_cells'] = sum(c.field == 'userEnteredValue' for c in changes)
-                report['modified_rows'] = len({(c.tab, c.row) for c in changes if c.field == 'userEnteredValue'})
+                report['added_rows'] = report.get('planned_added_rows', 0)
+                report['modified_rows'] = len({(c.tab, c.row) for c in changes if c.field == 'userEnteredValue' and c.reason != 'new_official_goal'})
                 report['note_cells'] = sum(c.field == 'note' for c in changes)
             else:
                 verify(before, fresh, [])
