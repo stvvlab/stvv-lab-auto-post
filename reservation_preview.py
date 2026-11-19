@@ -121,7 +121,7 @@ def plan(history, now):
         # Reuse the publisher's exact reviewed caption and strict fact policy.
         # Freshness is evaluated at publication time, not preparation time.
         for text, source in prepared_candidates(slot, due):
-            message = text + HASHTAGS
+            message = text if text.endswith(HASHTAGS) else text + HASHTAGS
             problems = set(audit({'type': 'news', 'text': message,
                                   'source_url': source}, max_length=270)) & CRITICAL
             reason = (','.join(sorted(problems)) if problems else

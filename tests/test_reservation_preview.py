@@ -57,6 +57,25 @@ class ReservationPreviewTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             future_slots(datetime.fromisoformat('2026-10-27T07:00:00+09:00'), lead_minutes=0)
 
+    def test_reviewed_caption_with_hashtags_is_not_doubled(self):
+        from stvv_post import HASHTAGS
+        self.card['text'] += HASHTAGS
+        self.write_card()
+        result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
+        self.assertEqual(len(result['proposals']), 1)
+        self.assertEqual(result['proposals'][0]['text'], self.card['text'])
+        self.assertFalse(result['proposals'][0]['text'].endswith(HASHTAGS + HASHTAGS))
+
+    def test_exact_approved_caption_with_hashtags_matches_manifest(self):
+        from stvv_post import HASHTAGS
+        from prepared_media import exact_card
+        self.card['text'] += HASHTAGS
+        self.write_card()
+        self.assertEqual(exact_card('news', self.card['text'], self.card['source_url']), self.card)
+        result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
+        self.assertEqual(len(result['proposals']), 1)
+        self.assertEqual(result['proposals'][0]['text'], self.card['text'])
+
     def test_occupied_and_pending_slots_are_not_proposed(self):
         self.history['pending_posts']['daily_2026-10-27_player'] = {}
         result = plan(self.history, datetime.fromisoformat('2026-10-27T00:00:00+09:00'))
@@ -131,6 +150,25 @@ class ReservationPreviewTests(unittest.TestCase):
         report = plan(self.history, now)
         self.assertEqual(report['content_readiness']['approved_ready_cards'], 1)
         self.assertEqual(report['content_readiness']['future_slots_with_candidate'], 0)
+
+    def test_official_fixture_index_requires_reviewed_time_locked_purpose(self):
+        from prepared_media import prepared_candidates
+        self.card['source_url'] = 'https://stvv.jp/game/2026-2027/'
+        self.card['text'] = 'Fixture official: https://stvv.jp/game/2026-2027/'
+        self.card['date_jst'] = '2026-10-27'
+        self.card['publish_due_jst'] = '2026-10-27T18:00:00+09:00'
+        self.card['editorial_purpose'] = {
+            'kind': 'fixture', 'event_id': 'stvv-fixture-2026-10-30'}
+        self.write_card()
+        due = datetime.fromisoformat('2026-10-27T18:00:00+09:00')
+        self.assertEqual(len(prepared_candidates('news', due)), 1)
+        self.card['editorial_purpose']['kind'] = 'other'
+        self.write_card()
+        self.assertEqual(prepared_candidates('news', due), [])
+        self.card['editorial_purpose']['kind'] = 'fixture'
+        self.card['status'] = 'asset_pending'
+        self.write_card()
+        self.assertEqual(prepared_candidates('news', due), [])
 
     def test_invalid_history_does_not_assume_empty(self):
         with self.assertRaises(ValueError):

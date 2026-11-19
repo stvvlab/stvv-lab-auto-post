@@ -23,15 +23,18 @@ def reviewed_text_only(card):
 
 def exact_card(slot, message, source):
     from stvv_post import HASHTAGS
+    # The approved manifest may already contain the standard hashtags.
+    # Match its exact copy first; only strip a suffix added by the runner.
+    messages = {message}
     if message.endswith(HASHTAGS):
-        message = message[:-len(HASHTAGS)]
+        messages.add(message[:-len(HASHTAGS)])
     if not MANIFEST.exists():
         return None
     data = json.loads(MANIFEST.read_text(encoding='utf-8'))
     if data.get('enabled') is not True:
         return None
     cards = [c for c in data.get('cards', []) if c.get('source_url') == source
-             and c.get('text') == message and slot in c.get('slots', [])
+             and c.get('text') in messages and slot in c.get('slots', [])
              and c.get('status') == 'ready' and c.get('reviewed') is True
              and (c.get('media_type') != 'text_only' or reviewed_text_only(c))]
     return cards[0] if len(cards) == 1 else None
@@ -129,7 +132,17 @@ def prepared_candidates(slot, now):
         belgian = (approved_url(source) and isinstance(digest, str)
                    and bool(re.fullmatch(r'[a-f0-9]{64}', digest))
                    and 'editorial_fact' not in card)
-        if not japanese and not belgian:
+        # Fixture index is an official source, but only for a specifically
+        # reviewed, time-locked fixture card. Never admit arbitrary index copy.
+        purpose = card.get('editorial_purpose')
+        fixture = (parsed.netloc == 'stvv.jp'
+                   and parsed.path == '/game/2026-2027/'
+                   and isinstance(purpose, dict)
+                   and purpose.get('kind') == 'fixture'
+                   and isinstance(purpose.get('event_id'), str)
+                   and purpose['event_id'].startswith('stvv-')
+                   and isinstance(card.get('publish_due_jst'), str))
+        if not japanese and not belgian and not fixture:
             continue
         try:
             day = date.fromisoformat(card['date_jst'])
