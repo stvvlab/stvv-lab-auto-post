@@ -397,7 +397,8 @@ def slot_for_run(now):
         expected -= timedelta(days=1)
 
     if now - expected > timedelta(hours=6):
-        raise RuntimeError("実行が6時間以上遅れたため安全停止")
+        # Never publish into a stale scheduled slot; keep offline preparation available.
+        return None, "stale_schedule"
 
     return slot, expected.date().isoformat()
 
@@ -1008,6 +1009,9 @@ def main():
     slot, day = slot_for_run(now)
 
     if slot is None:
+        if day == "stale_schedule":
+            log("6時間超の遅延枠は送信せずスキップ。次の定期枠を待ちます")
+            return run_result("skipped_stale_schedule", "遅延した過去枠へのBuffer送信なし")
         log("手動実行は安全確認のみ。投稿はしません")
         log(
             f"既存投稿履歴: {len(history['used_posts'])}件、"
