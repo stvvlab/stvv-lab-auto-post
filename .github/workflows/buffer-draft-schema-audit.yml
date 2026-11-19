@@ -1,0 +1,23 @@
+name: Inspect Buffer Draft input schema without sending
+on:
+  push:
+    branches:
+      - fix/de-meyer-exact-image-transfer-20261104
+    paths:
+      - 'editorial/manual_reservation/buffer_schema_audit_request.json'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Read-only GraphQL input inspection
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python -m scripts.inspect_buffer_draft_schema

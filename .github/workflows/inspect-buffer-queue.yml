@@ -1,0 +1,21 @@
+name: Inspect Buffer existing Draft queue options
+on:
+  push:
+    branches: [fix/de-meyer-exact-image-transfer-20261104]
+    paths: ['editorial/manual_reservation/buffer_queue_inspection_trigger.json']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Read-only inspect Buffer queue and existing Draft
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python -m scripts.inspect_buffer_queue
