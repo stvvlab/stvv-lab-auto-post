@@ -11,16 +11,12 @@ class BufferMonitorTriggerSafetyTests(unittest.TestCase):
     def setUp(self):
         self.text = WORKFLOW.read_text(encoding="utf-8")
 
-    def test_existing_scheduled_checks_are_preserved(self):
-        self.assertIn("- cron: '20 9 * * *'", self.text)
-        self.assertIn("- cron: '0 10 * * *'", self.text)
-
-    def test_completion_fallback_uses_existing_workflows_only(self):
-        self.assertIn("workflow_run:", self.text)
-        self.assertIn("- STVV Auto Post", self.text)
-        self.assertIn("- Buffer Metrics Read-Only Probe", self.text)
-        self.assertIn("types: [completed]", self.text)
-        self.assertIn("branches: [main]", self.text)
+    def test_monitor_is_manual_diagnostic_only(self):
+        # Keep optional monitoring from scheduling privileged Buffer probes.
+        trigger = self.text.split("on:\n", 1)[1].split("\npermissions:", 1)[0]
+        self.assertIn("workflow_dispatch:", trigger)
+        self.assertNotIn("schedule:", trigger)
+        self.assertNotIn("workflow_run:", trigger)
 
     def test_no_pr_or_manual_upstream_probe(self):
         self.assertIn(

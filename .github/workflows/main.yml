@@ -56,7 +56,7 @@ jobs:
           STVV_AI_ART_ENABLED: "false"  # Built-in imagegen preparation only; no paid API
           GITHUB_SCHEDULE: ${{ github.event.schedule }}
           STVV_DELIVERY_RECORD: "true"
-          STVV_ADVANCE_RESERVATIONS: "true" # Future existing slots; never shareNow
+          STVV_ADVANCE_RESERVATIONS: "false" # Restore previously successful publisher; approval checks remain
         run: python delivery_run.py
 
       # Read-only GitHub API probe. No Buffer/X calls or publication changes.
