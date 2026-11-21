@@ -106,7 +106,7 @@ def build_inventory(history, manifest, now, session=SESSION, max_articles=4):
         for entry in history.get(group, {}).values():
             known.add(canonical_source(entry.get('source') or entry.get('source_url')))
     for card in manifest.get('cards', []):
-        if card.get('status') in ('ready', 'published'):
+        if card.get('status') in ('ready', 'published', 'asset_pending', 'cancelled', 'buffer_sent_x_unverified'):
             known.add(canonical_source(card.get('source_url')))
     report = {'checked_at': now.isoformat(), 'listing_url': LISTING,
               'status': 'source_scan_failed', 'candidates': [], 'skipped': [],
