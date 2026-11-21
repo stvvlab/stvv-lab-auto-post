@@ -47,6 +47,17 @@ class BelgianOfficialTests(unittest.TestCase):
         self.assertEqual(result['candidates'], [])
         self.assertEqual(client.get.call_count, 1)
 
+    def test_cancelled_staged_and_unverified_cards_never_resurface(self):
+        for status in ('cancelled', 'asset_pending', 'buffer_sent_x_unverified'):
+            with self.subTest(status=status):
+                client = session()
+                manifest = {'cards': [{'source_url': URL, 'status': status}]}
+                result = source.build_inventory({}, manifest, NOW, client)
+                self.assertEqual(result['candidates'], [])
+                self.assertEqual(client.get.call_count, 1)
+                self.assertEqual(result['skipped'][0]['source_url'], URL)
+                self.assertFalse(result['publication_performed'])
+
     def test_known_links_do_not_exhaust_unseen_fetch_budget(self):
         second_url = 'https://stvv.com/nl/nieuws/artikel/nieuw-bericht'
         index = (INDEX + '<a href="/nl/nieuws/artikel/nieuw-bericht">'
