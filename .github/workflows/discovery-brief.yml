@@ -127,6 +127,7 @@ jobs:
           import os
           from pathlib import Path
           inventory = Path("reports/preparation-latest.json")
+          belgian = Path("reports/club-official-latest.json")
           research = Path("reports/editorial-research-latest.json")
           fixtures = Path("reports/fixture-schedule-latest.json")
           manifest = Path("editorial/imagegen_cards.json")
@@ -155,6 +156,16 @@ jobs:
                       lines.append("- No unpublished source in the scanned official lists; don't generate fabricated posts to fill slots.")
               except (ValueError, OSError, TypeError) as error:
                   lines.append(f"- Evidence unreadable ({type(error).__name__}); check artifacts.")
+          if belgian.exists():
+              try:
+                  club = json.loads(belgian.read_text(encoding="utf-8"))
+                  lines.append(f"- Belgian official research: {club.get('status', 'unknown')} (unapproved candidates: {len(club.get('candidates', []))})")
+                  for item in club.get("candidates", [])[:4]:
+                      lines.append(f"  - {item.get('source_url', 'unknown')} ({item.get('status', 'unknown')}; editorial review required)")
+              except (ValueError, OSError, TypeError):
+                  lines.append("- Belgian official research unreadable; inspect artifact.")
+          else:
+              lines.append("- Belgian official research unavailable; inspect artifact.")
           lines.append(f"- Editorial research report: {'available' if research.exists() else 'missing'}")
           if fixtures.exists():
               try:
