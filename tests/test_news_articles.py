@@ -29,7 +29,9 @@ class NewsArticleTests(unittest.TestCase):
         articles = self.articles_from(markup)
         self.assertEqual(len(articles), 1)
         self.assertEqual(articles[0][1][1], title)
-        message = '📰 STVV公式ニュース\n' + articles[0][1][1] + '\n🔗 ' + articles[0][0]
+        message = '📰 STVV公式ニュース
+' + articles[0][1][1] + '
+🔗 ' + articles[0][0]
         self.assertLessEqual(posting.x_length(message + posting.HASHTAGS), 270)
 
     def test_plain_links_remain_supported_and_source_filters_stay_in_place(self):
@@ -39,7 +41,10 @@ class NewsArticleTests(unittest.TestCase):
         <a href="https://example.test/news/team/20261021_3/"><h3>選手の試合出場について</h3></a>
         <a href="/news/team/20261001_4/"><h3>選手の試合出場について</h3></a>'''
         articles = self.articles_from(markup)
-        self.assertEqual([url for url, _ in articles], [\n            'https://stvv.jp/news/team/20261021_1/',\n            'https://stvv.jp/news/team/20261021_5/',\n        ])
+        self.assertEqual([url for url, _ in articles], [
+            'https://stvv.jp/news/team/20261021_1/',
+            'https://stvv.jp/news/team/20261021_5/',
+        ])
 
     def test_uefa_result_is_discovered_without_bypassing_safety_filters(self):
         title = 'STVVが敵地でFCミッティランに0-1で勝利！クラブ史上初の欧州挑戦で開幕2連勝を達成！'
