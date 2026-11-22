@@ -29,9 +29,7 @@ class NewsArticleTests(unittest.TestCase):
         articles = self.articles_from(markup)
         self.assertEqual(len(articles), 1)
         self.assertEqual(articles[0][1][1], title)
-        message = '📰 STVV公式ニュース
-' + articles[0][1][1] + '
-🔗 ' + articles[0][0]
+        message = '📰 STVV公式ニュース\n' + articles[0][1][1] + '\n🔗 ' + articles[0][0]
         self.assertLessEqual(posting.x_length(message + posting.HASHTAGS), 270)
 
     def test_plain_links_remain_supported_and_source_filters_stay_in_place(self):
