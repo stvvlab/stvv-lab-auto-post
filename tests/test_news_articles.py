@@ -39,7 +39,10 @@ class NewsArticleTests(unittest.TestCase):
         <a href="https://example.test/news/team/20261021_3/"><h3>選手の試合出場について</h3></a>
         <a href="/news/team/20261001_4/"><h3>選手の試合出場について</h3></a>'''
         articles = self.articles_from(markup)
-        self.assertEqual([url for url, _ in articles], ['https://stvv.jp/news/team/20261021_1/'])
+        self.assertEqual([url for url, _ in articles], [
+            'https://stvv.jp/news/team/20261021_1/',
+            'https://stvv.jp/news/team/20261021_5/',
+        ])
 
     def test_uefa_result_is_discovered_without_bypassing_safety_filters(self):
         title = 'STVVが敵地でFCミッティランに0-1で勝利！クラブ史上初の欧州挑戦で開幕2連勝を達成！'

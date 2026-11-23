@@ -21,6 +21,7 @@ WORDS = (
     "出場", "得点", "代表", "招集",
     "契約", "順位", "勝利", "敗戦", "日程",
     "UEFA", "カンファレンスリーグ", "無観客", "キックオフ",
+    "ゴール", "ドロー",
 )
 
 def scan_articles(now, session):
@@ -107,12 +108,10 @@ def parse_articles(markup, now):
         watch_party = is_event and "観戦会" in title
         sales_headline = any(word in title for word in
                              ("スポンサー", "協賛", "パートナー契約", "販売", "グッズ"))
-        promotional_excerpt = any(word in html.unescape(anchor.get_text(" ", strip=True))
-                                  for word in SPONSORS)
         if (len(title) < 8
                 or (is_event and not watch_party)
                 or (watch_party and sales_headline)
-                or (not watch_party and (promotional_excerpt
+                or (not watch_party and (sales_headline
                                          or not any(word in title for word in WORDS)))):
             continue
 
