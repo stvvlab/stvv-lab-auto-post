@@ -8,6 +8,12 @@ on:
       - official_sources.py
       - scripts/probe_live_official_discovery.py
       - .github/workflows/official-discovery-probe.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - official_sources.py
+      - scripts/probe_live_official_discovery.py
+      - .github/workflows/official-discovery-probe.yml
   workflow_dispatch:
 
 permissions:
