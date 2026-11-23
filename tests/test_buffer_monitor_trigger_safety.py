@@ -1,4 +1,4 @@
-"""Ensure the publication monitor's fallback never posts or handles PR secrets."""
+"""Ensure the optional Buffer publication monitor remains read-only and manual-only."""
 from pathlib import Path
 import unittest
 
@@ -11,18 +11,15 @@ class BufferMonitorTriggerSafetyTests(unittest.TestCase):
     def setUp(self):
         self.text = WORKFLOW.read_text(encoding="utf-8")
 
-    def test_existing_scheduled_checks_are_preserved(self):
-        self.assertIn("- cron: '20 9 * * *'", self.text)
-        self.assertIn("- cron: '0 10 * * *'", self.text)
+    def test_monitor_is_manual_only_not_scheduled(self):
+        # The current monitor is diagnostic only; automatic triggers are deliberately disabled.
+        trigger_section = self.text.split("permissions:", 1)[0]
+        self.assertIn("workflow_dispatch:", trigger_section)
+        self.assertNotIn("schedule:", trigger_section)
+        self.assertNotIn("workflow_run:", trigger_section)
 
-    def test_completion_fallback_uses_existing_workflows_only(self):
-        self.assertIn("workflow_run:", self.text)
-        self.assertIn("- STVV Auto Post", self.text)
-        self.assertIn("- Buffer Metrics Read-Only Probe", self.text)
-        self.assertIn("types: [completed]", self.text)
-        self.assertIn("branches: [main]", self.text)
-
-    def test_no_pr_or_manual_upstream_probe(self):
+    def test_no_automatic_upstream_probe(self):
+        # Retain the guard against privileged probes from PR or manual upstream runs.
         self.assertIn(
             "if: github.event_name != 'workflow_run' || "
             "(github.event.workflow_run.event == 'schedule' && "
