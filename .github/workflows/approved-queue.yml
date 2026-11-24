@@ -1,0 +1,28 @@
+name: Queue approved post
+on:
+  push:
+    branches: [fix/reuse-verified-buffer-draft-20261124]
+    paths: ['editorial/manual_reservation/approved_queue_request.json']
+permissions:
+  contents: read
+concurrency:
+  group: approved-queue
+  cancel-in-progress: false
+jobs:
+  enqueue:
+    if: github.actor != 'github-actions[bot]' && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - run: python -m editorial.manual_reservation.approved_queue
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: approved-queue-receipt
+          path: approved_queue_receipt.json
