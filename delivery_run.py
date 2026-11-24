@@ -317,6 +317,9 @@ def main():
             if report.get('status') == 'late_existing_reservation_buffer_sent_x_unverified':
                 print('Existing Buffer reservation confirmed sent; no new publication attempted')
                 return report['status']
+            if report.get('status') == 'blocked_schedule_more_than_six_hours_late' and report.get('delivery_state') == 'no_buffer_mutation_due_to_schedule_guard':
+                print('Scheduled run skipped: more than six hours late; no new publication attempted')
+                return report['status']
         raise
     _, hour, minute = publisher.SLOTS[os.environ['GITHUB_SCHEDULE']]
     scheduled = datetime.fromisoformat(day).replace(
