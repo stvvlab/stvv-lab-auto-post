@@ -153,7 +153,8 @@ class BufferReservations:
                     ' ... on MutationError { message }'
                     ' } }')
         payload = {'text': text, 'channelId': publisher.CHANNEL,
-                   'schedulingType': 'automatic', 'mode': 'draft'}
+                   'schedulingType': 'automatic', 'mode': 'addToQueue',
+                   'needsApproval': False, 'saveToDraft': True}
         if image_url:
             payload['assets'] = [{'image': {'url': image_url}}]
         data = self.query(mutation, {'input': payload})
