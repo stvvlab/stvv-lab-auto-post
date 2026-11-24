@@ -136,6 +136,38 @@ class BufferReservations:
 
 
 
+    def enqueue_approved(self, text, image_url):
+        """One approved queue mutation; caller owns durable intent and approval."""
+        if not isinstance(text, str) or not text.strip() or publisher.x_length(text) > 270:
+            raise ValueError('Invalid caption')
+        if not isinstance(image_url, str) or not image_url.startswith('https://'):
+            raise ValueError('HTTPS approved image required')
+        snapshot = self.preflight()
+        if any(p.get('text') == text for p in snapshot['posts']):
+            raise RuntimeError('Matching scheduled or sent post exists')
+        mutation = ('mutation QueueApproved($input: CreatePostInput!) {'
+                    ' createPost(input: $input) {'
+                    ' ... on PostActionSuccess { post { ' + POST_FIELDS + ' } }'
+                    ' ... on MutationError { message } } }')
+        payload = {'text': text, 'channelId': snapshot['channel_id'],
+                   'assets': [{'image': {'url': image_url}}],
+                   'schedulingType': 'automatic', 'mode': 'addToQueue',
+                   'needsApproval': False, 'saveToDraft': False}
+        result = self.query(mutation, {'input': payload}).get('createPost') or {}
+        post = result.get('post')
+        if not isinstance(post, dict) or not post.get('id'):
+            raise RuntimeError('Queue outcome unverified; do not retry')
+        remote = self.get_post(post['id'])
+        assets = remote.get('assets') or []
+        if (remote.get('channelId') != snapshot['channel_id']
+                or remote.get('text') != text
+                or remote.get('status') not in ('scheduled', 'sending')
+                or not remote.get('dueAt') or len(assets) != 1
+                or assets[0].get('source') != image_url
+                or assets[0].get('type') != 'image'):
+            raise RuntimeError('Queue read-back unverified; do not retry')
+        return remote
+
     def create_draft(self, text, image_url=None):
         """Create one Buffer draft; caller must persist a one-shot intent first.
 
