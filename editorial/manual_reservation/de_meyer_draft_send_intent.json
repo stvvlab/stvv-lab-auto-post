@@ -1,0 +1,7 @@
+{
+  "request_id": "stvv-2026-11-02-de-meyer-departure",
+  "caption_sha256": "29c8324a6d9688abcb4060388dac12486c1894c33cca0577ee19d7d47e9b0f41",
+  "image_url": "https://raw.githubusercontent.com/stvvlab/stvv-lab-auto-post/a9f95653379b6f1807b22cc2e4bebd28efc3ea44/generated/de_meyer_departure_20261104.jpg",
+  "image_sha256": "40c97a3f63667cd930c3d803c7448eebf7b347f5043572927dfcaa65b51843a7",
+  "state": "pending_unknown_do_not_retry"
+}

@@ -152,8 +152,12 @@ class BufferReservations:
                     ' ... on PostActionSuccess { post { ' + POST_FIELDS + ' } }'
                     ' ... on MutationError { message }'
                     ' } }')
+        # Buffer GraphQL introspection (2026-11-04): ShareMode does not
+        # contain 'draft'. Draft creation uses saveToDraft=True while mode
+        # remains a valid ShareMode; needsApproval is non-null.
         payload = {'text': text, 'channelId': publisher.CHANNEL,
-                   'schedulingType': 'automatic', 'mode': 'draft'}
+                   'schedulingType': 'automatic', 'mode': 'addToQueue',
+                   'needsApproval': False, 'saveToDraft': True}
         if image_url:
             payload['assets'] = [{'image': {'url': image_url}}]
         data = self.query(mutation, {'input': payload})
