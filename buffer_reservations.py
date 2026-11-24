@@ -140,7 +140,7 @@ class BufferReservations:
         """One approved queue mutation; caller owns durable intent and approval."""
         if not isinstance(text, str) or not text.strip() or publisher.x_length(text) > 270:
             raise ValueError('Invalid caption')
-        if not isinstance(image_url, str) or not image_url.startswith('https://'):
+        if image_url is not None and (not isinstance(image_url, str) or not image_url.startswith('https://')):
             raise ValueError('HTTPS approved image required')
         snapshot = self.preflight()
         if any(p.get('text') == text for p in snapshot['posts']):
@@ -150,9 +150,10 @@ class BufferReservations:
                     ' ... on PostActionSuccess { post { ' + POST_FIELDS + ' } }'
                     ' ... on MutationError { message } } }')
         payload = {'text': text, 'channelId': snapshot['channel_id'],
-                   'assets': [{'image': {'url': image_url}}],
                    'schedulingType': 'automatic', 'mode': 'addToQueue',
                    'needsApproval': False, 'saveToDraft': False}
+        if image_url:
+            payload['assets'] = [{'image': {'url': image_url}}]
         result = self.query(mutation, {'input': payload}).get('createPost') or {}
         post = result.get('post')
         if not isinstance(post, dict) or not post.get('id'):
@@ -162,9 +163,11 @@ class BufferReservations:
         if (remote.get('channelId') != snapshot['channel_id']
                 or remote.get('text') != text
                 or remote.get('status') not in ('scheduled', 'sending')
-                or not remote.get('dueAt') or len(assets) != 1
-                or assets[0].get('source') != image_url
-                or assets[0].get('type') != 'image'):
+                or not remote.get('dueAt')
+                or (image_url is None and assets)
+                or (image_url is not None and (len(assets) != 1
+                    or assets[0].get('source') != image_url
+                    or assets[0].get('type') != 'image'))):
             raise RuntimeError('Queue read-back unverified; do not retry')
         return remote
 
