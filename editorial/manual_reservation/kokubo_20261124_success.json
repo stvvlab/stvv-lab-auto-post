@@ -1,0 +1,10 @@
+{
+  "request_id": "stvv-20261124-kokubo-extension",
+  "trigger_commit": "2262f7cebfabecb8563b02d470e0fb6ec50c8c13",
+  "state": "scheduled_user_screenshot_verified",
+  "scheduled_display": "2026-11-26 09:29",
+  "channel": "stvvlabo",
+  "x_publication_verified": false,
+  "source_fact_independently_verified": false,
+  "retry": false
+}
