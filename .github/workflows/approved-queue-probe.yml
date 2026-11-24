@@ -1,0 +1,30 @@
+name: Approved queue trigger probe
+on:
+  push:
+    branches: [fix/reuse-verified-buffer-draft-20261124]
+    paths: ['editorial/manual_reservation/approved_queue_probe.json']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install requests beautifulsoup4 pillow
+      - name: Verify proven queue payload without external send
+        run: |
+          python - <<'PY'
+          from buffer_reservations import BufferReservations
+          from unittest.mock import Mock
+          c = BufferReservations()
+          c.preflight = Mock(return_value={'channel_id':'test','posts':[]})
+          c.query = Mock(return_value={'createPost':{'post':{'id':'test'}}})
+          url = 'https://example.com/image.jpg'
+          c.get_post = Mock(return_value={'channelId':'test','text':'test','status':'scheduled','dueAt':'2099-01-01T00:00:00Z','assets':[{'source':url,'type':'image'}]})
+          c.enqueue_approved('test',url)
+          assert c.query.call_args.args[1]['input'] == {'text':'test','channelId':'test','assets':[{'image':{'url':url}}],'schedulingType':'automatic','mode':'addToQueue','needsApproval':False,'saveToDraft':False}
+          print('QUEUE_TRIGGER_AND_PAYLOAD_OK')
+          PY
