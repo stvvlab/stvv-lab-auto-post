@@ -238,3 +238,8 @@
 
 - [JFA公式11/14ブラジル戦試合表](https://www.jfa.jp/samuraiblue/20261117/match_page/m2.html)で小久保の控え登録（代表背番号12）・出場0分を新規確認し、[選手別台帳](./player_roster_verified_2026-10-28.md)に追記。確認日2026-11-25 JST。11/17戦とは別記録。出場の有無と能力評価は区別。
 - [日本公式名簿](https://stvv.jp/team-member/)掲載27人を再照合。全選手の利き足・詳細位置・代表履歴・直近クラブ戦出場分・映像根拠と強み／改善点は未完成。既存品質ゲート・本番経路は変更なし。未審査台帳は投稿不可。
+
+## 2026-11-26 公式プレー根拠追加：RFC Liège親善試合
+
+- [本国公式7/22試合記事](https://stvv.com/nl/nieuws/wedstrijdverslag/wedstrijdverslag-rfc-li%C3%A8ge-stvv)から小久保、ディルキン、新川、メルラン、石渡、レンドフレス、ディウフ、松澤、ピュペ、ヴァンウェセマールの具体的局面を[選手別台帳](./player_roster_verified_2026-10-28.md)へ追加。確認日2026-11-26 JST。親善試合の公式文章根拠であり映像・直近公式戦出場時間の代用ではない。
+- [日本公式名簿](https://stvv.jp/team-member/)掲載27人を再確認。登録資格とは区別。[本国シャルルロワ戦ハイライト](https://stvv.com/nl/nieuws/wedstrijdverslag/game-report-highlights-l-sporting-charleroi-stvv)公開ページを確認、映像未検証。全員の詳細属性・直近出場分・映像による強みと改善点は未完成。既存品質ゲート・本番経路は変更しない。
