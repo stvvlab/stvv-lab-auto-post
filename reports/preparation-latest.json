@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-11-27T13:40:58.996229+09:00",
+  "checked_at": "2026-11-27T18:52:25.807650+09:00",
   "status": "candidates_need_review",
   "source_checks": [
     {
       "url": "https://stvv.jp/news/2026/",
       "status": "ok",
-      "eligible_items": 1
+      "eligible_items": 2
     },
     {
       "url": "https://stvv.jp/news/game/2026/",
@@ -25,11 +25,27 @@
     {
       "url": "https://stvv.jp/news/event/2026/",
       "status": "ok",
-      "eligible_items": 0
+      "eligible_items": 1
     }
   ],
   "unapproved_draft_suggestions": [],
   "candidates": [
+    {
+      "source_url": "https://stvv.jp/news/event/20261127_3/",
+      "date_jst": "2026-11-27",
+      "official_heading": "11月29日（日）ゲンク戦観戦会での出店企業に関してのお知らせ",
+      "status": "needs_editorial_review",
+      "reviewed": false,
+      "remaining": [
+        "verify facts and novelty from body",
+        "write concise sourced caption",
+        "built-in imagegen",
+        "visual review",
+        "register reviewed asset"
+      ],
+      "source_body": "〜11月29日(日)ゲンク戦観戦会がいよいよ週末に！〜\nシント＝トロイデンVV（以下、STVV）は、2026年11月29日（日）に、公式観戦会イベントを今シーズンも開催！その観戦会で出展される企業が決定したことををお知らせいたします。\n①主食・お惣菜など\nシント＝トロイデンVVのゴールドスポンサーである株式会社Oliverhood様が運営される【Oh My Onigiri】が出店。ボリューミーで美味しいおにぎりなどやドリンクなどを多数ご用意していただきます。\nなお決済方法は【現金もしくはQR決済】になります。\n②スイーツ\nシント＝トロイデンVVのコープレートスポンサーである株式会社アチェロ様がチョコレートやドリンクをご用意していただきます。\nなお決済方法は【PayPay・楽天Pay・クレジットカード】になります。\n③ドリンク\nシント＝トロイデンVVのコーポレートスポンサーである株式会社nacho様が販売する奄美大島産の素材を生かしたクラフトコーラをご用意していただきます。\nなお決済方法は【現金・QR決済】になります。\n④おつまみ・物販など\nシント＝トロイデンVVのカナリアススポンサーである「うみがめの来る町」徳島県美波町様が地元のお魚を使ったチップスやグミなど、さらに地元のグッズなどをご用意していただきます。\nなお決済方法は【現金】になります。\n注意事項\n①お車でお越しの際はご自身で駐車場の確保をお願いいたします。また、運転される方は飲酒はお控えください。\n②クラブの方から終電の案内はありませんので、事前に終電時間の把握をお願いいたします。\n終電などに合わせて途中退席されることは問題ありません。",
+      "body_sha256": "04f62b790035d293d79150538c213ad3ac8d64d9e02d33466fd72656f9994078"
+    },
     {
       "source_url": "https://stvv.jp/news/game/20261127_1/",
       "date_jst": "2026-11-27",
