@@ -1,0 +1,52 @@
+{
+  "started_at": "2026-11-27T13:40:50.476922+09:00",
+  "slot": "player",
+  "date_jst": "2026-11-27",
+  "scheduled_at": "2026-11-27T08:00:00+09:00",
+  "start_delay_seconds": 20450,
+  "schedule_delay_diagnostic": "severe_schedule_to_delivery_delay_unattributed",
+  "run_id": "45941336818",
+  "workflow_url": "https://github.com/stvvlab/stvv-lab-auto-post/actions/runs/45941336818",
+  "commit": "e0b9a09c5e84f936bc5158b929f9e62013750e31",
+  "manual_dispatch_performed": false,
+  "status": "skipped_no_verified_content",
+  "x_display_verified": false,
+  "delivery_mode": "shareNow",
+  "queue_before": {
+    "ready_cards": 1,
+    "eligible_now_cards": 0,
+    "blocked_by_reason": {
+      "fixed_publish_due_missed": 1
+    },
+    "candidates": [
+      {
+        "source_url": "https://stvv.com/nl/nieuws/artikel/de-week-van-de-waarheid",
+        "asset_path": null,
+        "slots": [
+          "news"
+        ],
+        "selection_block": "fixed_publish_due_missed"
+      }
+    ],
+    "note": "Selection diagnosis for the current slot only, not future reservations. Official body and public image bytes are checked by the publisher before sending."
+  },
+  "finished_at": "2026-11-27T13:40:55.563039+09:00",
+  "new_publications": [],
+  "pending_key": null,
+  "delivery_state": "no_new_buffer_acceptance_recorded",
+  "actions_timing": {
+    "status": "ok",
+    "workflow_created_at": "2026-11-27T04:40:41Z",
+    "workflow_started_at": "2026-11-27T04:40:41Z",
+    "job_created_at": "2026-11-27T04:40:42Z",
+    "job_started_at": "2026-11-27T04:40:43Z",
+    "cron_to_workflow_creation_seconds": 20441,
+    "workflow_creation_to_job_creation_seconds": 1,
+    "workflow_creation_to_job_start_seconds": 2,
+    "job_queue_seconds": 1,
+    "job_start_to_delivery_start_seconds": 7,
+    "note": "Timing segments are observations, not proof of GitHub's internal delay cause.",
+    "largest_known_stage": "workflow_created_late",
+    "largest_known_stage_seconds": 20441
+  }
+}
