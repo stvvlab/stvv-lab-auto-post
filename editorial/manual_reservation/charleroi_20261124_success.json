@@ -1,0 +1,10 @@
+{
+  "request_id": "stvv-20261124-charleroi-draw",
+  "trigger_commit": "c57cd3f797b4149e574feb23bb4de9f43cdc8188",
+  "state": "scheduled_user_screenshot_verified",
+  "channel": "stvvlabo",
+  "scheduled_display": "2026-11-25 09:40",
+  "evidence": "User supplied Buffer queue screenshot showing exact caption and official URL",
+  "x_publication_verified": false,
+  "retry": false
+}

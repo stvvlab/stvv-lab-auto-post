@@ -1,0 +1,10 @@
+{
+  "request_id": "stvv-20261124-lab-community",
+  "trigger_commit": "08f5071fa07eda004e57f0698a31e399fe9812e6",
+  "state": "scheduled_user_screenshot_verified",
+  "scheduled_display": "2026-11-27 09:54",
+  "image_thumbnail_verified": true,
+  "channel": "stvvlabo",
+  "x_publication_verified": false,
+  "retry": false
+}
